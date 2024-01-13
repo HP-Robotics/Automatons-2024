@@ -65,15 +65,15 @@ public final class Constants {
     public static final double kSlowAngularspeed = Math.PI / 2; // 1/4 rotation per second  // TODO MENTOR: is this a good turn speed?
 
     public static final double kWheelRadius = 0.0508 * (218.5 / 225.6); //219 /225.6 is a fudge factor
-    public static final int kEncoderResolution = 2048;
+    public static final double kEncoderResolution = 1.0;
 
     public static final double driveGearRatio = 6.75;
-    public static final double rotationGearRatio = 15.429;
+    public static final double turningGearRatio = 15.429;
 
-    public final static Translation2d kFrontLeftLocation = new Translation2d(0.270, 0.270);
-    public final static Translation2d kFrontRightLocation = new Translation2d(0.270, -0.270);
-    public final static Translation2d kBackLeftLocation = new Translation2d(-0.270, 0.270);
-    public final static Translation2d kBackRightLocation = new Translation2d(-0.270, -0.270);
+    public final static Translation2d kFrontLeftLocation = new Translation2d(0.308, 0.308);
+    public final static Translation2d kFrontRightLocation = new Translation2d(0.308, -0.308);
+    public final static Translation2d kBackLeftLocation = new Translation2d(-0.308, 0.308);
+    public final static Translation2d kBackRightLocation = new Translation2d(-0.308, -0.308);
 
     public final static SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         kFrontLeftLocation, kFrontRightLocation, kBackRightLocation, kBackLeftLocation);
@@ -82,41 +82,28 @@ public final class Constants {
         
     public static final double drivekP = 0.0015; //old value: 0.0005 OR 0.07
     public static final double drivekI = 0.0001; //old value: 0.000175 new old values: 0.0
-    public static final double drivekD = 0.5; //old value: 0.0
+    public static final double drivekD = 0.5; //old value: 0.0 
     public static final double drivekF = 0.048;
     public static final double drivekAllowableError = 50;
     public static final double drivekMaxIntegralAccumulation = 20000; // TODO: a guess, finetune later
     public static final double drivekIntegralZone = 300; //TODO: a guess, finetune later
 
-    public static final double turningkP = .5;
-    public static final double turningkI = .000;
-    public static final double turningkD = 4; //TODO: please tune for final robot eventually
-    public static final double turningkAllowableError = 50;
+    public static final double turningkP = 2.0;
+    public static final double turningkI = 0.01;
+    public static final double turningkD = 0;
+    public static final double turningkAllowableError = 50.0/2048;
 
-    public static final double balancekP = 0.04;
-    public static final double balancekI = 0.0;
-    public static final double balancekD = 0.012; //0.01
-    public static final int balanceThreshold = 2;
 
-    public static final double altBalanceSpeed = 1;
-    public static final double altBalanceAlpha = 0.2;
-    public static final double altRateThreshold = 0.1;
 
     public static final double encoderTolerance = 0.01;
 
-    public static Slot0Configs slot0Configs = new Slot0Configs();
-    slot0Configs.kV  = DriveConstants.drivekF;
-    slot0Configs.kP = DriveConstants.drivekP;
-    slot0Configs.kI = DriveConstants.drivekI;
-    slot0Configs.kD = DriveConstants.drivekD;
   }
 
   public static class RobotConstants { // For robot values that remain the same, such as max speed
-    public static final double swerveOffsetFL = 0.617738640443466;
-    public static final double swerveOffsetFR = 0.59958238998956;
-    public static final double swerveOffsetBL = 0.890661022266526;
-    public static final double swerveOffsetBR = 0.125644328141108; // Fill in later
-
+    public static final double swerveOffsetFL = 0.745;
+    public static final double swerveOffsetFR = 0.966;
+    public static final double swerveOffsetBR = 0.546; // Fill in later (not precise) >: (
+    public static final double swerveOffsetBL = 0.715;
   }
 
 

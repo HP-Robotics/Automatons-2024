@@ -11,11 +11,15 @@ import frc.robot.subsystems.DriveSubsystem;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPoint;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+import com.pathplanner.lib.commands.FollowPathHolonomic;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPlannerTrajectory;
+import com.pathplanner.lib.path.PathPoint;
+import com.pathplanner.lib.path.RotationTarget;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -93,13 +97,14 @@ public class MoveSetDistanceCommand extends CommandBase {
 
       m_wayPoints.add(new PathPoint(new Translation2d(m_subsystem.getPoseX(), m_subsystem.getPoseY()),
           Rotation2d.fromDegrees(theta), m_subsystem.getPoseRot()));
+          new RotationTarget(theta, m_Rot)
       for (int i = 0; i < m_MidPoints.size(); i++) {
         m_wayPoints.add(m_MidPoints.get(i));
-      }
+      } 
       m_wayPoints.add(new PathPoint(new Translation2d(m_X, m_Y), Rotation2d.fromDegrees(theta), m_Rot));
 
       // An example trajectory to follow. All units in meters.
-      PathPlannerTrajectory forwardTrajectory = PathPlanner.generatePath(
+      PathPlannerPath forwardTrajectory = PathPlanner.generatePath(
           new PathConstraints(m_Velocity, m_Acceleration),
           m_wayPoints
       // Start at the origin facing the +X direction
@@ -109,17 +114,22 @@ public class MoveSetDistanceCommand extends CommandBase {
       //new Pose2d(m_X, m_Y, m_Rot),
       //config); //Added robot poseX and y to this command
       );
+    
       m_subsystem.m_field.getObject("traj").setTrajectory(forwardTrajectory);
       // System.out.println("initialized");
-      m_swerveControllerCommand = new PPSwerveControllerCommand(
+      m_swerveControllerCommand = new FollowPathHolonomic(
           forwardTrajectory,
           m_subsystem::getPose, // Functional interface to feed supplier
-          DriveConstants.kDriveKinematics,
-
-          // Position controllers
-          m_XController, m_YController, m_thetaController,
-          m_subsystem::setModuleStates,
-          false,
+          m_subsystem::getCurrentspeeds,
+          m_subsystem::driveRobotRelative,
+          new HolonomicPathFollowerConfig(
+            new PIDConstants(AutoConstants.kPXController, AutoConstants.kIXController, AutoConstants.kDXController), 
+            new PIDConstants(AutoConstants.kPThetaController, AutoConstants.kIThetaController),
+            DriveConstants.kMaxSpeed,
+            DriveConstants.kFrontLeftLocation.getNorm(),
+            new ReplanningConfig()
+          ),
+          ()->{return False;},
           m_subsystem);
 
       m_swerveControllerCommand.initialize();
