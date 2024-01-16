@@ -80,10 +80,10 @@ public final class Constants {
 
 
         
-    public static final double drivekP = 0.0015; //old value: 0.0005 OR 0.07
-    public static final double drivekI = 0.0001; //old value: 0.000175 new old values: 0.0
-    public static final double drivekD = 0.5; //old value: 0.0 
-    public static final double drivekF = 0.048;
+    public static final double drivekP = 0.0003002932551319648; //old value: 0.0015
+    public static final double drivekI = 0.02001955034213099; //old value: 0.0001
+    public static final double drivekD = 0.00010009775171065493; //old value: 0.5 
+    public static final double drivekF = 0.009609384164222873; //old value: 0.048
     public static final double drivekAllowableError = 50;
     public static final double drivekMaxIntegralAccumulation = 20000; // TODO: a guess, finetune later
     public static final double drivekIntegralZone = 300; //TODO: a guess, finetune later
@@ -101,9 +101,9 @@ public final class Constants {
 
   public static class RobotConstants { // For robot values that remain the same, such as max speed
     public static final double swerveOffsetFL = 0.745;
-    public static final double swerveOffsetFR = 0.966;
-    public static final double swerveOffsetBR = 0.546; // Fill in later (not precise) >: (
-    public static final double swerveOffsetBL = 0.715;
+    public static final double swerveOffsetFR = 0.97;
+    public static final double swerveOffsetBR = 0.74; // Fill in later (not precise) >: (
+    public static final double swerveOffsetBL = 0.55;
   }
 
 

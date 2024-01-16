@@ -115,12 +115,11 @@ public class RobotContainer {
     // An example command will be run in autonomous
     return Autos.exampleAuto(m_exampleSubsystem);
   }
-    public void resetDriveOffsets() {
 
+  public void resetDriveOffsets() {
     if (SubsystemConstants.useDrive) {
       m_robotDrive.resetOffsets();
-
-    }
+  }
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
