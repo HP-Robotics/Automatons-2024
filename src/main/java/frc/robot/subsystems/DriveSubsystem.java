@@ -28,9 +28,9 @@ import frc.robot.SwerveModule;
 public class DriveSubsystem extends SubsystemBase {
 
   // TODO MENTOR: the PDH has sensible channel numbering, so we could renumber these motors.
-  private final SwerveModule m_frontLeft = new SwerveModule(28, 29, 14, RobotConstants.swerveOffsetBR, "BR"); // BIG BONGO 7
-  private final SwerveModule m_frontRight = new SwerveModule(22, 23, 12, RobotConstants.swerveOffsetFL, "FL"); // BIG BONGO 2
-  private final SwerveModule m_backRight = new SwerveModule(20, 21, 11, RobotConstants.swerveOffsetFR, "FR"); // BIG BONGO 1
+  private final SwerveModule m_frontLeft = new SwerveModule(28, 29, 14, RobotConstants.swerveOffsetFL, "FL"); // BIG BONGO 7
+  private final SwerveModule m_frontRight = new SwerveModule(22, 23, 12, RobotConstants.swerveOffsetFR, "FR"); // BIG BONGO 2
+  private final SwerveModule m_backRight = new SwerveModule(20, 21, 11, RobotConstants.swerveOffsetBR, "BR"); // BIG BONGO 1
   private final SwerveModule m_backLeft = new SwerveModule(24, 25, 13, RobotConstants.swerveOffsetBL, "BL"); // BIG BONGO 3
   //26, 27 is Big Bongo 4
 
@@ -106,10 +106,10 @@ public class DriveSubsystem extends SubsystemBase {
     driveTrainTable.putValue("Back Left Turn Value", NetworkTableValue.makeDouble(m_backLeft.getEncoderAngle()));
     driveTrainTable.putValue("Back Right Turn Value", NetworkTableValue.makeDouble(m_backRight.getEncoderAngle()));
 
-    driveTrainTable.putValue("Big Bongo 1 Abs Encoder", NetworkTableValue.makeDouble(m_frontRight.m_absEncoder.getAbsolutePosition()));
-    driveTrainTable.putValue("Big Bongo 2 Abs Encoder", NetworkTableValue.makeDouble(m_frontLeft.m_absEncoder.getAbsolutePosition()));
+    driveTrainTable.putValue("Big Bongo 1 Abs Encoder", NetworkTableValue.makeDouble(m_backRight.m_absEncoder.getAbsolutePosition()));
+    driveTrainTable.putValue("Big Bongo 2 Abs Encoder", NetworkTableValue.makeDouble(m_frontRight.m_absEncoder.getAbsolutePosition()));
     driveTrainTable.putValue("Big Bongo 3 Abs Encoder", NetworkTableValue.makeDouble(m_backLeft.m_absEncoder.getAbsolutePosition()));
-    driveTrainTable.putValue("Big Bongo 4 Abs Encoder", NetworkTableValue.makeDouble(m_backRight.m_absEncoder.getAbsolutePosition()));
+    driveTrainTable.putValue("Big Bongo 7 Abs Encoder", NetworkTableValue.makeDouble(m_frontLeft.m_absEncoder.getAbsolutePosition()));
 
     driveTrainTable.putValue("Pigeon Pitch", NetworkTableValue.makeDouble(m_pGyro.getPitch().getValue()));
     driveTrainTable.putValue("Pigeon Yaw", NetworkTableValue.makeDouble(m_pGyro.getYaw().getValue()));

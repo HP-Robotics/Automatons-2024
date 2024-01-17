@@ -100,15 +100,15 @@ public final class Constants {
   }
 
   public static class RobotConstants { // For robot values that remain the same, such as max speed
-    public static final double swerveOffsetFL = 0.745;
-    public static final double swerveOffsetFR = 0.97;
+    public static final double swerveOffsetFL = 0.98;
+    public static final double swerveOffsetFR = 0.708;
     public static final double swerveOffsetBR = 0.74; // Fill in later (not precise) >: (
     public static final double swerveOffsetBL = 0.55;
   }
 
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 5; // TODO MENTOR: And note that we don't use them...
+    public static final double kMaxSpeedMetersPerSecond = 5.0; // TODO MENTOR: And note that we don't use them...
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxChargeStationVelocity = 2.5;

@@ -159,7 +159,7 @@ public class SwerveModule {
 
     PositionControlWithAllowableClosedloopError(m_turningMotor, goalPosition, DriveConstants.turningkAllowableError);
     driveTrainTable.putValue(m_name + "turningSetpoint",NetworkTableValue.makeDouble(goalPosition));
-    // m_driveMotor.setControl(new VelocityDutyCycle(metersToTicks(state.speedMetersPerSecond) / 10)); // the 10 is real, it turns ticks per second into ticks per 100ms
+    m_driveMotor.setControl(new VelocityDutyCycle(metersToTicks(state.speedMetersPerSecond))); 
 
   }
 
@@ -170,7 +170,7 @@ public class SwerveModule {
 
 
   public double applyOffset(double position) {
-    return position + m_offset;
+    return position - m_offset;
   }
 
   public void resetTurningMotor() {
