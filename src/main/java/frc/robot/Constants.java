@@ -88,9 +88,9 @@ public final class Constants {
     public static final double drivekMaxIntegralAccumulation = 20000; // TODO: a guess, finetune later
     public static final double drivekIntegralZone = 300; //TODO: a guess, finetune later
 
-    public static final double turningkP = 2.0;
-    public static final double turningkI = 0.01;
-    public static final double turningkD = 0;
+    public static final double turningkP = 1.0009775171065494;
+    public static final double turningkI = 0;
+    public static final double turningkD = 0.008007820136852395;
     public static final double turningkAllowableError = 50.0/2048;
 
 
