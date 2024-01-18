@@ -10,17 +10,16 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  private TalonFX m_motor3;
+  TalonFX m_motor3 = new TalonFX(IntakeConstants.motor3ID);
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
-    TalonFX m_motor3 = new TalonFX(3);
-
     TalonFXConfiguration config = new TalonFXConfiguration();
     m_motor3.getConfigurator().apply(config);
 
-    SmartDashboard.putNumber("Intake Speed", 0);
+    SmartDashboard.putNumber("Intake Speed", IntakeConstants.intakeSpeed);
   }
 
   @Override

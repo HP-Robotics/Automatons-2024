@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.Constants.IntakeConstants;
 
 public class IntakeCommand extends Command {
     private final IntakeSubsystem m_subsystem;
@@ -21,7 +22,7 @@ public class IntakeCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double output = SmartDashboard.getNumber("Intake Speed", 0);
+    double output = SmartDashboard.getNumber("Intake Speed", IntakeConstants.intakeSpeed);
     m_subsystem.useIntake(output);
   }
 
@@ -32,7 +33,7 @@ public class IntakeCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.useIntake(0.0);
+    m_subsystem.useIntake(0.0); // Turn intake off; 
   }
 
   // Returns true when the command should end.
