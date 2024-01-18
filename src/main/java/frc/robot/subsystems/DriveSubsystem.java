@@ -92,14 +92,14 @@ public class DriveSubsystem extends SubsystemBase {
     driveTrainTable.putValue("Robot y", NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getY()));
     driveTrainTable.putValue("Robot theta", NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getRotation().getDegrees()));
 
-    driveTrainTable.putValue("Front Left Drive Output", NetworkTableValue.makeDouble(m_frontLeft.drivePower()));
-    driveTrainTable.putValue("Front Right Drive Output", NetworkTableValue.makeDouble(m_frontRight.drivePower()));
-    driveTrainTable.putValue("Back Left Drive Output",NetworkTableValue.makeDouble( m_backLeft.drivePower()));
-    driveTrainTable.putValue("Back Right Drive Output", NetworkTableValue.makeDouble(m_backRight.drivePower()));
-    driveTrainTable.putValue("Front Left Turn Output", NetworkTableValue.makeDouble(m_frontLeft.turnPower()));
-    driveTrainTable.putValue("Front Right Turn Output",NetworkTableValue.makeDouble( m_frontRight.turnPower()));
-    driveTrainTable.putValue("Back Left Turn Output", NetworkTableValue.makeDouble(m_backLeft.turnPower()));
-    driveTrainTable.putValue("Back Right Turn Output", NetworkTableValue.makeDouble(m_backRight.turnPower()));
+    driveTrainTable.putValue("Front Left Drive Power", NetworkTableValue.makeDouble(m_frontLeft.drivePower()));
+    driveTrainTable.putValue("Front Right Drive Power", NetworkTableValue.makeDouble(m_frontRight.drivePower()));
+    driveTrainTable.putValue("Back Left Drive Power",NetworkTableValue.makeDouble( m_backLeft.drivePower()));
+    driveTrainTable.putValue("Back Right Drive Power", NetworkTableValue.makeDouble(m_backRight.drivePower()));
+    driveTrainTable.putValue("Front Left Turn Power", NetworkTableValue.makeDouble(m_frontLeft.turnPower()));
+    driveTrainTable.putValue("Front Right Turn Power",NetworkTableValue.makeDouble( m_frontRight.turnPower()));
+    driveTrainTable.putValue("Back Left Turn Power", NetworkTableValue.makeDouble(m_backLeft.turnPower()));
+    driveTrainTable.putValue("Back Right Turn Power", NetworkTableValue.makeDouble(m_backRight.turnPower()));
 
     driveTrainTable.putValue("Front Left Turn Value", NetworkTableValue.makeDouble(m_frontLeft.getEncoderAngle()));
     driveTrainTable.putValue("Front Right Turn Value", NetworkTableValue.makeDouble(m_frontRight.getEncoderAngle()));
@@ -115,18 +115,10 @@ public class DriveSubsystem extends SubsystemBase {
     driveTrainTable.putValue("Pigeon Yaw", NetworkTableValue.makeDouble(m_pGyro.getYaw().getValue()));
     driveTrainTable.putValue("Pigeon Roll", NetworkTableValue.makeDouble(m_pGyro.getRoll().getValue()));
 
-    m_frontLeft.getDrivePower("Front Left");
-    m_frontRight.getDrivePower("Front Right");
-    m_backLeft.getDrivePower("Back Left");
-    m_backRight.getDrivePower("Back Right");
 
     m_field.setRobotPose(m_odometry.getPoseMeters());
 
-    if (trackingGamePiece()) {
-      m_gamePieceSightCounter = 0;
-    } else {
-      m_gamePieceSightCounter = m_gamePieceSightCounter - 1;
-    }
+
   }
 
   /**
@@ -232,32 +224,5 @@ public class DriveSubsystem extends SubsystemBase {
     m_pGyro.setYaw(0);
   }
 
-  public boolean trackingGamePiece() {
-    if (limelightTable.getEntry("tv").getNumber(0).intValue() >= 0.5) {
-      return true;
-    }
-    return false;
-  }
 
-  public Boolean gamePieceSeen() {
-    return (m_gamePieceSightCounter > -5);
-  }
-
-  public double getGamePieceX() {
-    return gamePieceX.getDouble(0);
-  }
-
-  public void switchConePipeline() {
-    limelightTable.getEntry("pipeline").setValue(2);
-
-  }
-
-  public void switchCubePipeline() {
-    limelightTable.getEntry("pipeline").setValue(0);
-
-  }
-
-  public void switchCameraPipeline() { // for driver visibility
-    SmartDashboard.getEntry("limelight-prada_PipelineName").setValue("Cube");
-  }
 }
