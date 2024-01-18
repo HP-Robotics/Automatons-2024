@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -36,7 +37,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    private final Joystick m_joystick = new Joystick(1);
+    private final CommandJoystick m_joystick = new CommandJoystick(1);
   //private final Joystick m_opJoystick = new Joystick(0);
   // The robot's subsystems and commands are defined here...
     final DriveSubsystem m_robotDrive = SubsystemConstants.useDrive ? new DriveSubsystem() : null;
@@ -113,8 +114,8 @@ public class RobotContainer {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     //new Trigger(m_exampleSubsystem::exampleCondition)
         //.onTrue(new ExampleCommand(m_exampleSubsystem));
-    m_driverController.b().whileTrue(new SetShooterCommand(m_shooterSubsystem));
-    m_driverController.x().whileTrue(new IntakeCommand(m_intakeSubsystem));
+    m_joystick.button(2).whileTrue(new SetShooterCommand(m_shooterSubsystem));
+    m_joystick.button(1).whileTrue(new IntakeCommand(m_intakeSubsystem));
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
