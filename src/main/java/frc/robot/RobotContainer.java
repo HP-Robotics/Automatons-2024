@@ -61,12 +61,12 @@ public class RobotContainer {
                 m_robotDrive.drive(
                     // TODO MENTOR:  are deadbands good?  Do we want to try to tweak turning so it's easier to turn a small amount?
                     Math.signum(m_joystick.getRawAxis(1))
-                        * Math.pow(MathUtil.applyDeadband(m_joystick.getRawAxis(1), 0.05), 2) * -1
+                        * Math.pow(MathUtil.applyDeadband(m_joystick.getRawAxis(1), 0.15), 2) * -1
                         * DriveConstants.kMaxSpeed,
                     Math.signum(m_joystick.getRawAxis(0))
-                        * Math.pow(MathUtil.applyDeadband(m_joystick.getRawAxis(0), 0.05), 2) * -1
+                        * Math.pow(MathUtil.applyDeadband(m_joystick.getRawAxis(0), 0.15), 2) * -1
                         * DriveConstants.kMaxSpeed,
-                    MathUtil.applyDeadband(m_joystick.getRawAxis(2), 0.1) * -1
+                    MathUtil.applyDeadband(m_joystick.getRawAxis(4), 0.15) * -1
                         * DriveConstants.kMaxAngularSpeed,
                     //0.2 * DriveConstants.kMaxSpeed, 0, 0,
                     m_robotDrive.m_fieldRelative);
@@ -115,7 +115,9 @@ public class RobotContainer {
     //new Trigger(m_exampleSubsystem::exampleCondition)
         //.onTrue(new ExampleCommand(m_exampleSubsystem));
     m_joystick.button(2).whileTrue(new SetShooterCommand(m_shooterSubsystem));
-    m_joystick.button(1).whileTrue(new IntakeCommand(m_intakeSubsystem));
+    m_joystick.axisGreaterThan(3, 0.1).whileTrue(new IntakeCommand(m_intakeSubsystem));
+    m_joystick.button(6).whileTrue(new InstantCommand(m_robotDrive::resetYaw)); // Reset field orientation
+    
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());

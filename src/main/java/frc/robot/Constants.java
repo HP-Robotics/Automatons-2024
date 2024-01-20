@@ -139,8 +139,8 @@ public final class Constants {
 
 
   public static class IntakeConstants {
-    public static final int motor3ID = 3;
-    public static final int intakeSpeed = 0;
+    public static final int motor3ID = 4;
+    public static final double intakeSpeed = -0.95;
   }
 
   public static class ShooterConstants {
