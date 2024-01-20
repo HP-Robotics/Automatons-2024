@@ -37,7 +37,7 @@ public class RobotContainer {
   // Joystick(OperatorConstants.kOperatorControllerPort);
   // The robot's subsystems and commands are defined here...
   final DriveSubsystem m_robotDrive = SubsystemConstants.useDrive ? new DriveSubsystem() : null;
-  private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem();
+  private final LimelightSubsystem m_limelightSubsystem = SubsystemConstants.useLimelight ? new LimelightSubsystem() : null;
 
   private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem() : null;
   private final IntakeSubsystem m_intakeSubsystem = SubsystemConstants.useIntake ? new IntakeSubsystem() : null;

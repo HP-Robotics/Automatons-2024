@@ -68,7 +68,7 @@ public class LimelightSubsystem extends SubsystemBase {
     double ry = botpose[4];
     double rz = botpose[5];
     
-    Pose2d m_robotPose = new Pose2d(tx,ty,new Rotation2d());
+    Pose2d m_robotPose = new Pose2d(tx,ty,new Rotation2d(Math.toRadians(rz)));
     m_field.setRobotPose(m_robotPose);
     // specify the widget here
     // m_field.setRobotPose(table.getdoub.getPoseMeters());
