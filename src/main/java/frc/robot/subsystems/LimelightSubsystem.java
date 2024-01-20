@@ -19,8 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 
 public class LimelightSubsystem extends SubsystemBase {
-  NetworkTableEntry m_tx;
-  NetworkTableEntry m_ty;
+  NetworkTableEntry botpose_blue;
   /** Creates a new ExampleSubsystem. */
   public final Field2d m_field = new Field2d();
   public LimelightSubsystem() {
@@ -28,8 +27,7 @@ public class LimelightSubsystem extends SubsystemBase {
    .add("Pose2d", m_field)
    .withWidget(BuiltInWidgets.kField);
    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-three");
-    m_tx = table.getEntry("tx");
-    m_ty = table.getEntry("ty");
+    botpose_blue = table.getEntry("botpose_wpiblue");
   }
   /**
    * Example command factory method.
@@ -61,16 +59,21 @@ public class LimelightSubsystem extends SubsystemBase {
     
 
     //read values periodically
-    double x = m_tx.getDouble(0.0);
-    double y = m_ty.getDouble(0.0);
-    // double area = ta.getDouble(0.0);
+    double defaultValues[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    double[] botpose = botpose_blue.getDoubleArray(defaultValues);
+    double tx = botpose[0];
+    double ty = botpose[1];
+    double tz = botpose[2];
+    double rx = botpose[3];
+    double ry = botpose[4];
+    double rz = botpose[5];
     
-    Pose2d m_robotPose = new Pose2d(x,y,new Rotation2d());
+    Pose2d m_robotPose = new Pose2d(tx,ty,new Rotation2d());
     m_field.setRobotPose(m_robotPose);
     // specify the widget here
     // m_field.setRobotPose(table.getdoub.getPoseMeters());
-    System.out.println(x);
-    System.out.println(y);
+    // System.out.println(tx);
+    // System.out.println(ty);
 
 
   }
