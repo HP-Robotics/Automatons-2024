@@ -67,7 +67,7 @@ public class RobotContainer {
                             OperatorConstants.driveJoystickDeadband), 2)
                         * -1
                         * DriveConstants.kMaxSpeed,
-                    MathUtil.applyDeadband(m_driveJoystick.getRawAxis(4), OperatorConstants.turnJoystickDeadband) * -1
+                    MathUtil.applyDeadband(m_driveJoystick.getRawAxis(4), OperatorConstants.driveJoystickDeadband) * -1
                         * DriveConstants.kMaxAngularSpeed,
                     m_robotDrive.m_fieldRelative);
               },
