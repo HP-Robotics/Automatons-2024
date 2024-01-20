@@ -26,7 +26,7 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kOperatorControllerPort = 0;
     public static final int kDriverControllerPort = 1;
-    public static final double driveJoystickDeadband = 0.05;
+    public static final double driveJoystickDeadband = 0.15;
     public static final double turnJoystickDeadband = 0.1;
 
   }
@@ -131,7 +131,7 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final int motor3ID = 4;
-    public static final double intakeSpeed = 0.2;
+    public static final double intakeSpeed = -0.95;
   }
 
   public static class ShooterConstants {

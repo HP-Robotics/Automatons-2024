@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -54,6 +55,7 @@ public class RobotContainer {
 
               () -> {
                 m_robotDrive.drive(
+<<<<<<< HEAD
                     Math.signum(m_driveJoystick.getRawAxis(1))
                         * Math.pow(MathUtil.applyDeadband(m_driveJoystick.getRawAxis(1),
                             OperatorConstants.driveJoystickDeadband), 2)
@@ -65,6 +67,16 @@ public class RobotContainer {
                         * -1
                         * DriveConstants.kMaxSpeed,
                     MathUtil.applyDeadband(m_driveJoystick.getRawAxis(2), OperatorConstants.turnJoystickDeadband) * -1
+=======
+                    // TODO MENTOR:  are deadbands good?  Do we want to try to tweak turning so it's easier to turn a small amount?
+                    Math.signum(m_joystick.getRawAxis(1))
+                        * Math.pow(MathUtil.applyDeadband(m_joystick.getRawAxis(1), 0.15), 2) * -1
+                        * DriveConstants.kMaxSpeed,
+                    Math.signum(m_joystick.getRawAxis(0))
+                        * Math.pow(MathUtil.applyDeadband(m_joystick.getRawAxis(0), 0.15), 2) * -1
+                        * DriveConstants.kMaxSpeed,
+                    MathUtil.applyDeadband(m_joystick.getRawAxis(4), 0.15) * -1
+>>>>>>> origin/Theo
                         * DriveConstants.kMaxAngularSpeed,
                     m_robotDrive.m_fieldRelative);
               },
@@ -89,22 +101,23 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    // if (SubsystemConstants.useDrive) {
+     if (SubsystemConstants.useDrive) {
     // new JoystickButton(m_driveJoystick, 2).onTrue(new InstantCommand(m_robotDrive::forceRobotRelative, m_robotDrive));
     // new JoystickButton(m_driveJoystick, 2).onFalse(new
     // InstantCommand(m_robotDrive::forceFieldRelative, m_robotDrive));
-    //new JoystickButton(m_joystick, 10).onTrue(new
-    //InstantCommand(m_robotDrive::resetYaw, m_robotDrive));// No go north for now
+    m_driveJoystick.button(6).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
     // // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // // cancelling on release.
-    // }
+     }
     if(SubsystemConstants.useShooter){
       m_driveJoystick.button(2).whileTrue(new SetShooterCommand(m_shooterSubsystem));
     }
     if(SubsystemConstants.useIntake){
-      m_driveJoystick.button(1).whileTrue(new IntakeCommand(m_intakeSubsystem));
+      m_driveJoystick.axisGreaterThan(3, 0.1).whileTrue(new IntakeCommand(m_intakeSubsystem));
     }
+
+    
   }
 
   /**
