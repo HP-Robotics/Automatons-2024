@@ -14,6 +14,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DataLogManager;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -36,6 +37,7 @@ public class RobotContainer {
   // Joystick(OperatorConstants.kOperatorControllerPort);
   // The robot's subsystems and commands are defined here...
   final DriveSubsystem m_robotDrive = SubsystemConstants.useDrive ? new DriveSubsystem() : null;
+  private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem();
 
   private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem() : null;
   private final IntakeSubsystem m_intakeSubsystem = SubsystemConstants.useIntake ? new IntakeSubsystem() : null;
@@ -55,7 +57,6 @@ public class RobotContainer {
 
               () -> {
                 m_robotDrive.drive(
-<<<<<<< HEAD
                     Math.signum(m_driveJoystick.getRawAxis(1))
                         * Math.pow(MathUtil.applyDeadband(m_driveJoystick.getRawAxis(1),
                             OperatorConstants.driveJoystickDeadband), 2)
@@ -66,17 +67,7 @@ public class RobotContainer {
                             OperatorConstants.driveJoystickDeadband), 2)
                         * -1
                         * DriveConstants.kMaxSpeed,
-                    MathUtil.applyDeadband(m_driveJoystick.getRawAxis(2), OperatorConstants.turnJoystickDeadband) * -1
-=======
-                    // TODO MENTOR:  are deadbands good?  Do we want to try to tweak turning so it's easier to turn a small amount?
-                    Math.signum(m_joystick.getRawAxis(1))
-                        * Math.pow(MathUtil.applyDeadband(m_joystick.getRawAxis(1), 0.15), 2) * -1
-                        * DriveConstants.kMaxSpeed,
-                    Math.signum(m_joystick.getRawAxis(0))
-                        * Math.pow(MathUtil.applyDeadband(m_joystick.getRawAxis(0), 0.15), 2) * -1
-                        * DriveConstants.kMaxSpeed,
-                    MathUtil.applyDeadband(m_joystick.getRawAxis(4), 0.15) * -1
->>>>>>> origin/Theo
+                    MathUtil.applyDeadband(m_driveJoystick.getRawAxis(4), OperatorConstants.turnJoystickDeadband) * -1
                         * DriveConstants.kMaxAngularSpeed,
                     m_robotDrive.m_fieldRelative);
               },
