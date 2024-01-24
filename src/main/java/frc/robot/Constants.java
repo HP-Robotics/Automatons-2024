@@ -78,7 +78,7 @@ public final class Constants {
     public final static SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         kFrontLeftLocation, kFrontRightLocation, kBackRightLocation, kBackLeftLocation);
 
-    public static final double drivekP = 0.0003002932551319648; // old value: 0.0015
+    public static final double drivekP = 0.003002932551319648; // old value: 0.0015
     public static final double drivekI = 0.02001955034213099; // old value: 0.0001
     public static final double drivekD = 0.00010009775171065493; // old value: 0.5
     public static final double drivekF = 0.009609384164222873; // old value: 0.048
