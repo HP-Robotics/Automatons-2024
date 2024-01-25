@@ -8,8 +8,13 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.commands.FollowPathCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.SetShooterCommand;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DataLogManager;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -97,6 +102,7 @@ public class RobotContainer {
     // new JoystickButton(m_driveJoystick, 2).onFalse(new
     // InstantCommand(m_robotDrive::forceFieldRelative, m_robotDrive));
     m_driveJoystick.button(6).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
+    m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path"));
     // // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // // cancelling on release.
@@ -116,9 +122,6 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    return null;
-  }
 
   public void resetDriveOffsets() {
     if (SubsystemConstants.useDrive) {
@@ -127,4 +130,7 @@ public class RobotContainer {
 
   }
 
+   public Command getAutonomousCommand() {
+       return null;
+   }
 }

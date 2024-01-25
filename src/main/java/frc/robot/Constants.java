@@ -36,7 +36,7 @@ public final class Constants {
     public static final boolean useIntake = false;
     public static final boolean useShooter = false;
     public static final boolean useDataManger = true;
-    public static final boolean useLimelight = false;
+    public static final boolean useLimelight = true;
   }
 
   public static class DriveConstants {
