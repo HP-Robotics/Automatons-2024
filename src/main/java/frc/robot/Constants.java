@@ -57,18 +57,6 @@ public final class Constants {
     public final static Translation2d kBackLeftLocation = new Translation2d(-0.308, 0.308);
     public final static Translation2d kBackRightLocation = new Translation2d(-0.308, -0.308);
 
-    public final static int FLDriveMotorID = 28;
-    public final static int FRDriveMotorID = 22;
-    public final static int BRDriveMotorID = 20;
-    public final static int BLDriveMotorID = 24;
-
-    public final static int FLTurningMotorID = 29;
-    public final static int FRTurningMotorID = 23;
-    public final static int BRTurningMotorID = 21;
-    public final static int BLTurningMotorID = 25;
-
-    public final static int PigeonID = 57;
-
     public final static int FLAbsEncoder = 14;
     public final static int FRAbsEncoder = 12;
     public final static int BRAbsEncoder = 11;
@@ -130,15 +118,32 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final int motor3ID = 4;
+    
     public static final double intakeSpeed = -0.95;
   }
 
   public static class ShooterConstants {
-    public static final int motor1ID = 2;
-    public static final int motor2ID = 1;
-
+    
     public static final double shooterSpeed1 = 0;
     public static final double shooterSpeed2 = 0;
+  }
+
+  public static class IDConstants {
+    public final static int FLDriveMotorID = 28;
+    public final static int FRDriveMotorID = 22;
+    public final static int BRDriveMotorID = 20;
+    public final static int BLDriveMotorID = 24;
+
+    public final static int FLTurningMotorID = 29;
+    public final static int FRTurningMotorID = 23;
+    public final static int BRTurningMotorID = 21;
+    public final static int BLTurningMotorID = 25;
+
+    public static final int intakeMotorID = 4;
+
+    public static final int shooterMotor1ID = 2;
+    public static final int shooterMotor2ID = 1;
+
+    public final static int PigeonID = 57;
   }
 }
