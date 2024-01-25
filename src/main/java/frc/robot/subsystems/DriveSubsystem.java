@@ -26,17 +26,17 @@ import frc.robot.SwerveModule;
 /** Represents a swerve drive style drivetrain. */
 public class DriveSubsystem extends SubsystemBase {
   // BIG BONGO 7
-  private final SwerveModule m_frontLeft = new SwerveModule(DriveConstants.FLDriveMotorID,
-      DriveConstants.FLTurningMotorID, DriveConstants.FLAbsEncoder, DriveConstants.absEncoderForwardFL, "FL");
+  private final SwerveModule m_frontLeft = new SwerveModule(IDConstants.FLDriveMotorID,
+      IDConstants.FLTurningMotorID, DriveConstants.FLAbsEncoder, DriveConstants.absEncoderForwardFL, "FL");
   // BIG BONGO 2
-  private final SwerveModule m_frontRight = new SwerveModule(DriveConstants.FRDriveMotorID,
-      DriveConstants.FRTurningMotorID, DriveConstants.FRAbsEncoder, DriveConstants.absEncoderForwardFR, "FR");
+  private final SwerveModule m_frontRight = new SwerveModule(IDConstants.FRDriveMotorID,
+      IDConstants.FRTurningMotorID, DriveConstants.FRAbsEncoder, DriveConstants.absEncoderForwardFR, "FR");
   // BIG BONGO 1
-  private final SwerveModule m_backRight = new SwerveModule(DriveConstants.BRDriveMotorID,
-      DriveConstants.BRTurningMotorID, DriveConstants.BRAbsEncoder, DriveConstants.absEncoderForwardBR, "BR");
+  private final SwerveModule m_backRight = new SwerveModule(IDConstants.BRDriveMotorID,
+      IDConstants.BRTurningMotorID, DriveConstants.BRAbsEncoder, DriveConstants.absEncoderForwardBR, "BR");
   // BIG BONGO 3
-  private final SwerveModule m_backLeft = new SwerveModule(DriveConstants.BLDriveMotorID,
-      DriveConstants.BLTurningMotorID, DriveConstants.BLAbsEncoder, DriveConstants.absEncoderForwardBL, "BL");
+  private final SwerveModule m_backLeft = new SwerveModule(IDConstants.BLDriveMotorID,
+      IDConstants.BLTurningMotorID, DriveConstants.BLAbsEncoder, DriveConstants.absEncoderForwardBL, "BL");
 
   private SwerveModuleState[] m_swerveModuleStates = {
       new SwerveModuleState(), new SwerveModuleState(), new SwerveModuleState(), new SwerveModuleState()
@@ -49,7 +49,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   // Duty Encoders may have the wrong values
 
-  private final Pigeon2 m_pGyro = new Pigeon2(DriveConstants.PigeonID);
+  private final Pigeon2 m_pGyro = new Pigeon2(IDConstants.PigeonID);
 
   SwerveDriveOdometry m_odometry;
 

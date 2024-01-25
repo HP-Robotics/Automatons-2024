@@ -12,6 +12,10 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
@@ -29,7 +33,6 @@ public class SwerveModule {
   public double m_turningOffset;
   public final DutyCycleEncoder m_absEncoder;
   String m_name;
-
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable driveTrainTable = inst.getTable("drive-train");
 
@@ -48,6 +51,8 @@ public class SwerveModule {
       int driveMotorChannel,
       int turningMotorChannel, int absEncoder, double absEncoderForward, String name) {
     m_driveMotor = new TalonFX(driveMotorChannel);
+    // m_driveMotor.getClosedLoopDerivativeOutput().setUpdateFrequency(50);
+    // m_driveMotor.getClosedLoopIntegratedOutput().setUpdateFrequency(50);
     var slot0Configs = new Slot0Configs();
     slot0Configs.kV = DriveConstants.drivekF;
     slot0Configs.kP = DriveConstants.drivekP;
@@ -55,8 +60,13 @@ public class SwerveModule {
     slot0Configs.kD = DriveConstants.drivekD;
     m_driveMotor.getConfigurator().apply(new TalonFXConfiguration());
     m_driveMotor.getConfigurator().apply(slot0Configs);
-
     m_driveMotor.setNeutralMode(NeutralModeValue.Coast);
+    
+    BaseStatusSignal.setUpdateFrequencyForAll(50,m_driveMotor.getClosedLoopError(), m_driveMotor.getClosedLoopDerivativeOutput(),m_driveMotor.getClosedLoopIntegratedOutput(),m_driveMotor.getClosedLoopProportionalOutput(),m_driveMotor.getClosedLoopFeedForward());
+    SignalLogger.start();
+    
+
+    
     m_turningMotor = new TalonFX(turningMotorChannel);
     var turningConfig = new Slot0Configs();
     turningConfig.kP = DriveConstants.turningkP;
@@ -65,12 +75,19 @@ public class SwerveModule {
     m_turningMotor.getConfigurator().apply(new TalonFXConfiguration());
     m_turningMotor.getConfigurator().apply(turningConfig);
     m_turningMotor.setNeutralMode(NeutralModeValue.Brake);
-
     m_turningMotor.setInverted(true);
+
+
+    
     m_absEncoder = new DutyCycleEncoder(absEncoder);
     m_turningOffset = 0.0;
     m_absEncoderForward = absEncoderForward;
     m_name = name;
+
+    m_turningMotor.getClosedLoopDerivativeOutput().setUpdateFrequency(50);
+    m_turningMotor.getClosedLoopIntegratedOutput().setUpdateFrequency(50);
+    m_turningMotor.getClosedLoopProportionalOutput().setUpdateFrequency(50);
+    m_turningMotor.getClosedLoopFeedForward().setUpdateFrequency(50);
 
   }
 
@@ -124,7 +141,7 @@ public class SwerveModule {
         currentPosition + Constants.DriveConstants.turningGearRatio / 2);
         m_turningMotor.setControl(new PositionDutyCycle(goalPosition));
     driveTrainTable.putValue(m_name + "turningSetpoint", NetworkTableValue.makeDouble(goalPosition));
-    driveTrainTable.putValue(m_name + "driveSetpoint", NetworkTableValue.makeDouble(state.speedMetersPerSecond));
+    driveTrainTable.putValue(m_name + "driveSetpoint", NetworkTableValue.makeDouble(metersToTicks(state.speedMetersPerSecond)));
 
     m_driveMotor.setControl(new VelocityDutyCycle(metersToTicks(state.speedMetersPerSecond)));
 
@@ -168,11 +185,13 @@ public class SwerveModule {
     driveTrainTable.putValue(m_name + " Abs Encoder", NetworkTableValue.makeDouble(m_absEncoder.getAbsolutePosition()));
    
     driveTrainTable.putValue(m_name + " Turning kD Proportion", NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopDerivativeOutput().getValue()));
+    m_turningMotor.getClosedLoopProportionalOutput().refresh();
     driveTrainTable.putValue(m_name + " Turning kP Proportion", NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopProportionalOutput().getValue()));
     driveTrainTable.putValue(m_name + " Turning kI Proportion", NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopIntegratedOutput().getValue()));
     driveTrainTable.putValue(m_name + " Turning kF Proportion", NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopFeedForward().getValue()));
     
     driveTrainTable.putValue(m_name + " Driving kD Proportion", NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopDerivativeOutput().getValue()));
+    driveTrainTable.putValue(m_name + " Driving Error", NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopError().getValue()));
     driveTrainTable.putValue(m_name + " Driving kP Proportion", NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopProportionalOutput().getValue()));
     driveTrainTable.putValue(m_name + " Driving kI Proportion", NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopIntegratedOutput().getValue()));
     driveTrainTable.putValue(m_name + " Driving kF Proportion", NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopFeedForward().getValue()));

@@ -10,10 +10,11 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  TalonFX m_motor3 = new TalonFX(IntakeConstants.motor3ID);
+  TalonFX m_motor3 = new TalonFX(IDConstants.intakeMotorID);
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
     TalonFXConfiguration config = new TalonFXConfiguration();
