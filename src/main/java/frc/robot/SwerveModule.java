@@ -50,7 +50,7 @@ public class SwerveModule {
   public SwerveModule(
       int driveMotorChannel,
       int turningMotorChannel, int absEncoder, double absEncoderForward, String name) {
-    m_driveMotor = new TalonFX(driveMotorChannel);
+    m_driveMotor = new TalonFX(driveMotorChannel, "CANivore");
     // m_driveMotor.getClosedLoopDerivativeOutput().setUpdateFrequency(50);
     // m_driveMotor.getClosedLoopIntegratedOutput().setUpdateFrequency(50);
     var slot0Configs = new Slot0Configs();
@@ -67,7 +67,7 @@ public class SwerveModule {
     
 
     
-    m_turningMotor = new TalonFX(turningMotorChannel);
+    m_turningMotor = new TalonFX(turningMotorChannel, "CANivore");
     var turningConfig = new Slot0Configs();
     turningConfig.kP = DriveConstants.turningkP;
     turningConfig.kI = DriveConstants.turningkI;

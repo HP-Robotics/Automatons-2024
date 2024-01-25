@@ -49,7 +49,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   // Duty Encoders may have the wrong values
 
-  private final Pigeon2 m_pGyro = new Pigeon2(IDConstants.PigeonID);
+  private final Pigeon2 m_pGyro = new Pigeon2(IDConstants.PigeonID, "CANivore");
 
   SwerveDriveOdometry m_odometry;
 
