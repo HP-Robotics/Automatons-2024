@@ -149,5 +149,11 @@ public final class Constants {
     
     public static final double shooterSpeed1 = 0;
     public static final double shooterSpeed2 = 0;
+
+    public static final double motor1kP = 0.4;
+    public static final double motor1kI = 0.01;
+    public static final double motor1kD = 0;
+    public static final double motor1kV = 0.12;
+
   }
 }
