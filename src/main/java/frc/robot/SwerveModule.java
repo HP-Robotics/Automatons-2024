@@ -20,6 +20,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -143,7 +144,7 @@ public class SwerveModule {
     driveTrainTable.putValue(m_name + "turningSetpoint", NetworkTableValue.makeDouble(goalPosition));
     driveTrainTable.putValue(m_name + "driveSetpoint", NetworkTableValue.makeDouble(metersToTicks(state.speedMetersPerSecond)));
 
-    m_driveMotor.setControl(new VelocityDutyCycle(metersToTicks(state.speedMetersPerSecond)));
+    m_driveMotor.setControl(new VelocityTorqueCurrentFOC(metersToTicks(state.speedMetersPerSecond)));
 
   }
 

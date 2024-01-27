@@ -32,15 +32,15 @@ public final class Constants {
   }
 
   public static class SubsystemConstants {
-    public static final boolean useDrive = false;
+    public static final boolean useDrive = true;
     public static final boolean useIntake = false;
     public static final boolean useShooter = false;
     public static final boolean useDataManger = true;
-    public static final boolean useLimelight = true;
+    public static final boolean useLimelight = false;
   }
 
   public static class DriveConstants {
-    public static final double kMaxSpeed = 5.0; // meters per second
+    public static final double kMaxSpeed = 4.0; // meters per second
     public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second // TODO MENTOR: is this a good
                                                            // turn speed?
     public static final double kSlowSpeed = 2.0;
@@ -67,17 +67,17 @@ public final class Constants {
     public final static SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         kFrontLeftLocation, kFrontRightLocation, kBackRightLocation, kBackLeftLocation);
 
-    public static final double drivekP = 0.003002932551319648; // old value: 0.0015
-    public static final double drivekI = 0.02001955034213099; // old value: 0.0001
-    public static final double drivekD = 0.00010009775171065493; // old value: 0.5
-    public static final double drivekF = 0.009609384164222873; // old value: 0.048
+    public static final double drivekP = 5; // old value: 0.0015
+    public static final double drivekI = 10;//.02001955034213099; // old value: 0.0001
+    public static final double drivekD = 0;//.00010009775171065493; // old value: 0.5
+    public static final double drivekF = 0;//.009609384164222873; // old value: 0.048
     public static final double drivekAllowableError = 50;
     public static final double drivekMaxIntegralAccumulation = 20000; // TODO: a guess, finetune later
     public static final double drivekIntegralZone = 300; // TODO: a guess, finetune later
 
-    public static final double turningkP = 1.0009775171065494;
-    public static final double turningkI = 0;
-    public static final double turningkD = 0.008007820136852395;
+    public static final double turningkP = 1.8;
+    public static final double turningkI = 1;
+    public static final double turningkD = 0.008;
     public static final double turningkAllowableError = 50.0 / 2048;
 
     public static final double encoderTolerance = 0.01;
