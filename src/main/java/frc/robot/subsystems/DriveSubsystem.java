@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -18,8 +20,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants.*;
 import frc.robot.SwerveModule;
 
@@ -49,7 +52,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   // Duty Encoders may have the wrong values
 
-  private final Pigeon2 m_pGyro = new Pigeon2(IDConstants.PigeonID,"CANivore");
+  private final Pigeon2 m_pGyro = new Pigeon2(IDConstants.PigeonID, "CANivore");
 
   SwerveDriveOdometry m_odometry;
 
@@ -119,7 +122,6 @@ public class DriveSubsystem extends SubsystemBase {
    *                      field.
    */
 
-  
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
 
@@ -136,6 +138,25 @@ public class DriveSubsystem extends SubsystemBase {
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(discSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeed);
     setModuleStates(swerveModuleStates);
+  }
+
+  public void driveWithJoystick(CommandJoystick joystick) {
+    drive(
+        Math.signum(joystick.getRawAxis(1))
+            * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(1),
+                OperatorConstants.driveJoystickDeadband), 2)
+            * -1 * DriveConstants.kMaxSpeed,
+        Math.signum(joystick.getRawAxis(0))
+            * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(0),
+                OperatorConstants.driveJoystickDeadband), 2)
+            * -1 * DriveConstants.kMaxSpeed,
+        MathUtil.applyDeadband(joystick.getRawAxis(4), OperatorConstants.driveJoystickDeadband) * -1
+            * DriveConstants.kMaxAngularSpeed,
+        m_fieldRelative);
+  }
+
+  public void driveToAngle() {
+    
   }
 
   public Pose2d getPose() {
@@ -199,11 +220,11 @@ public class DriveSubsystem extends SubsystemBase {
         pose);
   }
 
-/** Resets robot's conception of field orientation
- */
+  /**
+   * Resets robot's conception of field orientation
+   */
   public void resetYaw() {
     m_pGyro.setYaw(0);
   }
 
-  
 }

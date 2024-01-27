@@ -58,23 +58,10 @@ public class RobotContainer {
 
     if (SubsystemConstants.useDrive) {
       m_robotDrive.setDefaultCommand(
+        
           new RunCommand(
-
               () -> {
-                m_robotDrive.drive(
-                    Math.signum(m_driveJoystick.getRawAxis(1))
-                        * Math.pow(MathUtil.applyDeadband(m_driveJoystick.getRawAxis(1),
-                            OperatorConstants.driveJoystickDeadband), 2)
-                        * -1
-                        * DriveConstants.kMaxSpeed,
-                    Math.signum(m_driveJoystick.getRawAxis(0))
-                        * Math.pow(MathUtil.applyDeadband(m_driveJoystick.getRawAxis(0),
-                            OperatorConstants.driveJoystickDeadband), 2)
-                        * -1
-                        * DriveConstants.kMaxSpeed,
-                    MathUtil.applyDeadband(m_driveJoystick.getRawAxis(4), OperatorConstants.driveJoystickDeadband) * -1
-                        * DriveConstants.kMaxAngularSpeed,
-                    m_robotDrive.m_fieldRelative);
+                m_robotDrive.driveWithJoystick(m_driveJoystick);
               },
               m_robotDrive));
     }
