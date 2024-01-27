@@ -49,8 +49,8 @@ public class ShooterSubsystem extends SubsystemBase {
     slot0Configs.kP = SmartDashboard.getNumber("Shooter kP", 0);
     slot0Configs.kI = SmartDashboard.getNumber("Shooter kI", 0);
     slot0Configs.kD = SmartDashboard.getNumber("Shooter kD", 0);
-    m_motor1.getConfigurator().apply(slot0Configs);
-    m_motor2.getConfigurator().apply(slot0Configs);
+    // m_motor1.getConfigurator().apply(slot0Configs);
+    // m_motor2.getConfigurator().apply(slot0Configs);
 
 
   }
