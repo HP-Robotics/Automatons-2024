@@ -6,15 +6,19 @@ package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.PivotManualCommand;
+import frc.robot.commands.PivotSetPositionCommand;
 import frc.robot.commands.SetShooterCommand;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DataLogManager;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -41,6 +45,7 @@ public class RobotContainer {
 
   private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem() : null;
   private final IntakeSubsystem m_intakeSubsystem = SubsystemConstants.useIntake ? new IntakeSubsystem() : null;
+  private final PivotSubsystem m_pivotSubsystem = SubsystemConstants.usePivot ? new PivotSubsystem() : null;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -106,6 +111,11 @@ public class RobotContainer {
     }
     if(SubsystemConstants.useIntake){
       m_driveJoystick.axisGreaterThan(3, 0.1).whileTrue(new IntakeCommand(m_intakeSubsystem));
+    }
+    if(SubsystemConstants.usePivot){
+      m_driveJoystick.button(5).whileTrue(new PivotManualCommand(m_pivotSubsystem, PivotConstants.manualSpeed));
+      m_driveJoystick.button(6).whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
+      m_driveJoystick.button(7).whileTrue(new PivotSetPositionCommand(m_pivotSubsystem, PivotConstants.position1));
     }
 
     
