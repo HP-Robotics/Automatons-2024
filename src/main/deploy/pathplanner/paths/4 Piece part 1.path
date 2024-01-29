@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.7824422299675968,
+        "y": 6.727333169630711
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.2991794154609702,
+        "y": 6.532338005293588
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.6,
+        "y": 6.727333169630711
+      },
+      "prevControl": {
+        "x": 2.196157171411731,
+        "y": 6.083849127318207
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Grab piece 1A"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 41.82,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "4 Piece",
+  "previewStartingState": {
+    "rotation": 58.39,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

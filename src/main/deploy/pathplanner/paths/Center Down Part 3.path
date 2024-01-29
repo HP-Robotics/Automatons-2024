@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 4.321604462682471,
+        "y": 2.3984405213513993
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0138839138077134,
-        "y": 5.695053213468251
+        "x": 5.321604462682471,
+        "y": 1.8984405213513993
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Center Down: Grab 4C"
     },
     {
       "anchor": {
-        "x": 4.0,
-        "y": 6.501949869996606
+        "x": 7.822951647139101,
+        "y": 0.9163618747407863
       },
       "prevControl": {
-        "x": 3.5123745306873047,
-        "y": 5.5086133925236975
+        "x": 7.732324023936696,
+        "y": 0.9399793357393291
       },
       "nextControl": {
-        "x": 4.898183589172957,
-        "y": 8.33162977545886
+        "x": 8.041721033575856,
+        "y": 0.8593508082549549
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 4.321604462682471,
+        "y": 2.3984405213513993
       },
       "prevControl": {
-        "x": 1.7866673263037751,
-        "y": 7.809556331701738
+        "x": 4.390600241048652,
+        "y": 2.385191758174761
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,13 +46,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 180.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 0,
-      "rotationDegrees": 0,
+      "waypointRelativePos": 1,
+      "rotationDegrees": -17.52556837372279,
       "rotateFast": false
     }
   ],
@@ -66,11 +61,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -0.5806118373371782,
+    "rotation": -36.379999999999995,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Test Paths",
-  "previewStartingState": null,
+  "folder": "Center Down",
+  "previewStartingState": {
+    "rotation": -36.379999999999995,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }
