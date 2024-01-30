@@ -103,7 +103,7 @@ public class RobotContainer {
     // new JoystickButton(m_driveJoystick, 2).onFalse(new
     // InstantCommand(m_robotDrive::forceFieldRelative, m_robotDrive));
     m_driveJoystick.button(6).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
-    m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path Circle"));
+    m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path"));
     m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path Line"));
     // // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
@@ -132,8 +132,8 @@ public class RobotContainer {
 
   }
 
-   public Command getAutonomousCommand() {
-       return Autos.FourPiece(m_robotDrive);
+    //public Command getAutonomousCommand() {
+      // return Autos.FourPiece(m_robotDrive);
 
    }
-}
+
