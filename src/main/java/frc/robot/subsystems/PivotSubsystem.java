@@ -4,8 +4,10 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
-import frc.robot.Constants.PivotConstants;
 
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.PivotConstants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PivotSubsystem extends SubsystemBase {
@@ -16,12 +18,13 @@ public class PivotSubsystem extends SubsystemBase {
     public PivotSubsystem() {
         double speed = 0.0;
         m_motorR = new TalonFX(PivotConstants.motorRID);
-        m_motorR = new TalonFX(PivotConstants.motorLID);
+        m_motorL = new TalonFX(PivotConstants.motorLID);
         Slot0Configs motorConfigs = new Slot0Configs();
-        motorConfigs.kP = PivotConstants.kP;
-        motorConfigs.kI = PivotConstants.kI;
-        motorConfigs.kD = PivotConstants.kD;
+        motorConfigs.kP = SmartDashboard.getNumber("kP", PivotConstants.kP);
+        motorConfigs.kI = SmartDashboard.getNumber("kI", PivotConstants.kI);
+        motorConfigs.kD = SmartDashboard.getNumber("kD", PivotConstants.kD);
         m_motorR.getConfigurator().apply(motorConfigs);
+        m_motorL.getConfigurator().apply(motorConfigs);
     }
 
     public void periodic() {
