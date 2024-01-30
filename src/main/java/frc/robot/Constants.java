@@ -37,6 +37,7 @@ public final class Constants {
     public static final boolean useShooter = false;
     public static final boolean useDataManger = true;
     public static final boolean useLimelight = true;
+    public static final boolean usePivot = true;
   }
 
   public static class DriveConstants {
@@ -62,7 +63,6 @@ public final class Constants {
     public final static int FRAbsEncoder = 12;
     public final static int BRAbsEncoder = 11;
     public final static int BLAbsEncoder = 13;
-  
 
     public final static SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         kFrontLeftLocation, kFrontRightLocation, kBackRightLocation, kBackLeftLocation);
@@ -81,14 +81,13 @@ public final class Constants {
     public static final double turningkAllowableError = 50.0 / 2048;
 
     public static final double encoderTolerance = 0.01;
-    
-    //Absolute encoder values that make the wheels point forward
+
+    // Absolute encoder values that make the wheels point forward
     public static final double absEncoderForwardFL = 0.98;
     public static final double absEncoderForwardFR = 0.708;
-    public static final double absEncoderForwardBR = 0.74; //TODO Fill in later (not precise) >: (
+    public static final double absEncoderForwardBR = 0.74; // TODO Fill in later (not precise) >: (
     public static final double absEncoderForwardBL = 0.55;
   }
-
 
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 5.0;
@@ -103,10 +102,10 @@ public final class Constants {
 
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kPXController = 20; 
-    public static final double kIXController = 0.2; 
+    public static final double kPXController = 20;
+    public static final double kIXController = 0.2;
     public static final double kDXController = 0.0;
-    public static final double kIYController = 0.2; 
+    public static final double kIYController = 0.2;
     public static final double kPYController = 20;
     public static final double kPThetaController = 3;
     public static final double kIThetaController = 0.05;
@@ -119,12 +118,12 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    
+
     public static final double intakeSpeed = -0.95;
   }
 
   public static class ShooterConstants {
-    
+
     public static final double shooterSpeed1 = 0;
     public static final double shooterSpeed2 = 0;
   }
@@ -146,5 +145,17 @@ public final class Constants {
     public static final int shooterMotor2ID = 1;
 
     public final static int PigeonID = 57;
+  }
+
+  public static class PivotConstants {
+    public static final double kP = 0.0;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+
+    public static final int motorRID = 0;
+    public static final int motorLID = 0;
+
+    public static final double manualSpeed = 0.2;
+    public static final double position1 = 0.0;
   }
 }
