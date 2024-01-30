@@ -43,7 +43,8 @@ public class RobotContainer {
   // Joystick(OperatorConstants.kOperatorControllerPort);
   // The robot's subsystems and commands are defined here...
   final DriveSubsystem m_robotDrive = SubsystemConstants.useDrive ? new DriveSubsystem() : null;
-  private final LimelightSubsystem m_limelightSubsystem = SubsystemConstants.useLimelight ? new LimelightSubsystem() : null;
+  private final LimelightSubsystem m_limelightSubsystem = SubsystemConstants.useLimelight ? new LimelightSubsystem()
+      : null;
 
   private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem() : null;
   private final IntakeSubsystem m_intakeSubsystem = SubsystemConstants.useIntake ? new IntakeSubsystem() : null;
@@ -98,25 +99,25 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-     if (SubsystemConstants.useDrive) {
-    // new JoystickButton(m_driveJoystick, 2).onTrue(new InstantCommand(m_robotDrive::forceRobotRelative, m_robotDrive));
-    // new JoystickButton(m_driveJoystick, 2).onFalse(new
-    // InstantCommand(m_robotDrive::forceFieldRelative, m_robotDrive));
-    m_driveJoystick.button(6).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
-    m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path"));
-    m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path Line"));
-    // // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-    // pressed,
-    // // cancelling on release.
-     }
-    if(SubsystemConstants.useShooter){
+    if (SubsystemConstants.useDrive) {
+      // new JoystickButton(m_driveJoystick, 2).onTrue(new
+      // InstantCommand(m_robotDrive::forceRobotRelative, m_robotDrive));
+      // new JoystickButton(m_driveJoystick, 2).onFalse(new
+      // InstantCommand(m_robotDrive::forceFieldRelative, m_robotDrive));
+      m_driveJoystick.button(6).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
+      m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path"));
+      m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path Line"));
+      // // Schedule `exampleMethodCommand` when the Xbox controller's B button is
+      // pressed,
+      // // cancelling on release.
+    }
+    if (SubsystemConstants.useShooter) {
       m_driveJoystick.button(2).whileTrue(new SetShooterCommand(m_shooterSubsystem));
     }
-    if(SubsystemConstants.useIntake){
+    if (SubsystemConstants.useIntake) {
       m_driveJoystick.axisGreaterThan(3, 0.1).whileTrue(new IntakeCommand(m_intakeSubsystem));
     }
 
-    
   }
 
   /**
@@ -132,8 +133,8 @@ public class RobotContainer {
 
   }
 
-    //public Command getAutonomousCommand() {
-      // return Autos.FourPiece(m_robotDrive);
-
-   }
-
+  public Command getAutonomousCommand() {
+    // return Autos.FourPiece(m_robotDrive);
+    return null;
+  }
+}
