@@ -14,6 +14,7 @@ import com.ctre.phoenix6.signals.ControlModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -23,9 +24,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
-    // TODO: move to constants
-    m_motor1 = new TalonFX(ShooterConstants.motor1ID);
-    m_motor2 = new TalonFX(ShooterConstants.motor2ID);
+    // TODO: move to constants 
+    m_motor1 = new TalonFX(IDConstants.shooterMotor1ID);
+    m_motor2 = new TalonFX(IDConstants.shooterMotor2ID);
     TalonFXConfiguration config = new TalonFXConfiguration();
 
     m_motor1.getConfigurator().apply(config);

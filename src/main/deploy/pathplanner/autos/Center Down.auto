@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4000824184120118,
+      "y": 1.597872570604367
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Down Part 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Down Part 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Down Part 3"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

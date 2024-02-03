@@ -1,0 +1,74 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.3758779156513192,
+        "y": 3.10042311296024
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.945588988565151,
+        "y": 0.40948984510795655
+      },
+      "isLocked": false,
+      "linkedName": "Center Down: Shoot preload"
+    },
+    {
+      "anchor": {
+        "x": 7.8217676625377015,
+        "y": 2.2131951152263354
+      },
+      "prevControl": {
+        "x": 7.899785039618608,
+        "y": 2.607182869484908
+      },
+      "nextControl": {
+        "x": 7.626772498200579,
+        "y": 1.2284695353238697
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.321604462682471,
+        "y": 2.3984405213513993
+      },
+      "prevControl": {
+        "x": 4.926089472127551,
+        "y": 2.0571989837614364
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Center Down: Grab 4C"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 25.559965171823173,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -36.379999999999995,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Center Down",
+  "previewStartingState": {
+    "rotation": -36.02999999999997,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

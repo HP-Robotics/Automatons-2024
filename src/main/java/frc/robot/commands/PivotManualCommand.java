@@ -4,35 +4,35 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.Constants.IntakeConstants;
+import frc.robot.subsystems.PivotSubsystem;
 
-public class IntakeCommand extends Command {
-    private final IntakeSubsystem m_subsystem;
-  /** Creates a new IntakeCommand. */
-  public IntakeCommand(IntakeSubsystem subsystem) {
+public class PivotManualCommand extends Command {
+  private final PivotSubsystem m_subsystem;
+  double m_speed;
+  /** Creates a new pivotManualCommand. */
+  public PivotManualCommand(PivotSubsystem subsystem, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
+    m_speed = speed;
     addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double output = SmartDashboard.getNumber("Intake Speed", IntakeConstants.intakeSpeed);
-    m_subsystem.useIntake(output);
+    m_subsystem.movePivot(m_speed, true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.useIntake(0.0); // Turn intake off; 
+    m_subsystem.movePivot(0.0, true);
   }
 
   // Returns true when the command should end.
