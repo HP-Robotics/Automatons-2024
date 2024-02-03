@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class FollowPathCommand extends Command {
   DriveSubsystem m_drive;
-  String m_pathName;
+  String m_pathName; 
   PathPlannerPath m_path;
   
 
@@ -35,15 +35,15 @@ public class FollowPathCommand extends Command {
 
     return new FollowPathHolonomic(
         m_path,
-        m_drive::getPose, // Robot pose supplier
-        m_drive::getCurrentspeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        m_drive::getPose, 
+        m_drive::getCurrentspeeds, // MUST BE ROBOT RELATIVE
         m_drive::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-            new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-            4.5, // Max module speed, in m/s
-            0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-            new ReplanningConfig() // Default path replanning config. See the API for the options here
+        new HolonomicPathFollowerConfig( // TODO move to Constants
+            new PIDConstants(5.0, 0.0, 0.0), 
+            new PIDConstants(5.0, 0.0, 0.0), 
+            4.5,
+            0.4, // Distance from robot center to furthest module.
+            new ReplanningConfig()
         ),
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red
