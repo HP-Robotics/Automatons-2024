@@ -40,6 +40,7 @@ public final class Constants {
     public static final boolean useDataManger = true;
     public static final boolean useLimelight = false;
     public static final boolean usePivot = false;
+    public static final boolean useClimber = false;
   }
 
   public static class DriveConstants {

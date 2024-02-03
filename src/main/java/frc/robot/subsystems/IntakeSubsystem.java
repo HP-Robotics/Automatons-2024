@@ -14,13 +14,13 @@ import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  TalonFX m_motor3 = new TalonFX(IDConstants.intakeMotorID);
+  TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID);
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
     TalonFXConfiguration config = new TalonFXConfiguration();
-    m_motor3.getConfigurator().apply(config);
+    m_motor.getConfigurator().apply(config);
 
-    SmartDashboard.putNumber("Intake Speed", IntakeConstants.intakeSpeed);
+    SmartDashboard.putNumber("Intake Speed", IntakeConstants.intakeSpeed);  //TODO Add SmartDashboard Tab
   }
 
   @Override
@@ -28,7 +28,29 @@ public class IntakeSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void useIntake(double output) {
-    m_motor3.setControl(new DutyCycleOut(output));
+  public void runIntake(double output) {
+    m_motor.setControl(new DutyCycleOut(output));
   };
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

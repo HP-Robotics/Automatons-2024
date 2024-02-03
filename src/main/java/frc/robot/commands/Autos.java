@@ -40,7 +40,7 @@ public final class Autos {
 
 
   private Autos() {
-    throw new UnsupportedOperationException("This is a utility class!");
+    throw new UnsupportedOperationException("Now watch me whip! Now watch me nae nae!");
   }
 
 
