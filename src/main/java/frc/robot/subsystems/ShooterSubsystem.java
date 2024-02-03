@@ -7,11 +7,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.ControlModeValue;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IDConstants;
@@ -24,7 +21,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
-    // TODO: move to constants 
     m_motor1 = new TalonFX(IDConstants.shooterMotor1ID);
     m_motor2 = new TalonFX(IDConstants.shooterMotor2ID);
     TalonFXConfiguration config = new TalonFXConfiguration();
@@ -32,10 +28,18 @@ public class ShooterSubsystem extends SubsystemBase {
     m_motor1.getConfigurator().apply(config);
     m_motor2.getConfigurator().apply(config);
 
+    Slot0Configs slot0Configs = new Slot0Configs(); 
+    slot0Configs.kV = ShooterConstants.motor1kV;
+    slot0Configs.kP = ShooterConstants.motor1kP;
+    slot0Configs.kI = ShooterConstants.motor1kI;
+    slot0Configs.kD = ShooterConstants.motor1kD;
+    m_motor1.getConfigurator().apply(slot0Configs);
+    m_motor2.getConfigurator().apply(slot0Configs);
+
     SmartDashboard.putNumber("Shooter Speed 1", ShooterConstants.shooterSpeed1);
     SmartDashboard.putNumber("Shooter Speed 2", ShooterConstants.shooterSpeed2);
     SmartDashboard.putNumber("Shooter kV", 0);
-    SmartDashboard.putNumber("Shooter kP", 0);
+    SmartDashboard.putNumber("Shooter kP", 0); //TODO Make shooter networktable
     SmartDashboard.putNumber("Shooter kI", 0);
     SmartDashboard.putNumber("Shooter kD", 0);
   }
@@ -45,13 +49,6 @@ public class ShooterSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("motor1 Velocity", m_motor1.getVelocity().getValue());
     SmartDashboard.putNumber("motor2 Velocity", m_motor2.getVelocity().getValue());
-    Slot0Configs slot0Configs = new Slot0Configs();
-    slot0Configs.kV = ShooterConstants.motor1kV;
-    slot0Configs.kP = ShooterConstants.motor1kP;
-    slot0Configs.kI = ShooterConstants.motor1kI;
-    slot0Configs.kD = ShooterConstants.motor1kD;
-    m_motor1.getConfigurator().apply(slot0Configs);
-    m_motor2.getConfigurator().apply(slot0Configs);
   }
 
   public void setShooter(double output1, double output2) {
