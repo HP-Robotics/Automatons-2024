@@ -33,7 +33,7 @@ public class SetShooterCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.setShooter(0.0, 0.0); // turn
+    m_subsystem.stopShooter(); // turn
   }
 
   // Returns true when the command should end.
