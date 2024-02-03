@@ -21,7 +21,7 @@ public class ClimbSubsystem extends SubsystemBase {
     TalonFXConfiguration config = new TalonFXConfiguration();
     climbMotor.getConfigurator().apply(config);
 
-    SmartDashboard.putNumber("Intake Speed", IntakeConstants.intakeSpeed);
+    SmartDashboard.putNumber("Intake Speed", IntakeConstants.intakeSpeed); 
   }
 
   @Override
