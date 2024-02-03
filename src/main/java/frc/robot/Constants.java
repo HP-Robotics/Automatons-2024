@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -36,8 +38,8 @@ public final class Constants {
     public static final boolean useIntake = false;
     public static final boolean useShooter = false;
     public static final boolean useDataManger = true;
-    public static final boolean usePivot = true;
     public static final boolean useLimelight = false;
+    public static final boolean usePivot = false;
   }
 
   public static class DriveConstants {
@@ -91,6 +93,11 @@ public final class Constants {
     public static final double absEncoderForwardBR = 0.74; // TODO Fill in later (not precise) >: (
     public static final double absEncoderForwardBL = 0.55;
 
+
+  }
+
+  public static final class LimelightConstants {
+    public static final Pose2d aprilTag7 = new Pose2d(-1.5 * 0.0254, 218.42 * 0.0254, new Rotation2d(0));
 
   }
 

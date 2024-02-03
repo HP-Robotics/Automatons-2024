@@ -13,21 +13,21 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public final class Autos {
   /** Example static factory for an autonomous command. */
-  //public static Command exampleAuto(ExampleSubsystem subsystem) {
-   // return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
- // }
+//   public static Command exampleAuto(ExampleSubsystem subsystem) {
+//    return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
+//  }
 
- // public static Command FourPiece(DriveSubsystem drive) {
- //   return new SequentialCommandGroup(
- //     new FollowPathCommand(drive, "4 Piece part 1"),
- //     new WaitCommand(1),
- //     new FollowPathCommand(drive, "4 Piece part 2"),
- //     new WaitCommand(1),
- //     new FollowPathCommand(drive, "4 Piece Part 3")
- //     );
- // }
+  public static Command FourPiece(DriveSubsystem drive) {
+    return new SequentialCommandGroup(
+      new FollowPathCommand(drive, "4 Piece part 1"),
+      new WaitCommand(1),
+      new FollowPathCommand(drive, "4 Piece part 2"),
+      new WaitCommand(1),
+      new FollowPathCommand(drive, "4 Piece Part 3")
+      );
+  }
 
-/*  public static Command CenterDown(DriveSubsystem drive) {
+  public static Command CenterDown(DriveSubsystem drive) {
     return new SequentialCommandGroup(
       new FollowPathCommand(drive, "Center Down Part 1"),
       new WaitCommand(1),
@@ -36,7 +36,7 @@ public final class Autos {
       new FollowPathCommand(drive, "Center Down Part 3")
       );
   }
-*/
+
 
 
   private Autos() {

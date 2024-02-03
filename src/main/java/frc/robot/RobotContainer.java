@@ -133,7 +133,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    // return Autos.FourPiece(m_robotDrive);
-    return null;
+    return Autos.FourPiece(m_robotDrive);
+    //return null;
   }
 }

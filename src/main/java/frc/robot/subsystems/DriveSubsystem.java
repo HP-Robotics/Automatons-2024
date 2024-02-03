@@ -8,6 +8,8 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import com.pathplanner.lib.util.PathPlannerLogging;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -50,6 +52,8 @@ public class DriveSubsystem extends SubsystemBase {
   public boolean m_allowVisionUpdates = false;
 
   public final Field2d m_field = new Field2d();
+  public final Field2d m_currentPose = new Field2d();
+  public final Field2d m_targetPose = new Field2d();
 
   // Duty Encoders may have the wrong values
 
@@ -77,7 +81,14 @@ public class DriveSubsystem extends SubsystemBase {
             m_frontRight.getPosition(),
             m_backRight.getPosition(),
             m_backLeft.getPosition()
+
         });
+    PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+      m_currentPose.setRobotPose(pose);
+    });
+    PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+      m_targetPose.setRobotPose(pose);
+    });
 
     SmartDashboard.putData("Field", m_field);
     rotationController = new PIDController(DriveConstants.turningControllerkP, DriveConstants.turningControllerkI,

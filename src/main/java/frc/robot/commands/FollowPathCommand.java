@@ -10,21 +10,24 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import frc.robot.subsystems.DriveSubsystem;
-
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class FollowPathCommand extends Command {
   DriveSubsystem m_drive;
   String m_pathName;
   PathPlannerPath m_path;
+  
 
   public Command m_pathPlannerCommand;
 
   public FollowPathCommand(DriveSubsystem Drive, String PathName) {
     m_drive = Drive;
     m_pathName = PathName;
+
     m_path = PathPlannerPath.fromPathFile(PathName);
     m_pathPlannerCommand = PathCommand();
+    addRequirements(Drive);
   }
 
   /** Creates a new PathCommand. */
