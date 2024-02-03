@@ -44,6 +44,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   private final CommandJoystick m_driveJoystick = new CommandJoystick(OperatorConstants.kDriverControllerPort);
+  private final CommandJoystick m_operatorJoystick = new CommandJoystick(OperatorConstants.kOperatorControllerPort);
   // private final Joystick m_opJoystick = new
   // Joystick(OperatorConstants.kOperatorControllerPort);
   // The robot's subsystems and commands are defined here...
@@ -105,16 +106,17 @@ public class RobotContainer {
     }
 
     if(SubsystemConstants.useShooter){
-      m_driveJoystick.button(2).whileTrue(new SetShooterCommand(m_shooterSubsystem));
+      m_operatorJoystick.axisGreaterThan(3, 0.1).whileTrue(new SetShooterCommand(m_shooterSubsystem)); //Toggle shooter wheels
     }
 
     if (SubsystemConstants.useIntake) {
       m_driveJoystick.axisGreaterThan(3, 0.1).whileTrue(new IntakeCommand(m_intakeSubsystem));
     }
     if(SubsystemConstants.usePivot){
-      m_driveJoystick.button(5).whileTrue(new PivotManualCommand(m_pivotSubsystem, PivotConstants.manualSpeed));
-      m_driveJoystick.button(6).whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
-      m_driveJoystick.button(7).whileTrue(new PivotSetPositionCommand(m_pivotSubsystem, PivotConstants.position1));
+      m_operatorJoystick.povRight().whileTrue(new PivotManualCommand(m_pivotSubsystem, PivotConstants.manualSpeed));
+      m_operatorJoystick.povLeft().whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
+      m_operatorJoystick.button(2).whileTrue(new PivotSetPositionCommand(m_pivotSubsystem, PivotConstants.positionStage));
+      m_operatorJoystick.button(1).whileTrue(new PivotSetPositionCommand(m_pivotSubsystem, PivotConstants.positionAmp));
     }
 
   }
