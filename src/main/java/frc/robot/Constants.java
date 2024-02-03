@@ -149,7 +149,7 @@ public final class Constants {
   public static class IDConstants {
     public final static int FLDriveMotorID = 28;
     public final static int FRDriveMotorID = 22;
-    public final static int BRDriveMotorID = 20;
+     public final static int BRDriveMotorID = 20;
     public final static int BLDriveMotorID = 24;
 
     public final static int FLTurningMotorID = 29;
@@ -165,7 +165,13 @@ public final class Constants {
     public final static int PigeonID = 57;
 
     public final static int pivotAbsEncoderID = 0;
+    public final static int climbMotorID = 9; //TODO choose ID number
   }
+
+  public static class ClimberConstants {
+    public final static double climbSpeed = 0.4;
+  }
+
 
   public static class PivotConstants {
     public static final double kP = 0.0;

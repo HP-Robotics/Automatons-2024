@@ -34,7 +34,8 @@ public class SetShooterCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     // m_subsystem.stopShooter(); // turn //TODO: decide which one to use
-    m_subsystem.setShooter(0.0, 0.0); // turn shooter off  }
+    m_subsystem.setShooter(0.0, 0.0); // turn shooter off  
+  }
 
   // Returns true when the command should end.
   @Override
