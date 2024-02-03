@@ -22,7 +22,7 @@ public class IntakeCommand extends Command {
   @Override
   public void initialize() {
     double output = SmartDashboard.getNumber("Intake Speed", IntakeConstants.intakeSpeed);
-    m_subsystem.useIntake(output);
+    m_subsystem.runIntake(output);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -32,7 +32,7 @@ public class IntakeCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.useIntake(0.0); // Turn intake off; 
+    m_subsystem.runIntake(0.0); // Turn intake off; 
   }
 
   // Returns true when the command should end.
