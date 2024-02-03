@@ -5,14 +5,23 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.PivotConstants;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableValue;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PivotSubsystem extends SubsystemBase {
     private TalonFX m_motorR;
     private TalonFX m_motorL;
+    private DutyCycleEncoder m_absEncoder;
+
+    NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    NetworkTable pivotTable = inst.getTable("pivot-table");
 
     /** Creates a new ExampleSubsystem. */
     public PivotSubsystem() {
@@ -25,9 +34,12 @@ public class PivotSubsystem extends SubsystemBase {
         motorConfigs.kD = SmartDashboard.getNumber("kD", PivotConstants.kD);
         m_motorR.getConfigurator().apply(motorConfigs);
         m_motorL.getConfigurator().apply(motorConfigs);
+        m_absEncoder = new DutyCycleEncoder(IDConstants.pivotAbsEncoderID);
+        
     }
 
     public void periodic() {
+        pivotTable.putValue("Absolute Encoder Position", NetworkTableValue.makeDouble(m_absEncoder.getAbsolutePosition()));
         // This method will be called once per scheduler run
     };
 

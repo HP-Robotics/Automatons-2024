@@ -150,6 +150,8 @@ public final class Constants {
     public static final int shooterMotor2ID = 1;
 
     public final static int PigeonID = 57;
+
+    public final static int pivotAbsEncoderID = 0;
   }
 
   public static class PivotConstants {
