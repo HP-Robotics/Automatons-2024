@@ -20,6 +20,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -65,23 +66,10 @@ public class RobotContainer {
 
     if (SubsystemConstants.useDrive) {
       m_robotDrive.setDefaultCommand(
+        
           new RunCommand(
-
               () -> {
-                m_robotDrive.drive(
-                    Math.signum(m_driveJoystick.getRawAxis(1))
-                        * Math.pow(MathUtil.applyDeadband(m_driveJoystick.getRawAxis(1),
-                            OperatorConstants.driveJoystickDeadband), 2)
-                        * -1
-                        * DriveConstants.kMaxSpeed,
-                    Math.signum(m_driveJoystick.getRawAxis(0))
-                        * Math.pow(MathUtil.applyDeadband(m_driveJoystick.getRawAxis(0),
-                            OperatorConstants.driveJoystickDeadband), 2)
-                        * -1
-                        * DriveConstants.kMaxSpeed,
-                    MathUtil.applyDeadband(m_driveJoystick.getRawAxis(4), OperatorConstants.driveJoystickDeadband) * -1
-                        * DriveConstants.kMaxAngularSpeed,
-                    m_robotDrive.m_fieldRelative);
+                m_robotDrive.driveWithJoystick(m_driveJoystick);
               },
               m_robotDrive));
     }
@@ -109,16 +97,17 @@ public class RobotContainer {
       // InstantCommand(m_robotDrive::forceRobotRelative, m_robotDrive));
       // new JoystickButton(m_driveJoystick, 2).onFalse(new
       // InstantCommand(m_robotDrive::forceFieldRelative, m_robotDrive));
-      m_driveJoystick.button(6).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
+      m_driveJoystick.button(8).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
       m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path"));
       m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path Line"));
-      // // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-      // pressed,
-      // // cancelling on release.
+      m_driveJoystick.button(4).whileTrue(new RunCommand(()-> m_robotDrive.drivePointedTowardsAngle(m_driveJoystick, new Rotation2d(0))));
+      
     }
-    if (SubsystemConstants.useShooter) {
+
+    if(SubsystemConstants.useShooter){
       m_driveJoystick.button(2).whileTrue(new SetShooterCommand(m_shooterSubsystem));
     }
+
     if (SubsystemConstants.useIntake) {
       m_driveJoystick.axisGreaterThan(3, 0.1).whileTrue(new IntakeCommand(m_intakeSubsystem));
     }

@@ -20,6 +20,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -62,7 +63,7 @@ public class SwerveModule {
     m_driveMotor.getConfigurator().apply(slot0Configs);
     m_driveMotor.setNeutralMode(NeutralModeValue.Coast);
     
-    BaseStatusSignal.setUpdateFrequencyForAll(50,m_driveMotor.getClosedLoopError(), m_driveMotor.getClosedLoopDerivativeOutput(),m_driveMotor.getClosedLoopIntegratedOutput(),m_driveMotor.getClosedLoopProportionalOutput(),m_driveMotor.getClosedLoopFeedForward());
+    // BaseStatusSignal.setUpdateFrequencyForAll(50,m_driveMotor.getClosedLoopError(), m_driveMotor.getClosedLoopDerivativeOutput(),m_driveMotor.getClosedLoopIntegratedOutput(),m_driveMotor.getClosedLoopProportionalOutput(),m_driveMotor.getClosedLoopFeedForward());
     SignalLogger.start();
     
 
@@ -143,7 +144,7 @@ public class SwerveModule {
     driveTrainTable.putValue(m_name + "turningSetpoint", NetworkTableValue.makeDouble(goalPosition));
     driveTrainTable.putValue(m_name + "driveSetpoint", NetworkTableValue.makeDouble(metersToTicks(state.speedMetersPerSecond)));
 
-    m_driveMotor.setControl(new VelocityDutyCycle(metersToTicks(state.speedMetersPerSecond)));
+    m_driveMotor.setControl(new VelocityTorqueCurrentFOC(metersToTicks(state.speedMetersPerSecond)));
 
   }
 
