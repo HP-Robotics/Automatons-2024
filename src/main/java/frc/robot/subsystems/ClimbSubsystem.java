@@ -21,16 +21,15 @@ public class ClimbSubsystem extends SubsystemBase {
     TalonFXConfiguration config = new TalonFXConfiguration();
     climbMotor.getConfigurator().apply(config);
 
-    SmartDashboard.putNumber("Intake Speed", IntakeConstants.intakeSpeed);
+    SmartDashboard.putNumber("Intake Speed", IntakeConstants.intakeSpeed); //TODO; change to climber values 
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    climbMotor.set(ClimberConstants.climbSpeed);
   }
 
   public void climb() {
-    climbMotor.setControl(new DutyCycleOut(ClimberConstants.climbSpeed));
+    climbMotor.setControl(new DutyCycleOut(ClimberConstants.climbSpeed)); //TODO; not finished 
   }
 }
