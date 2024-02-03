@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -55,6 +56,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final Pigeon2 m_pGyro = new Pigeon2(IDConstants.PigeonID, "CANivore");
 
   SwerveDriveOdometry m_odometry;
+  PIDController rotationController;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable limelightTable = inst.getTable("limelight-prada");
@@ -78,6 +80,9 @@ public class DriveSubsystem extends SubsystemBase {
         });
 
     SmartDashboard.putData("Field", m_field);
+    rotationController = new PIDController(DriveConstants.turningControllerkP, DriveConstants.turningControllerkI,
+        DriveConstants.turningControllerkD); //TODO: Needs basic tuning
+    rotationController.enableContinuousInput(-Math.PI, Math.PI);
   }
 
   @Override
@@ -107,6 +112,8 @@ public class DriveSubsystem extends SubsystemBase {
     driveTrainTable.putValue("Pigeon Pitch", NetworkTableValue.makeDouble(m_pGyro.getPitch().getValue()));
     driveTrainTable.putValue("Pigeon Yaw", NetworkTableValue.makeDouble(m_pGyro.getYaw().getValue()));
     driveTrainTable.putValue("Pigeon Roll", NetworkTableValue.makeDouble(m_pGyro.getRoll().getValue()));
+
+
 
     m_field.setRobotPose(m_odometry.getPoseMeters());
 
@@ -155,12 +162,41 @@ public class DriveSubsystem extends SubsystemBase {
         m_fieldRelative);
   }
 
-  public void driveToAngle() {
+  public void drivePointedTowardsAngle(CommandJoystick joystick, Rotation2d targetAngle) {
+    double rot = rotationController.calculate(getPoseRot().getRadians(), targetAngle.getRadians());
+    drive(
+        Math.signum(joystick.getRawAxis(1))
+            * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(1),
+                OperatorConstants.driveJoystickDeadband), 2)
+            * -1 * DriveConstants.kMaxSpeed,
+        Math.signum(joystick.getRawAxis(0))
+            * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(0),
+                OperatorConstants.driveJoystickDeadband), 2)
+            * -1 * DriveConstants.kMaxSpeed, 
+        rot * 1 * DriveConstants.kMaxAngularSpeed,
+        true);
+
+    driveTrainTable.putValue("Rotation Current Angle", NetworkTableValue.makeDouble(getPoseRot().getDegrees()));
+    driveTrainTable.putValue("Rotation Target Angle", NetworkTableValue.makeDouble(targetAngle.getDegrees()));
+    driveTrainTable.putValue("Rotation Power Input", NetworkTableValue.makeDouble(rot));
     
+    driveTrainTable.putValue("Rotation Controller P", NetworkTableValue.makeDouble(rotationController.getP()*rotationController.getPositionError()));
+    //driveTrainTable.putValue("Rotation Controller I", NetworkTableValue.makeDouble(rotationController.getI()*rotationController.));
+    //driveTrainTable.putValue("Rotation Controller D", NetworkTableValue.makeDouble(rotationController.));
+
+    driveTrainTable.putValue("Rotation Controller Position Error", NetworkTableValue.makeDouble(rotationController.getPositionError()));
+    driveTrainTable.putValue("Rotation Controller Setpoint", NetworkTableValue.makeDouble(rotationController.getSetpoint()));
   }
 
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
+  }
+
+  public Rotation2d pointToAngle(double x, double y){
+    System.out.println("X: " + getPoseX());
+    System.out.println("Y: " + getPoseY());
+    System.out.println(Math.atan2(x-getPoseX(),y-getPoseY()));
+    return new Rotation2d(Math.atan2(x-getPoseX(),y-getPoseY()));
   }
 
   public ChassisSpeeds getCurrentspeeds() {

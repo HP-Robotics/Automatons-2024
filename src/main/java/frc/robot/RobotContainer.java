@@ -16,6 +16,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -85,15 +86,15 @@ public class RobotContainer {
   private void configureBindings() {
 
      if (SubsystemConstants.useDrive) {
-    // new JoystickButton(m_driveJoystick, 2).onTrue(new InstantCommand(m_robotDrive::forceRobotRelative, m_robotDrive));
-    // new JoystickButton(m_driveJoystick, 2).onFalse(new
-    // InstantCommand(m_robotDrive::forceFieldRelative, m_robotDrive));
-    m_driveJoystick.button(6).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
-    m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path"));
-    // // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-    // pressed,
-    // // cancelling on release.
-     }
+      // new JoystickButton(m_driveJoystick, 2).onTrue(new InstantCommand(m_robotDrive::forceRobotRelative, m_robotDrive));
+      // new JoystickButton(m_driveJoystick, 2).onFalse(new
+      // InstantCommand(m_robotDrive::forceFieldRelative, m_robotDrive));
+      m_driveJoystick.button(6).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
+      m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path"));
+      //test of point towards angle button
+      m_driveJoystick.button(8).whileTrue(new RunCommand(()-> m_robotDrive.drivePointedTowardsAngle(m_driveJoystick, new Rotation2d(0))));
+      
+    }
     if(SubsystemConstants.useShooter){
       m_driveJoystick.button(2).whileTrue(new SetShooterCommand(m_shooterSubsystem));
     }

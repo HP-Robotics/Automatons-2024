@@ -41,11 +41,9 @@ public final class Constants {
 
   public static class DriveConstants {
     public static final double kMaxSpeed = 4.0; // meters per second
-    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second // TODO MENTOR: is this a good
-                                                           // turn speed?
+    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second // TODO MENTOR: is this a good turn speed?
     public static final double kSlowSpeed = 2.0;
-    public static final double kSlowAngularspeed = Math.PI / 2; // 1/4 rotation per second // TODO MENTOR: is this a
-                                                                // good turn speed?
+    public static final double kSlowAngularspeed = Math.PI / 2; // 1/4 rotation per second // TODO MENTOR: is this a good turn speed?
 
     public static final double kWheelRadius = 0.0508 * (218.5 / 225.6); // This is a fudge factor
     public static final double kEncoderResolution = 1.0;
@@ -80,6 +78,11 @@ public final class Constants {
     public static final double turningkD = 0.008;
     public static final double turningkAllowableError = 50.0 / 2048;
 
+    public static final double turningControllerkP = 1;
+    public static final double turningControllerkI = 0.0;
+    public static final double turningControllerkD = 0.0;
+    
+
     public static final double encoderTolerance = 0.01;
     
     //Absolute encoder values that make the wheels point forward
@@ -87,6 +90,8 @@ public final class Constants {
     public static final double absEncoderForwardFR = 0.708;
     public static final double absEncoderForwardBR = 0.74; //TODO Fill in later (not precise) >: (
     public static final double absEncoderForwardBL = 0.55;
+
+
   }
 
 
