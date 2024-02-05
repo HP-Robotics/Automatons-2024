@@ -1,0 +1,110 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.3707054194782846,
+        "y": 7.2620699087592495
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.885248214945642,
+        "y": 7.23868159987437
+      },
+      "isLocked": false,
+      "linkedName": "Start for Amp"
+    },
+    {
+      "anchor": {
+        "x": 8.504139629366648,
+        "y": 7.437482225395848
+      },
+      "prevControl": {
+        "x": 8.09484422388125,
+        "y": 8.197602264154444
+      },
+      "nextControl": {
+        "x": 8.797720411422691,
+        "y": 6.892260773006053
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.504139629366648,
+        "y": 1.0875563631509624
+      },
+      "prevControl": {
+        "x": 8.872608052036277,
+        "y": 1.4123081933004649
+      },
+      "nextControl": {
+        "x": 7.8141845172626905,
+        "y": 0.4794603321440855
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.645368253704238,
+        "y": 3.1925041627901507
+      },
+      "prevControl": {
+        "x": 3.4639590646750356,
+        "y": 2.7598204484198727
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 87.66269414088059,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 89.66976861625778,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1.1500000000000001,
+      "rotationDegrees": 60.53063680842307,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1.9,
+      "rotationDegrees": 58.12,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 2.55,
+      "rotationDegrees": -31.925719706754673,
+      "rotateFast": true
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -45.88140399658215,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Grand Theft Auto",
+  "previewStartingState": {
+    "rotation": 89.9999999995674,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}
