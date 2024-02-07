@@ -6,9 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.LimelightConstants;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -75,6 +78,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     m_robotContainer.resetDriveOffsets();
     m_robotContainer.m_robotDrive.initializePoseEstimator(new Pose2d(0,0,new Rotation2d(0)));
+    m_robotContainer.m_robotDrive.resetOdometry(LimelightConstants.aprilTag7.plus(new Transform2d(2,0,new Rotation2d(0))));
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

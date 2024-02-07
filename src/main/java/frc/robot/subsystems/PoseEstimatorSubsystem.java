@@ -10,23 +10,26 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 
 public class PoseEstimatorSubsystem extends SubsystemBase {
-  SwerveDriveKinematics m_kinematics;
-  Rotation2d m_gyroAngle;
-  SwerveModulePosition[] m_swervePositions;
-  Pose2d m_initialPose;
+  
+  NetworkTableInstance inst = NetworkTableInstance.getDefault();
+  NetworkTable poseEstimatorTable = inst.getTable("Pose Estimator Table");
+  StructPublisher<Pose2d> posePublisher;
+
+
   SwerveDrivePoseEstimator poseEstimator;
   
   public PoseEstimatorSubsystem() {
-  SwerveDriveKinematics m_kinematics;
-  Rotation2d m_gyroAngle;
-  SwerveModulePosition[] m_swervePositions;
-  Pose2d m_initialPose;
+  posePublisher = poseEstimatorTable.getStructTopic("Fused Pose", Pose2d.struct).publish();
+  
    //make fake intializaition run in Drive Subsystem
   }
 
@@ -44,4 +47,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     poseEstimator.addVisionMeasurement(vPose, vTime);
   }
   
+  @Override
+  public void periodic(){
+    posePublisher.set(poseEstimator.getEstimatedPosition());
+  }
 }

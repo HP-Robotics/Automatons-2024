@@ -21,6 +21,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -60,10 +61,11 @@ public class DriveSubsystem extends SubsystemBase {
   PoseEstimatorSubsystem m_poseEstimator;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable limelightTable = inst.getTable("limelight-prada"); // TODO: Move limelight stuff to limelight subsystem
   NetworkTable driveTrainTable = inst.getTable("drive-train");
+  NetworkTable poseEstimatorTable = inst.getTable("Pose Estimator Table");
+  StructPublisher<Pose2d> drivePublisher;
+
   NetworkTable pipeline = inst.getTable("SmartDashboard");
-  NetworkTableEntry gamePieceX = limelightTable.getEntry("tx");
 
   public DriveSubsystem(PoseEstimatorSubsystem poseEstimator) {
     m_poseEstimator = poseEstimator;
@@ -90,6 +92,9 @@ public class DriveSubsystem extends SubsystemBase {
     rotationController = new PIDController(DriveConstants.turningControllerkP, DriveConstants.turningControllerkI,
         DriveConstants.turningControllerkD);
     rotationController.enableContinuousInput(-Math.PI, Math.PI);
+
+    drivePublisher = poseEstimatorTable.getStructTopic("Drive Pose", Pose2d.struct).publish();
+
   }
 
   @Override
@@ -106,6 +111,7 @@ public class DriveSubsystem extends SubsystemBase {
         });
 
     m_field.setRobotPose(getPose());
+    drivePublisher.set(getPose());
     driveTrainTable.putValue("Robot x", NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getX()));
     driveTrainTable.putValue("Robot y", NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getY()));
     driveTrainTable.putValue("Robot theta",
