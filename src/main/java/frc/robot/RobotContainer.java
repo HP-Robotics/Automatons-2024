@@ -26,6 +26,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -47,13 +48,17 @@ public class RobotContainer {
   // private final Joystick m_opJoystick = new
   // Joystick(OperatorConstants.kOperatorControllerPort);
   // The robot's subsystems and commands are defined here...
-  final DriveSubsystem m_robotDrive = SubsystemConstants.useDrive ? new DriveSubsystem() : null;
-  private final LimelightSubsystem m_limelightSubsystem = SubsystemConstants.useLimelight ? new LimelightSubsystem()
-      : null;
+  private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem = 
+    new PoseEstimatorSubsystem();
+  final DriveSubsystem m_robotDrive = SubsystemConstants.useDrive ? new DriveSubsystem(m_PoseEstimatorSubsystem) : null;
+  private final LimelightSubsystem m_limelightSubsystem = SubsystemConstants.useLimelight ? 
+      new LimelightSubsystem(m_PoseEstimatorSubsystem) : null;
 
   private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem() : null;
   private final IntakeSubsystem m_intakeSubsystem = SubsystemConstants.useIntake ? new IntakeSubsystem() : null;
   private final PivotSubsystem m_pivotSubsystem = SubsystemConstants.usePivot ? new PivotSubsystem() : null;
+
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.

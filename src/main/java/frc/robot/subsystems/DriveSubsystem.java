@@ -57,14 +57,16 @@ public class DriveSubsystem extends SubsystemBase {
 
   SwerveDriveOdometry m_odometry;
   PIDController rotationController;
+  PoseEstimatorSubsystem m_poseEstimator;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable limelightTable = inst.getTable("limelight-prada"); //TODO: Move limelight stuff to limelight subsystem
+  NetworkTable limelightTable = inst.getTable("limelight-prada"); // TODO: Move limelight stuff to limelight subsystem
   NetworkTable driveTrainTable = inst.getTable("drive-train");
   NetworkTable pipeline = inst.getTable("SmartDashboard");
   NetworkTableEntry gamePieceX = limelightTable.getEntry("tx");
 
-  public DriveSubsystem() {
+  public DriveSubsystem(PoseEstimatorSubsystem poseEstimator) {
+    m_poseEstimator = poseEstimator;
     m_pGyro.setYaw(0);
     var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
     m_odometry = new SwerveDriveOdometry(
@@ -78,7 +80,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         });
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-      m_currentPose.setRobotPose(pose); //TODO: not working, AdvantageScope might say how to fix
+      m_currentPose.setRobotPose(pose); // TODO: not working, AdvantageScope might say how to fix
     });
     PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
       m_targetPose.setRobotPose(pose);
@@ -117,8 +119,14 @@ public class DriveSubsystem extends SubsystemBase {
     driveTrainTable.putValue("Pigeon Pitch", NetworkTableValue.makeDouble(m_pGyro.getPitch().getValue()));
     driveTrainTable.putValue("Pigeon Yaw", NetworkTableValue.makeDouble(m_pGyro.getYaw().getValue()));
     driveTrainTable.putValue("Pigeon Roll", NetworkTableValue.makeDouble(m_pGyro.getRoll().getValue()));
-
-    m_field.setRobotPose(m_odometry.getPoseMeters());
+    
+    m_poseEstimator.updatePoseEstimator(pigeonYaw,new SwerveModulePosition[] {
+        m_frontLeft.getPosition(),
+        m_frontRight.getPosition(),
+        m_backRight.getPosition(),
+        m_backLeft.getPosition()
+    });
+    
   }
 
   /**
@@ -174,25 +182,28 @@ public class DriveSubsystem extends SubsystemBase {
         Math.signum(joystick.getRawAxis(0))
             * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(0),
                 OperatorConstants.driveJoystickDeadband), 2)
-            * -1 * DriveConstants.kMaxSpeed, 
+            * -1 * DriveConstants.kMaxSpeed,
         rot * 1 * DriveConstants.kMaxAngularSpeed,
         true);
 
     driveTrainTable.putValue("Rotation Current Angle", NetworkTableValue.makeDouble(getPoseRot().getDegrees()));
     driveTrainTable.putValue("Rotation Target Angle", NetworkTableValue.makeDouble(targetAngle.getDegrees()));
     driveTrainTable.putValue("Rotation Power Input", NetworkTableValue.makeDouble(rot));
-    
-    driveTrainTable.putValue("Rotation Controller P", NetworkTableValue.makeDouble(rotationController.getP() * rotationController.getPositionError()));
-    driveTrainTable.putValue("Rotation Controller Position Error", NetworkTableValue.makeDouble(rotationController.getPositionError()));
-    driveTrainTable.putValue("Rotation Controller Setpoint", NetworkTableValue.makeDouble(rotationController.getSetpoint()));
+
+    driveTrainTable.putValue("Rotation Controller P",
+        NetworkTableValue.makeDouble(rotationController.getP() * rotationController.getPositionError()));
+    driveTrainTable.putValue("Rotation Controller Position Error",
+        NetworkTableValue.makeDouble(rotationController.getPositionError()));
+    driveTrainTable.putValue("Rotation Controller Setpoint",
+        NetworkTableValue.makeDouble(rotationController.getSetpoint()));
   }
 
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
 
-  public Rotation2d pointToAngle(double x, double y){
-    return new Rotation2d(Math.atan2(x-getPose().getX(),y-getPose().getY())); //TODO: Remove
+  public Rotation2d pointToAngle(double x, double y) {
+    return new Rotation2d(Math.atan2(x - getPose().getX(), y - getPose().getY())); // TODO: Remove
   }
 
   public ChassisSpeeds getCurrentspeeds() {
@@ -200,15 +211,15 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getPoseX() {
-    return m_odometry.getPoseMeters().getX(); //TODO remove
+    return m_odometry.getPoseMeters().getX(); // TODO remove
   }
 
-  public double getPoseY() {//TODO remove
+  public double getPoseY() {// TODO remove
     return getPose().getY();
   }
 
   public Rotation2d getPoseRot() {
-    return m_odometry.getPoseMeters().getRotation();//TODO remove
+    return m_odometry.getPoseMeters().getRotation();// TODO remove
   }
 
   public void setModuleStates(SwerveModuleState[] swerveModuleStates) {
@@ -223,12 +234,22 @@ public class DriveSubsystem extends SubsystemBase {
     m_fieldRelative = false;
   }
 
-  
   public void forceFieldRelative() {
     m_fieldRelative = true;
-  }//TODO combine with above function
+  }// TODO combine with above function
 
-  public void resetOffsets() { //Turn encoder offset
+  public void initializePoseEstimator(Pose2d pose) {
+    m_poseEstimator.createPoseEstimator(DriveConstants.kDriveKinematics,
+        new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue())), new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_backRight.getPosition(),
+            m_backLeft.getPosition()
+        }, pose);
+
+  }
+
+  public void resetOffsets() { // Turn encoder offset
     m_frontLeft.resetOffset();
     m_frontRight.resetOffset();
     m_backRight.resetOffset();
@@ -241,15 +262,14 @@ public class DriveSubsystem extends SubsystemBase {
     }
     var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
     m_odometry.resetPosition(
-      pigeonYaw,
-      new SwerveModulePosition[] {
-        m_frontLeft.getPosition(),
-        m_frontRight.getPosition(),
-        m_backRight.getPosition(),
-        m_backLeft.getPosition()
-      },
-      pose
-    );
+        pigeonYaw,
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_backRight.getPosition(),
+            m_backLeft.getPosition()
+        },
+        pose);
   }
 
   /**

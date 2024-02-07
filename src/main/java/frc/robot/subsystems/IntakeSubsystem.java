@@ -32,25 +32,3 @@ public class IntakeSubsystem extends SubsystemBase {
     m_motor.setControl(new DutyCycleOut(output));
   };
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

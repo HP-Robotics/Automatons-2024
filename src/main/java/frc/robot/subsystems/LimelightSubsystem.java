@@ -21,16 +21,21 @@ public class LimelightSubsystem extends SubsystemBase {
   NetworkTableEntry botpose_blue;
   /** Creates a new ExampleSubsystem. */
   public final Field2d m_field = new Field2d(); // TODO: Send Pose instead of field
-
+  
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable limelightMagicTable = inst.getTable("limelight Magic numbers");
 
-  public LimelightSubsystem() {
+  PoseEstimatorSubsystem m_poseEstimator;
+
+  public LimelightSubsystem(PoseEstimatorSubsystem PoseEstimatorSubsystem) {
     Shuffleboard.getTab("shuffleboard")
         .add("Pose2d", m_field)
         .withWidget(BuiltInWidgets.kField);
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-three");
+    NetworkTableInstance.getDefault().getTable("limelight-three").getEntry("tv").getDouble(0);
+    table.addListener("botpose_wpiblue", null, null);
     botpose_blue = table.getEntry("botpose_wpiblue"); // TODO: Look into Megatag
+    m_poseEstimator = PoseEstimatorSubsystem;
   }
 
   public double getDistanceTo(Pose2d robot, Pose2d fieldpose) {
@@ -52,7 +57,7 @@ public class LimelightSubsystem extends SubsystemBase {
   // This method will be called once per scheduler run
   public void periodic() {
     // read values periodically
-    double defaultValues[] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+    double defaultValues[] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ,0.0};
     double[] botpose = botpose_blue.getDoubleArray(defaultValues);
     double tx = botpose[0];
     double ty = botpose[1];
@@ -60,10 +65,15 @@ public class LimelightSubsystem extends SubsystemBase {
     double rx = botpose[3];
     double ry = botpose[4]; // TODO: Store tz, rx, and ry somewhere (Store 3D)
     double rz = botpose[5];
+    double latency = botpose[6];
 
     Pose2d m_robotPose = new Pose2d(tx, ty, new Rotation2d(Math.toRadians(rz)));
     m_field.setRobotPose(m_robotPose);
     // specify the widget here
+
+    // if(){
+    //   m_poseEstimator.updateVision(null, latency);
+    // }
 
     getDistanceTo(m_robotPose, LimelightConstants.aprilTag7);
     limelightMagicTable.putValue(
