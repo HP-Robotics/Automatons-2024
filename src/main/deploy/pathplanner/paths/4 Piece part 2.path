@@ -41,7 +41,24 @@
             {
               "type": "named",
               "data": {
-                "name": "IntakeCommand"
+                "name": "runIntake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.25,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "stopIntake"
               }
             }
           ]

@@ -28,7 +28,7 @@ public class IntakeSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void useIntake(double output) {
+  public void runIntake(double output) {
     m_motor3.setControl(new DutyCycleOut(output));
   };
 }

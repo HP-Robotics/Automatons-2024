@@ -16,10 +16,8 @@ import frc.robot.commands.PivotManualCommand;
 import frc.robot.commands.PivotSetPositionCommand;
 import frc.robot.commands.SetShooterCommand;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -77,6 +75,8 @@ public class RobotContainer {
               },
               m_robotDrive));
     }
+    NamedCommands.registerCommand("runIntake", m_intakeSubsystem.runOnce(() -> m_intakeSubsystem.runIntake(IntakeConstants.intakeSpeed)));
+    NamedCommands.registerCommand("stopIntake", m_intakeSubsystem.runOnce(() -> m_intakeSubsystem.runIntake(0)));
 
     m_chooseAutos = new SendableChooser<String>();
     m_chooseAutos.addOption("Center Down", "CenterDown");
