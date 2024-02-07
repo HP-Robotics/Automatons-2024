@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.SubsystemConstants;
@@ -16,12 +17,12 @@ import frc.robot.commands.PivotManualCommand;
 import frc.robot.commands.PivotSetPositionCommand;
 import frc.robot.commands.SetShooterCommand;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -58,7 +59,7 @@ public class RobotContainer {
   private final IntakeSubsystem m_intakeSubsystem = SubsystemConstants.useIntake ? new IntakeSubsystem() : null;
   private final PivotSubsystem m_pivotSubsystem = SubsystemConstants.usePivot ? new PivotSubsystem() : null;
 
-
+  private final SendableChooser<String> m_chooseAutos;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -78,6 +79,18 @@ public class RobotContainer {
               },
               m_robotDrive));
     }
+    NamedCommands.registerCommand("runIntake", m_intakeSubsystem.runOnce(() -> m_intakeSubsystem.runIntake(IntakeConstants.intakeSpeed)));
+    NamedCommands.registerCommand("stopIntake", m_intakeSubsystem.runOnce(() -> m_intakeSubsystem.runIntake(0)));
+
+    m_chooseAutos = new SendableChooser<String>();
+    m_chooseAutos.addOption("Center Down", "CenterDown");
+    m_chooseAutos.addOption("Four Piece", "FourPiece");
+    m_chooseAutos.addOption("Grand Theft Auto", "GrandTheftAuto");
+    m_chooseAutos.addOption("Basic Amp", "BasicAmp");
+    m_chooseAutos.addOption("Yuck", "yuck");
+    m_chooseAutos.setDefaultOption("Intermediate Amp", "IntermediateAmp");
+    SmartDashboard.putData("Auto Chooser", m_chooseAutos);
+
     configureBindings();
   }
 
@@ -138,7 +151,27 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Autos.FourPiece(m_robotDrive);
-    //return null;
+    // TODO Add chooser
+    // return Autos.FourPiece(m_robotDrive);
+    // return null;
+
+    if (m_chooseAutos.getSelected() == "CenterDown") {
+      return Autos.CenterDown(m_robotDrive);
+    } 
+    if (m_chooseAutos.getSelected() == "FourPiece") {
+      return Autos.FourPiece(m_robotDrive);
+    }
+    if (m_chooseAutos.getSelected() == "GrandTheftAuto") {
+      return Autos.GrandTheftAuto(m_robotDrive);
+    } 
+    if (m_chooseAutos.getSelected() == "BasicAmp") {
+      return Autos.BasicAmp(m_robotDrive);
+    }
+    if (m_chooseAutos.getSelected() == "IntermediateAmp") {
+      return Autos.IntermediateAmp(m_robotDrive);
+    }
+    else {
+      return null;
+    }
   }
 }
