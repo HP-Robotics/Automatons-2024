@@ -21,6 +21,7 @@ public class LimelightSubsystem extends SubsystemBase {
   NetworkTableEntry botpose_blue;
   /** Creates a new ExampleSubsystem. */
   public final Field2d m_field = new Field2d(); // TODO: Send Pose instead of field
+  public Pose2d m_visionPose2d = new Pose2d();
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable limelightMagicTable = inst.getTable("limelight Magic numbers");
@@ -63,6 +64,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
     Pose2d m_robotPose = new Pose2d(tx, ty, new Rotation2d(Math.toRadians(rz)));
     m_field.setRobotPose(m_robotPose);
+    m_visionPose2d = m_robotPose;
     // specify the widget here
 
     getDistanceTo(m_robotPose, LimelightConstants.aprilTag7);

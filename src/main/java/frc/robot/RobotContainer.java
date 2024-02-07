@@ -10,6 +10,7 @@ import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.commands.Autos;
+import frc.robot.commands.DrivePointedToSpeakerCommand;
 import frc.robot.commands.FollowPathCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.PivotManualCommand;
@@ -29,6 +30,7 @@ import frc.robot.subsystems.PivotSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -117,6 +119,9 @@ public class RobotContainer {
       m_operatorJoystick.povLeft().whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
       m_operatorJoystick.button(2).whileTrue(new PivotSetPositionCommand(m_pivotSubsystem, PivotConstants.positionStage));
       m_operatorJoystick.button(1).whileTrue(new PivotSetPositionCommand(m_pivotSubsystem, PivotConstants.positionAmp));
+    }
+    if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight){
+      m_driveJoystick.button(5).whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick));
     }
 
   }
