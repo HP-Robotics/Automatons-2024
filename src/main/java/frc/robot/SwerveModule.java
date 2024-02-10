@@ -22,6 +22,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.SubsystemConstants;
 
 public class SwerveModule {
 
@@ -59,8 +60,9 @@ public class SwerveModule {
     m_driveMotor.setNeutralMode(NeutralModeValue.Coast);
     
     // BaseStatusSignal.setUpdateFrequencyForAll(50,m_driveMotor.getClosedLoopError(), m_driveMotor.getClosedLoopDerivativeOutput(),m_driveMotor.getClosedLoopIntegratedOutput(),m_driveMotor.getClosedLoopProportionalOutput(),m_driveMotor.getClosedLoopFeedForward());
-    SignalLogger.start();
-    // TODO Only start signal logger if we're logging
+    if (SubsystemConstants.useDataManager) {
+      SignalLogger.start();
+    }
     
 
     

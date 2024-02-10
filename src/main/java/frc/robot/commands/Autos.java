@@ -18,7 +18,7 @@ public final class Autos {
 //  }
 
   public static Command FourPiece(DriveSubsystem drive) { 
-    if (SubsystemConstants.useIntake == false) {
+    if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive) {
       return null;
     }
     return new SequentialCommandGroup(
@@ -31,7 +31,7 @@ public final class Autos {
   }
 
   public static Command CenterDown(DriveSubsystem drive) {
-    if (SubsystemConstants.useIntake == false) {
+    if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive) {
       return null;
     }
     return new SequentialCommandGroup(
@@ -44,6 +44,9 @@ public final class Autos {
   }
 
   public static Command BasicAmp(DriveSubsystem drive) {
+    if (!SubsystemConstants.useDrive) {
+      return null;
+    }
     return new SequentialCommandGroup(
       new FollowPathCommandOurs(drive, "Basic Amp Part 1"),
       new WaitCommand(1),
@@ -53,13 +56,16 @@ public final class Autos {
     }
 
   public static Command GrandTheftAuto(DriveSubsystem drive) {
+    if (!SubsystemConstants.useDrive) {
+      return null;
+    }
     return new SequentialCommandGroup(
       new FollowPathCommandOurs(drive, "Grand Theft Auto Part 1")
     );
   }
 
   public static Command IntermediateAmp(DriveSubsystem drive) {
-    if (SubsystemConstants.useIntake == false) {
+    if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive) {
       return null;
     }
     return new SequentialCommandGroup(
@@ -71,12 +77,7 @@ public final class Autos {
     );
   }
 
-  
-
-
   private Autos() {
     throw new UnsupportedOperationException("Now watch me whip! Now watch me nae nae!");
   }
-
-
 }
