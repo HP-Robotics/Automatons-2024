@@ -33,16 +33,16 @@ import frc.robot.SwerveModule;
 public class DriveSubsystem extends SubsystemBase {
   // BIG BONGO 7
   private final SwerveModule m_frontLeft = new SwerveModule(IDConstants.FLDriveMotorID,
-      IDConstants.FLTurningMotorID, IDConstants.FLAbsEncoder, DriveConstants.absEncoderForwardFL, "FL");
+      IDConstants.FLTurningMotorID, PortConstants.FLAbsEncoder, DriveConstants.absEncoderForwardFL, "FL");
   // BIG BONGO 2
   private final SwerveModule m_frontRight = new SwerveModule(IDConstants.FRDriveMotorID,
-      IDConstants.FRTurningMotorID, IDConstants.FRAbsEncoder, DriveConstants.absEncoderForwardFR, "FR");
+      IDConstants.FRTurningMotorID, PortConstants.FRAbsEncoder, DriveConstants.absEncoderForwardFR, "FR");
   // BIG BONGO 1
   private final SwerveModule m_backRight = new SwerveModule(IDConstants.BRDriveMotorID,
-      IDConstants.BRTurningMotorID, IDConstants.BRAbsEncoder, DriveConstants.absEncoderForwardBR, "BR");
+      IDConstants.BRTurningMotorID, PortConstants.BRAbsEncoder, DriveConstants.absEncoderForwardBR, "BR");
   // BIG BONGO 3
   private final SwerveModule m_backLeft = new SwerveModule(IDConstants.BLDriveMotorID,
-      IDConstants.BLTurningMotorID, IDConstants.BLAbsEncoder, DriveConstants.absEncoderForwardBL, "BL");
+      IDConstants.BLTurningMotorID, PortConstants.BLAbsEncoder, DriveConstants.absEncoderForwardBL, "BL");
 
   private SwerveModuleState[] m_swerveModuleStates = {
       new SwerveModuleState(), new SwerveModuleState(), new SwerveModuleState(), new SwerveModuleState()
@@ -57,7 +57,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final Pigeon2 m_pGyro = new Pigeon2(IDConstants.PigeonID, "CANivore");
 
   SwerveDriveOdometry m_odometry;
-  PIDController rotationController;
+  PIDController rotationController; //TODO run setSetpoint
   PoseEstimatorSubsystem m_poseEstimator;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -94,6 +94,7 @@ public class DriveSubsystem extends SubsystemBase {
     rotationController.enableContinuousInput(-Math.PI, Math.PI);
 
     drivePublisher = poseEstimatorTable.getStructTopic("Drive Pose", Pose2d.struct).publish();
+
   }
 
   @Override

@@ -9,6 +9,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.PivotConstants;
+import frc.robot.Constants.PortConstants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -43,7 +44,7 @@ public class PivotSubsystem extends SubsystemBase {
 
 		m_motorL.setControl(new Follower(IDConstants.rightPivotID, true));
 		
-		m_absEncoder = new DutyCycleEncoder(IDConstants.pivotAbsEncoderID);
+		m_absEncoder = new DutyCycleEncoder(PortConstants.pivotAbsEncoderID);
 		m_pivotController = new PIDController(motorConfigs.kP, motorConfigs.kI, motorConfigs.kD);
 		m_pivotController.setSetpoint(m_absEncoder.getAbsolutePosition());
 	}

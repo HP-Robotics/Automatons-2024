@@ -14,13 +14,11 @@ import frc.robot.Constants.TriggerConstants;
 
 public class IntakeCommand extends Command {
     private final IntakeSubsystem m_subsystem;
-    private final int channelId;
   /** Creates a new IntakeCommand. */
   public IntakeCommand(IntakeSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
     addRequirements(subsystem);
-    channelId = IDConstants.BeamBreakID;
   }
 
   // Called when the command is initially scheduled.
