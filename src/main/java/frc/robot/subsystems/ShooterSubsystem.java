@@ -50,10 +50,10 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTable.putValue("backMotor Velocity", NetworkTableValue.makeDouble(m_backMotor.getVelocity().getValue()));
 
     Slot0Configs slot0Configs = new Slot0Configs();
-    slot0Configs.kV = ShooterConstants.motor1kV;
-    slot0Configs.kP = ShooterConstants.motor1kP;
-    slot0Configs.kI = ShooterConstants.motor1kI;
-    slot0Configs.kD = ShooterConstants.motor1kD;
+    slot0Configs.kV = ShooterConstants.shooterMotorskV; // TODO: Is this a good name?
+    slot0Configs.kP = ShooterConstants.shooterMotorskP;
+    slot0Configs.kI = ShooterConstants.shooterMotorskI;
+    slot0Configs.kD = ShooterConstants.shooterMotorskD;
     m_frontMotor.getConfigurator().apply(slot0Configs);
     m_backMotor.getConfigurator().apply(slot0Configs);
   }

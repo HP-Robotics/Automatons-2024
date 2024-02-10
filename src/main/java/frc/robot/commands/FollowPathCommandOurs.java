@@ -14,6 +14,9 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
+import frc.robot.Constants.DriveConstants;
+
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -45,13 +48,7 @@ public class FollowPathCommandOurs extends Command {
         m_drive::getPose, 
         m_drive::getCurrentspeeds, // MUST BE ROBOT RELATIVE
         m_drive::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        new HolonomicPathFollowerConfig( // TODO move to Constants
-            new PIDConstants(5.0, 0.0, 0.0), 
-            new PIDConstants(5.0, 0.0, 0.0), 
-            4.5,
-            0.4, // Distance from robot center to furthest module.
-            new ReplanningConfig()
-        ),
+        DriveConstants.holonomicConfig,
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red
           // alliance

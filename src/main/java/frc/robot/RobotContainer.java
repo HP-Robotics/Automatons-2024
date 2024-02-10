@@ -57,6 +57,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 public class RobotContainer {
   private final CommandJoystick m_driveJoystick = new CommandJoystick(OperatorConstants.kDriverControllerPort);
   private final CommandJoystick m_opJoystick = new CommandJoystick(OperatorConstants.kOperatorControllerPort);
+
   // The robot's subsystems and commands are defined here...
   private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem = 
     new PoseEstimatorSubsystem();
@@ -100,7 +101,6 @@ public class RobotContainer {
     m_chooseAutos.addOption("Four Piece", "FourPiece");
     m_chooseAutos.addOption("Grand Theft Auto", "GrandTheftAuto");
     m_chooseAutos.addOption("Basic Amp", "BasicAmp");
-    m_chooseAutos.addOption("Yuck", "yuck"); // TODO: Do we need this as an Auto?
     m_chooseAutos.setDefaultOption("Intermediate Amp", "IntermediateAmp");
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
 
@@ -108,7 +108,6 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // TODO Add an operator joystick and put stuff on it
 
     if (SubsystemConstants.useDrive) {
       m_driveJoystick.button(8).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
@@ -139,10 +138,8 @@ public class RobotContainer {
         new IntakeCommand(m_intakeSubsystem),
         new TriggerCommand(m_triggerSubsystem, false).asProxy() // TODO: Restart if cancelled
         ));
-    
-    
-      
     }
+    
     if(SubsystemConstants.usePivot){
       m_opJoystick.povRight().whileTrue(new PivotManualCommand(m_pivotSubsystem, PivotConstants.manualSpeed));
       m_opJoystick.povLeft().whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));

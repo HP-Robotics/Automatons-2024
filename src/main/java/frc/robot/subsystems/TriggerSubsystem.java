@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BeamBreak;
 import frc.robot.Constants.IDConstants;
+import frc.robot.Constants.PortConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TriggerConstants;
 import frc.robot.commands.TriggerCommand;
@@ -32,7 +33,7 @@ public class TriggerSubsystem extends SubsystemBase {
   public TriggerSubsystem() {
     // TODO: move to constants 
     m_triggerMotor = new TalonFX(IDConstants.triggerMotorID);
-    m_beamBreak = new BeamBreak(IDConstants.BeamBreakID);
+    m_beamBreak = new BeamBreak(PortConstants.TriggerBeamBreak);
 
     TalonFXConfiguration config = new TalonFXConfiguration();
 

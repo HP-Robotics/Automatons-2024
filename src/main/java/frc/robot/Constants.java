@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -80,6 +84,14 @@ public final class Constants {
     public static final double absEncoderForwardFR = 0.708;
     public static final double absEncoderForwardBR = 0.74;
     public static final double absEncoderForwardBL = 0.55;
+
+    public static final HolonomicPathFollowerConfig holonomicConfig = new HolonomicPathFollowerConfig( 
+            new PIDConstants(5.0, 0.0, 0.0), 
+            new PIDConstants(5.0, 0.0, 0.0), 
+            4.5,
+            0.4, // Distance from robot center to furthest module.
+            new ReplanningConfig()
+        );
   }
 
   public static final class LimelightConstants {
@@ -87,7 +99,7 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 5.0;//TODO look at these
+    public static final double kMaxSpeedMetersPerSecond = 5.0; // TODO look at these
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kFastAutoVelocity = 4.5;
@@ -121,10 +133,10 @@ public final class Constants {
     public static final double shooterSpeed1 = 50; // TODO: Is this correct?
     public static final double shooterSpeed2 = 50;
 
-    public static final double motor1kP = 0.4;//TODO Rename
-    public static final double motor1kI = 0.01;
-    public static final double motor1kD = 0;
-    public static final double motor1kV = 0.12;
+    public static final double shooterMotorskP = 0.4;
+    public static final double shooterMotorskI = 0.01;
+    public static final double shooterMotorskD = 0;
+    public static final double shooterMotorskV = 0.12;
 
     public static final double errorThreshold = 1.0;
 
@@ -148,28 +160,29 @@ public final class Constants {
     //Shooter is 30s
     public static final int shooterMotor1ID = 30;
     public static final int shooterMotor2ID = 31;
+    public final static int triggerMotorID = 32;
 
     //Pivot is 40s
     public static final int rightPivotID = 40;
     public static final int leftPivotID = 41;
 
     //Climber is 50s
-    public final static int climbMotorID = 50; //TODO choose ID number
+    public final static int climbMotorID = 50;
     
     public final static int PigeonID = 57;
-    
+  }
+
+  public static class PortConstants {
     public final static int FLAbsEncoder = 14;
     public final static int FRAbsEncoder = 12;
     public final static int BRAbsEncoder = 11;
     public final static int BLAbsEncoder = 13;
     
-    public final static int pivotAbsEncoderID = 0;
+    public final static int pivotAbsEncoderID = 8;
 
-    public final static int triggerMotorID = 0;
-
-    public final static int BeamBreakID = 0;
+    public final static int TriggerBeamBreak = 9; // Beam Break port
   }
-
+    
   public static class ClimberConstants {
     public final static double climbSpeed = 0.4;
   }
