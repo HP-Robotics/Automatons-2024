@@ -1,7 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project. 
-// We're waiting every night to finally roam and invite. Newcomers to play with us, for many years we've been all alone. We're forced to be still and play those same songs we've played since that day. An IMPOSTER took our life away, now we're stuck here to decay.
+
 package frc.robot.commands;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -9,27 +9,31 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TriggerSubsystem;
 import frc.robot.Constants.ShooterConstants;
-public class SetShooterCommand extends Command {
-   private final ShooterSubsystem m_subsystem;
+import frc.robot.Constants.TriggerConstants;
+public class TriggerCommand extends Command {
+   private final TriggerSubsystem m_subsystem;
+    boolean m_ignoreBeamBreak;
+
   /** Creates a new ShooterCommand. */
-  public SetShooterCommand(ShooterSubsystem subsystem) {
+  public TriggerCommand(TriggerSubsystem subsystem, Boolean ignoreBeamBreak) {
     // Use addRequirements() here to declare subsystem dependencies
     m_subsystem = subsystem;
     addRequirements(subsystem);
-  
+    m_ignoreBeamBreak = ignoreBeamBreak;
   }
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable shooterTable = inst.getTable("shooter-speed-PID");
+  NetworkTable triggerTable = inst.getTable("trigger-velocity-PID");
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double output1 = SmartDashboard.getNumber("frontMotor Velocity", ShooterConstants.shooterSpeed1);
-    double output2 = SmartDashboard.getNumber("backMotor Velocity", ShooterConstants.shooterSpeed2);
-    m_subsystem.setShooter(output1, output2); 
+    double output = SmartDashboard.getNumber("triggerMotor Velocity", TriggerConstants.triggerSpeed);
+    m_subsystem.setTrigger(output); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,13 +43,16 @@ public class SetShooterCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // m_subsystem.stopShooter(); // turn //TODO: decide which one to use
-    m_subsystem.setShooter(0.0, 0.0); // turn shooter off  
+    // m_subsystem.stopTrigger(); // turn //TODO: decide which one to use
+    m_subsystem.setTrigger(0.0); // turn shooter off
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (!m_ignoreBeamBreak && m_subsystem.m_beamBreak.beamBroken()) {
+        return true;
+    }
     return false;
   }
 }

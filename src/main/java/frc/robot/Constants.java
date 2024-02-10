@@ -36,6 +36,7 @@ public final class Constants {
     public static final boolean useDrive = true;
     public static final boolean useIntake = false;
     public static final boolean useShooter = false;
+    public static final boolean useClimber = false;
     public static final boolean useDataManger = true;
     public static final boolean useLimelight = false;
     public static final boolean usePivot = false;
@@ -117,13 +118,16 @@ public final class Constants {
   }
 
   public static class ShooterConstants {
-    public static final double shooterSpeed1 = 0;
-    public static final double shooterSpeed2 = 0;
+
+    public static final double shooterSpeed1 = 50; // TODO: Is this correct?
+    public static final double shooterSpeed2 = 50;
 
     public static final double motor1kP = 0.4;//TODO Rename
     public static final double motor1kI = 0.01;
     public static final double motor1kD = 0;
     public static final double motor1kV = 0.12;
+
+    public static final double errorThreshold = 1.0;
 
   }
 
@@ -161,12 +165,26 @@ public final class Constants {
     public final static int BLAbsEncoder = 13;
     
     public final static int pivotAbsEncoderID = 0;
+    public final static int climbMotorID = 9; //TODO choose ID number
+
+    public final static int triggerMotorID = 0;
+
+    public final static int BeamBreakID = 0;
   }
 
   public static class ClimberConstants {
     public final static double climbSpeed = 0.4;
   }
 
+  public static class TriggerConstants {
+    public static final double triggerSpeed = 0;
+
+    public static final double triggerkV = 0;
+    public static final double triggerkP = 0;
+    public static final double triggerkI = 0;
+    public static final double triggerkD = 0;
+
+  }
 
   public static class PivotConstants {
     public static final double kP = 0.0;
