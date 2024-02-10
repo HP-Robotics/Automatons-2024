@@ -156,7 +156,7 @@ public final class Constants {
     public final static int PigeonID = 57;
     
     public final static int FLAbsEncoder = 14;
-    public final static int FRAbsEncoder = 15;//TODO fix this
+    public final static int FRAbsEncoder = 12;
     public final static int BRAbsEncoder = 11;
     public final static int BLAbsEncoder = 13;
     
