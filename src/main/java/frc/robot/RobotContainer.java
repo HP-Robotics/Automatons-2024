@@ -110,13 +110,20 @@ public class RobotContainer {
   private void configureBindings() {
 
     if (SubsystemConstants.useDrive) {
-      m_driveJoystick.button(8).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
+
+      // new JoystickButton(m_driveJoystick, 2).onTrue(new
+      // InstantCommand(m_robotDrive::forceRobotRelative, m_robotDrive));
+      // new JoystickButton(m_driveJoystick, 2).onFalse(new
+      // InstantCommand(m_robotDrive::forceFieldRelative, m_robotDrive));
+      m_driveJoystick.button(8).whileTrue(new InstantCommand(m_robotDrive::resetYaw)); // Flightstick button 11
       m_driveJoystick.axisGreaterThan(2, 0.1).onTrue(new InstantCommand(() -> m_robotDrive.setFieldRelative(false)));
       m_driveJoystick.axisGreaterThan(2, 0.1).onFalse(new InstantCommand(() -> m_robotDrive.setFieldRelative(true)));
-      m_driveJoystick.button(7).whileTrue(new FollowPathCommandOurs(m_robotDrive, "Test Path"));
-      m_driveJoystick.button(9).whileTrue(new FollowPathCommandOurs(m_robotDrive, "Test Path Line"));
-      m_driveJoystick.button(4)
-          .whileTrue(new RunCommand(() -> m_robotDrive.drivePointedTowardsAngle(m_driveJoystick, new Rotation2d(0))));
+     // m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path")); 
+     // m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path Line"));
+     // m_driveJoystick.button(4).whileTrue(new RunCommand(()-> m_robotDrive.drivePointedTowardsAngle(m_driveJoystick, new Rotation2d(0))));
+      
+
+      
     }
 
     if (SubsystemConstants.useShooter) {
@@ -140,6 +147,9 @@ public class RobotContainer {
         new IntakeCommand(m_intakeSubsystem),
         new TriggerCommand(m_triggerSubsystem, false).asProxy() // TODO: Restart if cancelled
         ));
+    //m_driveJoystick.button(1).whileTrue(new IntakeCommand(m_intakeSubsystem)); flightstick code
+    
+      
     }
     
     if(SubsystemConstants.usePivot){
@@ -148,7 +158,7 @@ public class RobotContainer {
       m_opJoystick.button(7).onTrue(new InstantCommand(m_pivotSubsystem::togglePID));
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight){
-      m_driveJoystick.button(5).whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick));
+      m_driveJoystick.button(5).whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick)); //Flightstick button 2
     }
   }
 
