@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3707054194782846,
+        "x": 1.4198208681317652,
         "y": 7.2620699087592495
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.885248214945642,
-        "y": 7.23868159987437
+        "x": 1.4697692951422803,
+        "y": 7.259799525713317
       },
       "isLocked": false,
       "linkedName": "Start for Amp"
@@ -20,12 +20,12 @@
         "y": 7.2620699087592495
       },
       "prevControl": {
-        "x": 8.09484422388125,
-        "y": 8.022189947517846
+        "x": 7.907737752797442,
+        "y": 7.68305946868304
       },
       "nextControl": {
-        "x": 8.797720411422691,
-        "y": 6.716848456369455
+        "x": 9.010037443624242,
+        "y": 6.9049655692895895
       },
       "isLocked": false,
       "linkedName": null
@@ -98,7 +98,7 @@
   "reversed": false,
   "folder": "Grand Theft Auto",
   "previewStartingState": {
-    "rotation": 89.9999999995674,
+    "rotation": 90.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

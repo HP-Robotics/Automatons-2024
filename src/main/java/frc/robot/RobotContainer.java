@@ -17,7 +17,6 @@ import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.FollowPathCommandOurs;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.PivotManualCommand;
-import frc.robot.commands.PivotSetPositionCommand;
 import frc.robot.commands.SetShooterCommand;
 import frc.robot.commands.TriggerCommand;
 import frc.robot.commands.Autos;
@@ -34,6 +33,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TriggerSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -58,9 +58,11 @@ public class RobotContainer {
   private final CommandJoystick m_driveJoystick = new CommandJoystick(OperatorConstants.kDriverControllerPort);
   private final CommandJoystick m_opJoystick = new CommandJoystick(OperatorConstants.kOperatorControllerPort);
   // The robot's subsystems and commands are defined here...
-  final DriveSubsystem m_robotDrive = SubsystemConstants.useDrive ? new DriveSubsystem() : null;
-  private final LimelightSubsystem m_limelightSubsystem = SubsystemConstants.useLimelight ? new LimelightSubsystem()
-      : null;
+  private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem = 
+    new PoseEstimatorSubsystem();
+  final DriveSubsystem m_robotDrive = SubsystemConstants.useDrive ? new DriveSubsystem(m_PoseEstimatorSubsystem) : null;
+  private final LimelightSubsystem m_limelightSubsystem = SubsystemConstants.useLimelight ? 
+      new LimelightSubsystem(m_PoseEstimatorSubsystem) : null;
 
   private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem() : null;
   private final IntakeSubsystem m_intakeSubsystem = SubsystemConstants.useIntake ? new IntakeSubsystem() : null;
@@ -142,15 +144,20 @@ public class RobotContainer {
       
     }
     if(SubsystemConstants.usePivot){
-      m_operatorJoystick.povRight().whileTrue(new PivotManualCommand(m_pivotSubsystem, PivotConstants.manualSpeed));
-      m_operatorJoystick.povLeft().whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
-      m_operatorJoystick.button(2).whileTrue(new PivotSetPositionCommand(m_pivotSubsystem, PivotConstants.positionStage));
-      m_operatorJoystick.button(1).whileTrue(new PivotSetPositionCommand(m_pivotSubsystem, PivotConstants.positionAmp));
+      m_opJoystick.povRight().whileTrue(new PivotManualCommand(m_pivotSubsystem, PivotConstants.manualSpeed));
+      m_opJoystick.povLeft().whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
+      m_opJoystick.button(7).onTrue(new InstantCommand(m_pivotSubsystem::togglePID));
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight){
       m_driveJoystick.button(5).whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick));
     }
   }
+
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
 
   public void resetDriveOffsets() {
     if (SubsystemConstants.useDrive) {
@@ -159,10 +166,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    // TODO Add chooser
-    // return Autos.FourPiece(m_robotDrive);
-    // return null;
-
     if (m_chooseAutos.getSelected() == "CenterDown") {
       return Autos.CenterDown(m_robotDrive);
     } 

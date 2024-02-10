@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.43,
-        "y": 5.557362183607978
+        "x": 2.5401208637175103,
+        "y": 5.55472336015897
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.361903061098285,
-        "y": 5.1088733056325975
+        "x": 1.663059280534515,
+        "y": 5.355922734637492
       },
       "isLocked": false,
       "linkedName": "Grab piece 2A"
     },
     {
       "anchor": {
-        "x": 2.5373987090016947,
-        "y": 4.358141922934678
+        "x": 2.5401208637175103,
+        "y": 4.280060525933018
       },
       "prevControl": {
-        "x": 2.040161039942034,
-        "y": 4.358141922934678
+        "x": 1.9320248327106337,
+        "y": 4.256672217048138
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.85,
+      "waypointRelativePos": 0.45,
       "command": {
         "type": "parallel",
         "data": {
@@ -50,7 +50,7 @@
     },
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.3,
+      "waypointRelativePos": 0.15,
       "command": {
         "type": "parallel",
         "data": {
@@ -74,11 +74,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -32.89331393252941,
+    "rotation": -26.565051177078022,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 Piece",
+  "folder": "Four Piece",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
