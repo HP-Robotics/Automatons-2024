@@ -27,8 +27,8 @@ public class SetShooterCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double output1 = SmartDashboard.getNumber("frontMotor Velocity", ShooterConstants.shooterSpeed1);
-    double output2 = SmartDashboard.getNumber("backMotor Velocity", ShooterConstants.shooterSpeed2);
+    double output1 = shooterTable.getEntry("frontMotor Velocity").getDouble(ShooterConstants.shooterSpeed1);
+    double output2 = shooterTable.getEntry("backMotor Velocity").getDouble(ShooterConstants.shooterSpeed2);
     m_subsystem.setShooter(output1, output2); 
   }
 

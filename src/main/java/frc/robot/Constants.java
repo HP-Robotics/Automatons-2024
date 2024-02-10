@@ -35,11 +35,10 @@ public final class Constants {
   public static class SubsystemConstants {
     public static final boolean useDrive = true;
     public static final boolean useIntake = true;
-    public static final boolean useShooter = false;
-    public static final boolean useClimber = false;
+    public static final boolean useShooter = true;
     public static final boolean useDataManger = true;
     public static final boolean useLimelight = false;
-    public static final boolean usePivot = false;
+    public static final boolean usePivot = true;
     public static final boolean useClimber = false; //TODO check if these work
   }
 
@@ -165,7 +164,6 @@ public final class Constants {
     public final static int BLAbsEncoder = 13;
     
     public final static int pivotAbsEncoderID = 0;
-    public final static int climbMotorID = 9; //TODO choose ID number
 
     public final static int triggerMotorID = 0;
 
