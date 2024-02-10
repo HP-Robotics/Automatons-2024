@@ -27,7 +27,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
-    // TODO: move to constants 
     m_frontMotor = new TalonFX(IDConstants.shooterMotor1ID);
     m_backMotor = new TalonFX(IDConstants.shooterMotor2ID);
     TalonFXConfiguration config = new TalonFXConfiguration();
