@@ -20,47 +20,46 @@ public final class Autos {
 
   public static Command FourPiece(DriveSubsystem drive) {
     return new SequentialCommandGroup(
-      new FollowPathCommand(drive, "4 Piece part 1"),
+      new FollowPathCommandOurs(drive, "4 Piece part 1"),
       new WaitCommand(1),
-      new FollowPathCommand(drive, "4 Piece part 2"),
+      new FollowPathCommandOurs(drive, "4 Piece part 2"),
       new WaitCommand(1),
-      new FollowPathCommand(drive, "4 Piece Part 3")
+      new FollowPathCommandOurs(drive, "4 Piece Part 3")
       );
   }
 
   public static Command CenterDown(DriveSubsystem drive) {
     return new SequentialCommandGroup(
-      new FollowPathCommand(drive, "Center Down Part 1"),
+      new FollowPathCommandOurs(drive, "Center Down Part 1"),
       new WaitCommand(1),
-      new FollowPathCommand(drive, "Center Down Part 2"),
+      new FollowPathCommandOurs(drive, "Center Down Part 2"),
       new WaitCommand(1),
-      new FollowPathCommand(drive, "Center Down Part 3")
+      new FollowPathCommandOurs(drive, "Center Down Part 3")
       );
   }
 
   public static Command BasicAmp(DriveSubsystem drive) {
     return new SequentialCommandGroup(
-      new FollowPathCommand(drive, "Basic Amp Part 1"),
+      new FollowPathCommandOurs(drive, "Basic Amp Part 1"),
       new WaitCommand(1),
-      new FollowPathCommand(drive, "Basic Amp Part 2"),
+      new FollowPathCommandOurs(drive, "Basic Amp Part 2"),
       new WaitCommand(1)
       );
     }
 
   public static Command GrandTheftAuto(DriveSubsystem drive) {
     return new SequentialCommandGroup(
-      new FollowPathCommand(drive, "Grand Theft Auto Part 1")
-
+      new FollowPathCommandOurs(drive, "Grand Theft Auto Part 1")
     );
   }
 
   public static Command IntermediateAmp(DriveSubsystem drive) {
     return new SequentialCommandGroup(
-      new FollowPathCommand(drive, "Intermediate Amp Part 1"),
+      new FollowPathCommandOurs(drive, "Intermediate Amp Part 1"),
       new WaitCommand(1),
-      new FollowPathCommand(drive, "Intermediate Amp Part 2"),
+      new FollowPathCommandOurs(drive, "Intermediate Amp Part 2"),
       new WaitCommand(1),
-      new FollowPathCommand(drive, "Intermediate Amp Part 3")
+      new FollowPathCommandOurs(drive, "Intermediate Amp Part 3")
     );
   }
 

@@ -4,24 +4,31 @@
 
 package frc.robot.commands;
 
+import java.util.Optional;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.FollowPathHolonomic;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import frc.robot.subsystems.DriveSubsystem;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class FollowPathCommand extends Command {
+public class FollowPathCommandOurs extends Command {
   DriveSubsystem m_drive;
   String m_pathName;
   PathPlannerPath m_path;
   
 
-  public Command m_pathPlannerCommand;
+  public FollowPathCommand m_pathPlannerCommand;
+  public PPHolonomicDriveController m_HolonomicDriveController;
 
-  public FollowPathCommand(DriveSubsystem Drive, String PathName) {
+  public FollowPathCommandOurs(DriveSubsystem Drive, String PathName) {
     m_drive = Drive;
     m_pathName = PathName;
 
@@ -31,8 +38,8 @@ public class FollowPathCommand extends Command {
   }
 
   /** Creates a new PathCommand. */
-  public Command PathCommand() {
-
+  public FollowPathCommand PathCommand() {
+    
     return new FollowPathHolonomic(
         m_path,
         m_drive::getPose, // Robot pose supplier
@@ -61,7 +68,18 @@ public class FollowPathCommand extends Command {
   public void initialize() {
     m_drive.resetOdometry(m_path.getPreviewStartingHolonomicPose());
     m_pathPlannerCommand.initialize();
+    
   }
+// public Optional<Rotation2d> getRotationTargetOverride() {
+//       // Some condition that should decide if we want to override rotation
+//       if(Limelight.hasGamePieceTarget()) {
+//           // Return an optional containing the rotation override (this should be a field relative rotation)
+//           return Optional.of(Limelight.getRobotToGamePieceRotation());
+//       } else {
+//           // return an empty optional when we don't want to override the path's rotation
+//           return Optional.empty();
+//       }
+// }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
