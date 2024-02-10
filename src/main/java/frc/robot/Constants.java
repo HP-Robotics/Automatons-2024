@@ -40,7 +40,7 @@ public final class Constants {
     public static final boolean useDrive = true;
     public static final boolean useIntake = true;
     public static final boolean useShooter = true;
-    public static final boolean useDataManger = true;
+    public static final boolean useDataManager = true;
     public static final boolean useLimelight = false;
     public static final boolean usePivot = true;
     public static final boolean useClimber = false; //TODO check if these work

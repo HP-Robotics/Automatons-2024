@@ -79,7 +79,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    if (SubsystemConstants.useDataManger) {
+    if (SubsystemConstants.useDataManager) {
       DataLogManager.start();
     }
 
