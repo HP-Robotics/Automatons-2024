@@ -122,7 +122,6 @@ public class RobotContainer {
      // m_driveJoystick.button(4).whileTrue(new RunCommand(()-> m_robotDrive.drivePointedTowardsAngle(m_driveJoystick, new Rotation2d(0))));
       
 
-      m_driveJoystick.button(8).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
       
     }
 
