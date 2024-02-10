@@ -14,7 +14,6 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.FollowPathCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.PivotManualCommand;
-import frc.robot.commands.PivotSetPositionCommand;
 import frc.robot.commands.SetShooterCommand;
 
 import com.pathplanner.lib.auto.NamedCommands;
@@ -46,8 +45,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   private final CommandJoystick m_driveJoystick = new CommandJoystick(OperatorConstants.kDriverControllerPort);
-  // private final Joystick m_opJoystick = new
-  // Joystick(OperatorConstants.kOperatorControllerPort);
+  private final CommandJoystick m_opJoystick = new CommandJoystick(OperatorConstants.kOperatorControllerPort);
   // The robot's subsystems and commands are defined here...
   private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem = 
     new PoseEstimatorSubsystem();
@@ -123,16 +121,16 @@ public class RobotContainer {
     }
 
     if(SubsystemConstants.useShooter){
-      m_driveJoystick.button(2).whileTrue(new SetShooterCommand(m_shooterSubsystem));
+      m_opJoystick.button(2).whileTrue(new SetShooterCommand(m_shooterSubsystem));
     }
 
     if (SubsystemConstants.useIntake) {
       m_driveJoystick.axisGreaterThan(3, 0.1).whileTrue(new IntakeCommand(m_intakeSubsystem));
     }
     if(SubsystemConstants.usePivot){
-      m_driveJoystick.button(5).whileTrue(new PivotManualCommand(m_pivotSubsystem, PivotConstants.manualSpeed));
-      m_driveJoystick.button(6).whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
-      m_driveJoystick.button(7).whileTrue(new PivotSetPositionCommand(m_pivotSubsystem, PivotConstants.position1));
+      m_opJoystick.povRight().whileTrue(new PivotManualCommand(m_pivotSubsystem, PivotConstants.manualSpeed));
+      m_opJoystick.povLeft().whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
+      m_opJoystick.button(7).onTrue(new InstantCommand(m_pivotSubsystem::togglePID));
     }
 
   }
@@ -151,10 +149,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    // TODO Add chooser
-    // return Autos.FourPiece(m_robotDrive);
-    // return null;
-
     if (m_chooseAutos.getSelected() == "CenterDown") {
       return Autos.CenterDown(m_robotDrive);
     } 

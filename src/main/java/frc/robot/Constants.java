@@ -147,8 +147,8 @@ public final class Constants {
     public static final int shooterMotor2ID = 31;
 
     //Pivot is 40s
-    public static final int motorRID = 0;
-    public static final int motorLID = 0;
+    public static final int rightPivotID = 40;
+    public static final int leftPivotID = 41;
 
     //Climber is 50s
     public final static int climbMotorID = 50; //TODO choose ID number
@@ -172,10 +172,11 @@ public final class Constants {
     public static final double kP = 0.0;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
+    public static final boolean startWithPID = false;
 
-
-
-    public static final double manualSpeed = 0.2;
+    public static final double manualSpeed = 0.1;
     public static final double position1 = 0.0;
+
+    public static final double setpointChangeSpeed = 1;
   }
 }
