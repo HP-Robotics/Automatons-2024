@@ -111,7 +111,7 @@ public class RobotContainer {
     // TODO Add an operator joystick and put stuff on it
 
     if (SubsystemConstants.useDrive) {
-<<<<<<< HEAD
+
       // new JoystickButton(m_driveJoystick, 2).onTrue(new
       // InstantCommand(m_robotDrive::forceRobotRelative, m_robotDrive));
       // new JoystickButton(m_driveJoystick, 2).onFalse(new
@@ -121,13 +121,9 @@ public class RobotContainer {
      // m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path Line"));
      // m_driveJoystick.button(4).whileTrue(new RunCommand(()-> m_robotDrive.drivePointedTowardsAngle(m_driveJoystick, new Rotation2d(0))));
       
-=======
+
       m_driveJoystick.button(8).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
-      m_driveJoystick.button(7).whileTrue(new FollowPathCommandOurs(m_robotDrive, "Test Path"));
-      m_driveJoystick.button(9).whileTrue(new FollowPathCommandOurs(m_robotDrive, "Test Path Line"));
-      m_driveJoystick.button(4)
-          .whileTrue(new RunCommand(() -> m_robotDrive.drivePointedTowardsAngle(m_driveJoystick, new Rotation2d(0))));
->>>>>>> main
+      
     }
 
     if (SubsystemConstants.useShooter) {
@@ -147,17 +143,13 @@ public class RobotContainer {
     }
 
     if (SubsystemConstants.useIntake) {
-<<<<<<< HEAD
-      m_driveJoystick.axisGreaterThan(3, 0.1).whileTrue(new IntakeCommand(m_intakeSubsystem)); //m_driveJoystick.button(1).whileTrue(new IntakeCommand(m_intakeSubsystem)); flightstick code
-=======
       m_driveJoystick.axisGreaterThan(3, 0.1).whileTrue(new ParallelCommandGroup(
         new IntakeCommand(m_intakeSubsystem),
         new TriggerCommand(m_triggerSubsystem, false).asProxy() // TODO: Restart if cancelled
         ));
-    
+    //m_driveJoystick.button(1).whileTrue(new IntakeCommand(m_intakeSubsystem)); flightstick code
     
       
->>>>>>> main
     }
     if(SubsystemConstants.usePivot){
       m_opJoystick.povRight().whileTrue(new PivotManualCommand(m_pivotSubsystem, PivotConstants.manualSpeed));
