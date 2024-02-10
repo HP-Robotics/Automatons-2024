@@ -24,7 +24,6 @@ public class LimelightSubsystem extends SubsystemBase {
   NetworkTableEntry botpose_blue;
   double sawAprilTag;
   /** Creates a new ExampleSubsystem. */
-  public final Field2d m_field = new Field2d(); // TODO: Send Pose instead of field
   public Pose2d m_visionPose2d = new Pose2d();
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -36,9 +35,6 @@ public class LimelightSubsystem extends SubsystemBase {
   PoseEstimatorSubsystem m_poseEstimator;
 
   public LimelightSubsystem(PoseEstimatorSubsystem PoseEstimatorSubsystem) {
-    Shuffleboard.getTab("shuffleboard")
-        .add("Pose2d", m_field)
-        .withWidget(BuiltInWidgets.kField);
     sawAprilTag = NetworkTableInstance.getDefault().getTable("limelight-three").getEntry("tv").getDouble(0);
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-three");
     botpose_blue = table.getEntry("botpose_wpiblue"); // TODO: Look into Megatag
@@ -90,7 +86,6 @@ public class LimelightSubsystem extends SubsystemBase {
     double timeStamp = (blueBotpose.getTime()*1.0)/1000000 - latency;
 
     Pose2d m_robotPose = new Pose2d(tx, ty, new Rotation2d(Math.toRadians(rz)));
-    m_field.setRobotPose(m_robotPose);
     m_visionPose2d = m_robotPose;
     // specify the widget here
 
