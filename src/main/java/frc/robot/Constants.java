@@ -54,8 +54,8 @@ public final class Constants {
     public static final double driveGearRatio = 6.75;
     public static final double turningGearRatio = 15.429;
 
-    public final static Translation2d kFrontLeftLocation = new Translation2d(0.308, 0.308);
-    public final static Translation2d kFrontRightLocation = new Translation2d(0.308, -0.308);//TODO change front locations
+    public final static Translation2d kFrontLeftLocation = new Translation2d(0.308-0.038, 0.308);
+    public final static Translation2d kFrontRightLocation = new Translation2d(0.308-0.038, -0.308);
     public final static Translation2d kBackLeftLocation = new Translation2d(-0.308, 0.308);
     public final static Translation2d kBackRightLocation = new Translation2d(-0.308, -0.308);
 
@@ -156,7 +156,7 @@ public final class Constants {
     public final static int PigeonID = 57;
     
     public final static int FLAbsEncoder = 14;
-    public final static int FRAbsEncoder = 12;
+    public final static int FRAbsEncoder = 15;//TODO fix this
     public final static int BRAbsEncoder = 11;
     public final static int BLAbsEncoder = 13;
     
