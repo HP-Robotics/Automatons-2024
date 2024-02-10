@@ -57,7 +57,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final Pigeon2 m_pGyro = new Pigeon2(IDConstants.PigeonID, "CANivore");
 
   SwerveDriveOdometry m_odometry;
-  PIDController rotationController; //TODO run setSetpoint
+  PIDController rotationController;
   PoseEstimatorSubsystem m_poseEstimator;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
