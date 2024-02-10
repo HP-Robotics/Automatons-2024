@@ -3,37 +3,59 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7275269251393202,
-        "y": 6.665668032190766
+        "x": 1.861859906055994,
+        "y": 7.6128945420284
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.244264110632693,
-        "y": 6.470672867853643
+        "x": 2.762309798123869,
+        "y": 7.68305946868304
+      },
+      "isLocked": false,
+      "linkedName": "Amp"
+    },
+    {
+      "anchor": {
+        "x": 4.036972632349822,
+        "y": 7.6128945420284
+      },
+      "prevControl": {
+        "x": 3.248405310728492,
+        "y": 7.636790521471471
+      },
+      "nextControl": {
+        "x": 4.8087868255508575,
+        "y": 7.58950623314352
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.6453682536994707,
-        "y": 6.829386194384925
+        "x": 7.779102053930601,
+        "y": 7.437482225391801
       },
       "prevControl": {
-        "x": 2.2415254251112016,
-        "y": 6.185902152072421
+        "x": 7.065758632941766,
+        "y": 7.226987445427882
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Grab piece 1A"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": -90.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.75,
+      "waypointRelativePos": 1.85,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +63,7 @@
             {
               "type": "named",
               "data": {
-                "name": "runIntake"
+                "name": "IntakeCommand"
               }
             }
           ]
@@ -57,13 +79,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 41.82,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Four Piece",
+  "folder": "Basic Amp",
   "previewStartingState": {
-    "rotation": 58.39,
+    "rotation": -90.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

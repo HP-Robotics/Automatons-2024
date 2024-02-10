@@ -10,7 +10,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.IntakeConstants;
 
@@ -21,16 +20,15 @@ public class ClimbSubsystem extends SubsystemBase {
     TalonFXConfiguration config = new TalonFXConfiguration();
     climbMotor.getConfigurator().apply(config);
 
-    SmartDashboard.putNumber("Intake Speed", IntakeConstants.intakeSpeed); 
+    SmartDashboard.putNumber("Intake Speed", IntakeConstants.intakeSpeed); //TODO make a networktable
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    climbMotor.set(ClimberConstants.climbSpeed);
   }
 
-  public void climb() {
-    climbMotor.setControl(new DutyCycleOut(ClimberConstants.climbSpeed));
+  public void climb(double output) {
+    climbMotor.setControl(new DutyCycleOut(output));
   }
 }
