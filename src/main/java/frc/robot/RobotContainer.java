@@ -116,8 +116,8 @@ public class RobotContainer {
       // new JoystickButton(m_driveJoystick, 2).onFalse(new
       // InstantCommand(m_robotDrive::forceFieldRelative, m_robotDrive));
       m_driveJoystick.button(8).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
-      m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path"));
-      m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path Line"));
+     // m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path"));
+      m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path Spinny Line"));
       m_driveJoystick.button(4).whileTrue(new RunCommand(()-> m_robotDrive.drivePointedTowardsAngle(m_driveJoystick, new Rotation2d(0))));
       
     }
