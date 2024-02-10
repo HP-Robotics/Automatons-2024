@@ -173,7 +173,8 @@ public final class Constants {
     public static final double kI = 0.0;
     public static final double kD = 0.0;
 
-
+    public static final double positionAmp = 0.0;
+    public static final double positionStage = 0.0;
 
     public static final double manualSpeed = 0.2;
     public static final double position1 = 0.0;
