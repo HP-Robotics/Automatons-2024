@@ -43,8 +43,7 @@ public class TriggerCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // m_subsystem.stopTrigger(); // turn //TODO: decide which one to use
-    m_subsystem.setTrigger(0.0); // turn shooter off
+    m_subsystem.stopTrigger();
   }
 
   // Returns true when the command should end.

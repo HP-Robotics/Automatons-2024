@@ -179,7 +179,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void drivePointedTowardsAngle(CommandJoystick joystick, Rotation2d targetAngle) {
-    double rot = rotationController.calculate(getPoseRot().getRadians(), targetAngle.getRadians());
+    double rot = rotationController.calculate(m_odometry.getPoseMeters().getRotation().getRadians(), targetAngle.getRadians());
     drive(
         Math.signum(joystick.getRawAxis(1))
             * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(1),
@@ -192,7 +192,7 @@ public class DriveSubsystem extends SubsystemBase {
         rot * 1 * DriveConstants.kMaxAngularSpeed,
         true);
 
-    driveTrainTable.putValue("Rotation Current Angle", NetworkTableValue.makeDouble(getPoseRot().getDegrees()));
+    driveTrainTable.putValue("Rotation Current Angle", NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getRotation().getDegrees()));
     driveTrainTable.putValue("Rotation Target Angle", NetworkTableValue.makeDouble(targetAngle.getDegrees()));
     driveTrainTable.putValue("Rotation Power Input", NetworkTableValue.makeDouble(rot));
 
@@ -208,24 +208,8 @@ public class DriveSubsystem extends SubsystemBase {
     return m_odometry.getPoseMeters();
   }
 
-  public Rotation2d pointToAngle(double x, double y) {
-    return new Rotation2d(Math.atan2(x - getPose().getX(), y - getPose().getY())); // TODO: Remove
-  }
-
   public ChassisSpeeds getCurrentspeeds() {
     return DriveConstants.kDriveKinematics.toChassisSpeeds(m_swerveModuleStates);
-  }
-
-  public double getPoseX() {
-    return m_odometry.getPoseMeters().getX(); // TODO remove
-  }
-
-  public double getPoseY() {// TODO remove
-    return getPose().getY();
-  }
-
-  public Rotation2d getPoseRot() {
-    return m_odometry.getPoseMeters().getRotation();// TODO remove
   }
 
   public void setModuleStates(SwerveModuleState[] swerveModuleStates) {
@@ -236,13 +220,9 @@ public class DriveSubsystem extends SubsystemBase {
     m_backLeft.setDesiredState(swerveModuleStates[3]);
   }
 
-  public void forceRobotRelative() {
-    m_fieldRelative = false;
+  public void setFieldRelative(boolean isTrue) {
+    m_fieldRelative = isTrue;
   }
-
-  public void forceFieldRelative() {
-    m_fieldRelative = true;
-  }// TODO combine with above function
 
   public void initializePoseEstimator(Pose2d pose) {
     m_poseEstimator.createPoseEstimator(DriveConstants.kDriveKinematics,

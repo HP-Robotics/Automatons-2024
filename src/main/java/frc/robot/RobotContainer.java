@@ -111,6 +111,8 @@ public class RobotContainer {
 
     if (SubsystemConstants.useDrive) {
       m_driveJoystick.button(8).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
+      m_driveJoystick.axisGreaterThan(2, 0.1).onTrue(new InstantCommand(() -> m_robotDrive.setFieldRelative(false)));
+      m_driveJoystick.axisGreaterThan(2, 0.1).onFalse(new InstantCommand(() -> m_robotDrive.setFieldRelative(true)));
       m_driveJoystick.button(7).whileTrue(new FollowPathCommandOurs(m_robotDrive, "Test Path"));
       m_driveJoystick.button(9).whileTrue(new FollowPathCommandOurs(m_robotDrive, "Test Path Line"));
       m_driveJoystick.button(4)
