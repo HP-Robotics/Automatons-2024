@@ -43,13 +43,6 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTable.putValue("Shooter kP", NetworkTableValue.makeDouble(ShooterConstants.shooterMotorskP));
     shooterTable.putValue("Shooter kI", NetworkTableValue.makeDouble(ShooterConstants.shooterMotorskI));
     shooterTable.putValue("Shooter kD", NetworkTableValue.makeDouble(ShooterConstants.shooterMotorskD));
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    shooterTable.putValue("frontMotor Velocity", NetworkTableValue.makeDouble(m_frontMotor.getVelocity().getValue()));
-    shooterTable.putValue("backMotor Velocity", NetworkTableValue.makeDouble(m_backMotor.getVelocity().getValue()));
 
     Slot0Configs slot0Configs = new Slot0Configs();
     slot0Configs.kV = ShooterConstants.shooterMotorskV; // TODO: Is this a good name?
@@ -60,21 +53,36 @@ public class ShooterSubsystem extends SubsystemBase {
     m_backMotor.getConfigurator().apply(slot0Configs);
   }
 
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    shooterTable.putValue("frontMotor Velocity", NetworkTableValue.makeDouble(m_frontMotor.getVelocity().getValue()));
+    shooterTable.putValue("backMotor Velocity", NetworkTableValue.makeDouble(m_backMotor.getVelocity().getValue()));
+
+    // Slot0Configs slot0Configs = new Slot0Configs();
+    // slot0Configs.kV = ShooterConstants.shooterMotorskV; // TODO: Is this a good name?
+    // slot0Configs.kP = ShooterConstants.shooterMotorskP;
+    // slot0Configs.kI = ShooterConstants.shooterMotorskI;
+    // slot0Configs.kD = ShooterConstants.shooterMotorskD;
+    // m_frontMotor.getConfigurator().apply(slot0Configs);
+    // m_backMotor.getConfigurator().apply(slot0Configs);
+  }
+
   public void setShooter(double output1, double output2) {
-    // m_velocity.Slot = 0;
-    // m_frontMotor.setControl(m_velocity.withVelocity(output1));
-    // m_backMotor.setControl(m_velocity.withVelocity(output2));
-    m_frontMotor.setControl(new DutyCycleOut(output1));
-    m_backMotor.setControl(new DutyCycleOut(output2));
+    m_velocity.Slot = 0;
+    m_frontMotor.setControl(m_velocity.withVelocity(output1));
+    m_backMotor.setControl(m_velocity.withVelocity(output2));
+    // m_frontMotor.setControl(new DutyCycleOut(output1));
+    // m_backMotor.setControl(new DutyCycleOut(output2));
   }
 
   public boolean atSpeed() {
-    return true;
-    // if (Math.abs(m_frontMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold 
-    //  && Math.abs(m_backMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold) {
-    //   return true;
-    // }
-    // return false;
+    // return true;
+    if (Math.abs(m_frontMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold 
+     && Math.abs(m_backMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold) {
+      return true;
+    }
+    return false;
   }
 
   public void stopShooter() {
