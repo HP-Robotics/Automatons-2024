@@ -14,7 +14,7 @@ import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID);
+  TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID,"CANivore");
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
     TalonFXConfiguration config = new TalonFXConfiguration();
