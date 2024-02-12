@@ -62,10 +62,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable driveTrainTable = inst.getTable("drive-train");
-  NetworkTable poseEstimatorTable = inst.getTable("Pose Estimator Table");
+  NetworkTable poseEstimatorTable = inst.getTable("pose-estimator-table");
   StructPublisher<Pose2d> drivePublisher;
-
-  NetworkTable pipeline = inst.getTable("SmartDashboard");
 
   public DriveSubsystem(PoseEstimatorSubsystem poseEstimator) {
     m_poseEstimator = poseEstimator;

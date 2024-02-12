@@ -27,12 +27,12 @@ public class TriggerCommand extends Command {
   }
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable triggerTable = inst.getTable("trigger-velocity-PID");
+  NetworkTable triggerTable = inst.getTable("trigger-subsystem");
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double output = SmartDashboard.getNumber("Trigger Speed", TriggerConstants.triggerSpeed);
+    double output = triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed);
     m_subsystem.setTrigger(output); 
   }
 

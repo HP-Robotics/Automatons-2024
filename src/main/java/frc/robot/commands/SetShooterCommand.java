@@ -22,7 +22,7 @@ public class SetShooterCommand extends Command {
   }
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable shooterTable = inst.getTable("shooter-speed-PID");
+  NetworkTable shooterTable = inst.getTable("shooter-subsystem");
 
   // Called when the command is initially scheduled.
   @Override

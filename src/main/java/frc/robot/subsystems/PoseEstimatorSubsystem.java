@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class PoseEstimatorSubsystem extends SubsystemBase {
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable poseEstimatorTable = inst.getTable("Pose Estimator Table");
+  NetworkTable poseEstimatorTable = inst.getTable("pose-estimator-table");
   StructPublisher<Pose2d> posePublisher;
 
   SwerveDrivePoseEstimator poseEstimator;

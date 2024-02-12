@@ -18,7 +18,7 @@ import frc.robot.Constants.IntakeConstants;
 public class ClimbSubsystem extends SubsystemBase {
   TalonFX climbMotor = new TalonFX(IDConstants.climbMotorID);
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable climbTable = inst.getTable("Climb Table");
+  NetworkTable climbTable = inst.getTable("climb-table");
   /** Creates a new ClimbSubsystem. */
   public ClimbSubsystem() {
     TalonFXConfiguration config = new TalonFXConfiguration();
