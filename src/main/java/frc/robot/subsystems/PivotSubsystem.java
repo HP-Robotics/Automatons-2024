@@ -101,4 +101,6 @@ public class PivotSubsystem extends SubsystemBase {
 	public void setPosition(double position) {
 		m_pivotController.setSetpoint(position);
 	};
+
+	//TODO: at position function 
 }

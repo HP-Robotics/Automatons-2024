@@ -57,6 +57,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     shooterTable.putValue("frontMotor Velocity", NetworkTableValue.makeDouble(m_frontMotor.getVelocity().getValue()));
     shooterTable.putValue("backMotor Velocity", NetworkTableValue.makeDouble(m_backMotor.getVelocity().getValue()));
+    shooterTable.putValue("Shooter At Speed", NetworkTableValue.makeBoolean(this.atSpeed()));
 
     // Slot0Configs slot0Configs = new Slot0Configs();
     // slot0Configs.kV = ShooterConstants.shooterMotorskV; // TODO: Is this a good name?
@@ -65,6 +66,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // slot0Configs.kD = ShooterConstants.shooterMotorskD;
     // m_frontMotor.getConfigurator().apply(slot0Configs);
     // m_backMotor.getConfigurator().apply(slot0Configs);
+
   }
 
   public void setShooter(double output1, double output2) {

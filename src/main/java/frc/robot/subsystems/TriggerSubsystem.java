@@ -50,6 +50,7 @@ public class TriggerSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     triggerTable.putValue("triggerMotor Velocity", NetworkTableValue.makeDouble(m_triggerMotor.getVelocity().getValue()));
+    triggerTable.putValue("Beam Broken", NetworkTableValue.makeBoolean(m_beamBreak.beamBroken()));
 
     Slot0Configs slot0Configs = new Slot0Configs();
     slot0Configs.kV = TriggerConstants.triggerkV;
