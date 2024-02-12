@@ -130,8 +130,8 @@ public final class Constants {
 
   public static class ShooterConstants {
 
-    public static final double shooterSpeedFront = 0.3; // TODO: Is this correct?
-    public static final double shooterSpeedBack = 0.3; //50
+    public static final double shooterSpeedFront = 50; // TODO: Is this correct?
+    public static final double shooterSpeedBack = 50; //50
 
     public static final double shooterMotorskP = 0.4;
     public static final double shooterMotorskI = 0.01;
