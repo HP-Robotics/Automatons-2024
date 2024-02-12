@@ -14,14 +14,11 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BeamBreak;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.PortConstants;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TriggerConstants;
-import frc.robot.commands.TriggerCommand;
 
 public class TriggerSubsystem extends SubsystemBase {
   private TalonFX m_triggerMotor;
@@ -29,7 +26,7 @@ public class TriggerSubsystem extends SubsystemBase {
   public BeamBreak m_beamBreak;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable triggerTable = inst.getTable("trigger-velocity-PID");
+  NetworkTable triggerTable = inst.getTable("trigger-subsystem");
 
   /** Creates a new ShooterSubsystem. */
   public TriggerSubsystem() {
@@ -42,7 +39,7 @@ public class TriggerSubsystem extends SubsystemBase {
     m_triggerMotor.getConfigurator().apply(config);
     m_triggerMotor.setNeutralMode(NeutralModeValue.Brake);
 
-    triggerTable.putValue("Trigger Speed", NetworkTableValue.makeDouble(TriggerConstants.triggerSpeed));
+    triggerTable.putValue("Trigger Setpoint", NetworkTableValue.makeDouble(TriggerConstants.triggerSpeed));
     triggerTable.putValue("Trigger kV", NetworkTableValue.makeDouble(0));
     triggerTable.putValue("Trigger kP", NetworkTableValue.makeDouble(0));
     triggerTable.putValue("Trigger kI", NetworkTableValue.makeDouble(0));

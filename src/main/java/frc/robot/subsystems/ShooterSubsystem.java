@@ -12,7 +12,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.ShooterConstants;
@@ -23,7 +22,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable shooterTable = inst.getTable("shooter-speed-PID");
+  NetworkTable shooterTable = inst.getTable("shooter-subsystem");
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
@@ -45,7 +44,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTable.putValue("Shooter kD", NetworkTableValue.makeDouble(ShooterConstants.shooterMotorskD));
 
     Slot0Configs slot0Configs = new Slot0Configs();
-    slot0Configs.kV = ShooterConstants.shooterMotorskV; // TODO: Is this a good name?
+    slot0Configs.kV = ShooterConstants.shooterMotorskV;
     slot0Configs.kP = ShooterConstants.shooterMotorskP;
     slot0Configs.kI = ShooterConstants.shooterMotorskI;
     slot0Configs.kD = ShooterConstants.shooterMotorskD;

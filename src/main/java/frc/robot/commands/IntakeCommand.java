@@ -6,19 +6,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.subsystems.TriggerSubsystem;
-import frc.robot.Constants.TriggerConstants;
 
 public class IntakeCommand extends Command {
     private final IntakeSubsystem m_subsystem;
   /** Creates a new IntakeCommand. */
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    NetworkTable intakeTable = inst.getTable("Intake Table");
+    NetworkTable intakeTable = inst.getTable("intake-table");
   public IntakeCommand(IntakeSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
@@ -28,7 +24,7 @@ public class IntakeCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double output = intakeTable.getEntry("Intake Speed").getDouble(IntakeConstants.intakeSpeed);
+    double output = intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed);
     m_subsystem.runIntake(output);
   }
 

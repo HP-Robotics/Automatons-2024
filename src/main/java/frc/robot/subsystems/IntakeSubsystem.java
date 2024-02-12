@@ -19,7 +19,7 @@ public class IntakeSubsystem extends SubsystemBase {
   TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID,"CANivore");
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable intakeTable = inst.getTable("Intake Table");
+  NetworkTable intakeTable = inst.getTable("intake-table");
 
 
   /** Creates a new IntakeSubsystem. */
@@ -27,7 +27,7 @@ public class IntakeSubsystem extends SubsystemBase {
     TalonFXConfiguration config = new TalonFXConfiguration();
     m_motor.getConfigurator().apply(config);
 
-    intakeTable.getEntry("Intake Speed").getDouble(IntakeConstants.intakeSpeed);
+    intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed);
 
   }
 

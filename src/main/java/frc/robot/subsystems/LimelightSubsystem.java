@@ -27,8 +27,8 @@ public class LimelightSubsystem extends SubsystemBase {
   public Pose2d m_visionPose2d = new Pose2d();
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable limelightMagicTable = inst.getTable("limelight Magic numbers");
-  NetworkTable poseEstimatorTable = inst.getTable("Pose Estimator Table");
+  NetworkTable limelightMagicTable = inst.getTable("limelight-subsystem");
+  NetworkTable poseEstimatorTable = inst.getTable("pose-estimator-table");
 
   StructPublisher<Pose2d> publisher;
 
