@@ -130,8 +130,8 @@ public final class Constants {
 
   public static class ShooterConstants {
 
-    public static final double shooterSpeed1 = 50; // TODO: Is this correct?
-    public static final double shooterSpeed2 = 50;
+    public static final double shooterSpeedFront = 0.3; // TODO: Is this correct?
+    public static final double shooterSpeedBack = 0.3; //50
 
     public static final double shooterMotorskP = 0.4;
     public static final double shooterMotorskI = 0.01;
@@ -158,8 +158,8 @@ public final class Constants {
     public static final int intakeMotorID = 10;
 
     //Shooter is 30s
-    public static final int shooterMotor1ID = 30;
-    public static final int shooterMotor2ID = 31;
+    public static final int frontMotorID = 30;
+    public static final int backMotorID = 31;
     public final static int triggerMotorID = 32;
 
     //Pivot is 40s
@@ -174,7 +174,7 @@ public final class Constants {
 
   public static class PortConstants {
     public final static int FLAbsEncoder = 14;
-    public final static int FRAbsEncoder = 12;
+    public final static int FRAbsEncoder = 15;
     public final static int BRAbsEncoder = 11;
     public final static int BLAbsEncoder = 13;
     
@@ -188,7 +188,7 @@ public final class Constants {
   }
 
   public static class TriggerConstants {
-    public static final double triggerSpeed = 0;
+    public static final double triggerSpeed = 0.3;
 
     public static final double triggerkV = 0;
     public static final double triggerkP = 0;

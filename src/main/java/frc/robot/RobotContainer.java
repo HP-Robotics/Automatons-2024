@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -129,14 +130,18 @@ public class RobotContainer {
     if (SubsystemConstants.useShooter) {
       m_opJoystick.axisGreaterThan(3, 0.1).whileTrue(
         new SetShooterCommand(m_shooterSubsystem));
+      //TODO add trigger if statement
       m_opJoystick.button(3).whileTrue(new ParallelCommandGroup(
         new SetShooterCommand(m_shooterSubsystem).withInterruptBehavior(InterruptionBehavior.kCancelIncoming),
-        new WaitUntilCommand(m_shooterSubsystem::atSpeed).andThen(new TriggerCommand(m_triggerSubsystem, true)
-        .withInterruptBehavior(InterruptionBehavior.kCancelIncoming))
-      ));
+        new WaitUntilCommand(m_shooterSubsystem::atSpeed)
+          .andThen(new StartEndCommand(() -> m_triggerSubsystem.setTrigger(-0.2),m_triggerSubsystem::stopTrigger)).withTimeout(0.1)
+          .andThen(new TriggerCommand(m_triggerSubsystem, true).withInterruptBehavior(InterruptionBehavior.kCancelIncoming))));
+      m_driveJoystick.button(4).onTrue(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(-0.2)),
+       new InstantCommand(() -> m_triggerSubsystem.setTrigger(-0.2)))); //TODO make yuck button better
+      m_driveJoystick.button(4).onFalse(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(0)),
+       new InstantCommand(() -> m_triggerSubsystem.setTrigger(0))));
     }
 
-    
 
     if (SubsystemConstants.useClimber) {
       m_driveJoystick.button(10).whileTrue(new ClimberCommand(m_climberSubsystem));
@@ -145,7 +150,8 @@ public class RobotContainer {
     if (SubsystemConstants.useIntake) {
       m_driveJoystick.axisGreaterThan(3, 0.1).whileTrue(new ParallelCommandGroup(
         new IntakeCommand(m_intakeSubsystem),
-        new TriggerCommand(m_triggerSubsystem, false).asProxy() // TODO: Restart if cancelled
+        new TriggerCommand(m_triggerSubsystem, false).asProxy(), // TODO: Restart if cancelled
+        new StartEndCommand(() -> {m_shooterSubsystem.setShooter(-0.1, -0.1);}, m_shooterSubsystem::stopShooter)
         ));
     //m_driveJoystick.button(1).whileTrue(new IntakeCommand(m_intakeSubsystem)); flightstick code
     

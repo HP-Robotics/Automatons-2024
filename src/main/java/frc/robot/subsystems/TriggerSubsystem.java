@@ -9,6 +9,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
@@ -31,12 +33,14 @@ public class TriggerSubsystem extends SubsystemBase {
 
   /** Creates a new ShooterSubsystem. */
   public TriggerSubsystem() {
-    m_triggerMotor = new TalonFX(IDConstants.triggerMotorID);
+    // TODO: move to constants 
+    m_triggerMotor = new TalonFX(IDConstants.triggerMotorID,"CANivore");
     m_beamBreak = new BeamBreak(PortConstants.TriggerBeamBreak);
 
     TalonFXConfiguration config = new TalonFXConfiguration();
 
     m_triggerMotor.getConfigurator().apply(config);
+    m_triggerMotor.setNeutralMode(NeutralModeValue.Brake);
 
     triggerTable.putValue("Trigger Speed", NetworkTableValue.makeDouble(TriggerConstants.triggerSpeed));
     triggerTable.putValue("Trigger kV", NetworkTableValue.makeDouble(0));
@@ -60,7 +64,7 @@ public class TriggerSubsystem extends SubsystemBase {
 
   public void setTrigger(double output) {
     m_velocity.Slot = 0;
-    m_triggerMotor.setControl(m_velocity.withVelocity(output));
+    m_triggerMotor.setControl(new DutyCycleOut(output));
   }
 
   public void stopTrigger() {

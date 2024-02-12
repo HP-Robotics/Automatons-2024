@@ -27,19 +27,22 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
-    m_frontMotor = new TalonFX(IDConstants.shooterMotor1ID);
-    m_backMotor = new TalonFX(IDConstants.shooterMotor2ID);
+    // TODO: move to constants 
+    m_frontMotor = new TalonFX(IDConstants.frontMotorID,"CANivore");
+    m_backMotor = new TalonFX(IDConstants.backMotorID,"CANivore");
     TalonFXConfiguration config = new TalonFXConfiguration();
 
     m_frontMotor.getConfigurator().apply(config);
     m_backMotor.getConfigurator().apply(config);
 
-    shooterTable.putValue("Shooter Speed 1", NetworkTableValue.makeDouble(ShooterConstants.shooterSpeed1));
-    shooterTable.putValue("Shooter Speed 2", NetworkTableValue.makeDouble(ShooterConstants.shooterSpeed2));
-    shooterTable.putValue("Shooter kV", NetworkTableValue.makeDouble(0));
-    shooterTable.putValue("Shooter kP", NetworkTableValue.makeDouble(0));
-    shooterTable.putValue("Shooter kI", NetworkTableValue.makeDouble(0));
-    shooterTable.putValue("Shooter kD", NetworkTableValue.makeDouble(0));
+    m_frontMotor.setInverted(true);
+
+    shooterTable.putValue("frontMotor Setpoint", NetworkTableValue.makeDouble(ShooterConstants.shooterSpeedFront));
+    shooterTable.putValue("backMotor Setpoint", NetworkTableValue.makeDouble(ShooterConstants.shooterSpeedBack));
+    shooterTable.putValue("Shooter kV", NetworkTableValue.makeDouble(ShooterConstants.shooterMotorskV));
+    shooterTable.putValue("Shooter kP", NetworkTableValue.makeDouble(ShooterConstants.shooterMotorskP));
+    shooterTable.putValue("Shooter kI", NetworkTableValue.makeDouble(ShooterConstants.shooterMotorskI));
+    shooterTable.putValue("Shooter kD", NetworkTableValue.makeDouble(ShooterConstants.shooterMotorskD));
   }
 
   @Override
@@ -58,17 +61,20 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setShooter(double output1, double output2) {
-    m_velocity.Slot = 0;
-    m_frontMotor.setControl(m_velocity.withVelocity(-output1));
-    m_backMotor.setControl(m_velocity.withVelocity(output2));
+    // m_velocity.Slot = 0;
+    // m_frontMotor.setControl(m_velocity.withVelocity(output1));
+    // m_backMotor.setControl(m_velocity.withVelocity(output2));
+    m_frontMotor.setControl(new DutyCycleOut(output1));
+    m_backMotor.setControl(new DutyCycleOut(output2));
   }
 
   public boolean atSpeed() {
-    if (Math.abs(m_frontMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold 
-     && Math.abs(m_backMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold) {
-      return true;
-    }
-    return false;
+    return true;
+    // if (Math.abs(m_frontMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold 
+    //  && Math.abs(m_backMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold) {
+    //   return true;
+    // }
+    // return false;
   }
 
   public void stopShooter() {

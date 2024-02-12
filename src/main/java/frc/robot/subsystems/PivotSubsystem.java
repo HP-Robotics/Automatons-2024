@@ -30,12 +30,13 @@ public class PivotSubsystem extends SubsystemBase {
 
 	/** Creates a new ExampleSubsystem. */
 	public PivotSubsystem() {
-		m_motorR = new TalonFX(IDConstants.rightPivotID);
-		m_motorL = new TalonFX(IDConstants.leftPivotID);
+		m_motorR = new TalonFX(IDConstants.rightPivotID,"CANivore");
+		m_motorL = new TalonFX(IDConstants.leftPivotID,"CANivore");
 		Slot0Configs motorConfigs = new Slot0Configs();
 		m_motorL.getConfigurator().apply(new TalonFXConfiguration());
 		m_motorR.getConfigurator().apply(new TalonFXConfiguration());
 		m_motorR.setNeutralMode(NeutralModeValue.Brake);
+		m_motorR.setInverted(true);
 		m_motorL.setNeutralMode(NeutralModeValue.Brake);
 
 		motorConfigs.kP = SmartDashboard.getNumber("kP", PivotConstants.kP); //won't send to falcon

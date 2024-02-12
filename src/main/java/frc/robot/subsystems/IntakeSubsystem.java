@@ -16,7 +16,7 @@ import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID);
+  TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID,"CANivore");
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable intakeTable = inst.getTable("Intake Table");

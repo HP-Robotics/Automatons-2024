@@ -32,7 +32,7 @@ public class TriggerCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double output = SmartDashboard.getNumber("triggerMotor Velocity", TriggerConstants.triggerSpeed);
+    double output = SmartDashboard.getNumber("Trigger Speed", TriggerConstants.triggerSpeed);
     m_subsystem.setTrigger(output); 
   }
 
