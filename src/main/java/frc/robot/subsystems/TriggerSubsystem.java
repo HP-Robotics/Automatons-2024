@@ -30,7 +30,6 @@ public class TriggerSubsystem extends SubsystemBase {
 
   /** Creates a new ShooterSubsystem. */
   public TriggerSubsystem() {
-    // TODO: move to constants 
     m_triggerMotor = new TalonFX(IDConstants.triggerMotorID,"CANivore");
     m_beamBreak = new BeamBreak(PortConstants.TriggerBeamBreak);
 

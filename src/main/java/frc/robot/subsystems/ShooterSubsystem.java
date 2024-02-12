@@ -26,7 +26,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
-    // TODO: move to constants 
     m_frontMotor = new TalonFX(IDConstants.frontMotorID,"CANivore");
     m_backMotor = new TalonFX(IDConstants.backMotorID,"CANivore");
     TalonFXConfiguration config = new TalonFXConfiguration();
@@ -60,7 +59,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTable.putValue("Shooter At Speed", NetworkTableValue.makeBoolean(this.atSpeed()));
 
     // Slot0Configs slot0Configs = new Slot0Configs();
-    // slot0Configs.kV = ShooterConstants.shooterMotorskV; // TODO: Is this a good name?
+    // slot0Configs.kV = ShooterConstants.shooterMotorskV;
     // slot0Configs.kP = ShooterConstants.shooterMotorskP;
     // slot0Configs.kI = ShooterConstants.shooterMotorskI;
     // slot0Configs.kD = ShooterConstants.shooterMotorskD;
