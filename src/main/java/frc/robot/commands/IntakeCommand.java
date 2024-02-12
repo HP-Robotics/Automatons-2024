@@ -12,6 +12,7 @@ import frc.robot.Constants.IntakeConstants;
 
 public class IntakeCommand extends Command {
     private final IntakeSubsystem m_subsystem;
+    Boolean pastBeamBroken = false;
   /** Creates a new IntakeCommand. */
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
     NetworkTable intakeTable = inst.getTable("intake-table");
@@ -30,7 +31,9 @@ public class IntakeCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    pastBeamBroken = m_subsystem.m_beambreak.beamBroken();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -41,6 +44,9 @@ public class IntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (pastBeamBroken != m_subsystem.m_beambreak.beamBroken() && pastBeamBroken) {
+      return true;
+    }
     return false;
   }
 }

@@ -10,6 +10,7 @@ import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TriggerSubsystem;
 import frc.robot.Constants.ShooterConstants;
@@ -17,11 +18,14 @@ import frc.robot.Constants.TriggerConstants;
 public class TriggerCommand extends Command {
    private final TriggerSubsystem m_subsystem;
     boolean m_ignoreBeamBreak;
+    boolean pastBeamBroken = false;
+    IntakeSubsystem m_intakeSubsystem;
 
   /** Creates a new ShooterCommand. */
-  public TriggerCommand(TriggerSubsystem subsystem, Boolean ignoreBeamBreak) {
+  public TriggerCommand(TriggerSubsystem subsystem, Boolean ignoreBeamBreak, IntakeSubsystem intakesubsystem) {
     // Use addRequirements() here to declare subsystem dependencies
     m_subsystem = subsystem;
+    m_intakeSubsystem = intakesubsystem;
     addRequirements(subsystem);
     m_ignoreBeamBreak = ignoreBeamBreak;
   }
@@ -38,7 +42,9 @@ public class TriggerCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    pastBeamBroken = m_intakeSubsystem.m_beambreak.beamBroken();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -49,8 +55,10 @@ public class TriggerCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (!m_ignoreBeamBreak && m_subsystem.m_beamBreak.beamBroken()) {
+    if (!m_ignoreBeamBreak) {
+      if (pastBeamBroken != m_intakeSubsystem.m_beambreak.beamBroken() && pastBeamBroken) {
         return true;
+      }
     }
     return false;
   }

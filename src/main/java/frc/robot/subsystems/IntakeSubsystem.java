@@ -10,13 +10,17 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BeamBreak;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.PortConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
   TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID,"CANivore");
+  public BeamBreak m_beambreak;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable intakeTable = inst.getTable("intake-table");
@@ -29,11 +33,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
     intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed);
 
+    m_beambreak = new BeamBreak(PortConstants.TriggerBeamBreak);
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    intakeTable.putValue("Beam Broken", NetworkTableValue.makeBoolean(m_beambreak.beamBroken()));
   }
 
   public void runIntake(double output) {

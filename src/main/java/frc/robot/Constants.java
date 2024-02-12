@@ -58,12 +58,12 @@ public final class Constants {
     public static final double driveGearRatio = 6.75;
     public static final double turningGearRatio = 15.429;
 
-    public final static Translation2d kFrontLeftLocation = new Translation2d(0.308-0.038, 0.308);
-    public final static Translation2d kFrontRightLocation = new Translation2d(0.308-0.038, -0.308);
-    public final static Translation2d kBackLeftLocation = new Translation2d(-0.308, 0.308);
-    public final static Translation2d kBackRightLocation = new Translation2d(-0.308, -0.308);
+    public static final Translation2d kFrontLeftLocation = new Translation2d(0.308-0.038, 0.308);
+    public static final Translation2d kFrontRightLocation = new Translation2d(0.308-0.038, -0.308);
+    public static final Translation2d kBackLeftLocation = new Translation2d(-0.308, 0.308);
+    public static final Translation2d kBackRightLocation = new Translation2d(-0.308, -0.308);
 
-    public final static SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         kFrontLeftLocation, kFrontRightLocation, kBackRightLocation, kBackLeftLocation);
 
     public static final double drivekP = 5;
@@ -144,15 +144,15 @@ public final class Constants {
 
   public static class IDConstants {
     //Drive is 20s
-    public final static int FLDriveMotorID = 28;
-    public final static int FRDriveMotorID = 22;
-    public final static int BRDriveMotorID = 20;
-    public final static int BLDriveMotorID = 24;
+    public static final int FLDriveMotorID = 28;
+    public static final int FRDriveMotorID = 22;
+    public static final int BRDriveMotorID = 20;
+    public static final int BLDriveMotorID = 24;
 
-    public final static int FLTurningMotorID = 29;
-    public final static int FRTurningMotorID = 23;
-    public final static int BRTurningMotorID = 21;
-    public final static int BLTurningMotorID = 25;
+    public static final int FLTurningMotorID = 29;
+    public static final int FRTurningMotorID = 23;
+    public static final int BRTurningMotorID = 21;
+    public static final int BLTurningMotorID = 25;
 
     //Intake is 10s
     public static final int intakeMotorID = 10;
@@ -160,31 +160,32 @@ public final class Constants {
     //Shooter is 30s
     public static final int frontMotorID = 30;
     public static final int backMotorID = 31;
-    public final static int triggerMotorID = 32;
+    public static final int triggerMotorID = 32;
 
     //Pivot is 40s
     public static final int rightPivotID = 40;
     public static final int leftPivotID = 41;
 
     //Climber is 50s
-    public final static int climbMotorID = 50;
+    public static final int climbMotorID = 50;
     
-    public final static int PigeonID = 57;
+    public static final int PigeonID = 57;
   }
 
   public static class PortConstants {
-    public final static int FLAbsEncoder = 14;
-    public final static int FRAbsEncoder = 15;
-    public final static int BRAbsEncoder = 11;
-    public final static int BLAbsEncoder = 13;
+    public static final int FLAbsEncoder = 14;
+    public static final int FRAbsEncoder = 15;
+    public static final int BRAbsEncoder = 11;
+    public static final int BLAbsEncoder = 13;
     
-    public final static int pivotAbsEncoderID = 8;
+    public static final int pivotAbsEncoderID = 8;
 
-    public final static int TriggerBeamBreak = 9; // Beam Break port
+    public static final int TriggerBeamBreak = 9; // Beam Break port
+    public static final int IntakeBeamBreak = 0; //TODO: actually set
   }
     
   public static class ClimberConstants {
-    public final static double climbSpeed = 0.4;
+    public static final double climbSpeed = 0.4;
   }
 
   public static class TriggerConstants {
