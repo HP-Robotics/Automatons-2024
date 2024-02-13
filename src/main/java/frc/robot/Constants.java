@@ -151,6 +151,32 @@ public final class Constants {
 
   }
 
+  public static class ClimberConstants {
+    public static final double climbSpeed = 0.4;
+  }
+
+  public static class TriggerConstants {
+    public static final double triggerSpeed = 0.3;
+
+    public static final double triggerkV = 0;
+    public static final double triggerkP = 0;
+    public static final double triggerkI = 0;
+    public static final double triggerkD = 0;
+
+  }
+
+  public static class PivotConstants {
+    public static final double kP = 5;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final boolean startWithPID = false;
+
+    public static final double manualSpeed = 0.1;
+    public static final double position1 = 0.0;
+
+    public static final double setpointChangeSpeed = 0.44;
+  }
+
   public static class IDConstants {
     //Drive is 20s
     public static final int FLDriveMotorID = 28;
@@ -193,29 +219,4 @@ public final class Constants {
     public static final int IntakeBeamBreak = 0; //TODO: actually set
   }
     
-  public static class ClimberConstants {
-    public static final double climbSpeed = 0.4;
-  }
-
-  public static class TriggerConstants {
-    public static final double triggerSpeed = 0.3;
-
-    public static final double triggerkV = 0;
-    public static final double triggerkP = 0;
-    public static final double triggerkI = 0;
-    public static final double triggerkD = 0;
-
-  }
-
-  public static class PivotConstants {
-    public static final double kP = 5;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
-    public static final boolean startWithPID = false;
-
-    public static final double manualSpeed = 0.1;
-    public static final double position1 = 0.0;
-
-    public static final double setpointChangeSpeed = 0.44;
-  }
 }
