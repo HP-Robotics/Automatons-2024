@@ -45,6 +45,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -111,14 +112,12 @@ public class RobotContainer {
   private void configureBindings() {
 
     if (SubsystemConstants.useDrive) {
-
-      // new JoystickButton(m_driveJoystick, 2).onTrue(new
-      // InstantCommand(m_robotDrive::forceRobotRelative, m_robotDrive));
-      // new JoystickButton(m_driveJoystick, 2).onFalse(new
-      // InstantCommand(m_robotDrive::forceFieldRelative, m_robotDrive));
-      m_driveJoystick.button(8).whileTrue(new InstantCommand(m_robotDrive::resetYaw)); // Flightstick button 11
-      m_driveJoystick.axisGreaterThan(2, 0.1).onTrue(new InstantCommand(() -> m_robotDrive.setFieldRelative(false)));
-      m_driveJoystick.axisGreaterThan(2, 0.1).onFalse(new InstantCommand(() -> m_robotDrive.setFieldRelative(true)));
+      m_driveJoystick.button(OperatorConstants.resetYawButton).whileTrue(new InstantCommand(m_robotDrive::resetYaw)); // Flightstick button 11
+      Trigger fieldRelativeTrigger = OperatorConstants.useXbox
+        ? new Trigger(m_driveJoystick.axisGreaterThan(2, 0.1))
+        : new Trigger(m_driveJoystick.button(OperatorConstants.fieldRelativeButton));
+      fieldRelativeTrigger.onTrue(new InstantCommand(() -> m_robotDrive.setFieldRelative(false)));
+      fieldRelativeTrigger.onFalse(new InstantCommand(() -> m_robotDrive.setFieldRelative(true)));
      // m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path")); 
      // m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path Line"));
      // m_driveJoystick.button(4).whileTrue(new RunCommand(()-> m_robotDrive.drivePointedTowardsAngle(m_driveJoystick, new Rotation2d(0))));
@@ -136,25 +135,26 @@ public class RobotContainer {
         new WaitUntilCommand(m_shooterSubsystem::atSpeed)
           .andThen(new StartEndCommand(() -> m_triggerSubsystem.setTrigger(-0.2),m_triggerSubsystem::stopTrigger)).withTimeout(0.1)
           .andThen(new TriggerCommand(m_triggerSubsystem, true, m_intakeSubsystem).withInterruptBehavior(InterruptionBehavior.kCancelIncoming))));
-      m_driveJoystick.button(4).onTrue(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(-0.2)),
+      m_driveJoystick.button(OperatorConstants.yuckButton).onTrue(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(-0.2)),
        new InstantCommand(() -> m_triggerSubsystem.setTrigger(-0.2)))); //TODO make yuck button better
-      m_driveJoystick.button(4).onFalse(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(0)),
+      m_driveJoystick.button(OperatorConstants.yuckButton).onFalse(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(0)),
        new InstantCommand(() -> m_triggerSubsystem.setTrigger(0))));
     }
 
 
     if (SubsystemConstants.useClimber) {
-      m_driveJoystick.button(10).whileTrue(new ClimberCommand(m_climberSubsystem));
+      m_driveJoystick.button(OperatorConstants.climberButton).whileTrue(new ClimberCommand(m_climberSubsystem));
     }
 
     if (SubsystemConstants.useIntake) {
-      m_driveJoystick.axisGreaterThan(3, 0.1).whileTrue(new ParallelCommandGroup(
+      Trigger intakeTrigger = OperatorConstants.useXbox
+        ? new Trigger(m_driveJoystick.axisGreaterThan(3, 0.1))
+        : new Trigger(m_driveJoystick.button(OperatorConstants.intakeButton));
+      intakeTrigger.whileTrue(new ParallelCommandGroup(
         new IntakeCommand(m_intakeSubsystem),
         new TriggerCommand(m_triggerSubsystem, false, m_intakeSubsystem).asProxy(), // TODO: Restart if cancelled
         new StartEndCommand(() -> {m_shooterSubsystem.setShooter(-0.1, -0.1);}, m_shooterSubsystem::stopShooter)
-        ));
-    //m_driveJoystick.button(1).whileTrue(new IntakeCommand(m_intakeSubsystem)); flightstick code
-    
+        ));   
       
     }
     
@@ -167,7 +167,7 @@ public class RobotContainer {
 
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight){
-      m_driveJoystick.button(5).whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick)); //Flightstick button 2
+      m_driveJoystick.button(OperatorConstants.drivePointedToSpeakerButton).whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick)); //Flightstick button 2
     }
   }
 

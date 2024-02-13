@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -34,6 +35,14 @@ public final class Constants {
     public static final int kDriverControllerPort = 1;
     public static final double driveJoystickDeadband = 0.15;
     public static final double turnJoystickDeadband = 0.1;
+
+    public static final boolean useXbox = true;
+    public static final int resetYawButton = useXbox ? 8 : 11;
+    public static final int fieldRelativeButton = useXbox ? 0 : 0;
+    public static final int yuckButton = useXbox ? 4 : 0;
+    public static final int climberButton = useXbox ? 10 : 0;
+    public static final int intakeButton = useXbox ? 0 : 1; 
+    public static final int drivePointedToSpeakerButton = useXbox ? 5 : 0;
   }
 
   public static class SubsystemConstants {
