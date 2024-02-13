@@ -22,9 +22,7 @@ public class PivotManualCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(m_subsystem.getUsePID()) {
-      m_subsystem.setPosition(m_subsystem.getCurrentPosition() + m_speed * PivotConstants.setpointChangeSpeed);
-    } else {
+    if(!m_subsystem.getUsePID()) {
       m_subsystem.setSpeed(m_speed);
     }
   }
@@ -32,6 +30,9 @@ public class PivotManualCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(m_subsystem.getUsePID()) {
+      m_subsystem.setPosition(m_subsystem.getCurrentPosition() + m_speed * PivotConstants.setpointChangeSpeed);
+    }
   }
 
   // Called once the command ends or is interrupted.

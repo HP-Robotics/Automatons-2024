@@ -10,6 +10,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.PortConstants;
+import frc.robot.Constants.ShooterConstants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -39,15 +40,21 @@ public class PivotSubsystem extends SubsystemBase {
 		m_motorR.setInverted(true);
 		m_motorL.setNeutralMode(NeutralModeValue.Brake);
 
-		motorConfigs.kP = SmartDashboard.getNumber("kP", PivotConstants.kP); //won't send to falcon
-		motorConfigs.kI = SmartDashboard.getNumber("kI", PivotConstants.kI);
-		motorConfigs.kD = SmartDashboard.getNumber("kD", PivotConstants.kD);
+		pivotTable.putValue("kP", NetworkTableValue.makeDouble(PivotConstants.kP));
+    	pivotTable.putValue("kI", NetworkTableValue.makeDouble(PivotConstants.kI));
+    	pivotTable.putValue("kD", NetworkTableValue.makeDouble(PivotConstants.kD));
+
+		motorConfigs.kP = pivotTable.getEntry("kP").getDouble(PivotConstants.kP); //we won't send to falcon
+		motorConfigs.kI = pivotTable.getEntry("kI").getDouble(PivotConstants.kI);
+		motorConfigs.kD = pivotTable.getEntry("kD").getDouble(PivotConstants.kD);
 
 		m_motorL.setControl(new Follower(IDConstants.rightPivotID, true));
 		
 		m_absEncoder = new DutyCycleEncoder(PortConstants.pivotAbsEncoderID);
 		m_pivotController = new PIDController(motorConfigs.kP, motorConfigs.kI, motorConfigs.kD);
 		m_pivotController.setSetpoint(m_absEncoder.getAbsolutePosition());
+		m_pivotController.setTolerance(0.015);
+		
 	}
 
 	public void periodic() {
@@ -56,7 +63,12 @@ public class PivotSubsystem extends SubsystemBase {
 		if(m_absEncoder.getAbsolutePosition() != 0) {
 			double output = m_pivotController.calculate(m_absEncoder.getAbsolutePosition());
 			if(m_usePID) {
-				m_motorR.setControl(new DutyCycleOut(output));
+				if(m_pivotController.atSetpoint()){
+					m_motorR.setControl(new DutyCycleOut(0));
+				}
+				else{
+					m_motorR.setControl(new DutyCycleOut(output));
+				}
 			}
 			m_absoluteBroken = false;
 		} else {
@@ -67,6 +79,9 @@ public class PivotSubsystem extends SubsystemBase {
 		}
 		pivotTable.putValue("Pivot Power",NetworkTableValue.makeDouble(m_motorR.getDutyCycle().getValueAsDouble()));
 		pivotTable.putValue("Pivot Position",NetworkTableValue.makeDouble(m_motorR.getPosition().getValueAsDouble()));
+		pivotTable.putValue("P Proportion", NetworkTableValue.makeDouble(m_pivotController.getPositionError()*m_pivotController.getP()));
+		pivotTable.putValue("D Proportion", NetworkTableValue.makeDouble(m_pivotController.getVelocityError()*m_pivotController.getD()));
+
 
 		if(m_pivotController.getP() != pivotTable.getEntry("kP").getDouble(m_pivotController.getP())) {
 			m_pivotController.setP(pivotTable.getEntry("kP").getDouble(m_pivotController.getP()));
@@ -77,12 +92,13 @@ public class PivotSubsystem extends SubsystemBase {
 		if(m_pivotController.getD() != pivotTable.getEntry("kD").getDouble(m_pivotController.getD())) {
 			m_pivotController.setD(pivotTable.getEntry("kD").getDouble(m_pivotController.getD()));
 		}
+		
 	}
 
 	public void togglePID() {
 		m_usePID = !m_usePID;
 		if(m_usePID) {
-			m_pivotController.setSetpoint(m_absEncoder.getAbsolutePosition());
+			m_pivotController.setSetpoint(m_absEncoder.getAbsolutePosition());//TODO constrain setpoint to within limit switches
 		}
 	}
 
@@ -99,8 +115,10 @@ public class PivotSubsystem extends SubsystemBase {
 	};
 
 	public void setPosition(double position) {
-		m_pivotController.setSetpoint(position);
+		m_pivotController.setSetpoint(position); //TODO constrain setpoint to within limit switches--make setpoint safe method
+		System.out.println(position);
 	};
+	//TODO angle to sucesful shot, amp, speaker, and podium setpoint
 
 	//TODO: at position function 
 }
