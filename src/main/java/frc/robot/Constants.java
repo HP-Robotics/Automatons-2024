@@ -198,7 +198,7 @@ public final class Constants {
   }
 
   public static class PivotConstants {
-    public static final double kP = 0.0;
+    public static final double kP = 5;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final boolean startWithPID = false;
@@ -206,6 +206,6 @@ public final class Constants {
     public static final double manualSpeed = 0.1;
     public static final double position1 = 0.0;
 
-    public static final double setpointChangeSpeed = 1;
+    public static final double setpointChangeSpeed = 0.44;
   }
 }
