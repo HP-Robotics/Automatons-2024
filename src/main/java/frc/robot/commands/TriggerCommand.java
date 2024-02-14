@@ -18,6 +18,7 @@ import frc.robot.Constants.TriggerConstants;
 public class TriggerCommand extends Command {
    private final TriggerSubsystem m_subsystem;
     boolean m_ignoreBeamBreak;
+    boolean m_currentbeambreak = false;
     boolean pastBeamBroken = false;
     IntakeSubsystem m_intakeSubsystem;
 
@@ -43,7 +44,7 @@ public class TriggerCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    pastBeamBroken = m_intakeSubsystem.m_beambreak.beamBroken();
+    pastBeamBroken = m_currentbeambreak;
   }
 
   // Called once the command ends or is interrupted.
@@ -55,8 +56,10 @@ public class TriggerCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    m_currentbeambreak = m_intakeSubsystem.m_beambreak.beamBroken();
     if (!m_ignoreBeamBreak) {
-      if (pastBeamBroken != m_intakeSubsystem.m_beambreak.beamBroken() && pastBeamBroken) {
+      if (pastBeamBroken != m_currentbeambreak && pastBeamBroken) {
+        System.out.println("stopped");
         return true;
       }
     }

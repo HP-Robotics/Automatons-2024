@@ -33,7 +33,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed);
 
-    m_beambreak = new BeamBreak(PortConstants.TriggerBeamBreak);
+    m_beambreak = new BeamBreak(PortConstants.IntakeBeamBreak);
 
   }
 

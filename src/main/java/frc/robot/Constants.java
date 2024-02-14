@@ -46,7 +46,7 @@ public final class Constants {
   }
 
   public static class SubsystemConstants {
-    public static final boolean useDrive = true;
+    public static final boolean useDrive = false;
     public static final boolean useIntake = true;
     public static final boolean useShooter = true;
     public static final boolean useDataManager = true;
@@ -216,7 +216,7 @@ public final class Constants {
     public static final int pivotAbsEncoderID = 8;
 
     public static final int TriggerBeamBreak = 9; // Beam Break port
-    public static final int IntakeBeamBreak = 0; //TODO: actually set
+    public static final int IntakeBeamBreak = 7;
   }
     
 }
