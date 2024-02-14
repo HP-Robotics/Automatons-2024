@@ -13,10 +13,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide
+ /* The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
  * constants. This class should not be used for any other purpose. All constants
  * should be declared
@@ -43,6 +42,20 @@ public final class Constants {
     public static final int climberButton = useXbox ? 10 : 0;
     public static final int intakeButton = useXbox ? 0 : 1; 
     public static final int drivePointedToSpeakerButton = useXbox ? 5 : 0;
+    public static double getRotation(CommandJoystick stick){
+      if(useXbox){
+        return stick.getRawAxis(4);
+      }
+      else {
+        if (stick.povLeft().getAsBoolean()) {
+        return -0.5;
+        }
+        else if (stick.povRight().getAsBoolean()) {
+          return 0.5;
+        }
+        return 0;
+      }
+    }
   }
 
   public static class SubsystemConstants {
