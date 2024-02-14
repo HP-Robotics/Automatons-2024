@@ -46,7 +46,7 @@ public final class Constants {
   }
 
   public static class SubsystemConstants {
-    public static final boolean useDrive = false;
+    public static final boolean useDrive = true;
     public static final boolean useIntake = true;
     public static final boolean useShooter = true;
     public static final boolean useDataManager = true;
@@ -166,15 +166,17 @@ public final class Constants {
   }
 
   public static class PivotConstants {
-    public static final double kP = 5;
+    public static final double kP = 2;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final boolean startWithPID = false;
+    public static final double kG = 0.02;
+    public static final boolean startWithPID = true;
 
     public static final double manualSpeed = 0.1;
     public static final double position1 = 0.0;
 
     public static final double setpointChangeSpeed = 0.44;
+    public static final double encoderAt90 = 0.51;
   }
 
   public static class IDConstants {
