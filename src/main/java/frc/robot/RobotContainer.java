@@ -21,6 +21,7 @@ import frc.robot.commands.SetShooterCommand;
 import frc.robot.commands.TriggerCommand;
 import frc.robot.commands.Autos;
 
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -169,6 +170,24 @@ public class RobotContainer {
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight){
       m_driveJoystick.button(OperatorConstants.drivePointedToSpeakerButton).whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick)); //Flightstick button 2
     }
+  }
+
+  //pulls beambreak every millisecond
+  public void fastBeambreakCheck () {
+    if (!SubsystemConstants.useIntake) {
+      return;
+    }
+    if (m_intakeSubsystem.beambreakState || (!m_intakeSubsystem.intakeFire && !m_intakeSubsystem.intakeOn && !m_intakeSubsystem.intakeYuck)) {
+      return;
+    }
+    if (!m_triggerSubsystem.m_beamBreak.beamBroken()) {
+      return;  
+    }
+    m_intakeSubsystem.beambreakState = true;
+    if (m_intakeSubsystem.intakeYuck || m_intakeSubsystem.intakeFire){
+      return;
+    }
+    m_intakeSubsystem.m_motor.setControl(new NeutralOut());
   }
 
   /**

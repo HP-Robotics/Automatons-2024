@@ -17,10 +17,15 @@ import frc.robot.BeamBreak;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.PortConstants;
+import frc.robot.Constants.SubsystemConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID,"CANivore");
+  public TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID,"CANivore");
   public BeamBreak m_beambreak;
+  public boolean intakeOn = false; //intake button is pressed
+  public boolean intakeFire = false; //fire button is pressed
+  public boolean intakeYuck = false; //yuck button is pressed
+  public boolean beambreakState = false; //trigger beambreak sees note & intakeOn
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable intakeTable = inst.getTable("intake-table");
@@ -46,4 +51,38 @@ public class IntakeSubsystem extends SubsystemBase {
   public void runIntake(double output) {
     m_motor.setControl(new DutyCycleOut(output));
   };
+
+  public void intakeButtonPressed () {
+    if (!intakeFire && !intakeYuck && !beambreakState) {
+      intakeOn = true;
+    }
+  }
+  
+  public void intakeButtonReleased () {
+    if (intakeOn) {
+      intakeOn = false;
+    }
+  }
+
+  public void yuckButtonPressed () {
+    if ((intakeOn || beambreakState) && !intakeFire) {
+      intakeYuck = true;
+    }
+  }
+
+  public void yuckButtonReleased () {
+    intakeYuck = false;
+  }
+
+  public void fireButtonPressed () {
+    if ((intakeOn || beambreakState) && !intakeYuck) {
+      intakeFire = true;
+    }
+  }
+
+  public void fireButtonReleased () {
+    intakeFire = false;
+  }
+
+
 }
