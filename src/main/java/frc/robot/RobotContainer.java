@@ -106,7 +106,6 @@ public class RobotContainer {
         new StartEndCommand(() -> {m_shooterSubsystem.setShooter(-0.1, -0.1);}, m_shooterSubsystem::stopShooter)));
     NamedCommands.registerCommand("stopIntake", m_intakeSubsystem.runOnce(() -> m_intakeSubsystem.runIntake(0)));
     NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem));
-    NamedCommands.registerCommand(null, getAutonomousCommand());
 
 
     m_chooseAutos = new SendableChooser<String>();
@@ -117,8 +116,8 @@ public class RobotContainer {
     m_chooseAutos.setDefaultOption("Intermediate Amp", "IntermediateAmp");
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
 
-    configureBindings();
     configureCommands();
+    configureBindings();
   }
 
   private void configureCommands() {
@@ -150,8 +149,8 @@ public class RobotContainer {
       m_opJoystick.axisGreaterThan(3, 0.1).whileTrue(
         new SetShooterCommand(m_shooterSubsystem));
       //TODO add trigger if statement
-      m_opJoystick.button(OperatorConstants.yuckButton).whileTrue(compoundShooter);
-      m_driveJoystick.button(4).onTrue(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(-0.2)),
+      m_opJoystick.button(3).whileTrue(compoundShooter);
+      m_driveJoystick.button(OperatorConstants.yuckButton).onTrue(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(-0.2)),
        new InstantCommand(() -> m_triggerSubsystem.setTrigger(-0.2)))); //TODO make yuck button better
       m_driveJoystick.button(OperatorConstants.yuckButton).onFalse(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(0)),
        new InstantCommand(() -> m_triggerSubsystem.setTrigger(0))));

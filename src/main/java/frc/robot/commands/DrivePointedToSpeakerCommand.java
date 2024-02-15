@@ -14,13 +14,13 @@ import frc.robot.subsystems.LimelightSubsystem;
 
 public class DrivePointedToSpeakerCommand extends Command {
     private final DriveSubsystem m_drivesubsystem;
-    private final LimelightSubsystem m_limelightsubsystem;
+    private final LimelightSubsystem m_limelightSubsystem;
     private final CommandJoystick m_joystick;
   /** Creates a new IntakeCommand. */
   public DrivePointedToSpeakerCommand(DriveSubsystem drivesubsystem, LimelightSubsystem limelightsubsystem, CommandJoystick joystick) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivesubsystem = drivesubsystem;
-    m_limelightsubsystem = limelightsubsystem;
+    m_limelightSubsystem = limelightsubsystem;
     m_joystick = joystick;
     addRequirements(drivesubsystem);
   }
@@ -32,7 +32,11 @@ public class DrivePointedToSpeakerCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivesubsystem.drivePointedTowardsAngle(m_joystick, new Rotation2d(Math.toRadians(m_limelightsubsystem.getAngleTo(m_limelightsubsystem.m_visionPose2d, LimelightConstants.aprilTag7) - 180)));
+    if (m_limelightSubsystem.sawAprilTag == 1) {
+    m_drivesubsystem.drivePointedTowardsAngle(m_joystick, new Rotation2d(Math.toRadians(m_limelightSubsystem.getAngleTo(m_limelightSubsystem.m_visionPose2d, LimelightConstants.aprilTag7) - 180)));
+    } else {
+      m_drivesubsystem.driveWithJoystick(m_joystick);
+    }
   }
 
   // Called once the command ends or is interrupted.
