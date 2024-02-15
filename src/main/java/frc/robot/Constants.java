@@ -13,9 +13,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide
+ /* The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
  * constants. This class should not be used for any other purpose. All constants
  * should be declared
@@ -34,6 +34,28 @@ public final class Constants {
     public static final int kDriverControllerPort = 1;
     public static final double driveJoystickDeadband = 0.15;
     public static final double turnJoystickDeadband = 0.1;
+
+    public static final boolean useXbox = true;
+    public static final int resetYawButton = useXbox ? 8 : 11;
+    public static final int fieldRelativeButton = useXbox ? 0 : 0;
+    public static final int yuckButton = useXbox ? 4 : 0;
+    public static final int climberButton = useXbox ? 10 : 0;
+    public static final int intakeButton = useXbox ? 0 : 1; 
+    public static final int drivePointedToSpeakerButton = useXbox ? 5 : 0;
+    public static double getRotation(CommandJoystick stick){
+      if(useXbox){
+        return stick.getRawAxis(4);
+      }
+      else {
+        if (stick.povLeft().getAsBoolean()) {
+        return -0.5;
+        }
+        else if (stick.povRight().getAsBoolean()) {
+          return 0.5;
+        }
+        return 0;
+      }
+    }
   }
 
   public static class SubsystemConstants {
@@ -142,6 +164,34 @@ public final class Constants {
 
   }
 
+  public static class ClimberConstants {
+    public static final double climbSpeed = 0.4;
+  }
+
+  public static class TriggerConstants {
+    public static final double triggerSpeed = 0.3;
+
+    public static final double triggerkV = 0;
+    public static final double triggerkP = 0;
+    public static final double triggerkI = 0;
+    public static final double triggerkD = 0;
+
+  }
+
+  public static class PivotConstants {
+    public static final double kP = 2;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double kG = 0.02;
+    public static final boolean startWithPID = true;
+
+    public static final double manualSpeed = 0.1;
+    public static final double position1 = 0.0;
+
+    public static final double setpointChangeSpeed = 0.44;
+    public static final double encoderAt90 = 0.51;
+  }
+
   public static class IDConstants {
     //Drive is 20s
     public static final int FLDriveMotorID = 28;
@@ -174,39 +224,14 @@ public final class Constants {
 
   public static class PortConstants {
     public static final int FLAbsEncoder = 14;
-    public static final int FRAbsEncoder = 15;
+    public static final int FRAbsEncoder = 12;
     public static final int BRAbsEncoder = 11;
     public static final int BLAbsEncoder = 13;
     
     public static final int pivotAbsEncoderID = 8;
 
     public static final int TriggerBeamBreak = 9; // Beam Break port
-    public static final int IntakeBeamBreak = 0; //TODO: actually set
+    public static final int IntakeBeamBreak = 7;
   }
     
-  public static class ClimberConstants {
-    public static final double climbSpeed = 0.4;
-  }
-
-  public static class TriggerConstants {
-    public static final double triggerSpeed = 0.3;
-
-    public static final double triggerkV = 0;
-    public static final double triggerkP = 0;
-    public static final double triggerkI = 0;
-    public static final double triggerkD = 0;
-
-  }
-
-  public static class PivotConstants {
-    public static final double kP = 5;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
-    public static final boolean startWithPID = false;
-
-    public static final double manualSpeed = 0.1;
-    public static final double position1 = 0.0;
-
-    public static final double setpointChangeSpeed = 0.44;
-  }
 }

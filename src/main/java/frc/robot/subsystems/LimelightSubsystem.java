@@ -22,6 +22,7 @@ import edu.wpi.first.networktables.StructPublisher;
 
 public class LimelightSubsystem extends SubsystemBase {
   NetworkTableEntry botpose_blue;
+  NetworkTable m_gamePieceTable;
   double sawAprilTag;
   /** Creates a new ExampleSubsystem. */
   public Pose2d m_visionPose2d = new Pose2d();
@@ -41,6 +42,7 @@ public class LimelightSubsystem extends SubsystemBase {
     m_poseEstimator = PoseEstimatorSubsystem;
     publisher = poseEstimatorTable.getStructTopic("AprilTagPose", Pose2d.struct).publish();
 
+    m_gamePieceTable = NetworkTableInstance.getDefault().getTable("limelight-two");
   }
 
   public double getDistanceTo(Pose2d robot, Pose2d fieldpose) {
@@ -101,5 +103,9 @@ public class LimelightSubsystem extends SubsystemBase {
       "angleToSpeaker", NetworkTableValue.makeDouble(getAngleTo(m_robotPose, LimelightConstants.aprilTag7)));
     
     publisher.set(m_robotPose);
+
+    double noteTV = m_gamePieceTable.getEntry("tv").getValue().getDouble();
+    double noteTX = m_gamePieceTable.getEntry("tx").getValue().getDouble();
+    double noteTY = m_gamePieceTable.getEntry("ty").getValue().getDouble();
   }
 }
