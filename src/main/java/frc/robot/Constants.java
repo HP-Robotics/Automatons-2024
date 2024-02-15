@@ -30,16 +30,20 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 public final class Constants {
 
   public static class OperatorConstants {
+    public static final boolean useXbox = true;
+
     public static final int kOperatorControllerPort = 0;
     public static final int kDriverControllerPort = 1;
-    public static final double driveJoystickDeadband = 0.15;
-    public static final double turnJoystickDeadband = 0.1;
+    public static final double driveJoystickDeadband = useXbox ? 0.05 : 0.15;
+    public static final double turnJoystickDeadband = useXbox ? 0.05 : 0.1;
 
-    public static final boolean useXbox = true;
+    public static final double driveJoystickExponent = useXbox ? 2 : 2;
+
+    
     public static final int resetYawButton = useXbox ? 8 : 11;
-    public static final int fieldRelativeButton = useXbox ? 0 : 0;
-    public static final int yuckButton = useXbox ? 4 : 0;
-    public static final int climberButton = useXbox ? 10 : 0;
+    public static final int fieldRelativeButton = useXbox ? 8 : 8;
+    public static final int yuckButton = useXbox ? 4 : 2;
+    public static final int climberButton = useXbox ? 10 : 10;
     public static final int intakeButton = useXbox ? 0 : 1; 
     public static final int drivePointedToSpeakerButton = useXbox ? 5 : 0;
     public static double getRotation(CommandJoystick stick){
@@ -47,13 +51,14 @@ public final class Constants {
         return stick.getRawAxis(4);
       }
       else {
-        if (stick.povLeft().getAsBoolean()) {
-        return -0.5;
-        }
-        else if (stick.povRight().getAsBoolean()) {
-          return 0.5;
-        }
-        return 0;
+        return stick.getRawAxis(2);
+        // if (stick.povLeft().getAsBoolean()) {
+        // return -0.5;
+        // }
+        // else if (stick.povRight().getAsBoolean()) {
+        //   return 0.5;
+        // }
+        // return 0;
       }
     }
   }
@@ -62,7 +67,7 @@ public final class Constants {
     public static final boolean useDrive = true;
     public static final boolean useIntake = true;
     public static final boolean useShooter = true;
-    public static final boolean useDataManager = true;
+    public static final boolean useDataManager = false;
     public static final boolean useLimelight = false;
     public static final boolean usePivot = true;
     public static final boolean useClimber = false; //TODO check if these work
@@ -152,8 +157,10 @@ public final class Constants {
 
   public static class ShooterConstants {
 
-    public static final double shooterSpeedFront = 50; // TODO: Is this correct?
+    public static final double shooterSpeedFront = 50; // TODO: Is this correct? 50
     public static final double shooterSpeedBack = 50; //50
+    public static final double shooterSpeedAmp = 15; 
+    
 
     public static final double shooterMotorskP = 0.4;
     public static final double shooterMotorskI = 0.01;

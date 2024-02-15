@@ -162,8 +162,9 @@ public class RobotContainer {
       m_opJoystick.povRight().whileTrue(new PivotManualCommand(m_pivotSubsystem, PivotConstants.manualSpeed));
       m_opJoystick.povLeft().whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
       m_opJoystick.button(7).onTrue(new InstantCommand(m_pivotSubsystem::togglePID));
-      m_opJoystick.button(1).onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.415)));
+      m_opJoystick.button(1).onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.43)));
       m_opJoystick.button(2).onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.6))); //temporary
+      m_opJoystick.button(4).onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.385)));
 
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight){

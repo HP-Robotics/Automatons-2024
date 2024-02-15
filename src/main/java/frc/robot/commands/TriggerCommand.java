@@ -59,7 +59,7 @@ public class TriggerCommand extends Command {
     m_currentbeambreak = m_intakeSubsystem.m_beambreak.beamBroken();
     if (!m_ignoreBeamBreak) {
       if (pastBeamBroken != m_currentbeambreak && pastBeamBroken) {
-        System.out.println("stopped");
+        //System.out.println("stopped");
         return true;
       }
     }
