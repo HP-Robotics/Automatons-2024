@@ -22,7 +22,7 @@ import edu.wpi.first.networktables.StructPublisher;
 
 public class LimelightSubsystem extends SubsystemBase {
   NetworkTableEntry botpose_blue;
-  double sawAprilTag;
+  public double sawAprilTag;
   /** Creates a new ExampleSubsystem. */
   public Pose2d m_visionPose2d = new Pose2d();
 

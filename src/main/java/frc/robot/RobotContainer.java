@@ -16,6 +16,7 @@ import frc.robot.commands.DrivePointedToSpeakerCommand;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.FollowPathCommandOurs;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.PivotMagicCommand;
 import frc.robot.commands.PivotManualCommand;
 import frc.robot.commands.SetShooterCommand;
 import frc.robot.commands.TriggerCommand;
@@ -159,6 +160,7 @@ public class RobotContainer {
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight){
       m_driveJoystick.button(5).whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick)); //Flightstick button 2
+      m_driveJoystick.button(5).whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem)); //Flightstick button 2
     }
   }
 

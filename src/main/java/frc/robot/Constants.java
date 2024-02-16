@@ -202,10 +202,13 @@ public final class Constants {
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final boolean startWithPID = false;
+    
+    public static final double[] magicConstants = {0.0055544,-0.0546681,0.484095};
 
     public static final double manualSpeed = 0.1;
     public static final double position1 = 0.0;
 
     public static final double setpointChangeSpeed = 1;
+
   }
 }
