@@ -22,7 +22,9 @@ import edu.wpi.first.networktables.StructPublisher;
 
 public class LimelightSubsystem extends SubsystemBase {
   NetworkTableEntry botpose_blue;
-  double sawAprilTag;
+  NetworkTable m_gamePieceTable;
+  NetworkTable m_limelight_twoplus;
+  public double sawAprilTag;
   /** Creates a new ExampleSubsystem. */
   public Pose2d m_visionPose2d = new Pose2d();
 
@@ -35,12 +37,12 @@ public class LimelightSubsystem extends SubsystemBase {
   PoseEstimatorSubsystem m_poseEstimator;
 
   public LimelightSubsystem(PoseEstimatorSubsystem PoseEstimatorSubsystem) {
-    sawAprilTag = NetworkTableInstance.getDefault().getTable("limelight-three").getEntry("tv").getDouble(0);
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-three");
-    botpose_blue = table.getEntry("botpose_wpiblue"); // TODO: Look into Megatag
+    m_limelight_twoplus = NetworkTableInstance.getDefault().getTable("limelight-twoplus");
+    botpose_blue = m_limelight_twoplus.getEntry("botpose_wpiblue"); // TODO: Look into Megatag
     m_poseEstimator = PoseEstimatorSubsystem;
     publisher = poseEstimatorTable.getStructTopic("AprilTagPose", Pose2d.struct).publish();
 
+    m_gamePieceTable = NetworkTableInstance.getDefault().getTable("limelight-two");
   }
 
   public double getDistanceTo(Pose2d robot, Pose2d fieldpose) {
@@ -55,26 +57,27 @@ public class LimelightSubsystem extends SubsystemBase {
     double turnToSpeakerA = fieldpose.getX() - robot.getX();
     double turnToSpeakerB = fieldpose.getY() - robot.getY();
     double angleToSpeaker = Math.atan2(turnToSpeakerB, turnToSpeakerA);
-    
+
     return Math.toDegrees(angleToSpeaker);
   }
 
   // This method will be called once per scheduler run
   public void periodic() {
     // read values periodically
-    double defaultValues[] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ,0.0};
-    
+    sawAprilTag = m_limelight_twoplus.getEntry("tv").getDouble(0);
+
+    double defaultValues[] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+
     NetworkTableValue blueBotpose = botpose_blue.getValue();
     double[] botpose;
-    if(blueBotpose.getType()!=NetworkTableType.kUnassigned){
+    if (blueBotpose.getType() != NetworkTableType.kUnassigned) {
       botpose = blueBotpose.getDoubleArray();
-    }
-    else{
+    } else {
       botpose = defaultValues;
     }
-    
+
     botpose_blue.getLastChange();
-    
+
     double tx = botpose[0];
     double ty = botpose[1];
     double tz = botpose[2];
@@ -83,23 +86,27 @@ public class LimelightSubsystem extends SubsystemBase {
     double rz = botpose[5];
     double latency = botpose[6];
 
-    double timeStamp = (blueBotpose.getTime()*1.0)/1000000 - latency;
+    double timeStamp = (blueBotpose.getTime() * 1.0) / 1000000 - latency;
 
-    Pose2d m_robotPose = new Pose2d(tx, ty, new Rotation2d(Math.toRadians(rz)));
-    m_visionPose2d = m_robotPose;
     // specify the widget here
 
-    if(sawAprilTag == 1){
+    if (sawAprilTag == 1) {
+      Pose2d m_robotPose = new Pose2d(tx, ty, new Rotation2d(Math.toRadians(rz)));
+      m_visionPose2d = m_robotPose;
       m_poseEstimator.updateVision(m_robotPose, timeStamp);
-      System.out.println("saw apriltag: " + timeStamp);
+      // System.out.println("saw apriltag: " + timeStamp);
+
+      getDistanceTo(m_robotPose, LimelightConstants.aprilTag7);
+      limelightMagicTable.putValue(
+          "distanceToSpeaker", NetworkTableValue.makeDouble(getDistanceTo(m_robotPose, LimelightConstants.aprilTag7)));
+      limelightMagicTable.putValue(
+          "angleToSpeaker", NetworkTableValue.makeDouble(getAngleTo(m_robotPose, LimelightConstants.aprilTag7)));
+
+      publisher.set(m_robotPose);
     }
 
-    getDistanceTo(m_robotPose, LimelightConstants.aprilTag7);
-    limelightMagicTable.putValue(
-      "distanceToSpeaker", NetworkTableValue.makeDouble(getDistanceTo(m_robotPose, LimelightConstants.aprilTag7)));
-    limelightMagicTable.putValue(
-      "angleToSpeaker", NetworkTableValue.makeDouble(getAngleTo(m_robotPose, LimelightConstants.aprilTag7)));
-    
-    publisher.set(m_robotPose);
+    // double noteTV = m_gamePieceTable.getEntry("tv").getValue().getDouble();
+    // double noteTX = m_gamePieceTable.getEntry("tx").getValue().getDouble();
+    // double noteTY = m_gamePieceTable.getEntry("ty").getValue().getDouble();
   }
 }

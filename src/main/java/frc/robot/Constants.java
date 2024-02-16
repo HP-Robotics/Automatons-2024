@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
 public final class Constants {
 
-  public static class OperatorConstants {
+  public static class OperatorConstants { // TODO: Rename this (This name sucks)
     public static final boolean useXbox = true;
 
     public static final int kOperatorControllerPort = 0;
@@ -67,8 +67,8 @@ public final class Constants {
     public static final boolean useDrive = true;
     public static final boolean useIntake = true;
     public static final boolean useShooter = true;
-    public static final boolean useDataManager = false;
-    public static final boolean useLimelight = false;
+    public static final boolean useDataManager = true;
+    public static final boolean useLimelight = true;
     public static final boolean usePivot = true;
     public static final boolean useClimber = false; //TODO check if these work
   }
@@ -122,7 +122,9 @@ public final class Constants {
   }
 
   public static final class LimelightConstants {
-    public static final Pose2d aprilTag7 = new Pose2d(-1.5 * 0.0254, 218.42 * 0.0254, new Rotation2d(0));
+    public static final double inToM = 0.0254;
+    public static final Pose2d aprilTag7 = new Pose2d(-1.5 * inToM, 218.42 * inToM, new Rotation2d(0));
+    public static final Pose2d aprilTag4 = new Pose2d(652.73 * inToM, 218.42 * inToM, new Rotation2d(Math.PI));
   }
 
   public static final class AutoConstants {
@@ -143,6 +145,9 @@ public final class Constants {
     public static final double kPYController = 20;
     public static final double kPThetaController = 3;
     public static final double kIThetaController = 0.05;
+
+    public static final double additionalIntakeTime = 0.5;
+    public static final double additionalShootTime = 0.3;
 
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
@@ -191,6 +196,8 @@ public final class Constants {
     public static final double kD = 0.0;
     public static final double kG = 0.02;
     public static final boolean startWithPID = true;
+    
+    public static final double[] magicConstants = {0.0, -0.0219711, 0.437724};
 
     public static final double manualSpeed = 0.1;
     public static final double position1 = 0.0;

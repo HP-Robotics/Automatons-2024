@@ -5,27 +5,30 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants.LimelightConstants;
-import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
 
-public class DrivePointedToSpeakerCommand extends Command {
-    private final DriveSubsystem m_drivesubsystem;
-    private final LimelightSubsystem m_limelightSubsystem;
-    private final CommandJoystick m_joystick;
-    private Pose2d m_targetAprilTag;
-  /** Creates a new IntakeCommand. */
-  public DrivePointedToSpeakerCommand(DriveSubsystem drivesubsystem, LimelightSubsystem limelightsubsystem, CommandJoystick joystick) {
+public class PivotMagicCommand extends Command {
+  private final PivotSubsystem m_subsystem;
+  private final LimelightSubsystem m_limelightSubsystem;
+  private Pose2d m_targetAprilTag;
+
+  NetworkTableInstance inst = NetworkTableInstance.getDefault();
+  NetworkTable pivotTable = inst.getTable("pivot-table");
+
+  /** Creates a new pivotMagicCommand. */
+  public PivotMagicCommand(PivotSubsystem subsystem, LimelightSubsystem limelightSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drivesubsystem = drivesubsystem;
-    m_limelightSubsystem = limelightsubsystem;
-    m_joystick = joystick;
-    addRequirements(drivesubsystem);
+    m_subsystem = subsystem;
+    m_limelightSubsystem = limelightSubsystem;
+    addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -47,10 +50,11 @@ public class DrivePointedToSpeakerCommand extends Command {
   @Override
   public void execute() {
     if (m_limelightSubsystem.sawAprilTag == 1) {
-    m_drivesubsystem.drivePointedTowardsAngle(m_joystick, 
-    new Rotation2d(Math.toRadians(m_limelightSubsystem.getAngleTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag) - 180)));
-    } else {
-      m_drivesubsystem.driveWithJoystick(m_joystick);
+      m_subsystem.setPosition(m_subsystem.getMagicAngle(
+          m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag)));
+      pivotTable.putValue(
+          "magicEncoderValue", NetworkTableValue.makeDouble(m_subsystem.getMagicAngle(
+              m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag))));
     }
   }
 

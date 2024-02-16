@@ -8,21 +8,26 @@ import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.PivotConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DrivePointedToSpeakerCommand;
 import frc.robot.commands.ClimberCommand;
+import frc.robot.commands.CommandBlocks;
 import frc.robot.commands.FollowPathCommandOurs;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.PivotMagicCommand;
 import frc.robot.commands.PivotManualCommand;
 import frc.robot.commands.SetShooterCommand;
 import frc.robot.commands.TriggerCommand;
 import frc.robot.commands.Autos;
+import frc.robot.BeamBreak;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -47,6 +52,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -59,6 +65,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   private final CommandJoystick m_driveJoystick = new CommandJoystick(OperatorConstants.kDriverControllerPort);
   private final CommandJoystick m_opJoystick = new CommandJoystick(OperatorConstants.kOperatorControllerPort);
+  private CommandBlocks compoundCommands; // TODO: Pick a better name
 
   // The robot's subsystems and commands are defined here...
   private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem = 
@@ -74,6 +81,8 @@ public class RobotContainer {
   private final TriggerSubsystem m_triggerSubsystem = SubsystemConstants.useShooter ? new TriggerSubsystem() : null;
 
   private final SendableChooser<String> m_chooseAutos;
+
+  private Command compoundShooter;
 
 
   /**
@@ -95,8 +104,13 @@ public class RobotContainer {
               m_robotDrive));
     }
 
-    NamedCommands.registerCommand("runIntake", m_intakeSubsystem.runOnce(() -> m_intakeSubsystem.runIntake(IntakeConstants.intakeSpeed)));
+    NamedCommands.registerCommand("runIntake", new ParallelCommandGroup(
+        new IntakeCommand(m_intakeSubsystem),
+        new TriggerCommand(m_triggerSubsystem, false, m_intakeSubsystem).asProxy(), 
+        new StartEndCommand(() -> {m_shooterSubsystem.setShooter(-0.1, -0.1);}, m_shooterSubsystem::stopShooter)));
     NamedCommands.registerCommand("stopIntake", m_intakeSubsystem.runOnce(() -> m_intakeSubsystem.runIntake(0)));
+    NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem));
+
 
     m_chooseAutos = new SendableChooser<String>();
     m_chooseAutos.addOption("Center Down", "CenterDown");
@@ -106,7 +120,17 @@ public class RobotContainer {
     m_chooseAutos.setDefaultOption("Intermediate Amp", "IntermediateAmp");
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
 
+    configureCommands();
+    compoundCommands = new CommandBlocks(m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem, m_pivotSubsystem);
     configureBindings();
+  }
+
+  private void configureCommands() {
+    compoundShooter = new ParallelCommandGroup(
+        new SetShooterCommand(m_shooterSubsystem).withInterruptBehavior(InterruptionBehavior.kCancelIncoming),
+        new WaitUntilCommand(m_shooterSubsystem::atSpeed)
+          .andThen(new StartEndCommand(() -> m_triggerSubsystem.setTrigger(-0.2),m_triggerSubsystem::stopTrigger)).withTimeout(0.1)
+          .andThen(new TriggerCommand(m_triggerSubsystem, true, m_intakeSubsystem).withInterruptBehavior(InterruptionBehavior.kCancelIncoming)));
   }
 
   private void configureBindings() {
@@ -130,11 +154,7 @@ public class RobotContainer {
       m_opJoystick.axisGreaterThan(3, 0.1).whileTrue(
         new SetShooterCommand(m_shooterSubsystem));
       //TODO add trigger if statement
-      m_opJoystick.button(3).whileTrue(new ParallelCommandGroup(
-        new SetShooterCommand(m_shooterSubsystem).withInterruptBehavior(InterruptionBehavior.kCancelIncoming),
-        new WaitUntilCommand(m_shooterSubsystem::atSpeed)
-          .andThen(new StartEndCommand(() -> m_triggerSubsystem.setTrigger(-0.2),m_triggerSubsystem::stopTrigger)).withTimeout(0.1)
-          .andThen(new TriggerCommand(m_triggerSubsystem, true, m_intakeSubsystem).withInterruptBehavior(InterruptionBehavior.kCancelIncoming))));
+      m_opJoystick.button(3).whileTrue(compoundShooter);
       m_driveJoystick.button(OperatorConstants.yuckButton).onTrue(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(-0.2)),
        new InstantCommand(() -> m_triggerSubsystem.setTrigger(-0.2)))); //TODO make yuck button better
       m_driveJoystick.button(OperatorConstants.yuckButton).onFalse(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(0)),
@@ -169,6 +189,7 @@ public class RobotContainer {
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight){
       m_driveJoystick.button(OperatorConstants.drivePointedToSpeakerButton).whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick)); //Flightstick button 2
+      m_opJoystick.axisGreaterThan(2, 0.1).whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem)); //Flightstick button 2
     }
   }
 
@@ -186,19 +207,19 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     if (m_chooseAutos.getSelected() == "CenterDown") {
-      return Autos.CenterDown(m_robotDrive);
+      return Autos.CenterDown(compoundCommands, m_robotDrive, m_shooterSubsystem);
     } 
     if (m_chooseAutos.getSelected() == "FourPiece") {
-      return Autos.FourPiece(m_robotDrive);
+      return Autos.FourPiece(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem, m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "GrandTheftAuto") {
       return Autos.GrandTheftAuto(m_robotDrive);
     } 
     if (m_chooseAutos.getSelected() == "BasicAmp") {
-      return Autos.BasicAmp(m_robotDrive);
+      return Autos.BasicAmp(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem);
     }
     if (m_chooseAutos.getSelected() == "IntermediateAmp") {
-      return Autos.IntermediateAmp(m_robotDrive);
+      return Autos.IntermediateAmp(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem);
     }
     else {
       return null;

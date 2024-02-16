@@ -123,13 +123,19 @@ public class PivotSubsystem extends SubsystemBase {
 
 	public void setSpeed(double output) {
 		m_motorR.setControl(new DutyCycleOut(output));
-	};
+	}
+
+	public double getMagicAngle(double distance){
+		return PivotConstants.magicConstants[0] * distance*distance + PivotConstants.magicConstants[1] * distance + PivotConstants.magicConstants[2];
+	}
 
 	public void setPosition(double position) {
 		m_pivotController.setSetpoint(position); //TODO constrain setpoint to within limit switches--make setpoint safe method
 		//System.out.println(position);
 	};
-	//TODO angle to sucesful shot, amp, speaker, and podium setpoint
+	//TODO angle to sucesful shot, amp, speaker, and podium setpoint 
 
-	//TODO: at position function 
+	public boolean atPosition() {
+		return m_pivotController.atSetpoint();
+	}
 }
