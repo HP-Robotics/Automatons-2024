@@ -122,7 +122,9 @@ public final class Constants {
   }
 
   public static final class LimelightConstants {
-    public static final Pose2d aprilTag7 = new Pose2d(-1.5 * 0.0254, 218.42 * 0.0254, new Rotation2d(0));
+    public static final double inToM = 0.0254;
+    public static final Pose2d aprilTag7 = new Pose2d(-1.5 * inToM, 218.42 * inToM, new Rotation2d(0));
+    public static final Pose2d aprilTag4 = new Pose2d(652.73 * inToM, 218.42 * inToM, new Rotation2d(Math.PI));
   }
 
   public static final class AutoConstants {

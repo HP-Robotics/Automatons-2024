@@ -6,6 +6,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants.LimelightConstants;
@@ -16,6 +18,7 @@ public class DrivePointedToSpeakerCommand extends Command {
     private final DriveSubsystem m_drivesubsystem;
     private final LimelightSubsystem m_limelightSubsystem;
     private final CommandJoystick m_joystick;
+    private Pose2d m_targetAprilTag;
   /** Creates a new IntakeCommand. */
   public DrivePointedToSpeakerCommand(DriveSubsystem drivesubsystem, LimelightSubsystem limelightsubsystem, CommandJoystick joystick) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -27,13 +30,25 @@ public class DrivePointedToSpeakerCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if (DriverStation.getAlliance().isPresent()) {
+      if (DriverStation.getAlliance().get() == Alliance.Blue) {
+        m_targetAprilTag = LimelightConstants.aprilTag7;
+      }
+      else {
+        m_targetAprilTag = LimelightConstants.aprilTag4;
+      }
+    } else {
+      m_targetAprilTag = LimelightConstants.aprilTag7;
+    }
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (m_limelightSubsystem.sawAprilTag == 1) {
-    m_drivesubsystem.drivePointedTowardsAngle(m_joystick, new Rotation2d(Math.toRadians(m_limelightSubsystem.getAngleTo(m_limelightSubsystem.m_visionPose2d, LimelightConstants.aprilTag7) - 180)));
+    m_drivesubsystem.drivePointedTowardsAngle(m_joystick, 
+    new Rotation2d(Math.toRadians(m_limelightSubsystem.getAngleTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag) - 180)));
     } else {
       m_drivesubsystem.driveWithJoystick(m_joystick);
     }

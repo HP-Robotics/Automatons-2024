@@ -19,14 +19,15 @@ import frc.robot.Constants.DriveConstants;
 
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class FollowPathCommandOurs extends Command {
   DriveSubsystem m_drive;
-  String m_pathName; 
+  String m_pathName;
   PathPlannerPath m_path;
-  
 
   public FollowPathCommand m_pathPlannerCommand;
   public PPHolonomicDriveController m_HolonomicDriveController;
@@ -42,10 +43,10 @@ public class FollowPathCommandOurs extends Command {
 
   /** Creates a new PathCommand. */
   public FollowPathCommand PathCommand() {
-    
+
     return new FollowPathHolonomic(
         m_path,
-        m_drive::getPose, 
+        m_drive::getPose,
         m_drive::getCurrentspeeds, // MUST BE ROBOT RELATIVE
         m_drive::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         DriveConstants.holonomicConfig,
@@ -54,6 +55,12 @@ public class FollowPathCommandOurs extends Command {
           // alliance
           // This will flip the path being followed to the red side of the field.
           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          if (DriverStation.getAlliance().isPresent()) {
+            if (DriverStation.getAlliance().get() == Alliance.Red) {
+              return true;
+            }    
+          }
           return false;
         },
         m_drive // Reference to this subsystem to set requirements
@@ -65,18 +72,20 @@ public class FollowPathCommandOurs extends Command {
   public void initialize() {
     m_drive.resetOdometry(m_path.getPreviewStartingHolonomicPose());
     m_pathPlannerCommand.initialize();
-    
+
   }
-// public Optional<Rotation2d> getRotationTargetOverride() {
-//       // Some condition that should decide if we want to override rotation
-//       if(Limelight.hasGamePieceTarget()) {
-//           // Return an optional containing the rotation override (this should be a field relative rotation)
-//           return Optional.of(Limelight.getRobotToGamePieceRotation());
-//       } else {
-//           // return an empty optional when we don't want to override the path's rotation
-//           return Optional.empty();
-//       }
-// }
+  // public Optional<Rotation2d> getRotationTargetOverride() {
+  // // Some condition that should decide if we want to override rotation
+  // if(Limelight.hasGamePieceTarget()) {
+  // // Return an optional containing the rotation override (this should be a
+  // field relative rotation)
+  // return Optional.of(Limelight.getRobotToGamePieceRotation());
+  // } else {
+  // // return an empty optional when we don't want to override the path's
+  // rotation
+  // return Optional.empty();
+  // }
+  // }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
