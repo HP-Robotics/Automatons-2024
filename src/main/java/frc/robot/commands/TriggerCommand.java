@@ -26,7 +26,7 @@ public class TriggerCommand extends Command {
   public TriggerCommand(TriggerSubsystem subsystem, Boolean ignoreBeamBreak, IntakeSubsystem intakesubsystem) {
     // Use addRequirements() here to declare subsystem dependencies
     m_subsystem = subsystem;
-    m_intakeSubsystem = intakesubsystem;
+    m_intakeSubsystem = intakesubsystem; 
     addRequirements(subsystem);
     m_ignoreBeamBreak = ignoreBeamBreak;
   }

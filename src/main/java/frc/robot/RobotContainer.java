@@ -8,12 +8,14 @@ import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.PivotConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DrivePointedToSpeakerCommand;
 import frc.robot.commands.ClimberCommand;
+import frc.robot.commands.CommandBlocks;
 import frc.robot.commands.FollowPathCommandOurs;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.PivotManualCommand;
@@ -59,6 +61,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   private final CommandJoystick m_driveJoystick = new CommandJoystick(OperatorConstants.kDriverControllerPort);
   private final CommandJoystick m_opJoystick = new CommandJoystick(OperatorConstants.kOperatorControllerPort);
+  private CommandBlocks compoundCommands; // TODO: Pick a better name
 
   // The robot's subsystems and commands are defined here...
   private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem = 
@@ -97,6 +100,8 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("runIntake", m_intakeSubsystem.runOnce(() -> m_intakeSubsystem.runIntake(IntakeConstants.intakeSpeed)));
     NamedCommands.registerCommand("stopIntake", m_intakeSubsystem.runOnce(() -> m_intakeSubsystem.runIntake(0)));
+    NamedCommands.registerCommand("shoot", m_shooterSubsystem.runOnce(() -> m_shooterSubsystem.setShooter
+      (ShooterConstants.shooterSpeedFront, ShooterConstants.shooterSpeedBack)));
 
     m_chooseAutos = new SendableChooser<String>();
     m_chooseAutos.addOption("Center Down", "CenterDown");
@@ -106,6 +111,7 @@ public class RobotContainer {
     m_chooseAutos.setDefaultOption("Intermediate Amp", "IntermediateAmp");
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
 
+    compoundCommands = new CommandBlocks(m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem, m_pivotSubsystem);
     configureBindings();
   }
 
@@ -186,19 +192,19 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     if (m_chooseAutos.getSelected() == "CenterDown") {
-      return Autos.CenterDown(m_robotDrive);
+      return Autos.CenterDown(compoundCommands, m_robotDrive, m_shooterSubsystem);
     } 
     if (m_chooseAutos.getSelected() == "FourPiece") {
-      return Autos.FourPiece(m_robotDrive);
+      return Autos.FourPiece(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem, m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "GrandTheftAuto") {
       return Autos.GrandTheftAuto(m_robotDrive);
     } 
     if (m_chooseAutos.getSelected() == "BasicAmp") {
-      return Autos.BasicAmp(m_robotDrive);
+      return Autos.BasicAmp(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem);
     }
     if (m_chooseAutos.getSelected() == "IntermediateAmp") {
-      return Autos.IntermediateAmp(m_robotDrive);
+      return Autos.IntermediateAmp(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem);
     }
     else {
       return null;
