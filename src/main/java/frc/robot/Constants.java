@@ -185,7 +185,7 @@ public final class Constants {
     public static final double kG = 0.02;
     public static final boolean startWithPID = true;
     
-    public static final double[] magicConstants = {0.0055544,-0.0546681,0.484095};
+    public static final double[] magicConstants = {0.0, -0.0219711, 0.437724};
 
     public static final double manualSpeed = 0.1;
     public static final double position1 = 0.0;

@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -36,6 +37,8 @@ public class PivotMagicCommand extends Command {
   public void execute() {
     if (m_limelightSubsystem.sawAprilTag == 1) {
       m_subsystem.setPosition(m_subsystem.getMagicAngle(m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, LimelightConstants.aprilTag7)));
+      pivotTable.putValue(
+          "magicEncoderValue", NetworkTableValue.makeDouble(m_subsystem.getMagicAngle(m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, LimelightConstants.aprilTag7))));
     }
   }
 
