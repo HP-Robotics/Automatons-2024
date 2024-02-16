@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
 public final class Constants {
 
-  public static class OperatorConstants {
+  public static class OperatorConstants { // TODO: Rename this (This name sucks)
     public static final int kOperatorControllerPort = 0;
     public static final int kDriverControllerPort = 1;
     public static final double driveJoystickDeadband = 0.15;
@@ -184,6 +184,8 @@ public final class Constants {
     public static final double kD = 0.0;
     public static final double kG = 0.02;
     public static final boolean startWithPID = true;
+    
+    public static final double[] magicConstants = {0.0055544,-0.0546681,0.484095};
 
     public static final double manualSpeed = 0.1;
     public static final double position1 = 0.0;
