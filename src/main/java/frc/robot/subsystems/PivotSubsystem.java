@@ -131,9 +131,11 @@ public class PivotSubsystem extends SubsystemBase {
 
 	public void setPosition(double position) {
 		m_pivotController.setSetpoint(position); //TODO constrain setpoint to within limit switches--make setpoint safe method
-		System.out.println(position);
+		//System.out.println(position);
 	};
-	//TODO angle to sucesful shot, amp, speaker, and podium setpoint
+	//TODO angle to sucesful shot, amp, speaker, and podium setpoint 
 
-	//TODO: at position function 
+	public boolean atPosition() {
+		return m_pivotController.atSetpoint();
+	}
 }

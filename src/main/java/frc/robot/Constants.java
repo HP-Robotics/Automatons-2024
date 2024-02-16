@@ -30,16 +30,20 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 public final class Constants {
 
   public static class OperatorConstants { // TODO: Rename this (This name sucks)
+    public static final boolean useXbox = true;
+
     public static final int kOperatorControllerPort = 0;
     public static final int kDriverControllerPort = 1;
-    public static final double driveJoystickDeadband = 0.15;
-    public static final double turnJoystickDeadband = 0.1;
+    public static final double driveJoystickDeadband = useXbox ? 0.05 : 0.15;
+    public static final double turnJoystickDeadband = useXbox ? 0.05 : 0.1;
 
-    public static final boolean useXbox = true;
+    public static final double driveJoystickExponent = useXbox ? 2 : 2;
+
+    
     public static final int resetYawButton = useXbox ? 8 : 11;
-    public static final int fieldRelativeButton = useXbox ? 0 : 0;
-    public static final int yuckButton = useXbox ? 4 : 0;
-    public static final int climberButton = useXbox ? 10 : 0;
+    public static final int fieldRelativeButton = useXbox ? 8 : 8;
+    public static final int yuckButton = useXbox ? 4 : 2;
+    public static final int climberButton = useXbox ? 10 : 10;
     public static final int intakeButton = useXbox ? 0 : 1; 
     public static final int drivePointedToSpeakerButton = useXbox ? 5 : 0;
     public static double getRotation(CommandJoystick stick){
@@ -47,13 +51,14 @@ public final class Constants {
         return stick.getRawAxis(4);
       }
       else {
-        if (stick.povLeft().getAsBoolean()) {
-        return -0.5;
-        }
-        else if (stick.povRight().getAsBoolean()) {
-          return 0.5;
-        }
-        return 0;
+        return stick.getRawAxis(2);
+        // if (stick.povLeft().getAsBoolean()) {
+        // return -0.5;
+        // }
+        // else if (stick.povRight().getAsBoolean()) {
+        //   return 0.5;
+        // }
+        // return 0;
       }
     }
   }
@@ -139,6 +144,9 @@ public final class Constants {
     public static final double kPThetaController = 3;
     public static final double kIThetaController = 0.05;
 
+    public static final double additionalIntakeTime = 0.5;
+    public static final double additionalShootTime = 0.3;
+
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
@@ -152,8 +160,10 @@ public final class Constants {
 
   public static class ShooterConstants {
 
-    public static final double shooterSpeedFront = 50; // TODO: Is this correct?
+    public static final double shooterSpeedFront = 50; // TODO: Is this correct? 50
     public static final double shooterSpeedBack = 50; //50
+    public static final double shooterSpeedAmp = 15; 
+    
 
     public static final double shooterMotorskP = 0.4;
     public static final double shooterMotorskI = 0.01;
