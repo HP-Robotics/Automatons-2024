@@ -26,9 +26,8 @@ public class IntakeCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double output = intakeTable.getEntry("Intake Speed").getDouble(IntakeConstants.intakeSpeed);
-    double vanguardOutput = intakeTable.getEntry("Vanguard Speed").getDouble(IntakeConstants.vanguardSpeed);
-    m_subsystem.runIntake(output, vanguardOutput );
+    double output = intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed);
+    m_subsystem.runIntake(output);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,7 +39,7 @@ public class IntakeCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.runIntake(0.0, 0.0); // Turn intake off; 
+    m_subsystem.runIntake(0.0); // Turn intake off; 
   }
 
   // Returns true when the command should end.
