@@ -108,7 +108,7 @@ public class RobotContainer {
         new IntakeCommand(m_intakeSubsystem),
         new TriggerCommand(m_triggerSubsystem, false, m_intakeSubsystem).asProxy(), 
         new StartEndCommand(() -> {m_shooterSubsystem.setShooter(-0.1, -0.1);}, m_shooterSubsystem::stopShooter)));
-    NamedCommands.registerCommand("stopIntake", m_intakeSubsystem.runOnce(() -> m_intakeSubsystem.runIntake(0)));
+    NamedCommands.registerCommand("stopIntake", m_intakeSubsystem.runOnce(() -> m_intakeSubsystem.runIntake(0,0)));
     NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem));
 
 
@@ -155,9 +155,9 @@ public class RobotContainer {
         new SetShooterCommand(m_shooterSubsystem));
       //TODO add trigger if statement
       m_opJoystick.button(3).whileTrue(compoundShooter);
-      m_driveJoystick.button(OperatorConstants.yuckButton).onTrue(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(-0.2)),
+      m_driveJoystick.button(OperatorConstants.yuckButton).onTrue(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(-0.2, 0)),
        new InstantCommand(() -> m_triggerSubsystem.setTrigger(-0.2)))); //TODO make yuck button better
-      m_driveJoystick.button(OperatorConstants.yuckButton).onFalse(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(0)),
+      m_driveJoystick.button(OperatorConstants.yuckButton).onFalse(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(0, 0)),
        new InstantCommand(() -> m_triggerSubsystem.setTrigger(0))));
     }
 
