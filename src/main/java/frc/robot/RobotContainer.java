@@ -140,8 +140,8 @@ public class RobotContainer {
       Trigger fieldRelativeTrigger = OperatorConstants.useXbox
         ? new Trigger(m_driveJoystick.axisGreaterThan(2, 0.1))
         : new Trigger(m_driveJoystick.button(OperatorConstants.fieldRelativeButton));
-      fieldRelativeTrigger.onTrue(new InstantCommand(() -> m_robotDrive.setFieldRelative(false)));
-      fieldRelativeTrigger.onFalse(new InstantCommand(() -> m_robotDrive.setFieldRelative(true)));
+      // fieldRelativeTrigger.onTrue(new InstantCommand(() -> m_robotDrive.setFieldRelative(false)));
+      // fieldRelativeTrigger.onFalse(new InstantCommand(() -> m_robotDrive.setFieldRelative(true)));
      // m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path")); 
      // m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path Line"));
      // m_driveJoystick.button(4).whileTrue(new RunCommand(()-> m_robotDrive.drivePointedTowardsAngle(m_driveJoystick, new Rotation2d(0))));
@@ -221,8 +221,11 @@ public class RobotContainer {
     if (m_chooseAutos.getSelected() == "IntermediateAmp") {
       return Autos.IntermediateAmp(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem);
     }
+    if(m_chooseAutos.getSelected() == "DoNothing"){
+      return Autos.DoNothing();
+    }
     else {
-      return null;
+      return Autos.DoNothing();
     }
   }
 }

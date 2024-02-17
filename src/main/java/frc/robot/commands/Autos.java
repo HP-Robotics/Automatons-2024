@@ -44,22 +44,15 @@ public final class Autos {
         new TriggerCommand(triggerSubsystem, false, intakeSubsystem)
         .andThen(commandBlocks.fireGamePieceCommand())
       ),
-      new ParallelCommandGroup(
         new FollowPathCommandOurs(drive, "4 Piece part 2"),
-        new WaitCommand(1.0)
+        new ParallelCommandGroup(
+          new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime),
+          commandBlocks.fireGamePieceCommand()
       ),
-      new ParallelCommandGroup(
-        new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime),
-        commandBlocks.fireGamePieceCommand()
-      ),
-      new ParallelCommandGroup(
         new FollowPathCommandOurs(drive, "4 Piece Part 3"),
-        new WaitCommand(1.0)
-      ),
-      
-      new ParallelCommandGroup(
-        new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime),
-        commandBlocks.fireGamePieceCommand()
+        new ParallelCommandGroup(
+          new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime),
+          commandBlocks.fireGamePieceCommand()
       )
       );
   }
@@ -112,6 +105,10 @@ public final class Autos {
       new FollowPathCommandOurs(drive, "Intermediate Amp Part 3"),
       new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime)
     );
+  }
+
+  public static Command DoNothing(){
+    return new WaitCommand(10);
   }
 
   private Autos() {
