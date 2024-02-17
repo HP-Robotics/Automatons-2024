@@ -158,6 +158,7 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final double intakeSpeed = -0.95;
+    public static final double vanguardSpeed = 0.2;
   }
 
   public static class ShooterConstants {
@@ -220,6 +221,8 @@ public final class Constants {
 
     //Intake is 10s
     public static final int intakeMotorID = 10;
+    public static final int vanguardLeftID = 11;
+    public static final int vanguardRightID = 12;
 
     //Shooter is 30s
     public static final int frontMotorID = 30;
