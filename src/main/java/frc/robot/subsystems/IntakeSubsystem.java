@@ -23,8 +23,8 @@ import frc.robot.Constants.PortConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
   TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID,"CANivore");
-  CANSparkMax m_vanguardLeft = new CANSparkMax(0, CANSparkLowLevel.MotorType.kBrushless);
-  CANSparkMax m_vanguardRight = new CANSparkMax(0, CANSparkLowLevel.MotorType.kBrushless);
+  CANSparkMax m_vanguardLeft = new CANSparkMax(IDConstants.vanguardLeftID, CANSparkLowLevel.MotorType.kBrushless);
+  CANSparkMax m_vanguardRight = new CANSparkMax(IDConstants.vanguardRightID, CANSparkLowLevel.MotorType.kBrushless);
 
   public BeamBreak m_beambreak;
 
@@ -43,6 +43,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     m_vanguardLeft.restoreFactoryDefaults();
     m_vanguardRight.restoreFactoryDefaults();
+    m_vanguardLeft.setSmartCurrentLimit(10);
+    m_vanguardRight.setSmartCurrentLimit(10);
     m_vanguardRight.follow(m_vanguardLeft, true);
   }
 

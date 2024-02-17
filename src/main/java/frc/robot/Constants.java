@@ -158,7 +158,7 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final double intakeSpeed = -0.95;
-    public static final double vanguardSpeed = 0.2;
+    public static final double vanguardSpeed = -0.5;
   }
 
   public static class ShooterConstants {
