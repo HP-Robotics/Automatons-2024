@@ -40,7 +40,7 @@ public final class Constants {
     public static final double driveJoystickExponent = useXbox ? 2 : 2;
 
     
-    public static final int resetYawButton = useXbox ? 8 : 11;
+    public static final int resetYawButton = useXbox ? 7 : 11;
     public static final int fieldRelativeButton = useXbox ? 8 : 8;
     public static final int yuckButton = useXbox ? 4 : 2;
     public static final int climberButton = useXbox ? 10 : 10;
@@ -191,10 +191,10 @@ public final class Constants {
   }
 
   public static class PivotConstants {
-    public static final double kP = 2;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
-    public static final double kG = 0.02;
+    public static final double kP = 3;//2
+    public static final double kI = 0.001;
+    public static final double kD = 0.08;
+    public static final double kG = -0.02;//0.02
     public static final boolean startWithPID = true;
     
     public static final double[] magicConstants = {0.0, -0.0219711, 0.437724};
