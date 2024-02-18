@@ -34,6 +34,9 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    //addPeriodic(()->{}, 0.001);
+      addPeriodic(() -> {m_robotContainer.fastBeamBreakCheckIntake();
+     m_robotContainer.fastBeamBreakCheckTrigger();}, 0.001);
   }
 
   /**

@@ -20,13 +20,18 @@ import frc.robot.BeamBreak;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.PortConstants;
+import frc.robot.Constants.SubsystemConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID,"CANivore");
+  public TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID,"CANivore");
   CANSparkMax m_vanguardLeft = new CANSparkMax(IDConstants.vanguardLeftID, CANSparkLowLevel.MotorType.kBrushless);
   CANSparkMax m_vanguardRight = new CANSparkMax(IDConstants.vanguardRightID, CANSparkLowLevel.MotorType.kBrushless);
 
   public BeamBreak m_beambreak;
+  public boolean intakeOn = false; //intake button is pressed
+  public boolean intakeFire = false; //fire button is pressed
+  public boolean intakeYuck = false; //yuck button is pressed
+  public boolean beambreakState = false; //trigger beambreak sees note & intakeOn
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable intakeTable = inst.getTable("intake-table");
@@ -52,10 +57,52 @@ public class IntakeSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     intakeTable.putValue("Beam Broken", NetworkTableValue.makeBoolean(m_beambreak.beamBroken()));
+
+    intakeTable.putValue("Intake On", NetworkTableValue.makeBoolean(intakeOn));
+    intakeTable.putValue("Intake Fire", NetworkTableValue.makeBoolean(intakeFire));
+    intakeTable.putValue("Intake Yuck", NetworkTableValue.makeBoolean(intakeYuck));
+    intakeTable.putValue("Intake BeamBreak", NetworkTableValue.makeBoolean(beambreakState));
   }
 
   public void runIntake(double output, double vanguardOutput) {
     m_motor.setControl(new DutyCycleOut(output));
     m_vanguardLeft.set(vanguardOutput);
   };
+
+  public void intakeButtonPressed () {
+    if (!intakeFire && !intakeYuck && !beambreakState) {
+      intakeOn = true;
+    }
+  }
+  
+  public void intakeButtonReleased () {
+    if (intakeOn) {
+      intakeOn = false;
+    }
+  }
+
+  public void yuckButtonPressed () {
+    if ((intakeOn || beambreakState) && !intakeFire) {
+      intakeYuck = true;
+    }
+  }
+
+  public void yuckButtonReleased () {
+    intakeYuck = false;
+  }
+
+  public void fireButtonPressed () {
+    if ((intakeOn || beambreakState) && !intakeYuck) {
+      intakeFire = true;
+    }
+  }
+
+  public void fireButtonReleased () {
+    intakeFire = false;
+  }
+
+  public void runOnlyVanguard (double output) {
+    m_vanguardLeft.set(output); // TODO: Add right
+  }
+
 }
