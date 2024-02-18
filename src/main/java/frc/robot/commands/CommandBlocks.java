@@ -21,7 +21,7 @@ public class CommandBlocks {
         return new ParallelDeadlineGroup(
             new WaitCommand(1).until(() -> {return m_shooterSubsystem.atSpeed() && m_pivotSubsystem.atPosition();})
           .andThen(new TriggerCommand(m_triggerSubsystem, true, m_intakeSubsystem).withTimeout(0.3)),
-          new SetShooterCommand(m_shooterSubsystem),
+          new SetShooterCommand(m_shooterSubsystem, null, null),
           new InstantCommand(() -> m_pivotSubsystem.setPosition(0.43)),
           new InstantCommand(() -> {System.out.println("firing game piece");})
         );
