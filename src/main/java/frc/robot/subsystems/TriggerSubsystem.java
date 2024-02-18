@@ -93,7 +93,7 @@ public class TriggerSubsystem extends SubsystemBase {
   }
 
   public void yuckButtonPressed () {
-    if ((triggerOn || beambreakState) && !triggerFire) {
+    if (!triggerFire) {
       triggerYuck = true;
     }
   }

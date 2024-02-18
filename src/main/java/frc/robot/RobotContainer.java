@@ -114,14 +114,10 @@ public class RobotContainer {
           new TriggerStatesCommand(m_triggerSubsystem, m_triggerSubsystem.m_beamBreak));
     }
 
-    NamedCommands.registerCommand("runIntake", new ParallelCommandGroup(
-        new IntakeCommand(m_intakeSubsystem),
-        new TriggerCommand(m_triggerSubsystem, false, m_intakeSubsystem).asProxy(),
-        new StartEndCommand(() -> {
-          m_shooterSubsystem.setShooter(-0.1, -0.1);
-        }, m_shooterSubsystem::stopShooter)));
-    NamedCommands.registerCommand("stopIntake", m_intakeSubsystem.runOnce(() -> m_intakeSubsystem.runIntake(0, 0)));
+    NamedCommands.registerCommand("startIntaking", compoundCommands.startIntaking());
+    NamedCommands.registerCommand("stopIntaking", compoundCommands.stopIntaking());
     NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, null, null));
+    NamedCommands.registerCommand("stopShooter", new SetShooterCommand(m_shooterSubsystem, 0.0, 0.0));
 
     m_chooseAutos = new SendableChooser<String>();
     m_chooseAutos.addOption("Center Down", "CenterDown");

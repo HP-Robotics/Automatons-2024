@@ -203,7 +203,7 @@ public final class Constants {
     public static final double[] magicConstants = {0.0, -0.0219711, 0.437724};
 
     public static final double manualSpeed = 0.1;
-    public static final double position1 = 0.0;
+    public static final double subwooferPosition = 0.43;
 
     public static final double setpointChangeSpeed = 0.44;
     public static final double encoderAt90 = 0.51;

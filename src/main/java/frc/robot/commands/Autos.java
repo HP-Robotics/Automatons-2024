@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -32,28 +33,13 @@ public final class Autos {
       return null;
     }
     return new SequentialCommandGroup(
-      commandBlocks.fireGamePieceCommand(),
-      new ParallelCommandGroup(
-        new WaitCommand(1.0),
-        new FollowPathCommandOurs(drive, "4 Piece part 1")
-      ),
-     
-      
-      new ParallelCommandGroup(
-        new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime),
-        new TriggerCommand(triggerSubsystem, false, intakeSubsystem)
-        .andThen(commandBlocks.fireGamePieceCommand())
-      ),
-        new FollowPathCommandOurs(drive, "4 Piece part 2"),
-        new ParallelCommandGroup(
-          new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime),
-          commandBlocks.fireGamePieceCommand()
-      ),
-        new FollowPathCommandOurs(drive, "4 Piece Part 3"),
-        new ParallelCommandGroup(
-          new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime),
-          commandBlocks.fireGamePieceCommand()
-      )
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
+      new FollowPathCommandOurs(drive, "4 Piece part 1"),
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
+      new FollowPathCommandOurs(drive, "4 Piece part 2"),
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
+      new FollowPathCommandOurs(drive, "4 Piece Part 3"),
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition)
       );
   }
 
@@ -63,11 +49,11 @@ public final class Autos {
     }
     return new SequentialCommandGroup(
       new FollowPathCommandOurs(drive, "Center Down Part 1"),
-      commandBlocks.fireGamePieceCommand(),
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
       new FollowPathCommandOurs(drive, "Center Down Part 2"),
-      commandBlocks.fireGamePieceCommand(),
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
       new FollowPathCommandOurs(drive, "Center Down Part 3"),
-      commandBlocks.fireGamePieceCommand()
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition)
       );
   }
 
@@ -78,7 +64,7 @@ public final class Autos {
     }
     return new SequentialCommandGroup(
       new FollowPathCommandOurs(drive, "Basic Amp Part 1"),
-      commandBlocks.fireGamePieceCommand(),
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
       new FollowPathCommandOurs(drive, "Basic Amp Part 2"),
       new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime)
       );
@@ -99,9 +85,9 @@ public final class Autos {
     }
     return new SequentialCommandGroup(
       new FollowPathCommandOurs(drive, "Intermediate Amp Part 1"),
-      commandBlocks.fireGamePieceCommand(),
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
       new FollowPathCommandOurs(drive, "Intermediate Amp Part 2"),
-      commandBlocks.fireGamePieceCommand(),
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
       new FollowPathCommandOurs(drive, "Intermediate Amp Part 3"),
       new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime)
     );
