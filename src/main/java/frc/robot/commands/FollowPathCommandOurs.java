@@ -86,7 +86,7 @@ public class FollowPathCommandOurs extends Command {
   }
 
   public Pose2d mirrorPose(Pose2d inputPose2d) {
-    Pose2d output = new Pose2d(54 * 12 * 0.0254 - inputPose2d.getX(), 0,
+    Pose2d output = new Pose2d(54 * 12 * 0.0254 - inputPose2d.getX(), inputPose2d.getY(),
         new Rotation2d(Math.PI).minus(inputPose2d.getRotation()));
     return output;
   }
