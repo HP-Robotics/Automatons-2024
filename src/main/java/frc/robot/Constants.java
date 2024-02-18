@@ -29,17 +29,21 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
 public final class Constants {
 
-  public static class OperatorConstants {
+  public static class OperatorConstants { // TODO: Rename this (This name sucks)
+    public static final boolean useXbox = true;
+
     public static final int kOperatorControllerPort = 0;
     public static final int kDriverControllerPort = 1;
-    public static final double driveJoystickDeadband = 0.15;
-    public static final double turnJoystickDeadband = 0.1;
+    public static final double driveJoystickDeadband = useXbox ? 0.15 : 0.15;
+    public static final double turnJoystickDeadband = useXbox ? 0.1 : 0.1;
 
-    public static final boolean useXbox = true;
-    public static final int resetYawButton = useXbox ? 8 : 11;
-    public static final int fieldRelativeButton = useXbox ? 0 : 0;
-    public static final int yuckButton = useXbox ? 4 : 0;
-    public static final int climberButton = useXbox ? 10 : 0;
+    public static final double driveJoystickExponent = useXbox ? 2 : 2;
+
+    
+    public static final int resetYawButton = useXbox ? 7 : 11;
+    public static final int fieldRelativeButton = useXbox ? 8 : 8;
+    public static final int yuckButton = useXbox ? 4 : 2;
+    public static final int climberButton = useXbox ? 10 : 10;
     public static final int intakeButton = useXbox ? 0 : 1; 
     public static final int drivePointedToSpeakerButton = useXbox ? 5 : 0;
     public static double getRotation(CommandJoystick stick){
@@ -47,13 +51,14 @@ public final class Constants {
         return stick.getRawAxis(4);
       }
       else {
-        if (stick.povLeft().getAsBoolean()) {
-        return -0.5;
-        }
-        else if (stick.povRight().getAsBoolean()) {
-          return 0.5;
-        }
-        return 0;
+        return stick.getRawAxis(2);
+        // if (stick.povLeft().getAsBoolean()) {
+        // return -0.5;
+        // }
+        // else if (stick.povRight().getAsBoolean()) {
+        //   return 0.5;
+        // }
+        // return 0;
       }
     }
   }
@@ -63,7 +68,7 @@ public final class Constants {
     public static final boolean useIntake = true;
     public static final boolean useShooter = true;
     public static final boolean useDataManager = true;
-    public static final boolean useLimelight = false;
+    public static final boolean useLimelight = true;
     public static final boolean usePivot = true;
     public static final boolean useClimber = false; //TODO check if these work
   }
@@ -117,7 +122,9 @@ public final class Constants {
   }
 
   public static final class LimelightConstants {
-    public static final Pose2d aprilTag7 = new Pose2d(-1.5 * 0.0254, 218.42 * 0.0254, new Rotation2d(0));
+    public static final double inToM = 0.0254;
+    public static final Pose2d aprilTag7 = new Pose2d(-1.5 * inToM, 218.42 * inToM, new Rotation2d(0));
+    public static final Pose2d aprilTag4 = new Pose2d(652.73 * inToM, 218.42 * inToM, new Rotation2d(Math.PI));
   }
 
   public static final class AutoConstants {
@@ -139,6 +146,9 @@ public final class Constants {
     public static final double kPThetaController = 3;
     public static final double kIThetaController = 0.05;
 
+    public static final double additionalIntakeTime = 0.5;
+    public static final double additionalShootTime = 0.3;
+
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
@@ -147,13 +157,16 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final double intakeSpeed = -0.95;
+    public static final double intakeSpeed = -0.45;
+    public static final double vanguardSpeed = -0.5;
   }
 
   public static class ShooterConstants {
 
-    public static final double shooterSpeedFront = 50; // TODO: Is this correct?
+    public static final double shooterSpeedFront = 50; // TODO: Is this correct? 50
     public static final double shooterSpeedBack = 50; //50
+    public static final double shooterSpeedAmp = 15; 
+    
 
     public static final double shooterMotorskP = 0.4;
     public static final double shooterMotorskI = 0.01;
@@ -179,11 +192,13 @@ public final class Constants {
   }
 
   public static class PivotConstants {
-    public static final double kP = 2;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
-    public static final double kG = 0.02;
+    public static final double kP = 3/2;//2
+    public static final double kI = 0.001;
+    public static final double kD = 0.08/2;
+    public static final double kG = -0.02;//0.02
     public static final boolean startWithPID = true;
+    
+    public static final double[] magicConstants = {0.0, -0.0219711, 0.437724};
 
     public static final double manualSpeed = 0.1;
     public static final double position1 = 0.0;
@@ -206,6 +221,8 @@ public final class Constants {
 
     //Intake is 10s
     public static final int intakeMotorID = 10;
+    public static final int vanguardLeftID = 11;
+    public static final int vanguardRightID = 12;
 
     //Shooter is 30s
     public static final int frontMotorID = 30;

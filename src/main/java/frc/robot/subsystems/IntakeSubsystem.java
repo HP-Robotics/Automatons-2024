@@ -7,6 +7,9 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -21,6 +24,9 @@ import frc.robot.Constants.SubsystemConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
   public TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID,"CANivore");
+  CANSparkMax m_vanguardLeft = new CANSparkMax(IDConstants.vanguardLeftID, CANSparkLowLevel.MotorType.kBrushless);
+  CANSparkMax m_vanguardRight = new CANSparkMax(IDConstants.vanguardRightID, CANSparkLowLevel.MotorType.kBrushless);
+
   public BeamBreak m_beambreak;
   public boolean intakeOn = false; //intake button is pressed
   public boolean intakeFire = false; //fire button is pressed
@@ -40,6 +46,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     m_beambreak = new BeamBreak(PortConstants.IntakeBeamBreak);
 
+    m_vanguardLeft.restoreFactoryDefaults();
+    m_vanguardRight.restoreFactoryDefaults();
+    m_vanguardLeft.setSmartCurrentLimit(10);
+    m_vanguardRight.setSmartCurrentLimit(10);
+    m_vanguardRight.follow(m_vanguardLeft, true);
   }
 
   @Override
@@ -48,8 +59,9 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeTable.putValue("Beam Broken", NetworkTableValue.makeBoolean(m_beambreak.beamBroken()));
   }
 
-  public void runIntake(double output) {
+  public void runIntake(double output, double vanguardOutput) {
     m_motor.setControl(new DutyCycleOut(output));
+    m_vanguardLeft.set(vanguardOutput);
   };
 
   public void intakeButtonPressed () {

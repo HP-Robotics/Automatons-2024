@@ -36,15 +36,15 @@ public class IntakeStatesCommand extends Command {
   @Override
   public void execute() {
     if (m_subsystem.intakeYuck) {
-      m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed));
+      m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed), IntakeConstants.vanguardSpeed);
     }
     else if (m_subsystem.intakeFire ) {
-      m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed));
+      m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed), 0);
     }
     else if (m_subsystem.beambreakState) {
     }
     else if (m_subsystem.intakeOn) {
-      m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed));
+      m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed), IntakeConstants.vanguardSpeed);
     }
     else {
       m_subsystem.m_motor.setControl(new NeutralOut());
@@ -57,7 +57,7 @@ public class IntakeStatesCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.runIntake(0.0); // Turn intake off; 
+    m_subsystem.runIntake(0.0, 0.0); // Turn intake off; 
   }
 
   // Returns true when the command should end.

@@ -14,6 +14,7 @@ import frc.robot.Constants.PortConstants;
 import frc.robot.Constants.ShooterConstants;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
@@ -31,6 +32,7 @@ public class PivotSubsystem extends SubsystemBase {
 	NetworkTable pivotTable = inst.getTable("pivot-table");
 	private boolean m_absoluteBroken = false;
 	private ArmFeedforward m_armGraivty;
+	private LinearFilter m_filter;
 
 	/** Creates a new ExampleSubsystem. */
 	public PivotSubsystem() {
@@ -46,6 +48,7 @@ public class PivotSubsystem extends SubsystemBase {
 		pivotTable.putValue("kP", NetworkTableValue.makeDouble(PivotConstants.kP));
     	pivotTable.putValue("kI", NetworkTableValue.makeDouble(PivotConstants.kI));
     	pivotTable.putValue("kD", NetworkTableValue.makeDouble(PivotConstants.kD));
+		pivotTable.putValue("kG",NetworkTableValue.makeDouble(PivotConstants.kG));
 
 		motorConfigs.kP = pivotTable.getEntry("kP").getDouble(PivotConstants.kP); //we won't send to falcon
 		motorConfigs.kI = pivotTable.getEntry("kI").getDouble(PivotConstants.kI);
@@ -57,16 +60,19 @@ public class PivotSubsystem extends SubsystemBase {
 		m_pivotController = new PIDController(motorConfigs.kP, motorConfigs.kI, motorConfigs.kD);
 		m_pivotController.setSetpoint(0.4);
 		m_pivotController.setTolerance(0.015);
+		m_pivotController.setIZone(0.014);
 
 		m_armGraivty = new ArmFeedforward(0, PivotConstants.kG, 0);
+		m_filter = LinearFilter.singlePoleIIR(0.1, 0.02);
 	}
 
 	public void periodic() {
 		pivotTable.putValue("Absolute Encoder Position",
 				NetworkTableValue.makeDouble(m_absEncoder.getAbsolutePosition()));
-		if(m_absEncoder.getAbsolutePosition() != 0 || m_absEncoder.getAbsolutePosition() !=1) {
-			double output = m_pivotController.calculate(m_absEncoder.getAbsolutePosition());
-			double grav = -m_armGraivty.calculate(encoderToRadians(m_pivotController.getSetpoint()),0);
+		double grav = -m_armGraivty.calculate(encoderToRadians(m_pivotController.getSetpoint()),0);
+		if(m_absEncoder.getAbsolutePosition() != 0 && m_absEncoder.getAbsolutePosition() !=1) {
+			double filtered_Encoder = m_filter.calculate(m_absEncoder.getAbsolutePosition());
+			double output = m_pivotController.calculate(filtered_Encoder);
 			output = output + grav;
 			if(m_usePID) {
 				if(m_pivotController.atSetpoint()){
@@ -78,19 +84,23 @@ public class PivotSubsystem extends SubsystemBase {
 			}
 			m_absoluteBroken = false;
 			pivotTable.putValue("Grav Propotion", NetworkTableValue.makeDouble(grav));
+			pivotTable.putValue("Commanded Output", NetworkTableValue.makeDouble(output));
+			pivotTable.putValue("Filtered Input", NetworkTableValue.makeDouble(filtered_Encoder));
+
+
 		} else {
 			if(!m_absoluteBroken) {
-				m_motorR.setControl(new DutyCycleOut(0));
+				// m_motorR.setControl(new DutyCycleOut(grav));
 				m_absoluteBroken = true;
 			}
 		}
-		pivotTable.putValue("Pivot Power",NetworkTableValue.makeDouble(m_motorR.getDutyCycle().getValueAsDouble()));
-		pivotTable.putValue("Pivot Position",NetworkTableValue.makeDouble(m_motorR.getPosition().getValueAsDouble()));
+		// pivotTable.putValue("Pivot Power",NetworkTableValue.makeDouble(m_motorR.getDutyCycle().getValueAsDouble()));
+		// pivotTable.putValue("Pivot Position",NetworkTableValue.makeDouble(m_motorR.getPosition().getValueAsDouble()));
 		pivotTable.putValue("P Proportion", NetworkTableValue.makeDouble(m_pivotController.getPositionError()*m_pivotController.getP()));
 		pivotTable.putValue("D Proportion", NetworkTableValue.makeDouble(m_pivotController.getVelocityError()*m_pivotController.getD()));
 		pivotTable.putValue("Pivot Setpoint",NetworkTableValue.makeDouble(m_pivotController.getSetpoint()));
-		pivotTable.putValue("Pivot Error",NetworkTableValue.makeDouble(m_pivotController.getPositionError()));
-		pivotTable.putValue("Pivot Angle",NetworkTableValue.makeDouble(Math.toDegrees(encoderToRadians(m_absEncoder.getAbsolutePosition()))));
+		// pivotTable.putValue("Pivot Error",NetworkTableValue.makeDouble(m_pivotController.getPositionError()));
+		// pivotTable.putValue("Pivot Angle",NetworkTableValue.makeDouble(Math.toDegrees(encoderToRadians(m_absEncoder.getAbsolutePosition()))));
 
 		if(m_pivotController.getP() != pivotTable.getEntry("kP").getDouble(m_pivotController.getP())) {
 			m_pivotController.setP(pivotTable.getEntry("kP").getDouble(m_pivotController.getP()));
@@ -100,6 +110,9 @@ public class PivotSubsystem extends SubsystemBase {
 		}
 		if(m_pivotController.getD() != pivotTable.getEntry("kD").getDouble(m_pivotController.getD())) {
 			m_pivotController.setD(pivotTable.getEntry("kD").getDouble(m_pivotController.getD()));
+		}
+		if(m_armGraivty.kg != pivotTable.getEntry("kG").getDouble(m_armGraivty.kg)) {
+			m_armGraivty = new ArmFeedforward(0, pivotTable.getEntry("kG").getDouble(m_pivotController.getD()), 0);
 		}
 	}
 	public double encoderToRadians(double encoder){
@@ -123,13 +136,19 @@ public class PivotSubsystem extends SubsystemBase {
 
 	public void setSpeed(double output) {
 		m_motorR.setControl(new DutyCycleOut(output));
-	};
+	}
 
-	public void setPosition(double position) {
+	public double getMagicAngle(double distance){
+		return PivotConstants.magicConstants[0] * distance*distance + PivotConstants.magicConstants[1] * distance + PivotConstants.magicConstants[2];
+	}
+
+	public void setPosition(double position) { //TODO remove bad inputs
 		m_pivotController.setSetpoint(position); //TODO constrain setpoint to within limit switches--make setpoint safe method
-		System.out.println(position);
+		//System.out.println(position);
 	};
-	//TODO angle to sucesful shot, amp, speaker, and podium setpoint
+	//TODO angle to sucesful shot, amp, speaker, and podium setpoint 
 
-	//TODO: at position function 
+	public boolean atPosition() {
+		return m_pivotController.atSetpoint();
+	}
 }
