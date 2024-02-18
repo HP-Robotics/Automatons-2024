@@ -21,12 +21,17 @@ import frc.robot.Constants.PortConstants;
 import frc.robot.Constants.TriggerConstants;
 
 public class TriggerSubsystem extends SubsystemBase {
-  private TalonFX m_triggerMotor;
+  public TalonFX m_triggerMotor;
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
   public BeamBreak m_beamBreak;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable triggerTable = inst.getTable("trigger-subsystem");
+
+  public boolean triggerOn = false; //intake button is pressed
+  public boolean triggerFire = false; //fire button is pressed
+  public boolean triggerYuck = false; //yuck button is pressed
+  public boolean beambreakState = false; //trigger beambreak sees note & intakeOn
 
   /** Creates a new ShooterSubsystem. */
   public TriggerSubsystem() {
@@ -57,6 +62,13 @@ public class TriggerSubsystem extends SubsystemBase {
     slot0Configs.kI = TriggerConstants.triggerkI;
     slot0Configs.kD = TriggerConstants.triggerkD;
     m_triggerMotor.getConfigurator().apply(slot0Configs);
+
+    triggerTable.putValue("Trigger On", NetworkTableValue.makeBoolean(triggerOn));
+    triggerTable.putValue("Trigger Fire", NetworkTableValue.makeBoolean(triggerFire));
+    triggerTable.putValue("Trigger Yuck", NetworkTableValue.makeBoolean(triggerYuck));
+    triggerTable.putValue("Trigger BeamBreak", NetworkTableValue.makeBoolean(beambreakState));
+
+
   }
 
   public void setTrigger(double output) {
@@ -67,4 +79,37 @@ public class TriggerSubsystem extends SubsystemBase {
   public void stopTrigger() {
     m_triggerMotor.setControl(new DutyCycleOut(0));
   }
+
+  public void intakeButtonPressed () {
+    if (!triggerFire && !triggerYuck && !beambreakState) {
+      triggerOn = true;
+    }
+  }
+  
+  public void intakeButtonReleased () {
+    if (triggerOn) {
+      triggerOn = false;
+    }
+  }
+
+  public void yuckButtonPressed () {
+    if ((triggerOn || beambreakState) && !triggerFire) {
+      triggerYuck = true;
+    }
+  }
+
+  public void yuckButtonReleased () {
+    triggerYuck = false;
+  }
+
+  public void fireButtonPressed () {
+    if ((triggerOn || beambreakState) && !triggerYuck) {
+      triggerFire = true;
+    }
+  }
+
+  public void fireButtonReleased () {
+    triggerFire = false;
+  }
+
 }

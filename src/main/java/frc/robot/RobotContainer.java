@@ -18,13 +18,18 @@ import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.CommandBlocks;
 import frc.robot.commands.FollowPathCommandOurs;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.IntakeStatesCommand;
 import frc.robot.commands.PivotMagicCommand;
 import frc.robot.commands.PivotManualCommand;
 import frc.robot.commands.SetShooterCommand;
 import frc.robot.commands.TriggerCommand;
+import frc.robot.commands.TriggerStatesCommand;
 import frc.robot.commands.Autos;
 import frc.robot.BeamBreak;
 
+import javax.sound.sampled.CompoundControl;
+
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
@@ -52,7 +57,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -68,11 +72,11 @@ public class RobotContainer {
   private CommandBlocks compoundCommands; // TODO: Pick a better name
 
   // The robot's subsystems and commands are defined here...
-  private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem = 
-    new PoseEstimatorSubsystem();
+  private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem();
   final DriveSubsystem m_robotDrive = SubsystemConstants.useDrive ? new DriveSubsystem(m_PoseEstimatorSubsystem) : null;
-  private final LimelightSubsystem m_limelightSubsystem = SubsystemConstants.useLimelight ? 
-      new LimelightSubsystem(m_PoseEstimatorSubsystem) : null;
+  private final LimelightSubsystem m_limelightSubsystem = SubsystemConstants.useLimelight
+      ? new LimelightSubsystem(m_PoseEstimatorSubsystem)
+      : null;
 
   private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem() : null;
   private final IntakeSubsystem m_intakeSubsystem = SubsystemConstants.useIntake ? new IntakeSubsystem() : null;
@@ -83,7 +87,6 @@ public class RobotContainer {
   private final SendableChooser<String> m_chooseAutos;
 
   private Command compoundShooter;
-
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -104,63 +107,80 @@ public class RobotContainer {
               m_robotDrive));
     }
 
+    if (SubsystemConstants.useIntake && SubsystemConstants.useTrigger) {
+      m_intakeSubsystem.setDefaultCommand(
+          new IntakeStatesCommand(m_intakeSubsystem, m_triggerSubsystem.m_beamBreak));
+      m_triggerSubsystem.setDefaultCommand(
+          new TriggerStatesCommand(m_triggerSubsystem, m_triggerSubsystem.m_beamBreak));
+    }
+
     NamedCommands.registerCommand("runIntake", new ParallelCommandGroup(
         new IntakeCommand(m_intakeSubsystem),
-        new TriggerCommand(m_triggerSubsystem, false, m_intakeSubsystem).asProxy(), 
-        new StartEndCommand(() -> {m_shooterSubsystem.setShooter(-0.1, -0.1);}, m_shooterSubsystem::stopShooter)));
-    NamedCommands.registerCommand("stopIntake", m_intakeSubsystem.runOnce(() -> m_intakeSubsystem.runIntake(0,0)));
-    NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem));
-
+        new TriggerCommand(m_triggerSubsystem, false, m_intakeSubsystem).asProxy(),
+        new StartEndCommand(() -> {
+          m_shooterSubsystem.setShooter(-0.1, -0.1);
+        }, m_shooterSubsystem::stopShooter)));
+    NamedCommands.registerCommand("stopIntake", m_intakeSubsystem.runOnce(() -> m_intakeSubsystem.runIntake(0, 0)));
+    NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, null, null));
 
     m_chooseAutos = new SendableChooser<String>();
     m_chooseAutos.addOption("Center Down", "CenterDown");
     m_chooseAutos.addOption("Four Piece", "FourPiece");
     m_chooseAutos.addOption("Grand Theft Auto", "GrandTheftAuto");
     m_chooseAutos.addOption("Basic Amp", "BasicAmp");
-    m_chooseAutos.setDefaultOption("Intermediate Amp", "IntermediateAmp");
+    m_chooseAutos.addOption("Intermediate Amp", "IntermediateAmp");
+    m_chooseAutos.setDefaultOption("Do Nothing", "DoNothing");
+
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
 
     configureCommands();
-    compoundCommands = new CommandBlocks(m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem, m_pivotSubsystem);
+    compoundCommands = new CommandBlocks(m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
+        m_pivotSubsystem);
     configureBindings();
   }
 
   private void configureCommands() {
     compoundShooter = new ParallelCommandGroup(
-        new SetShooterCommand(m_shooterSubsystem).withInterruptBehavior(InterruptionBehavior.kCancelIncoming),
+        new SetShooterCommand(m_shooterSubsystem, null, null)
+            .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).asProxy(),
         new WaitUntilCommand(m_shooterSubsystem::atSpeed)
-          .andThen(new StartEndCommand(() -> m_triggerSubsystem.setTrigger(-0.2),m_triggerSubsystem::stopTrigger)).withTimeout(0.1)
-          .andThen(new TriggerCommand(m_triggerSubsystem, true, m_intakeSubsystem).withInterruptBehavior(InterruptionBehavior.kCancelIncoming)));
+            .andThen(new StartEndCommand(() -> m_triggerSubsystem.setTrigger(-0.2), m_triggerSubsystem::stopTrigger))
+            .withTimeout(0.1)
+            .andThen(new TriggerCommand(m_triggerSubsystem, true, m_intakeSubsystem)
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)));
   }
 
   private void configureBindings() {
 
     if (SubsystemConstants.useDrive) {
-      m_driveJoystick.button(OperatorConstants.resetYawButton).whileTrue(new InstantCommand(m_robotDrive::resetYaw)); // Flightstick button 11
+      m_driveJoystick.button(OperatorConstants.resetYawButton).whileTrue(new InstantCommand(m_robotDrive::resetYaw)); // Flightstick
+                                                                                                                      // button
+                                                                                                                      // 11
       Trigger fieldRelativeTrigger = OperatorConstants.useXbox
-        ? new Trigger(m_driveJoystick.axisGreaterThan(2, 0.1))
-        : new Trigger(m_driveJoystick.button(OperatorConstants.fieldRelativeButton));
-      fieldRelativeTrigger.onTrue(new InstantCommand(() -> m_robotDrive.setFieldRelative(false)));
-      fieldRelativeTrigger.onFalse(new InstantCommand(() -> m_robotDrive.setFieldRelative(true)));
-     // m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path")); 
-     // m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path Line"));
-     // m_driveJoystick.button(4).whileTrue(new RunCommand(()-> m_robotDrive.drivePointedTowardsAngle(m_driveJoystick, new Rotation2d(0))));
-      
-
-      
+          ? new Trigger(m_driveJoystick.axisGreaterThan(2, 0.1))
+          : new Trigger(m_driveJoystick.button(OperatorConstants.fieldRelativeButton));
+      // fieldRelativeTrigger.onTrue(new InstantCommand(() ->
+      // m_robotDrive.setFieldRelative(false)));
+      // fieldRelativeTrigger.onFalse(new InstantCommand(() ->
+      // m_robotDrive.setFieldRelative(true)));
+      // m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test
+      // Path"));
+      // m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test
+      // Path Line"));
+      // m_driveJoystick.button(4).whileTrue(new RunCommand(()->
+      // m_robotDrive.drivePointedTowardsAngle(m_driveJoystick, new Rotation2d(0))));
     }
 
     if (SubsystemConstants.useShooter) {
       m_opJoystick.axisGreaterThan(3, 0.1).whileTrue(
-        new SetShooterCommand(m_shooterSubsystem));
-      //TODO add trigger if statement
-      m_opJoystick.button(3).whileTrue(compoundShooter);
-      m_driveJoystick.button(OperatorConstants.yuckButton).onTrue(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(-0.2, 0)),
-       new InstantCommand(() -> m_triggerSubsystem.setTrigger(-0.2)))); //TODO make yuck button better
-      m_driveJoystick.button(OperatorConstants.yuckButton).onFalse(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(0, 0)),
-       new InstantCommand(() -> m_triggerSubsystem.setTrigger(0))));
+          new SetShooterCommand(m_shooterSubsystem, null, null));
+      // TODO add trigger if statement
+      m_opJoystick.button(3).whileTrue(compoundCommands.fireButtonHold());
+      m_opJoystick.button(6).whileTrue(
+          new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp, ShooterConstants.shooterSpeedAmp)
+              .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
+      m_driveJoystick.button(OperatorConstants.yuckButton).whileTrue(compoundCommands.yuckButtonHold());
     }
-
 
     if (SubsystemConstants.useClimber) {
       m_driveJoystick.button(OperatorConstants.climberButton).whileTrue(new ClimberCommand(m_climberSubsystem));
@@ -168,29 +188,66 @@ public class RobotContainer {
 
     if (SubsystemConstants.useIntake) {
       Trigger intakeTrigger = OperatorConstants.useXbox
-        ? new Trigger(m_driveJoystick.axisGreaterThan(3, 0.1))
-        : new Trigger(m_driveJoystick.button(OperatorConstants.intakeButton));
-      intakeTrigger.whileTrue(new ParallelCommandGroup(
-        new IntakeCommand(m_intakeSubsystem),
-        new TriggerCommand(m_triggerSubsystem, false, m_intakeSubsystem).asProxy(), // TODO: Restart if cancelled
-        new StartEndCommand(() -> {m_shooterSubsystem.setShooter(-0.1, -0.1);}, m_shooterSubsystem::stopShooter)
-        ));   
-      
+          ? new Trigger(m_driveJoystick.axisGreaterThan(3, 0.1))
+          : new Trigger(m_driveJoystick.button(OperatorConstants.intakeButton));
+      intakeTrigger.whileTrue(compoundCommands.intakeButtonHold());
     }
-    
-    if(SubsystemConstants.usePivot){
+
+    if (SubsystemConstants.usePivot) {
       m_opJoystick.povRight().whileTrue(new PivotManualCommand(m_pivotSubsystem, PivotConstants.manualSpeed));
       m_opJoystick.povLeft().whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
       m_opJoystick.button(7).onTrue(new InstantCommand(m_pivotSubsystem::togglePID));
       m_opJoystick.button(1).onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.43)));
-      m_opJoystick.button(2).onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.6))); //temporary
-      m_opJoystick.button(4).onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.385)));
+      m_opJoystick.button(2).whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.6)));
+      m_opJoystick.button(4).whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.385)));
+    }
+    if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
+      m_driveJoystick.button(OperatorConstants.drivePointedToSpeakerButton)
+          .whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick)); // Flightstick
+                                                                                                             // button 2
+      m_opJoystick.axisGreaterThan(2, 0.1).whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem)); // Flightstick
+                                                                                                                     // button
+                                                                                                                     // 2
+    }
+  }
 
+  // pulls beambreak every millisecond
+  public void fastBeamBreakCheckIntake() {
+    if (!SubsystemConstants.useIntake) {
+      return;
     }
-    if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight){
-      m_driveJoystick.button(OperatorConstants.drivePointedToSpeakerButton).whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick)); //Flightstick button 2
-      m_opJoystick.axisGreaterThan(2, 0.1).whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem)); //Flightstick button 2
+    if (m_intakeSubsystem.beambreakState
+        || (!m_intakeSubsystem.intakeFire && !m_intakeSubsystem.intakeOn && !m_intakeSubsystem.intakeYuck)) {
+      return;
     }
+    if (!m_triggerSubsystem.m_beamBreak.beamBroken()) {
+      return;
+    }
+    m_intakeSubsystem.beambreakState = true;
+    if (m_intakeSubsystem.intakeYuck || m_intakeSubsystem.intakeFire) {
+      return;
+    }
+    m_intakeSubsystem.m_motor.setControl(new NeutralOut());
+  }
+
+  public void fastBeamBreakCheckTrigger() {
+    if (!SubsystemConstants.useTrigger) {
+      return;
+    }
+    if (m_triggerSubsystem.beambreakState
+        || (!m_triggerSubsystem.triggerFire && !m_triggerSubsystem.triggerOn && !m_triggerSubsystem.triggerYuck)) {
+      return;
+    }
+    if (!m_triggerSubsystem.m_beamBreak.beamBroken()) {
+      return;
+    }
+    m_triggerSubsystem.beambreakState = true;
+    if (m_triggerSubsystem.triggerYuck || m_triggerSubsystem.triggerFire) {
+      return;
+    }
+    // NeutralOut neutral = new NeutralOut();
+    // neutral.UpdateFreqHz = 1000;
+    m_triggerSubsystem.m_triggerMotor.setControl(new NeutralOut());
   }
 
   /**
@@ -208,21 +265,24 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     if (m_chooseAutos.getSelected() == "CenterDown") {
       return Autos.CenterDown(compoundCommands, m_robotDrive, m_shooterSubsystem);
-    } 
+    }
     if (m_chooseAutos.getSelected() == "FourPiece") {
-      return Autos.FourPiece(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem, m_pivotSubsystem);
+      return Autos.FourPiece(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
+          m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "GrandTheftAuto") {
       return Autos.GrandTheftAuto(m_robotDrive);
-    } 
+    }
     if (m_chooseAutos.getSelected() == "BasicAmp") {
       return Autos.BasicAmp(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem);
     }
     if (m_chooseAutos.getSelected() == "IntermediateAmp") {
       return Autos.IntermediateAmp(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem);
     }
-    else {
-      return null;
+    if (m_chooseAutos.getSelected() == "DoNothing") {
+      return Autos.DoNothing();
+    } else {
+      return Autos.DoNothing();
     }
   }
 }

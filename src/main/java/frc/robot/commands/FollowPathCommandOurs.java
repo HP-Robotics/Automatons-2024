@@ -16,8 +16,9 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import frc.robot.Constants.DriveConstants;
-
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -71,8 +72,23 @@ public class FollowPathCommandOurs extends Command {
   @Override
   public void initialize() {
     m_drive.resetOdometry(m_path.getPreviewStartingHolonomicPose());
-    m_pathPlannerCommand.initialize();
 
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (ally.isPresent()) {
+      if (ally.get() == Alliance.Red) {
+        m_drive.resetOdometry(mirrorPose(m_path.getPreviewStartingHolonomicPose())); // TODO: only reset odometry once
+      }
+      if (ally.isPresent()) {
+        
+      }
+    }
+    m_pathPlannerCommand.initialize();
+  }
+
+  public Pose2d mirrorPose(Pose2d inputPose2d) {
+    Pose2d output = new Pose2d(54 * 12 * 0.0254 - inputPose2d.getX(), inputPose2d.getY(),
+        new Rotation2d(Math.PI).minus(inputPose2d.getRotation()));
+    return output;
   }
   // public Optional<Rotation2d> getRotationTargetOverride() {
   // // Some condition that should decide if we want to override rotation

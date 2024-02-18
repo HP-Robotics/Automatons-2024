@@ -127,10 +127,10 @@ public class DriveSubsystem extends SubsystemBase {
     driveTrainTable.putValue("Pigeon Roll", NetworkTableValue.makeDouble(m_pGyro.getRoll().getValue()));
     
     // m_poseEstimator.updatePoseEstimator(pigeonYaw,new SwerveModulePosition[] {
-    //     m_frontLeft.getPosition(),
-    //     m_frontRight.getPosition(),
-    //     m_backRight.getPosition(),
-    //     m_backLeft.getPosition()
+        // m_frontLeft.getPosition(),
+        // m_frontRight.getPosition(),
+        // m_backRight.getPosition(),
+        // m_backLeft.getPosition()
     //});
     
   }
@@ -165,12 +165,13 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void driveWithJoystick(CommandJoystick joystick) {
     drive(
-        /*Math.signum(joystick.getRawAxis(1))
-            * */Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(1),
+        Math.signum(joystick.getRawAxis(1))
+
+            * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(1),
                 OperatorConstants.driveJoystickDeadband), OperatorConstants.driveJoystickExponent)
             * -1 * DriveConstants.kMaxSpeed,
-       /*  Math.signum(joystick.getRawAxis(0))
-            * */ Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(0),
+         Math.signum(joystick.getRawAxis(0))
+            *  Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(0),
                 OperatorConstants.driveJoystickDeadband), OperatorConstants.driveJoystickExponent)
             * -1 * DriveConstants.kMaxSpeed,
         MathUtil.applyDeadband(OperatorConstants.getRotation(joystick), OperatorConstants.driveJoystickDeadband) * -1

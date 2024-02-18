@@ -34,13 +34,13 @@ public final class Constants {
 
     public static final int kOperatorControllerPort = 0;
     public static final int kDriverControllerPort = 1;
-    public static final double driveJoystickDeadband = useXbox ? 0.05 : 0.15;
-    public static final double turnJoystickDeadband = useXbox ? 0.05 : 0.1;
+    public static final double driveJoystickDeadband = useXbox ? 0.15 : 0.15;
+    public static final double turnJoystickDeadband = useXbox ? 0.1 : 0.1;
 
     public static final double driveJoystickExponent = useXbox ? 2 : 2;
 
     
-    public static final int resetYawButton = useXbox ? 8 : 11;
+    public static final int resetYawButton = useXbox ? 7 : 11;
     public static final int fieldRelativeButton = useXbox ? 8 : 8;
     public static final int yuckButton = useXbox ? 4 : 2;
     public static final int climberButton = useXbox ? 10 : 10;
@@ -71,6 +71,7 @@ public final class Constants {
     public static final boolean useLimelight = true;
     public static final boolean usePivot = true;
     public static final boolean useClimber = false; //TODO check if these work
+    public static final boolean useTrigger = true;
   }
 
   public static class DriveConstants {
@@ -157,8 +158,8 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final double intakeSpeed = -0.95;
-    public static final double vanguardSpeed = 0.2;
+    public static final double intakeSpeed = -0.45;
+    public static final double vanguardSpeed = -0.5;
   }
 
   public static class ShooterConstants {
@@ -183,6 +184,7 @@ public final class Constants {
 
   public static class TriggerConstants {
     public static final double triggerSpeed = 0.3;
+    public static final double yuckSpeed = -0.2;
 
     public static final double triggerkV = 0;
     public static final double triggerkP = 0;
@@ -192,10 +194,10 @@ public final class Constants {
   }
 
   public static class PivotConstants {
-    public static final double kP = 2;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
-    public static final double kG = 0.02;
+    public static final double kP = 3/2;//2
+    public static final double kI = 0.001;
+    public static final double kD = 0.08/2;
+    public static final double kG = -0.02;//0.02
     public static final boolean startWithPID = true;
     
     public static final double[] magicConstants = {0.0, -0.0219711, 0.437724};
