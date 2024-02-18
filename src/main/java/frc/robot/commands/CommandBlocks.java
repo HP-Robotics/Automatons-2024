@@ -50,4 +50,11 @@ public class CommandBlocks {
       new StartEndCommand(m_intakeSubsystem::fireButtonPressed, m_intakeSubsystem::fireButtonReleased)
     );
   }
+
+  public Command yuckButtonHold() {
+    return new ParallelCommandGroup(
+      new StartEndCommand(m_triggerSubsystem::yuckButtonPressed, m_triggerSubsystem::yuckButtonReleased), 
+      new StartEndCommand(m_intakeSubsystem::yuckButtonPressed, m_intakeSubsystem::yuckButtonReleased)
+    );
+  }
 }
