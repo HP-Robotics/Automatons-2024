@@ -186,8 +186,7 @@ public class RobotContainer {
       m_opJoystick.povLeft().whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
       m_opJoystick.button(7).onTrue(new InstantCommand(m_pivotSubsystem::togglePID));
       m_opJoystick.button(1).onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.43)));
-      m_opJoystick.button(2).whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.6))
-      .andThen(new StartEndCommand(() -> {m_shooterSubsystem.setShooter(0.15, 0.15);}, m_shooterSubsystem::stopShooter,m_shooterSubsystem)));
+      m_opJoystick.button(2).whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.6)));
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight){
       m_driveJoystick.button(OperatorConstants.drivePointedToSpeakerButton).whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick)); //Flightstick button 2
