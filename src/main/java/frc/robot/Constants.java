@@ -71,6 +71,7 @@ public final class Constants {
     public static final boolean useLimelight = true;
     public static final boolean usePivot = true;
     public static final boolean useClimber = false; //TODO check if these work
+    public static final boolean useTrigger = true;
   }
 
   public static class DriveConstants {
@@ -183,6 +184,7 @@ public final class Constants {
 
   public static class TriggerConstants {
     public static final double triggerSpeed = 0.3;
+    public static final double yuckSpeed = -0.2;
 
     public static final double triggerkV = 0;
     public static final double triggerkP = 0;

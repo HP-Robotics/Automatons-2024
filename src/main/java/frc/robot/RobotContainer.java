@@ -18,12 +18,16 @@ import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.CommandBlocks;
 import frc.robot.commands.FollowPathCommandOurs;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.IntakeStatesCommand;
 import frc.robot.commands.PivotMagicCommand;
 import frc.robot.commands.PivotManualCommand;
 import frc.robot.commands.SetShooterCommand;
 import frc.robot.commands.TriggerCommand;
+import frc.robot.commands.TriggerStatesCommand;
 import frc.robot.commands.Autos;
 import frc.robot.BeamBreak;
+
+import javax.sound.sampled.CompoundControl;
 
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -105,6 +109,15 @@ public class RobotContainer {
               m_robotDrive));
     }
 
+    if (SubsystemConstants.useIntake && SubsystemConstants.useTrigger) {
+      m_intakeSubsystem.setDefaultCommand(
+        new IntakeStatesCommand(m_intakeSubsystem, m_triggerSubsystem.m_beamBreak)
+      );
+      m_triggerSubsystem.setDefaultCommand(
+        new TriggerStatesCommand(m_triggerSubsystem, m_triggerSubsystem.m_beamBreak)
+      );
+    }
+
     NamedCommands.registerCommand("runIntake", new ParallelCommandGroup(
         new IntakeCommand(m_intakeSubsystem),
         new TriggerCommand(m_triggerSubsystem, false, m_intakeSubsystem).asProxy(), 
@@ -148,16 +161,13 @@ public class RobotContainer {
      // m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path")); 
      // m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test Path Line"));
      // m_driveJoystick.button(4).whileTrue(new RunCommand(()-> m_robotDrive.drivePointedTowardsAngle(m_driveJoystick, new Rotation2d(0))));
-      
-
-      
     }
 
     if (SubsystemConstants.useShooter) {
       m_opJoystick.axisGreaterThan(3, 0.1).whileTrue(
         new SetShooterCommand(m_shooterSubsystem));
       //TODO add trigger if statement
-      m_opJoystick.button(3).whileTrue(compoundShooter);
+      m_opJoystick.button(3).whileTrue(compoundCommands.fireButtonHold());
       m_driveJoystick.button(OperatorConstants.yuckButton).onTrue(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(-0.2, -IntakeConstants.vanguardSpeed)),
        new InstantCommand(() -> m_triggerSubsystem.setTrigger(-0.2)))); //TODO make yuck button better
       m_driveJoystick.button(OperatorConstants.yuckButton).onFalse(new ParallelCommandGroup(new InstantCommand(()-> m_intakeSubsystem.runIntake(0,0)),
@@ -173,12 +183,7 @@ public class RobotContainer {
       Trigger intakeTrigger = OperatorConstants.useXbox
         ? new Trigger(m_driveJoystick.axisGreaterThan(3, 0.1))
         : new Trigger(m_driveJoystick.button(OperatorConstants.intakeButton));
-      intakeTrigger.whileTrue(new ParallelCommandGroup(
-        new IntakeCommand(m_intakeSubsystem),
-        new TriggerCommand(m_triggerSubsystem, false, m_intakeSubsystem).asProxy(), // TODO: Restart if cancelled
-        new StartEndCommand(() -> {m_shooterSubsystem.setShooter(-0.1, -0.1);}, m_shooterSubsystem::stopShooter)
-        ));   
-      
+      intakeTrigger.whileTrue(compoundCommands.intakeButtonHold());
     }
     
     if(SubsystemConstants.usePivot){
@@ -196,7 +201,7 @@ public class RobotContainer {
   }
 
   //pulls beambreak every millisecond
-  public void fastBeambreakCheck () {
+  public void fastBeamBreakCheckIntake () {
     if (!SubsystemConstants.useIntake) {
       return;
     }
@@ -213,6 +218,24 @@ public class RobotContainer {
     m_intakeSubsystem.m_motor.setControl(new NeutralOut());
   }
 
+  public void fastBeamBreakCheckTrigger () {
+    if (!SubsystemConstants.useTrigger) {
+      return;
+    }
+    if (m_triggerSubsystem.beambreakState || (!m_triggerSubsystem.triggerFire && !m_triggerSubsystem.triggerOn && !m_triggerSubsystem.triggerYuck)) {
+      return;
+    }
+    if (!m_triggerSubsystem.m_beamBreak.beamBroken()) {
+      return;  
+    }
+    m_triggerSubsystem.beambreakState = true;
+    if (m_triggerSubsystem.triggerYuck || m_triggerSubsystem.triggerFire){
+      return;
+    }
+    // NeutralOut neutral = new NeutralOut();
+    // neutral.UpdateFreqHz = 1000;
+    m_triggerSubsystem.m_triggerMotor.setControl(new NeutralOut());
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
