@@ -13,18 +13,16 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
-import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.SignalLogger;
-import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.SubsystemConstants;
 
 public class SwerveModule {
 
@@ -52,8 +50,6 @@ public class SwerveModule {
       int driveMotorChannel,
       int turningMotorChannel, int absEncoder, double absEncoderForward, String name) {
     m_driveMotor = new TalonFX(driveMotorChannel, "CANivore");
-    // m_driveMotor.getClosedLoopDerivativeOutput().setUpdateFrequency(50);
-    // m_driveMotor.getClosedLoopIntegratedOutput().setUpdateFrequency(50);
     var slot0Configs = new Slot0Configs();
     slot0Configs.kV = DriveConstants.drivekF;
     slot0Configs.kP = DriveConstants.drivekP;
@@ -64,7 +60,9 @@ public class SwerveModule {
     m_driveMotor.setNeutralMode(NeutralModeValue.Coast);
     
     // BaseStatusSignal.setUpdateFrequencyForAll(50,m_driveMotor.getClosedLoopError(), m_driveMotor.getClosedLoopDerivativeOutput(),m_driveMotor.getClosedLoopIntegratedOutput(),m_driveMotor.getClosedLoopProportionalOutput(),m_driveMotor.getClosedLoopFeedForward());
-    SignalLogger.start();
+    if (SubsystemConstants.useDataManager) {
+      SignalLogger.start();
+    }
     
 
     
@@ -84,12 +82,6 @@ public class SwerveModule {
     m_turningOffset = 0.0;
     m_absEncoderForward = absEncoderForward;
     m_name = name;
-
-    m_turningMotor.getClosedLoopDerivativeOutput().setUpdateFrequency(50);
-    m_turningMotor.getClosedLoopIntegratedOutput().setUpdateFrequency(50);
-    m_turningMotor.getClosedLoopProportionalOutput().setUpdateFrequency(50);
-    m_turningMotor.getClosedLoopFeedForward().setUpdateFrequency(50);
-
   }
 
   public void resetOffset() {
@@ -103,8 +95,6 @@ public class SwerveModule {
   }
 
   public double radiansToTicks(double radians) {
-    // drive ratio: 6.75:1
-    // rotation ratio: 15.429:1
     return radians * ((DriveConstants.kEncoderResolution * DriveConstants.turningGearRatio) / (2 * Math.PI));
   }
 
@@ -186,7 +176,6 @@ public class SwerveModule {
     driveTrainTable.putValue(m_name + " Abs Encoder", NetworkTableValue.makeDouble(m_absEncoder.getAbsolutePosition()));
    
     driveTrainTable.putValue(m_name + " Turning kD Proportion", NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopDerivativeOutput().getValue()));
-    m_turningMotor.getClosedLoopProportionalOutput().refresh();
     driveTrainTable.putValue(m_name + " Turning kP Proportion", NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopProportionalOutput().getValue()));
     driveTrainTable.putValue(m_name + " Turning kI Proportion", NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopIntegratedOutput().getValue()));
     driveTrainTable.putValue(m_name + " Turning kF Proportion", NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopFeedForward().getValue()));
@@ -196,8 +185,6 @@ public class SwerveModule {
     driveTrainTable.putValue(m_name + " Driving kP Proportion", NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopProportionalOutput().getValue()));
     driveTrainTable.putValue(m_name + " Driving kI Proportion", NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopIntegratedOutput().getValue()));
     driveTrainTable.putValue(m_name + " Driving kF Proportion", NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopFeedForward().getValue()));
-
   }
-
 }
 

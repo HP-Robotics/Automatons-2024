@@ -4,14 +4,18 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide
+ /* The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
  * constants. This class should not be used for any other purpose. All constants
  * should be declared
@@ -25,28 +29,56 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public final class Constants {
 
-  public static class OperatorConstants {
+  public static class OperatorConstants { // TODO: Rename this (This name sucks)
+    public static final boolean useXbox = true;
+
     public static final int kOperatorControllerPort = 0;
     public static final int kDriverControllerPort = 1;
-    public static final double driveJoystickDeadband = 0.15;
-    public static final double turnJoystickDeadband = 0.1;
+    public static final double driveJoystickDeadband = useXbox ? 0.15 : 0.15;
+    public static final double turnJoystickDeadband = useXbox ? 0.1 : 0.1;
 
+    public static final double driveJoystickExponent = useXbox ? 2 : 2;
+
+    
+    public static final int resetYawButton = useXbox ? 7 : 11;
+    public static final int fieldRelativeButton = useXbox ? 8 : 8;
+    public static final int yuckButton = useXbox ? 4 : 2;
+    public static final int climberButton = useXbox ? 10 : 10;
+    public static final int intakeButton = useXbox ? 0 : 1; 
+    public static final int drivePointedToSpeakerButton = useXbox ? 5 : 0;
+    public static double getRotation(CommandJoystick stick){
+      if(useXbox){
+        return stick.getRawAxis(4);
+      }
+      else {
+        return stick.getRawAxis(2);
+        // if (stick.povLeft().getAsBoolean()) {
+        // return -0.5;
+        // }
+        // else if (stick.povRight().getAsBoolean()) {
+        //   return 0.5;
+        // }
+        // return 0;
+      }
+    }
   }
 
   public static class SubsystemConstants {
     public static final boolean useDrive = true;
-    public static final boolean useIntake = false;
-    public static final boolean useShooter = false;
-    public static final boolean useDataManger = true;
-    public static final boolean useLimelight = false;
-    public static final boolean usePivot = false;
+    public static final boolean useIntake = true;
+    public static final boolean useShooter = true;
+    public static final boolean useDataManager = true;
+    public static final boolean useLimelight = true;
+    public static final boolean usePivot = true;
+    public static final boolean useClimber = false; //TODO check if these work
+    public static final boolean useTrigger = true;
   }
 
   public static class DriveConstants {
     public static final double kMaxSpeed = 4.0; // meters per second
-    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second // TODO MENTOR: is this a good turn speed?
+    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second 
     public static final double kSlowSpeed = 2.0;
-    public static final double kSlowAngularspeed = Math.PI / 2; // 1/4 rotation per second // TODO MENTOR: is this a good turn speed?
+    public static final double kSlowAngularspeed = Math.PI / 2; // 1/4 rotation per second 
 
     public static final double kWheelRadius = 0.0508 * (218.5 / 225.6); // This is a fudge factor
     public static final double kEncoderResolution = 1.0;
@@ -54,59 +86,52 @@ public final class Constants {
     public static final double driveGearRatio = 6.75;
     public static final double turningGearRatio = 15.429;
 
-    public final static Translation2d kFrontLeftLocation = new Translation2d(0.308, 0.308);
-    public final static Translation2d kFrontRightLocation = new Translation2d(0.308, -0.308);
-    public final static Translation2d kBackLeftLocation = new Translation2d(-0.308, 0.308);
-    public final static Translation2d kBackRightLocation = new Translation2d(-0.308, -0.308);
+    public static final Translation2d kFrontLeftLocation = new Translation2d(0.308-0.038, 0.308);
+    public static final Translation2d kFrontRightLocation = new Translation2d(0.308-0.038, -0.308);
+    public static final Translation2d kBackLeftLocation = new Translation2d(-0.308, 0.308);
+    public static final Translation2d kBackRightLocation = new Translation2d(-0.308, -0.308);
 
-    public final static int FLAbsEncoder = 14;
-    public final static int FRAbsEncoder = 12;
-    public final static int BRAbsEncoder = 11;
-    public final static int BLAbsEncoder = 13;
-
-    public final static SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         kFrontLeftLocation, kFrontRightLocation, kBackRightLocation, kBackLeftLocation);
 
-    public static final double drivekP = 5; // old value: 0.0015
-    public static final double drivekI = 10;//.02001955034213099; // old value: 0.0001
-    public static final double drivekD = 0;//.00010009775171065493; // old value: 0.5
-    public static final double drivekF = 0;//.009609384164222873; // old value: 0.048
-    public static final double drivekAllowableError = 50;
-    public static final double drivekMaxIntegralAccumulation = 20000; // TODO: a guess, finetune later
-    public static final double drivekIntegralZone = 300; // TODO: a guess, finetune later
+    public static final double drivekP = 5;
+    public static final double drivekI = 10;
+    public static final double drivekD = 0;
+    public static final double drivekF = 0;
 
     public static final double turningkP = 1.8;
     public static final double turningkI = 1;
     public static final double turningkD = 0.008;
-    public static final double turningkAllowableError = 50.0 / 2048;
 
     public static final double turningControllerkP = 1;
     public static final double turningControllerkI = 0.0;
     public static final double turningControllerkD = 0.0;
     
-
-    public static final double encoderTolerance = 0.01;
-
     // Absolute encoder values that make the wheels point forward
     public static final double absEncoderForwardFL = 0.98;
     public static final double absEncoderForwardFR = 0.708;
-    public static final double absEncoderForwardBR = 0.74; // TODO Fill in later (not precise) >: (
+    public static final double absEncoderForwardBR = 0.74;
     public static final double absEncoderForwardBL = 0.55;
 
-
+    public static final HolonomicPathFollowerConfig holonomicConfig = new HolonomicPathFollowerConfig( 
+            new PIDConstants(5.0, 0.0, 0.0), 
+            new PIDConstants(5.0, 0.0, 0.0), 
+            4.5,
+            0.4, // Distance from robot center to furthest module.
+            new ReplanningConfig()
+        );
   }
 
   public static final class LimelightConstants {
-    public static final Pose2d aprilTag7 = new Pose2d(-1.5 * 0.0254, 218.42 * 0.0254, new Rotation2d(0));
-
+    public static final double inToM = 0.0254;
+    public static final Pose2d aprilTag7 = new Pose2d(-1.5 * inToM, 218.42 * inToM, new Rotation2d(0));
+    public static final Pose2d aprilTag4 = new Pose2d(652.73 * inToM, 218.42 * inToM, new Rotation2d(Math.PI));
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 5.0;
+    public static final double kMaxSpeedMetersPerSecond = 5.0; // TODO look at these
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-    public static final double kMaxChargeStationVelocity = 2.5;
-    public static final double kMaxChargeStationAcceleration = 2;
     public static final double kFastAutoVelocity = 4.5;
     public static final double kfastAutoAcceleration = 3.0;
     public static final double kMaxAutoVelocity = 3;
@@ -122,6 +147,9 @@ public final class Constants {
     public static final double kPThetaController = 3;
     public static final double kIThetaController = 0.05;
 
+    public static final double additionalIntakeTime = 0.5;
+    public static final double additionalShootTime = 0.3;
+
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
@@ -130,58 +158,99 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-
-    public static final double intakeSpeed = -0.95;
+    public static final double intakeSpeed = -0.45;
+    public static final double vanguardSpeed = -0.5;
   }
 
   public static class ShooterConstants {
 
-    public static final double shooterSpeed1 = 0;
-    public static final double shooterSpeed2 = 0;
+    public static final double shooterSpeedFront = 50; // TODO: Is this correct? 50
+    public static final double shooterSpeedBack = 50; //50
+    public static final double shooterSpeedAmp = 15; 
+    
 
-    public static final double motor1kP = 0.4;
-    public static final double motor1kI = 0.01;
-    public static final double motor1kD = 0;
-    public static final double motor1kV = 0.12;
+    public static final double shooterMotorskP = 0.4;
+    public static final double shooterMotorskI = 0.01;
+    public static final double shooterMotorskD = 0;
+    public static final double shooterMotorskV = 0.12;
 
-  }
+    public static final double errorThreshold = 1.0;
 
-  public static class IDConstants {
-    public final static int FLDriveMotorID = 28;
-    public final static int FRDriveMotorID = 22;
-     public final static int BRDriveMotorID = 20;
-    public final static int BLDriveMotorID = 24;
-
-    public final static int FLTurningMotorID = 29;
-    public final static int FRTurningMotorID = 23;
-    public final static int BRTurningMotorID = 21;
-    public final static int BLTurningMotorID = 25;
-
-    public static final int intakeMotorID = 4;
-
-    public static final int shooterMotor1ID = 2;
-    public static final int shooterMotor2ID = 1;
-
-    public final static int PigeonID = 57;
-
-    public final static int pivotAbsEncoderID = 0;
-    public final static int climbMotorID = 9; //TODO choose ID number
   }
 
   public static class ClimberConstants {
-    public final static double climbSpeed = 0.4;
+    public static final double climbSpeed = 0.4;
   }
 
+  public static class TriggerConstants {
+    public static final double triggerSpeed = 0.3;
+    public static final double yuckSpeed = -0.2;
+
+    public static final double triggerkV = 0;
+    public static final double triggerkP = 0;
+    public static final double triggerkI = 0;
+    public static final double triggerkD = 0;
+
+  }
 
   public static class PivotConstants {
-    public static final double kP = 0.0;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
+    public static final double kP = 3/2;//2
+    public static final double kI = 0.001;
+    public static final double kD = 0.08/2;
+    public static final double kG = -0.02;//0.02
+    public static final boolean startWithPID = true;
+    
+    public static final double[] magicConstants = {0.0, -0.0219711, 0.437724};
 
-    public static final int motorRID = 0;
-    public static final int motorLID = 0;
-
-    public static final double manualSpeed = 0.2;
+    public static final double manualSpeed = 0.1;
     public static final double position1 = 0.0;
+
+    public static final double setpointChangeSpeed = 0.44;
+    public static final double encoderAt90 = 0.51;
   }
+
+  public static class IDConstants {
+    //Drive is 20s
+    public static final int FLDriveMotorID = 28;
+    public static final int FRDriveMotorID = 22;
+    public static final int BRDriveMotorID = 20;
+    public static final int BLDriveMotorID = 24;
+
+    public static final int FLTurningMotorID = 29;
+    public static final int FRTurningMotorID = 23;
+    public static final int BRTurningMotorID = 21;
+    public static final int BLTurningMotorID = 25;
+
+    //Intake is 10s
+    public static final int intakeMotorID = 10;
+    public static final int vanguardLeftID = 11;
+    public static final int vanguardRightID = 12;
+
+    //Shooter is 30s
+    public static final int frontMotorID = 30;
+    public static final int backMotorID = 31;
+    public static final int triggerMotorID = 32;
+
+    //Pivot is 40s
+    public static final int rightPivotID = 40;
+    public static final int leftPivotID = 41;
+
+    //Climber is 50s
+    public static final int climbMotorID = 50;
+    
+    public static final int PigeonID = 57;
+  }
+
+  public static class PortConstants {
+    public static final int FLAbsEncoder = 14;
+    public static final int FRAbsEncoder = 12;
+    public static final int BRAbsEncoder = 11;
+    public static final int BLAbsEncoder = 13;
+    
+    public static final int pivotAbsEncoderID = 8;
+
+    public static final int TriggerBeamBreak = 9; // Beam Break port
+    public static final int IntakeBeamBreak = 7;
+  }
+    
 }

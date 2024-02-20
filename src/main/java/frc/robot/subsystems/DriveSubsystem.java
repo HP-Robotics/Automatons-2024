@@ -21,9 +21,9 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants.*;
@@ -33,44 +33,40 @@ import frc.robot.SwerveModule;
 public class DriveSubsystem extends SubsystemBase {
   // BIG BONGO 7
   private final SwerveModule m_frontLeft = new SwerveModule(IDConstants.FLDriveMotorID,
-      IDConstants.FLTurningMotorID, DriveConstants.FLAbsEncoder, DriveConstants.absEncoderForwardFL, "FL");
+      IDConstants.FLTurningMotorID, PortConstants.FLAbsEncoder, DriveConstants.absEncoderForwardFL, "FL");
   // BIG BONGO 2
   private final SwerveModule m_frontRight = new SwerveModule(IDConstants.FRDriveMotorID,
-      IDConstants.FRTurningMotorID, DriveConstants.FRAbsEncoder, DriveConstants.absEncoderForwardFR, "FR");
+      IDConstants.FRTurningMotorID, PortConstants.FRAbsEncoder, DriveConstants.absEncoderForwardFR, "FR");
   // BIG BONGO 1
   private final SwerveModule m_backRight = new SwerveModule(IDConstants.BRDriveMotorID,
-      IDConstants.BRTurningMotorID, DriveConstants.BRAbsEncoder, DriveConstants.absEncoderForwardBR, "BR");
+      IDConstants.BRTurningMotorID, PortConstants.BRAbsEncoder, DriveConstants.absEncoderForwardBR, "BR");
   // BIG BONGO 3
   private final SwerveModule m_backLeft = new SwerveModule(IDConstants.BLDriveMotorID,
-      IDConstants.BLTurningMotorID, DriveConstants.BLAbsEncoder, DriveConstants.absEncoderForwardBL, "BL");
+      IDConstants.BLTurningMotorID, PortConstants.BLAbsEncoder, DriveConstants.absEncoderForwardBL, "BL");
 
   private SwerveModuleState[] m_swerveModuleStates = {
       new SwerveModuleState(), new SwerveModuleState(), new SwerveModuleState(), new SwerveModuleState()
   };
 
   public boolean m_fieldRelative = true;
-  public boolean m_allowVisionUpdates = false;
 
   public final Field2d m_field = new Field2d();
   public final Field2d m_currentPose = new Field2d();
   public final Field2d m_targetPose = new Field2d();
 
-  // Duty Encoders may have the wrong values
-
   private final Pigeon2 m_pGyro = new Pigeon2(IDConstants.PigeonID, "CANivore");
 
   SwerveDriveOdometry m_odometry;
   PIDController rotationController;
+  PoseEstimatorSubsystem m_poseEstimator;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable limelightTable = inst.getTable("limelight-prada");
   NetworkTable driveTrainTable = inst.getTable("drive-train");
-  NetworkTable pipeline = inst.getTable("SmartDashboard");
-  NetworkTableEntry gamePieceX = limelightTable.getEntry("tx");
+  NetworkTable poseEstimatorTable = inst.getTable("pose-estimator-table");
+  StructPublisher<Pose2d> drivePublisher;
 
-  public int m_gamePieceSightCounter = 0;
-
-  public DriveSubsystem() {
+  public DriveSubsystem(PoseEstimatorSubsystem poseEstimator) {
+    m_poseEstimator = poseEstimator;
     m_pGyro.setYaw(0);
     var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
     m_odometry = new SwerveDriveOdometry(
@@ -84,7 +80,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         });
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-      m_currentPose.setRobotPose(pose);
+      m_currentPose.setRobotPose(pose); // TODO: not working, AdvantageScope might say how to fix
     });
     PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
       m_targetPose.setRobotPose(pose);
@@ -92,8 +88,11 @@ public class DriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putData("Field", m_field);
     rotationController = new PIDController(DriveConstants.turningControllerkP, DriveConstants.turningControllerkI,
-        DriveConstants.turningControllerkD); //TODO: Needs basic tuning
+        DriveConstants.turningControllerkD);
     rotationController.enableContinuousInput(-Math.PI, Math.PI);
+
+    drivePublisher = poseEstimatorTable.getStructTopic("Drive Pose", Pose2d.struct).publish();
+
   }
 
   @Override
@@ -110,24 +109,30 @@ public class DriveSubsystem extends SubsystemBase {
         });
 
     m_field.setRobotPose(getPose());
+    drivePublisher.set(getPose());
     driveTrainTable.putValue("Robot x", NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getX()));
     driveTrainTable.putValue("Robot y", NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getY()));
     driveTrainTable.putValue("Robot theta",
         NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getRotation().getDegrees()));
 
-    m_frontLeft.updateShuffleboard();
-    m_frontRight.updateShuffleboard();
-    m_backRight.updateShuffleboard();
-    m_backLeft.updateShuffleboard();
+
+        //TODO investigate why this takes so long
+    // m_frontLeft.updateShuffleboard();
+    // m_frontRight.updateShuffleboard();
+    // m_backRight.updateShuffleboard();
+    // m_backLeft.updateShuffleboard();
 
     driveTrainTable.putValue("Pigeon Pitch", NetworkTableValue.makeDouble(m_pGyro.getPitch().getValue()));
     driveTrainTable.putValue("Pigeon Yaw", NetworkTableValue.makeDouble(m_pGyro.getYaw().getValue()));
     driveTrainTable.putValue("Pigeon Roll", NetworkTableValue.makeDouble(m_pGyro.getRoll().getValue()));
-
-
-
-    m_field.setRobotPose(m_odometry.getPoseMeters());
-
+    
+    // m_poseEstimator.updatePoseEstimator(pigeonYaw,new SwerveModulePosition[] {
+        // m_frontLeft.getPosition(),
+        // m_frontRight.getPosition(),
+        // m_backRight.getPosition(),
+        // m_backLeft.getPosition()
+    //});
+    
   }
 
   /**
@@ -161,20 +166,21 @@ public class DriveSubsystem extends SubsystemBase {
   public void driveWithJoystick(CommandJoystick joystick) {
     drive(
         Math.signum(joystick.getRawAxis(1))
+
             * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(1),
-                OperatorConstants.driveJoystickDeadband), 2)
+                OperatorConstants.driveJoystickDeadband), OperatorConstants.driveJoystickExponent)
             * -1 * DriveConstants.kMaxSpeed,
-        Math.signum(joystick.getRawAxis(0))
-            * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(0),
-                OperatorConstants.driveJoystickDeadband), 2)
+         Math.signum(joystick.getRawAxis(0))
+            *  Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(0),
+                OperatorConstants.driveJoystickDeadband), OperatorConstants.driveJoystickExponent)
             * -1 * DriveConstants.kMaxSpeed,
-        MathUtil.applyDeadband(joystick.getRawAxis(4), OperatorConstants.driveJoystickDeadband) * -1
+        MathUtil.applyDeadband(OperatorConstants.getRotation(joystick), OperatorConstants.driveJoystickDeadband) * -1
             * DriveConstants.kMaxAngularSpeed,
         m_fieldRelative);
   }
 
   public void drivePointedTowardsAngle(CommandJoystick joystick, Rotation2d targetAngle) {
-    double rot = rotationController.calculate(getPoseRot().getRadians(), targetAngle.getRadians());
+    double rot = rotationController.calculate(m_odometry.getPoseMeters().getRotation().getRadians(), targetAngle.getRadians());
     drive(
         Math.signum(joystick.getRawAxis(1))
             * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(1),
@@ -183,47 +189,28 @@ public class DriveSubsystem extends SubsystemBase {
         Math.signum(joystick.getRawAxis(0))
             * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(0),
                 OperatorConstants.driveJoystickDeadband), 2)
-            * -1 * DriveConstants.kMaxSpeed, 
+            * -1 * DriveConstants.kMaxSpeed,
         rot * 1 * DriveConstants.kMaxAngularSpeed,
         true);
 
-    driveTrainTable.putValue("Rotation Current Angle", NetworkTableValue.makeDouble(getPoseRot().getDegrees()));
+    driveTrainTable.putValue("Rotation Current Angle", NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getRotation().getDegrees()));
     driveTrainTable.putValue("Rotation Target Angle", NetworkTableValue.makeDouble(targetAngle.getDegrees()));
     driveTrainTable.putValue("Rotation Power Input", NetworkTableValue.makeDouble(rot));
-    
-    driveTrainTable.putValue("Rotation Controller P", NetworkTableValue.makeDouble(rotationController.getP()*rotationController.getPositionError()));
-    //driveTrainTable.putValue("Rotation Controller I", NetworkTableValue.makeDouble(rotationController.getI()*rotationController.));
-    //driveTrainTable.putValue("Rotation Controller D", NetworkTableValue.makeDouble(rotationController.));
 
-    driveTrainTable.putValue("Rotation Controller Position Error", NetworkTableValue.makeDouble(rotationController.getPositionError()));
-    driveTrainTable.putValue("Rotation Controller Setpoint", NetworkTableValue.makeDouble(rotationController.getSetpoint()));
+    driveTrainTable.putValue("Rotation Controller P",
+        NetworkTableValue.makeDouble(rotationController.getP() * rotationController.getPositionError()));
+    driveTrainTable.putValue("Rotation Controller Position Error",
+        NetworkTableValue.makeDouble(rotationController.getPositionError()));
+    driveTrainTable.putValue("Rotation Controller Setpoint",
+        NetworkTableValue.makeDouble(rotationController.getSetpoint()));
   }
 
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
 
-  public Rotation2d pointToAngle(double x, double y){
-    System.out.println("X: " + getPoseX());
-    System.out.println("Y: " + getPoseY());
-    System.out.println(Math.atan2(x-getPoseX(),y-getPoseY()));
-    return new Rotation2d(Math.atan2(x-getPoseX(),y-getPoseY()));
-  }
-
   public ChassisSpeeds getCurrentspeeds() {
     return DriveConstants.kDriveKinematics.toChassisSpeeds(m_swerveModuleStates);
-  }
-
-  public double getPoseX() {
-    return m_odometry.getPoseMeters().getX();
-  }
-
-  public double getPoseY() {
-    return getPose().getY();
-  }
-
-  public Rotation2d getPoseRot() {
-    return m_odometry.getPoseMeters().getRotation();
   }
 
   public void setModuleStates(SwerveModuleState[] swerveModuleStates) {
@@ -232,18 +219,24 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backRight.setDesiredState(swerveModuleStates[2]);
     m_backLeft.setDesiredState(swerveModuleStates[3]);
+  }
+
+  public void setFieldRelative(boolean isTrue) {
+    m_fieldRelative = isTrue;
+  }
+
+  public void initializePoseEstimator(Pose2d pose) {
+    m_poseEstimator.createPoseEstimator(DriveConstants.kDriveKinematics,
+        new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue())), new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_backRight.getPosition(),
+            m_backLeft.getPosition()
+        }, pose);
 
   }
 
-  public void forceRobotRelative() {
-    m_fieldRelative = false;
-  }
-
-  public void forceFieldRelative() {
-    m_fieldRelative = true;
-  }
-
-  public void resetOffsets() {
+  public void resetOffsets() { // Turn encoder offset
     m_frontLeft.resetOffset();
     m_frontRight.resetOffset();
     m_backRight.resetOffset();
@@ -256,7 +249,6 @@ public class DriveSubsystem extends SubsystemBase {
     }
     var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
     m_odometry.resetPosition(
-
         pigeonYaw,
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
@@ -265,6 +257,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_backLeft.getPosition()
         },
         pose);
+    setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds()));
   }
 
   /**
@@ -273,5 +266,4 @@ public class DriveSubsystem extends SubsystemBase {
   public void resetYaw() {
     m_pGyro.setYaw(0);
   }
-
 }

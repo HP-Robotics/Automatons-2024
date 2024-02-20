@@ -4,24 +4,36 @@
 
 package frc.robot.commands;
 
+import java.util.Optional;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.FollowPathHolonomic;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class FollowPathCommand extends Command {
+public class FollowPathCommandOurs extends Command {
   DriveSubsystem m_drive;
   String m_pathName;
   PathPlannerPath m_path;
-  
 
-  public Command m_pathPlannerCommand;
+  public FollowPathCommand m_pathPlannerCommand;
+  public PPHolonomicDriveController m_HolonomicDriveController;
 
-  public FollowPathCommand(DriveSubsystem Drive, String PathName) {
+  public FollowPathCommandOurs(DriveSubsystem Drive, String PathName) {
     m_drive = Drive;
     m_pathName = PathName;
 
@@ -31,25 +43,25 @@ public class FollowPathCommand extends Command {
   }
 
   /** Creates a new PathCommand. */
-  public Command PathCommand() {
+  public FollowPathCommand PathCommand() {
 
     return new FollowPathHolonomic(
         m_path,
-        m_drive::getPose, // Robot pose supplier
-        m_drive::getCurrentspeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        m_drive::getPose,
+        m_drive::getCurrentspeeds, // MUST BE ROBOT RELATIVE
         m_drive::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-            new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-            4.5, // Max module speed, in m/s
-            0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-            new ReplanningConfig() // Default path replanning config. See the API for the options here
-        ),
+        DriveConstants.holonomicConfig,
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red
           // alliance
           // This will flip the path being followed to the red side of the field.
           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          if (DriverStation.getAlliance().isPresent()) {
+            if (DriverStation.getAlliance().get() == Alliance.Red) {
+              return true;
+            }    
+          }
           return false;
         },
         m_drive // Reference to this subsystem to set requirements
@@ -60,8 +72,36 @@ public class FollowPathCommand extends Command {
   @Override
   public void initialize() {
     m_drive.resetOdometry(m_path.getPreviewStartingHolonomicPose());
+
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (ally.isPresent()) {
+      if (ally.get() == Alliance.Red) {
+        m_drive.resetOdometry(mirrorPose(m_path.getPreviewStartingHolonomicPose())); // TODO: only reset odometry once
+      }
+      if (ally.isPresent()) {
+        
+      }
+    }
     m_pathPlannerCommand.initialize();
   }
+
+  public Pose2d mirrorPose(Pose2d inputPose2d) {
+    Pose2d output = new Pose2d(54 * 12 * 0.0254 - inputPose2d.getX(), inputPose2d.getY(),
+        new Rotation2d(Math.PI).minus(inputPose2d.getRotation()));
+    return output;
+  }
+  // public Optional<Rotation2d> getRotationTargetOverride() {
+  // // Some condition that should decide if we want to override rotation
+  // if(Limelight.hasGamePieceTarget()) {
+  // // Return an optional containing the rotation override (this should be a
+  // field relative rotation)
+  // return Optional.of(Limelight.getRobotToGamePieceRotation());
+  // } else {
+  // // return an empty optional when we don't want to override the path's
+  // rotation
+  // return Optional.empty();
+  // }
+  // }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

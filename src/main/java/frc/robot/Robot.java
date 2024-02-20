@@ -4,9 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.LimelightConstants;
+import frc.robot.Constants.SubsystemConstants;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -28,6 +34,9 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    //addPeriodic(()->{}, 0.001);
+      addPeriodic(() -> {m_robotContainer.fastBeamBreakCheckIntake();
+     m_robotContainer.fastBeamBreakCheckTrigger();}, 0.001);
   }
 
   /**
@@ -72,8 +81,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     m_robotContainer.resetDriveOffsets();
-    
-    // This makes sure that the autonomous stops running when
+    if(SubsystemConstants.useDrive) {
+      m_robotContainer.m_robotDrive.initializePoseEstimator(new Pose2d(0,0,new Rotation2d(0)));
+      m_robotContainer.m_robotDrive.resetOdometry(LimelightConstants.aprilTag7.plus(new Transform2d(2,0,new Rotation2d(0))));
+    }
+      // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.

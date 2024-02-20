@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7275269251393202,
-      "y": 6.665668032190766
+      "x": 1.42,
+      "y": 7.23
     },
-    "rotation": 58.39
+    "rotation": -90.0
   },
   "command": {
     "type": "sequential",
@@ -14,19 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "4 Piece part 1"
+            "pathName": "Basic Amp Part 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "4 Piece part 2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "4 Piece Part 3"
+            "pathName": "Basic Amp Part 2"
           }
         }
       ]
