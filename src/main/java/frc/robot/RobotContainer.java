@@ -36,6 +36,8 @@ import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -78,7 +80,7 @@ public class RobotContainer {
       ? new LimelightSubsystem(m_PoseEstimatorSubsystem)
       : null;
 
-  private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem() : null;
+  private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem(m_opJoystick) : null;
   private final IntakeSubsystem m_intakeSubsystem = SubsystemConstants.useIntake ? new IntakeSubsystem() : null;
   private final PivotSubsystem m_pivotSubsystem = SubsystemConstants.usePivot ? new PivotSubsystem() : null;
   private final ClimbSubsystem m_climberSubsystem = SubsystemConstants.useClimber ? new ClimbSubsystem() : null;
@@ -181,6 +183,8 @@ public class RobotContainer {
               .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
       m_driveJoystick.button(OperatorConstants.yuckButton).whileTrue(compoundCommands.yuckButtonHold());
     }
+
+    m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble,0.5);
 
     if (SubsystemConstants.useClimber) {
       m_driveJoystick.button(OperatorConstants.climberButton).whileTrue(new ClimberCommand(m_climberSubsystem));

@@ -12,24 +12,27 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants.IDConstants;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
   private TalonFX m_frontMotor;
   private TalonFX m_backMotor;
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
-
+  private final CommandJoystick m_rumbleJoystick;
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable shooterTable = inst.getTable("shooter-subsystem");
 
   /** Creates a new ShooterSubsystem. */
-  public ShooterSubsystem() {
+  public ShooterSubsystem(CommandJoystick joystick) {
     m_frontMotor = new TalonFX(IDConstants.frontMotorID,"CANivore");
     m_backMotor = new TalonFX(IDConstants.backMotorID,"CANivore");
     TalonFXConfiguration config = new TalonFXConfiguration();
-
+    m_rumbleJoystick = joystick;
     m_frontMotor.getConfigurator().apply(config);
     m_backMotor.getConfigurator().apply(config);
 
@@ -57,6 +60,13 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTable.putValue("frontMotor Velocity", NetworkTableValue.makeDouble(m_frontMotor.getVelocity().getValue()));
     shooterTable.putValue("backMotor Velocity", NetworkTableValue.makeDouble(m_backMotor.getVelocity().getValue()));
     shooterTable.putValue("Shooter At Speed", NetworkTableValue.makeBoolean(this.atSpeed()));
+
+    if (m_frontMotor.getVelocity().getValue() > 0.1 || m_backMotor.getVelocity().getValue() > 0.1){
+      m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble,0.5);
+    }
+    else {
+      m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble,0.0);
+    }
 
     // Slot0Configs slot0Configs = new Slot0Configs();
     // slot0Configs.kV = ShooterConstants.shooterMotorskV;
