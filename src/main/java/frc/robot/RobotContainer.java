@@ -125,6 +125,8 @@ public class RobotContainer {
     m_chooseAutos.addOption("Grand Theft Auto", "GrandTheftAuto");
     m_chooseAutos.addOption("Basic Amp", "BasicAmp");
     m_chooseAutos.addOption("Intermediate Amp", "IntermediateAmp");
+    m_chooseAutos.addOption("Four Piece Center", "FourPieceCenter");
+    m_chooseAutos.addOption("Three Piece Center", "Three Piece Center");
     m_chooseAutos.setDefaultOption("Do Nothing", "DoNothing");
 
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);

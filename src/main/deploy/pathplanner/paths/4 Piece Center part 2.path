@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7275269251393202,
-        "y": 6.665668032190766
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 1.244264110632693,
-        "y": 6.470672867853643
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
         "x": 2.649477010665733,
         "y": 6.831835645653273
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.3918805553303053,
+        "y": 6.558842415581301
+      },
+      "isLocked": false,
+      "linkedName": "Grab piece 1A"
+    },
+    {
+      "anchor": {
+        "x": 2.5401208637175103,
+        "y": 5.55472336015897
+      },
       "prevControl": {
-        "x": 2.2456341820774637,
-        "y": 6.188351603340769
+        "x": 1.6335447181661702,
+        "y": 5.759468282712948
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Grab piece 1A"
+      "linkedName": "Grab piece 2A"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.75,
+      "waypointRelativePos": 0.85,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +41,24 @@
             {
               "type": "named",
               "data": {
-                "name": "startIntaking"
+                "name": "runIntake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.25,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "stopIntake"
               }
             }
           ]
@@ -57,13 +74,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 41.82,
+    "rotation": -0.2785390203701393,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Four Piece",
+  "folder": "4 Piece Center",
   "previewStartingState": {
-    "rotation": 58.39,
+    "rotation": 41.82,
     "velocity": 0
   },
   "useDefaultConstraints": false
