@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.649477010665733,
-        "y": 6.831835645653273
+        "x": 2.5401208637175103,
+        "y": 5.55472336015897
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3918805553303053,
-        "y": 6.558842415581301
+        "x": 1.663059280534515,
+        "y": 5.355922734637492
       },
       "isLocked": false,
-      "linkedName": "Grab piece 1A"
+      "linkedName": "Grab piece 2A"
     },
     {
       "anchor": {
         "x": 2.5401208637175103,
-        "y": 5.55472336015897
+        "y": 4.280060525933018
       },
       "prevControl": {
-        "x": 1.6335447181661702,
-        "y": 5.759468282712948
+        "x": 1.9320248327106337,
+        "y": 4.256672217048138
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Grab piece 2A"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.85,
+      "waypointRelativePos": 0.45,
       "command": {
         "type": "parallel",
         "data": {
@@ -50,7 +50,7 @@
     },
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.25,
+      "waypointRelativePos": 0.15,
       "command": {
         "type": "parallel",
         "data": {
@@ -74,13 +74,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -0.2785390203701393,
+    "rotation": -26.565051177078022,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Four Piece",
+  "folder": "3 Piece Center",
   "previewStartingState": {
-    "rotation": 41.82,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": false
