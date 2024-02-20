@@ -27,12 +27,12 @@ public class CommandBlocks {
     m_triggerSubsystem = triggerSubsystem;
   }
 
-  public Command fireGamePieceCommand() {
+  public Command fireGamePieceCommand(double pivotAngle) {
         return new ParallelDeadlineGroup(
             new WaitCommand(1).until(() -> {return m_shooterSubsystem.atSpeed() && m_pivotSubsystem.atPosition();})
-          .andThen(new TriggerCommand(m_triggerSubsystem, true, m_intakeSubsystem).withTimeout(0.3)),
+          .andThen(fireButtonHold().until(() -> {return !m_triggerSubsystem.beambreakState;})),
           new SetShooterCommand(m_shooterSubsystem, null, null),
-          new InstantCommand(() -> m_pivotSubsystem.setPosition(0.43)),
+          new InstantCommand(() -> m_pivotSubsystem.setPosition(pivotAngle)),
           new InstantCommand(() -> {System.out.println("firing game piece");})
         );
   }
@@ -41,6 +41,20 @@ public class CommandBlocks {
     return new ParallelCommandGroup(
       new StartEndCommand(m_triggerSubsystem::intakeButtonPressed, m_triggerSubsystem::intakeButtonReleased), 
       new StartEndCommand(m_intakeSubsystem::intakeButtonPressed, m_intakeSubsystem::intakeButtonReleased)
+    );
+  }
+
+  public Command startIntaking() {
+    return new ParallelCommandGroup(
+        new InstantCommand(m_intakeSubsystem::intakeButtonPressed),
+        new InstantCommand(m_triggerSubsystem::intakeButtonPressed)
+    );
+  }
+
+  public Command stopIntaking() {
+    return new ParallelCommandGroup(
+        new InstantCommand(m_intakeSubsystem::intakeButtonReleased),
+        new InstantCommand(m_triggerSubsystem::intakeButtonReleased)
     );
   }
   
