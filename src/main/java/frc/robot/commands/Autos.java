@@ -95,6 +95,38 @@ public final class Autos {
     );
   }
 
+  public static Command FourPieceCenter(CommandBlocks commandBlocks, DriveSubsystem drive,
+      IntakeSubsystem intakeSubsystem, ShooterSubsystem shooterSubsystem,
+      TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem) {
+    if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive || !SubsystemConstants.useShooter) {
+      return null;
+    }
+    return new SequentialCommandGroup(
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
+        new FollowPathCommandOurs(drive, "4 Piece Center Part 1"),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
+        new FollowPathCommandOurs(drive, "4 Piece Center Part 2"),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
+        new FollowPathCommandOurs(drive, "4 Piece Center Part 3"),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition)
+        );
+  }
+
+   public static Command ThreePieceCenter(CommandBlocks commandBlocks, DriveSubsystem drive,
+      IntakeSubsystem intakeSubsystem, ShooterSubsystem shooterSubsystem,
+      TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem) {
+    if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive || !SubsystemConstants.useShooter) {
+      return null;
+    }
+    return new SequentialCommandGroup(
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
+        new FollowPathCommandOurs(drive, "3 Piece Center Part 1"),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
+        new FollowPathCommandOurs(drive, "3 Piece Center Part 2"),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition)
+        );
+  }
+  
   public static Command DoNothing() {
     return new WaitCommand(10);
   }
