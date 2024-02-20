@@ -57,6 +57,16 @@ public final class Autos {
       );
   }
 
+    public static Command OnlyPodiumPreload(CommandBlocks commandBlocks, DriveSubsystem drive, ShooterSubsystem shooterSubsystem) {
+    if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive || !SubsystemConstants.useShooter) {
+      return null;
+    }
+    return new SequentialCommandGroup(
+      new FollowPathCommandOurs(drive, "Center Down Part 1"),
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition));
+  }
+
+
   public static Command BasicAmp(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem, 
   ShooterSubsystem shooterSubsystem) {
     if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter) {
