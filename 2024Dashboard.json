@@ -78,7 +78,7 @@
               "Visuals/Show Outside Circles": false
             }
           },
-          "1,0": {
+          "0,0": {
             "size": [
               5,
               4
@@ -146,7 +146,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "2,4": {
+          "1,4": {
             "size": [
               1,
               1
@@ -160,7 +160,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "1,4": {
+          "0,4": {
             "size": [
               1,
               1
