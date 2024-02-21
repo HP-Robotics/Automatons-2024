@@ -40,6 +40,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.SnuffilatorSubsystem;
 import frc.robot.subsystems.TriggerSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
@@ -83,10 +84,11 @@ public class RobotContainer {
   private final PivotSubsystem m_pivotSubsystem = SubsystemConstants.usePivot ? new PivotSubsystem() : null;
   private final ClimbSubsystem m_climberSubsystem = SubsystemConstants.useClimber ? new ClimbSubsystem() : null;
   private final TriggerSubsystem m_triggerSubsystem = SubsystemConstants.useShooter ? new TriggerSubsystem() : null;
+  private final SnuffilatorSubsystem m_snuffilatorSubsystem = SubsystemConstants.useSnuffilator
+      ? new SnuffilatorSubsystem()
+      : null;
 
   private final SendableChooser<String> m_chooseAutos;
-
-  private Command compoundShooter;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -114,11 +116,6 @@ public class RobotContainer {
           new TriggerStatesCommand(m_triggerSubsystem, m_triggerSubsystem.m_beamBreak));
     }
 
-    NamedCommands.registerCommand("startIntaking", compoundCommands.startIntaking());
-    NamedCommands.registerCommand("stopIntaking", compoundCommands.stopIntaking());
-    NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, null, null));
-    NamedCommands.registerCommand("stopShooter", new SetShooterCommand(m_shooterSubsystem, 0.0, 0.0));
-
     m_chooseAutos = new SendableChooser<String>();
     m_chooseAutos.addOption("Center Down", "CenterDown");
     m_chooseAutos.addOption("Four Piece", "FourPiece");
@@ -131,21 +128,19 @@ public class RobotContainer {
 
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
 
-    configureCommands();
     compoundCommands = new CommandBlocks(m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
-        m_pivotSubsystem);
+        m_pivotSubsystem, m_snuffilatorSubsystem);
+    configureCommands();
     configureBindings();
   }
 
   private void configureCommands() {
-    compoundShooter = new ParallelCommandGroup(
-        new SetShooterCommand(m_shooterSubsystem, null, null)
-            .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).asProxy(),
-        new WaitUntilCommand(m_shooterSubsystem::atSpeed)
-            .andThen(new StartEndCommand(() -> m_triggerSubsystem.setTrigger(-0.2), m_triggerSubsystem::stopTrigger))
-            .withTimeout(0.1)
-            .andThen(new TriggerCommand(m_triggerSubsystem, true, m_intakeSubsystem)
-                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)));
+    NamedCommands.registerCommand("startIntaking", compoundCommands.startIntaking());
+    NamedCommands.registerCommand("stopIntaking", compoundCommands.stopIntaking());
+    if (m_shooterSubsystem != null) {
+      NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, null, null));
+      NamedCommands.registerCommand("stopShooter", new SetShooterCommand(m_shooterSubsystem, 0.0, 0.0));
+    }
   }
 
   private void configureBindings() {
@@ -195,9 +190,12 @@ public class RobotContainer {
       m_opJoystick.povRight().whileTrue(new PivotManualCommand(m_pivotSubsystem, PivotConstants.manualSpeed));
       m_opJoystick.povLeft().whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
       m_opJoystick.button(7).onTrue(new InstantCommand(m_pivotSubsystem::togglePID));
-      m_opJoystick.button(1).onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.43)));
-      m_opJoystick.button(2).whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.6)));
-      m_opJoystick.button(4).whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.385)));
+      m_opJoystick.button(1)
+          .onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.subwooferPosition)));
+      m_opJoystick.button(2)
+          .whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.ampPosition)));
+      m_opJoystick.button(4)
+          .whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.podiumPosition)));
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
       m_driveJoystick.button(OperatorConstants.drivePointedToSpeakerButton)
@@ -206,6 +204,12 @@ public class RobotContainer {
       m_opJoystick.axisGreaterThan(2, 0.1).whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem)); // Flightstick
                                                                                                                      // button
                                                                                                                      // 2
+    }
+
+    if (SubsystemConstants.useSnuffilator) {
+      new Trigger(() -> {return m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;})
+          .onTrue(compoundCommands.moveSnuffilator(true))
+          .onFalse(compoundCommands.moveSnuffilator(false));
     }
   }
 

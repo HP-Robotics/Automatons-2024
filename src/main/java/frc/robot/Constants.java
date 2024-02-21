@@ -72,6 +72,7 @@ public final class Constants {
     public static final boolean usePivot = true;
     public static final boolean useClimber = false; //TODO check if these work
     public static final boolean useTrigger = true;
+    public static final boolean useSnuffilator = true;
   }
 
   public static class DriveConstants {
@@ -214,7 +215,6 @@ public final class Constants {
     public static final double[] magicConstants = {0.0, -0.0219711, 0.437724};
 
     public static final double manualSpeed = 0.1;
-    public static final double subwooferPosition = 0.43;
 
     public static final double setpointChangeSpeed = 0.44;
     public static final double encoderAt90 = 0.51;
@@ -224,6 +224,17 @@ public final class Constants {
     public static final double currentTimeThreshold = 0.04;
 
     public static final double rampTimeTo300s = 10;
+
+    public static final double subwooferPosition = 0.43;
+    public static final double ampPosition = 0.6;
+    public static final double podiumPosition = 0.385;
+  }
+
+  public static class SnuffilatorConstants {
+    public static final int stallCurrentLimit = 3;
+    public static final int freeCurrentLimit = 5;
+
+    public static final double snuffilatorSpeed = 0.05;
   }
 
   public static class IDConstants {
@@ -256,6 +267,9 @@ public final class Constants {
     public static final int climbMotorID = 50;
     
     public static final int PigeonID = 57;
+
+    //Snuffilator is 60s
+    public static final int snuffilatorID = 60;
   }
 
   public static class PortConstants {

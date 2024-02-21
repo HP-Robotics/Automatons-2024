@@ -36,6 +36,7 @@ public class PivotSubsystem extends SubsystemBase {
   private boolean m_absoluteBroken = false;
   private ArmFeedforward m_armGraivty;
   private LinearFilter m_filter;
+  public double m_setpoint = 0;
 
   /** Creates a new ExampleSubsystem. */
   public PivotSubsystem() {
@@ -67,7 +68,7 @@ public class PivotSubsystem extends SubsystemBase {
 
     m_absEncoder = new DutyCycleEncoder(PortConstants.pivotAbsEncoderID);
     m_pivotController = new PIDController(motorConfigs.kP, motorConfigs.kI, motorConfigs.kD);
-    m_pivotController.setSetpoint(0.4);
+    setPosition(0.4);
     m_pivotController.setTolerance(0.015);
     m_pivotController.setIZone(0.014);
 
@@ -142,7 +143,7 @@ public class PivotSubsystem extends SubsystemBase {
   public void togglePID() {
     m_usePID = !m_usePID;
     if (m_usePID) {
-      m_pivotController.setSetpoint(m_absEncoder.getAbsolutePosition());// TODO constrain setpoint to within limit
+      setPosition(m_absEncoder.getAbsolutePosition());// TODO constrain setpoint to within limit
                                                                         // switches
     }
   }
@@ -165,11 +166,10 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public void setPosition(double position) { // TODO remove bad inputs
-    m_pivotController.setSetpoint(position); // TODO constrain setpoint to within limit switches--make setpoint safe
-                                             // method
+    m_pivotController.setSetpoint(position); // TODO constrain setpoint to within limit switches--make setpoint safe method
+    m_setpoint = position;
     // System.out.println(position);
   };
-  // TODO angle to sucesful shot, amp, speaker, and podium setpoint
 
   public boolean atPosition() {
     return m_pivotController.atSetpoint();
