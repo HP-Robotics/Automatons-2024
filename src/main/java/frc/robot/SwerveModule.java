@@ -25,6 +25,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.SubsystemConstants;
 
 public class SwerveModule {
@@ -66,6 +67,7 @@ public class SwerveModule {
     m_driveMotor.getConfigurator().apply(slot0Configs);
     //m_driveMotor.getConfigurator().apply(rampConfigs);
     m_driveMotor.getConfigurator().apply(currentConfigs);
+    
     m_driveMotor.setNeutralMode(NeutralModeValue.Coast);
     
     // BaseStatusSignal.setUpdateFrequencyForAll(50,m_driveMotor.getClosedLoopError(), m_driveMotor.getClosedLoopDerivativeOutput(),m_driveMotor.getClosedLoopIntegratedOutput(),m_driveMotor.getClosedLoopProportionalOutput(),m_driveMotor.getClosedLoopFeedForward());
@@ -85,7 +87,15 @@ public class SwerveModule {
     m_turningMotor.setNeutralMode(NeutralModeValue.Brake);
     m_turningMotor.setInverted(true);
 
+    var rampConfigsTurning = new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(DriveConstants.rampTimeTo300s);
+    var currentConfigsTurning = new CurrentLimitsConfigs()
+      .withSupplyCurrentLimit(DriveConstants.currentLimit)
+      .withSupplyCurrentLimitEnable(true)
+      .withSupplyCurrentThreshold(DriveConstants.currentThreshold)
+      .withSupplyTimeThreshold(DriveConstants.currentTimeThreshold); // TODO: This isn't working we don't know why
 
+    m_turningMotor.getConfigurator().apply(currentConfigsTurning);
+    m_turningMotor.getConfigurator().apply(rampConfigsTurning);
     
     m_absEncoder = new DutyCycleEncoder(absEncoder);
     m_turningOffset = 0.0;

@@ -124,7 +124,11 @@ public final class Constants {
     public static final double currentMax = 40.0;
     public static final double currentMin = -40.0;
 
-    public static final double rampTimeTo300s = 10;
+    public static final double rampTimeTo300s = 0.01;
+
+    public static final double currentLimit = 40.0;
+    public static final double currentThreshold = 40.0;
+    public static final double currentTimeThreshold = 0.04;
   }
 
   public static final class LimelightConstants {
@@ -181,12 +185,11 @@ public final class Constants {
 
     public static final double errorThreshold = 1.0;
 
-    public static final double currentLimit = 5.0;
-    public static final double currentThreshold = 5.0;
+    public static final double currentLimit = 25.0;
+    public static final double currentThreshold = 25.0;
     public static final double currentTimeThreshold = 0.04;
 
-    public static final double rampTimeTo300s = 10;
-
+    public static final double rampTimeTo300s = 0.4;
   }
 
   public static class ClimberConstants {
@@ -217,7 +220,7 @@ public final class Constants {
     public static final double subwooferPosition = 0.43;
 
     public static final double setpointChangeSpeed = 0.44;
-    public static final double encoderAt90 = 0.51;
+    public static final double encoderAt90 = 0.518;
 
     public static final double currentLimit = 40.0;
     public static final double currentThreshold = 40.0;

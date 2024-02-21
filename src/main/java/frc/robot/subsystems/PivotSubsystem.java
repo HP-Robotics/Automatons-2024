@@ -47,7 +47,7 @@ public class PivotSubsystem extends SubsystemBase {
     m_motorR.setNeutralMode(NeutralModeValue.Brake);
     m_motorR.setInverted(true);
     m_motorL.setNeutralMode(NeutralModeValue.Brake);
-    var rampConfigs = new ClosedLoopRampsConfigs().withTorqueClosedLoopRampPeriod(PivotConstants.rampTimeTo300s);
+    var rampConfigs = new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(PivotConstants.rampTimeTo300s);
     var currentConfigs = new CurrentLimitsConfigs()
       .withSupplyCurrentLimit(PivotConstants.currentLimit)
       .withSupplyCurrentLimitEnable(true)
