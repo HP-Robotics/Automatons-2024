@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -13,6 +15,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.ShooterConstants;
 
@@ -30,8 +33,20 @@ public class ShooterSubsystem extends SubsystemBase {
     m_backMotor = new TalonFX(IDConstants.backMotorID,"CANivore");
     TalonFXConfiguration config = new TalonFXConfiguration();
 
+    var rampConfigs = new ClosedLoopRampsConfigs().withTorqueClosedLoopRampPeriod(ShooterConstants.rampTimeTo300s);
+    var currentConfigs = new CurrentLimitsConfigs()
+      .withSupplyCurrentLimit(ShooterConstants.currentLimit)
+      .withSupplyCurrentLimitEnable(true)
+      .withSupplyCurrentThreshold(ShooterConstants.currentThreshold)
+      .withSupplyTimeThreshold(ShooterConstants.currentTimeThreshold); // TODO: This isn't working we don't know why
+
     m_frontMotor.getConfigurator().apply(config);
     m_backMotor.getConfigurator().apply(config);
+
+    m_frontMotor.getConfigurator().apply(rampConfigs);
+    m_backMotor.getConfigurator().apply(rampConfigs);
+    m_frontMotor.getConfigurator().apply(currentConfigs);
+    m_backMotor.getConfigurator().apply(currentConfigs);
 
     m_frontMotor.setInverted(true);
 

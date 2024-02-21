@@ -55,6 +55,9 @@ public class IntakeStatesCommand extends Command {
     if (m_subsystem.beambreakState && !m_beamBreak.beamBroken()) {
       m_subsystem.beambreakState = false;
     }
+    if (!m_subsystem.beambreakState && m_beamBreak.beamBroken()) {
+      m_subsystem.beambreakState = true;
+    }
   }
 
   // Called once the command ends or is interrupted.
