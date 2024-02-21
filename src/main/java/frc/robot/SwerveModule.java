@@ -14,8 +14,11 @@ import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TorqueCurrentConfigs;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -51,12 +54,18 @@ public class SwerveModule {
       int turningMotorChannel, int absEncoder, double absEncoderForward, String name) {
     m_driveMotor = new TalonFX(driveMotorChannel, "CANivore");
     var slot0Configs = new Slot0Configs();
+    var rampConfigs = new ClosedLoopRampsConfigs().withTorqueClosedLoopRampPeriod(DriveConstants.rampTimeTo300s);
+    var currentConfigs = new TorqueCurrentConfigs().withPeakForwardTorqueCurrent(DriveConstants.currentMax)
+    .withPeakReverseTorqueCurrent(DriveConstants.currentMin);
+
     slot0Configs.kV = DriveConstants.drivekF;
     slot0Configs.kP = DriveConstants.drivekP;
     slot0Configs.kI = DriveConstants.drivekI;
     slot0Configs.kD = DriveConstants.drivekD;
     m_driveMotor.getConfigurator().apply(new TalonFXConfiguration());
     m_driveMotor.getConfigurator().apply(slot0Configs);
+    //m_driveMotor.getConfigurator().apply(rampConfigs);
+    m_driveMotor.getConfigurator().apply(currentConfigs);
     m_driveMotor.setNeutralMode(NeutralModeValue.Coast);
     
     // BaseStatusSignal.setUpdateFrequencyForAll(50,m_driveMotor.getClosedLoopError(), m_driveMotor.getClosedLoopDerivativeOutput(),m_driveMotor.getClosedLoopIntegratedOutput(),m_driveMotor.getClosedLoopProportionalOutput(),m_driveMotor.getClosedLoopFeedForward());
