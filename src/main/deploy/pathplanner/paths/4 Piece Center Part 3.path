@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "runIntake"
+                "name": "startIntaking"
               }
             }
           ]
@@ -58,7 +58,7 @@
             {
               "type": "named",
               "data": {
-                "name": "stopIntake"
+                "name": "stopIntaking"
               }
             }
           ]

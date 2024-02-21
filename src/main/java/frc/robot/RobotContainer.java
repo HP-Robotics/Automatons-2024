@@ -114,11 +114,6 @@ public class RobotContainer {
           new TriggerStatesCommand(m_triggerSubsystem, m_triggerSubsystem.m_beamBreak));
     }
 
-    NamedCommands.registerCommand("startIntaking", compoundCommands.startIntaking());
-    NamedCommands.registerCommand("stopIntaking", compoundCommands.stopIntaking());
-    NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, null, null));
-    NamedCommands.registerCommand("stopShooter", new SetShooterCommand(m_shooterSubsystem, 0.0, 0.0));
-
     m_chooseAutos = new SendableChooser<String>();
     m_chooseAutos.addOption("Center Down", "CenterDown");
     m_chooseAutos.addOption("Four Piece", "FourPiece");
@@ -131,10 +126,13 @@ public class RobotContainer {
 
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
 
-    configureCommands();
     compoundCommands = new CommandBlocks(m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
-        m_pivotSubsystem);
+    m_pivotSubsystem);
+
+    configureCommands();
+
     configureBindings();
+
   }
 
   private void configureCommands() {
@@ -146,6 +144,10 @@ public class RobotContainer {
             .withTimeout(0.1)
             .andThen(new TriggerCommand(m_triggerSubsystem, true, m_intakeSubsystem)
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)));
+    NamedCommands.registerCommand("startIntaking", compoundCommands.startIntaking());
+    NamedCommands.registerCommand("stopIntaking", compoundCommands.stopIntaking());
+    NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, null, null));
+    NamedCommands.registerCommand("stopShooter", new SetShooterCommand(m_shooterSubsystem, 0.0, 0.0));
   }
 
   private void configureBindings() {
@@ -260,12 +262,16 @@ public class RobotContainer {
     }
   }
 
-  public Command getAutonomousCommand() {
+  public Command getAutonomousCommand() { //TODO put by auto chooser
     if (m_chooseAutos.getSelected() == "CenterDown") {
       return Autos.CenterDown(compoundCommands, m_robotDrive, m_shooterSubsystem);
     }
     if (m_chooseAutos.getSelected() == "FourPiece") {
       return Autos.FourPiece(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
+          m_pivotSubsystem);
+    }
+    if (m_chooseAutos.getSelected() == "FourPieceCenter") {
+      return Autos.FourPieceCenter(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
           m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "GrandTheftAuto") {
