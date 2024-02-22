@@ -230,6 +230,8 @@ public final class Constants {
     public static final double subwooferPosition = 0.43;
     public static final double ampPosition = 0.6;
     public static final double podiumPosition = 0.385;
+    public static final double note2Position = 0.395;
+    public static final double note1_3Position = 0.385;
   }
 
   public static class IDConstants {

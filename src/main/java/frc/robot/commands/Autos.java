@@ -37,11 +37,11 @@ public final class Autos {
     return new SequentialCommandGroup(
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
         new FollowPathCommandOurs(drive, "4 Piece part 1"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
+        commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position),
         new FollowPathCommandOurs(drive, "4 Piece part 2"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
+        commandBlocks.fireGamePieceCommand(PivotConstants.note2Position),
         new FollowPathCommandOurs(drive, "4 Piece Part 3"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition));
+        commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position));
   }
 
   public static Command FourPieceCenter(CommandBlocks commandBlocks, DriveSubsystem drive,
@@ -53,11 +53,11 @@ public final class Autos {
     return new SequentialCommandGroup(
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 1"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.podiumPosition),
+        commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 2"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.podiumPosition),
+        commandBlocks.fireGamePieceCommand(PivotConstants.note2Position),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 3"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.podiumPosition));
+        commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position));
   }
 
   public static Command CenterDown(CommandBlocks commandBlocks, DriveSubsystem drive,
