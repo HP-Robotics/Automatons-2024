@@ -53,11 +53,11 @@ public final class Autos {
     return new SequentialCommandGroup(
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 1"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
+        commandBlocks.fireGamePieceCommand(PivotConstants.podiumPosition),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 2"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
+        commandBlocks.fireGamePieceCommand(PivotConstants.podiumPosition),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 3"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition));
+        commandBlocks.fireGamePieceCommand(PivotConstants.podiumPosition));
   }
 
   public static Command CenterDown(CommandBlocks commandBlocks, DriveSubsystem drive,
@@ -130,6 +130,15 @@ public final class Autos {
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
         new FollowPathCommandOurs(drive, "3 Piece Center Part 2"),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition));
+  }
+
+  public static Command FiveMeterTest(DriveSubsystem drive){
+    if(!SubsystemConstants.useDrive){
+      return null;
+    }
+    else{
+      return new FollowPathCommandOurs(drive, "Test Path 5 Meters");
+    }
   }
 
   public static Command DoNothing() {

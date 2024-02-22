@@ -122,6 +122,7 @@ public class RobotContainer {
     m_chooseAutos.addOption("Intermediate Amp", "IntermediateAmp");
     m_chooseAutos.addOption("Four Piece Center", "FourPieceCenter");
     m_chooseAutos.addOption("Three Piece Center", "Three Piece Center");
+    m_chooseAutos.addOption("Test Path 5", "TestPath5");
     m_chooseAutos.setDefaultOption("Do Nothing", "DoNothing");
 
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
@@ -197,9 +198,9 @@ public class RobotContainer {
       m_opJoystick.povRight().whileTrue(new PivotManualCommand(m_pivotSubsystem, PivotConstants.manualSpeed));
       m_opJoystick.povLeft().whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
       m_opJoystick.button(7).onTrue(new InstantCommand(m_pivotSubsystem::togglePID));
-      m_opJoystick.button(1).onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.43)));
-      m_opJoystick.button(2).whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.6)));
-      m_opJoystick.button(4).whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(0.385)));
+      m_opJoystick.button(1).onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.subwooferPosition)));
+      m_opJoystick.button(2).whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.ampPosition)));
+      m_opJoystick.button(4).whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.podiumPosition)));
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
       m_driveJoystick.button(OperatorConstants.drivePointedToSpeakerButton)
@@ -282,6 +283,9 @@ public class RobotContainer {
     }
     if (m_chooseAutos.getSelected() == "IntermediateAmp") {
       return Autos.IntermediateAmp(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem);
+    }
+    if (m_chooseAutos.getSelected() == "TestPath5"){
+      return Autos.FiveMeterTest(m_robotDrive);
     }
     if (m_chooseAutos.getSelected() == "DoNothing") {
       return Autos.DoNothing();

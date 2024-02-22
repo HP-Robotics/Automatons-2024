@@ -16,12 +16,28 @@
     },
     {
       "anchor": {
-        "x": 2.5401208637175103,
-        "y": 5.55472336015897
+        "x": 2.54,
+        "y": 5.55
       },
       "prevControl": {
-        "x": 1.6335447181661702,
-        "y": 5.759468282712948
+        "x": 1.4299834872328734,
+        "y": 5.5856653391037385
+      },
+      "nextControl": {
+        "x": 2.5899742108076897,
+        "y": 5.548394305711313
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.65,
+        "y": 5.55
+      },
+      "prevControl": {
+        "x": 2.6,
+        "y": 5.55
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +49,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.85,
+      "waypointRelativePos": 0.7,
       "command": {
         "type": "parallel",
         "data": {
@@ -50,7 +66,7 @@
     },
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.25,
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "parallel",
         "data": {
@@ -74,8 +90,8 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -0.2785390203701393,
-    "rotateFast": false
+    "rotation": 0.0,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "4 Piece Center",

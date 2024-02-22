@@ -217,7 +217,6 @@ public final class Constants {
     public static final double[] magicConstants = {0.0, -0.0219711, 0.437724};
 
     public static final double manualSpeed = 0.1;
-    public static final double subwooferPosition = 0.43;
 
     public static final double setpointChangeSpeed = 0.44;
     public static final double encoderAt90 = 0.518;
@@ -227,6 +226,10 @@ public final class Constants {
     public static final double currentTimeThreshold = 0.04;
 
     public static final double rampTimeTo300s = 10;
+
+    public static final double subwooferPosition = 0.43;
+    public static final double ampPosition = 0.6;
+    public static final double podiumPosition = 0.385;
   }
 
   public static class IDConstants {

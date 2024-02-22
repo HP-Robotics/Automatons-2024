@@ -29,7 +29,7 @@ public class CommandBlocks {
 
   public Command fireGamePieceCommand(double pivotAngle) {
         return new ParallelDeadlineGroup(
-            new WaitCommand(1).until(() -> {/*System.out.println("wait for shooter");*/return m_shooterSubsystem.atSpeed() && m_pivotSubsystem.atPosition();})
+            new WaitCommand(1).until(() -> {/*System.out.println("wait for shooter");*/return m_shooterSubsystem.atSpeed() && m_pivotSubsystem.atPosition() && m_triggerSubsystem.beambreakState;})
           .andThen(fireButtonHold().until(() -> {/*System.out.println("waiting for fire");*/return !m_triggerSubsystem.beambreakState;})),
           new SetShooterCommand(m_shooterSubsystem, null, null),
           new InstantCommand(() -> m_pivotSubsystem.setPosition(pivotAngle))//,
