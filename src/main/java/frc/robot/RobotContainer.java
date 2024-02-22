@@ -204,11 +204,8 @@ public class RobotContainer {
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
       m_driveJoystick.button(OperatorConstants.drivePointedToSpeakerButton)
-          .whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick)); // Flightstick
-                                                                                                             // button 2
-      m_opJoystick.axisGreaterThan(2, 0.1).whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem)); // Flightstick
-                                                                                                                     // button
-                                                                                                                     // 2
+          .whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick));
+      m_opJoystick.axisGreaterThan(2, 0.1).whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem));
     }
   }
 
