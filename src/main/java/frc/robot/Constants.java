@@ -218,7 +218,7 @@ public final class Constants {
 
     public static final double manualSpeed = 0.1;
 
-    public static final double setpointChangeSpeed = 0.44;
+    public static final double setpointChangeSpeed = 0.2;
     public static final double encoderAt90 = 0.518;
 
     public static final double currentLimit = 40.0;
