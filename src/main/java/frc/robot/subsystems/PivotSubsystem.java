@@ -161,7 +161,7 @@ public class PivotSubsystem extends SubsystemBase {
 
   public double getMagicAngle(double distance) {
     return PivotConstants.magicConstants[0] * distance * distance + PivotConstants.magicConstants[1] * distance
-        + PivotConstants.magicConstants[2];
+        + PivotConstants.magicConstants[2] + PivotConstants.encoderAt90 - 0.51;
   }
 
   public void setPosition(double position) { // TODO remove bad inputs
