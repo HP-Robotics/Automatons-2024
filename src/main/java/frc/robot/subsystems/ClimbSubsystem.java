@@ -7,22 +7,51 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ShooterConstants;
 
 public class ClimbSubsystem extends SubsystemBase {
-  TalonFX climbMotor = new TalonFX(IDConstants.climbMotorID);
+  CANSparkMax climbMotor = new CANSparkMax(IDConstants.climbMotorID, MotorType.kBrushless);
+  SparkPIDController climbController; 
+  RelativeEncoder m_encoder;
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable climbTable = inst.getTable("climb-table");
+  NetworkTable climberTable = inst.getTable("climber-table");
   /** Creates a new ClimbSubsystem. */
   public ClimbSubsystem() {
-    TalonFXConfiguration config = new TalonFXConfiguration();
-    climbMotor.getConfigurator().apply(config);
+    // TalonFXConfiguration config = new TalonFXConfiguration();
+    // climbMotor.getConfigurator().apply(config); // TODO: Is there a configuration for CANSparkMax?
+    climbMotor.restoreFactoryDefaults();
+
+    climbController.setP(ClimberConstants.kP);
+    climbController.setI(ClimberConstants.kI);
+    climbController.setD(ClimberConstants.kD);
+    climbController.setIZone(ClimberConstants.kIz);
+    climbController.setFF(ClimberConstants.kFF);
+    climbController.setOutputRange(ClimberConstants.kMinOutput, ClimberConstants.kMaxOutput);
+
+    climbController.setReference(500.0, CANSparkMax.ControlType.kPosition);
+
+    climbMotor.burnFlash();
+
+    climberTable.putValue("Climber kP", NetworkTableValue.makeDouble(ClimberConstants.kP));
+    climberTable.putValue("Climber kI", NetworkTableValue.makeDouble(ClimberConstants.kI));
+    climberTable.putValue("Climber kD", NetworkTableValue.makeDouble(ClimberConstants.kD));
+    climberTable.putValue("Climber kIz", NetworkTableValue.makeDouble(ClimberConstants.kIz));
+    climberTable.putValue("Climber kFF", NetworkTableValue.makeDouble(ClimberConstants.kFF));
   }
 
   @Override
@@ -30,7 +59,16 @@ public class ClimbSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void climb(double output) {
-    climbMotor.setControl(new DutyCycleOut(output));
+  public void climbTo(double output) {
+    climbController.setReference(output, CANSparkMax.ControlType.kPosition);
+  }
+
+  public boolean atBottom() {
+    if ((m_encoder.getVelocity() < Math.abs(0.1)) || (m_encoder.getVelocity() < 0)) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 }
