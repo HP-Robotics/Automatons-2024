@@ -72,6 +72,7 @@ public final class Constants {
     public static final boolean usePivot = true;
     public static final boolean useClimber = false; //TODO check if these work
     public static final boolean useTrigger = true;
+    public static final boolean useSnuffilator = true;
   }
 
   public static class DriveConstants {
@@ -275,7 +276,8 @@ public final class Constants {
     
     public static final int PigeonID = 57;
 
-    
+    //Snuffilator is 60s
+    public static final int snuffilatorID = 60;
   }
 
   public static class PortConstants {
