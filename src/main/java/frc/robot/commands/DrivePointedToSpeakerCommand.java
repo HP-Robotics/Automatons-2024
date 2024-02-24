@@ -19,6 +19,7 @@ public class DrivePointedToSpeakerCommand extends Command {
     private final LimelightSubsystem m_limelightSubsystem;
     private final CommandJoystick m_joystick;
     private Pose2d m_targetAprilTag;
+    private Rotation2d m_offset;
   /** Creates a new IntakeCommand. */
   public DrivePointedToSpeakerCommand(DriveSubsystem drivesubsystem, LimelightSubsystem limelightsubsystem, CommandJoystick joystick) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -46,10 +47,13 @@ public class DrivePointedToSpeakerCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(m_limelightSubsystem.sawAprilTag==1) {
+      m_offset = (m_limelightSubsystem.m_visionPose2d.getRotation()).minus(m_drivesubsystem.getPose().getRotation());
+    }
     if (m_limelightSubsystem.aprilTagSeen) {
     m_drivesubsystem.drivePointedTowardsAngle(m_joystick, 
     new Rotation2d(Math.toRadians(m_limelightSubsystem.getAngleTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag) - 180)
-    ).minus(m_limelightSubsystem.m_visionPose2d.getRotation()).plus(m_drivesubsystem.getPose().getRotation()));
+    ).minus(m_offset));
     } else {
       m_drivesubsystem.driveWithJoystick(m_joystick);
     }
