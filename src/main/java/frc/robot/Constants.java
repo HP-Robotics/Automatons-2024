@@ -238,6 +238,9 @@ public final class Constants {
 
     public static final double setpointChangeSpeed = 0.2;
     public static final double encoderAt90 = 0.518;
+    public static double degreesToEncoder(double degrees) {
+      return (degrees-90) / 360 + PivotConstants.encoderAt90;
+    }
 
     public static final double currentLimit = 40.0;
     public static final double currentThreshold = 40.0;
@@ -245,11 +248,11 @@ public final class Constants {
 
     public static final double rampTimeTo300s = 10;
 
-    public static final double subwooferPosition = 0.43;
-    public static final double ampPosition = 0.6;
-    public static final double podiumPosition = 0.385;
-    public static final double note2Position = 0.395;
-    public static final double note1_3Position = 0.385;
+    public static final double subwooferPosition = degreesToEncoder(61.2); //0.43
+    public static final double ampPosition = degreesToEncoder(122.4); //0.6
+    public static final double podiumPosition = degreesToEncoder(45); //0.385
+    public static final double note2Position = degreesToEncoder(42.12); //0.395
+    public static final double note1_3Position = degreesToEncoder(45.72); //0.385
   }
 
   public static class IDConstants {

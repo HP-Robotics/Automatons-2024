@@ -143,8 +143,7 @@ public class PivotSubsystem extends SubsystemBase {
   public void togglePID() {
     m_usePID = !m_usePID;
     if (m_usePID) {
-      setPosition(m_absEncoder.getAbsolutePosition());// TODO constrain setpoint to within limit
-                                                                        // switches
+      setPosition(m_absEncoder.getAbsolutePosition());// TODO constrain setpoint to within limit switches
     }
   }
 
