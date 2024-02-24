@@ -226,9 +226,9 @@ public final class Constants {
   }
 
   public static class PivotConstants {
-    public static final double kP = 3/2;//2
+    public static final double kP = 3;//2
     public static final double kI = 0.001;
-    public static final double kD = 0.08/2;
+    public static final double kD = 0.08;
     public static final double kG = -0.02;//0.02
     public static final boolean startWithPID = true;
     

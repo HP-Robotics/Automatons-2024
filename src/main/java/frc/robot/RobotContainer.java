@@ -38,6 +38,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -90,6 +92,8 @@ public class RobotContainer {
       ? new SnuffilatorSubsystem()
       : null;
 
+  private final PowerDistribution pdh = new PowerDistribution(1,ModuleType.kRev);
+
   private final SendableChooser<String> m_chooseAutos;
 
   private Command compoundShooter;
@@ -98,6 +102,8 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
+    pdh.setSwitchableChannel(true);
 
     if (SubsystemConstants.useDataManager) {
       DataLogManager.start();
