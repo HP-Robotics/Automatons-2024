@@ -6,7 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.SubsystemConstants;
@@ -68,8 +68,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private final CommandJoystick m_driveJoystick = new CommandJoystick(OperatorConstants.kDriverControllerPort);
-  private final CommandJoystick m_opJoystick = new CommandJoystick(OperatorConstants.kOperatorControllerPort);
+  private final CommandJoystick m_driveJoystick = new CommandJoystick(ControllerConstants.kDriverControllerPort);
+  private final CommandJoystick m_opJoystick = new CommandJoystick(ControllerConstants.kOperatorControllerPort);
   private CommandBlocks compoundCommands; // TODO: Pick a better name
 
   // The robot's subsystems and commands are defined here...
@@ -146,12 +146,12 @@ public class RobotContainer {
   private void configureBindings() {
 
     if (SubsystemConstants.useDrive) {
-      m_driveJoystick.button(OperatorConstants.resetYawButton).whileTrue(new InstantCommand(m_robotDrive::resetYaw)); // Flightstick
+      m_driveJoystick.button(ControllerConstants.resetYawButton).whileTrue(new InstantCommand(m_robotDrive::resetYaw)); // Flightstick
                                                                                                                       // button
                                                                                                                       // 11
-      Trigger fieldRelativeTrigger = OperatorConstants.useXbox
+      Trigger fieldRelativeTrigger = ControllerConstants.useXbox
           ? new Trigger(m_driveJoystick.axisGreaterThan(2, 0.1))
-          : new Trigger(m_driveJoystick.button(OperatorConstants.fieldRelativeButton));
+          : new Trigger(m_driveJoystick.button(ControllerConstants.fieldRelativeButton));
       // fieldRelativeTrigger.onTrue(new InstantCommand(() ->
       // m_robotDrive.setFieldRelative(false)));
       // fieldRelativeTrigger.onFalse(new InstantCommand(() ->
@@ -172,17 +172,17 @@ public class RobotContainer {
       m_opJoystick.button(6).whileTrue(
           new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp, ShooterConstants.shooterSpeedAmp)
               .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
-      m_driveJoystick.button(OperatorConstants.yuckButton).whileTrue(compoundCommands.yuckButtonHold());
+      m_driveJoystick.button(ControllerConstants.yuckButton).whileTrue(compoundCommands.yuckButtonHold());
     }
 
     if (SubsystemConstants.useClimber) {
-      m_driveJoystick.button(OperatorConstants.climberButton).whileTrue(new ClimberCommand(m_climberSubsystem));
+      m_driveJoystick.button(ControllerConstants.climberButton).whileTrue(new ClimberCommand(m_climberSubsystem));
     }
 
     if (SubsystemConstants.useIntake) {
-      Trigger intakeTrigger = OperatorConstants.useXbox
+      Trigger intakeTrigger = ControllerConstants.useXbox
           ? new Trigger(m_driveJoystick.axisGreaterThan(3, 0.1))
-          : new Trigger(m_driveJoystick.button(OperatorConstants.intakeButton));
+          : new Trigger(m_driveJoystick.button(ControllerConstants.intakeButton));
       intakeTrigger.whileTrue(compoundCommands.intakeButtonHold());
     }
 
@@ -198,7 +198,7 @@ public class RobotContainer {
           .whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.podiumPosition)));
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
-      m_driveJoystick.button(OperatorConstants.drivePointedToSpeakerButton)
+      m_driveJoystick.button(ControllerConstants.drivePointedToSpeakerButton)
           .whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick)); // Flightstick
                                                                                                              // button 2
       m_opJoystick.axisGreaterThan(2, 0.1).whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem)); // Flightstick

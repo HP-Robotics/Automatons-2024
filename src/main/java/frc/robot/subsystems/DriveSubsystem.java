@@ -168,13 +168,13 @@ public class DriveSubsystem extends SubsystemBase {
         Math.signum(joystick.getRawAxis(1))
 
             * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(1),
-                OperatorConstants.driveJoystickDeadband), OperatorConstants.driveJoystickExponent)
+                ControllerConstants.driveJoystickDeadband), ControllerConstants.driveJoystickExponent)
             * -1 * DriveConstants.kMaxSpeed,
          Math.signum(joystick.getRawAxis(0))
             *  Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(0),
-                OperatorConstants.driveJoystickDeadband), OperatorConstants.driveJoystickExponent)
+                ControllerConstants.driveJoystickDeadband), ControllerConstants.driveJoystickExponent)
             * -1 * DriveConstants.kMaxSpeed,
-        MathUtil.applyDeadband(OperatorConstants.getRotation(joystick), OperatorConstants.driveJoystickDeadband) * -1
+        MathUtil.applyDeadband(ControllerConstants.getRotation(joystick), ControllerConstants.driveJoystickDeadband) * -1
             * DriveConstants.kMaxAngularSpeed,
         m_fieldRelative);
   }
@@ -184,11 +184,11 @@ public class DriveSubsystem extends SubsystemBase {
     drive(
         Math.signum(joystick.getRawAxis(1))
             * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(1),
-                OperatorConstants.driveJoystickDeadband), 2)
+                ControllerConstants.driveJoystickDeadband), 2)
             * -1 * DriveConstants.kMaxSpeed,
         Math.signum(joystick.getRawAxis(0))
             * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(0),
-                OperatorConstants.driveJoystickDeadband), 2)
+                ControllerConstants.driveJoystickDeadband), 2)
             * -1 * DriveConstants.kMaxSpeed,
         rot * 1 * DriveConstants.kMaxAngularSpeed,
         true);

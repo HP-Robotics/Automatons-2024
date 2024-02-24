@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
 public final class Constants {
 
-  public static class OperatorConstants { // TODO: Rename this (This name sucks)
+  public static class ControllerConstants {
     public static final boolean useXbox = true;
 
     public static final int kOperatorControllerPort = 0;
