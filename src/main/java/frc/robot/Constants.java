@@ -193,7 +193,17 @@ public final class Constants {
   }
 
   public static class ClimberConstants {
-    public static final double climbSpeed = 0.4;
+    public static final double climbSpeed = 0.4; // TODO: Decide this (in RPM, so 500?)
+    public static final double topPosition = 0.0;
+
+    public static final double kP = 0.0;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double kIz = 0.0;
+    public static final double kFF = 0.0;
+
+    public static final double kMinOutput = 0.0;
+    public static final double kMaxOutput = 0.0;
   }
 
   public static class TriggerConstants {
@@ -264,6 +274,8 @@ public final class Constants {
     public static final int climbMotorID = 50;
     
     public static final int PigeonID = 57;
+
+    
   }
 
   public static class PortConstants {
