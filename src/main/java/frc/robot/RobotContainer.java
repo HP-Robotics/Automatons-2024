@@ -129,6 +129,7 @@ public class RobotContainer {
     m_chooseAutos.addOption("Four Piece Center", "FourPieceCenter");
     m_chooseAutos.addOption("Three Piece Center", "Three Piece Center");
     m_chooseAutos.addOption("Test Path 5", "TestPath5");
+    m_chooseAutos.addOption("Only Podium Preload","OnlyPodiumPreload");
     m_chooseAutos.setDefaultOption("Do Nothing", "DoNothing");
 
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
@@ -158,9 +159,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     if (SubsystemConstants.useDrive) {
-      m_driveJoystick.button(OperatorConstants.resetYawButton).whileTrue(new InstantCommand(m_robotDrive::resetYaw)); // Flightstick
-                                                                                                                      // button
-                                                                                                                      // 11
+      m_driveJoystick.button(OperatorConstants.resetYawButton).whileTrue(new InstantCommand(m_robotDrive::resetYaw));
       Trigger fieldRelativeTrigger = OperatorConstants.useXbox
           ? new Trigger(m_driveJoystick.axisGreaterThan(2, 0.1))
           : new Trigger(m_driveJoystick.button(OperatorConstants.fieldRelativeButton));
@@ -295,8 +294,11 @@ public class RobotContainer {
     if (m_chooseAutos.getSelected() == "IntermediateAmp") {
       return Autos.IntermediateAmp(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem);
     }
-    if (m_chooseAutos.getSelected() == "TestPath5"){
+    if (m_chooseAutos.getSelected() == "TestPath5") {
       return Autos.FiveMeterTest(m_robotDrive);
+    }
+    if (m_chooseAutos.getSelected() == "OnlyPodiumPreload") {
+      return Autos.OnlyPodiumPreload(compoundCommands, m_robotDrive, m_shooterSubsystem);
     }
     if (m_chooseAutos.getSelected() == "DoNothing") {
       return Autos.DoNothing();
