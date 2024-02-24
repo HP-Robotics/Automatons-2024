@@ -47,7 +47,7 @@ public class PivotSubsystem extends SubsystemBase {
     m_motorR.setNeutralMode(NeutralModeValue.Brake);
     m_motorR.setInverted(true);
     m_motorL.setNeutralMode(NeutralModeValue.Brake);
-    var rampConfigs = new ClosedLoopRampsConfigs().withTorqueClosedLoopRampPeriod(PivotConstants.rampTimeTo300s);
+    var rampConfigs = new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(PivotConstants.rampTimeTo300s);
     var currentConfigs = new CurrentLimitsConfigs()
       .withSupplyCurrentLimit(PivotConstants.currentLimit)
       .withSupplyCurrentLimitEnable(true)
@@ -97,9 +97,9 @@ public class PivotSubsystem extends SubsystemBase {
         }
       }
       m_absoluteBroken = false;
-      pivotTable.putValue("Grav Propotion", NetworkTableValue.makeDouble(grav));
-      pivotTable.putValue("Commanded Output", NetworkTableValue.makeDouble(output));
-      pivotTable.putValue("Filtered Input", NetworkTableValue.makeDouble(filtered_Encoder));
+      // pivotTable.putValue("Grav Propotion", NetworkTableValue.makeDouble(grav));
+      // pivotTable.putValue("Commanded Output", NetworkTableValue.makeDouble(output));
+      // pivotTable.putValue("Filtered Input", NetworkTableValue.makeDouble(filtered_Encoder));
 
     } else {
       if (!m_absoluteBroken) {
@@ -111,10 +111,10 @@ public class PivotSubsystem extends SubsystemBase {
     // Power",NetworkTableValue.makeDouble(m_motorR.getDutyCycle().getValueAsDouble()));
     // pivotTable.putValue("Pivot
     // Position",NetworkTableValue.makeDouble(m_motorR.getPosition().getValueAsDouble()));
-    pivotTable.putValue("P Proportion",
-        NetworkTableValue.makeDouble(m_pivotController.getPositionError() * m_pivotController.getP()));
-    pivotTable.putValue("D Proportion",
-        NetworkTableValue.makeDouble(m_pivotController.getVelocityError() * m_pivotController.getD()));
+    // pivotTable.putValue("P Proportion",
+    //     NetworkTableValue.makeDouble(m_pivotController.getPositionError() * m_pivotController.getP()));
+    // pivotTable.putValue("D Proportion",
+    //     NetworkTableValue.makeDouble(m_pivotController.getVelocityError() * m_pivotController.getD()));
     pivotTable.putValue("Pivot Setpoint", NetworkTableValue.makeDouble(m_pivotController.getSetpoint()));
     // pivotTable.putValue("Pivot
     // Error",NetworkTableValue.makeDouble(m_pivotController.getPositionError()));
@@ -161,7 +161,7 @@ public class PivotSubsystem extends SubsystemBase {
 
   public double getMagicAngle(double distance) {
     return PivotConstants.magicConstants[0] * distance * distance + PivotConstants.magicConstants[1] * distance
-        + PivotConstants.magicConstants[2];
+        + PivotConstants.magicConstants[2] + PivotConstants.encoderAt90 - 0.51;
   }
 
   public void setPosition(double position) { // TODO remove bad inputs

@@ -33,7 +33,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_backMotor = new TalonFX(IDConstants.backMotorID,"CANivore");
     TalonFXConfiguration config = new TalonFXConfiguration();
 
-    var rampConfigs = new ClosedLoopRampsConfigs().withTorqueClosedLoopRampPeriod(ShooterConstants.rampTimeTo300s);
+    var rampConfigs = new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(ShooterConstants.rampTimeTo300s);
     var currentConfigs = new CurrentLimitsConfigs()
       .withSupplyCurrentLimit(ShooterConstants.currentLimit)
       .withSupplyCurrentLimitEnable(true)

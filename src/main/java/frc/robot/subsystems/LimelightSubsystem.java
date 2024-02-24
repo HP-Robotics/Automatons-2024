@@ -25,6 +25,7 @@ public class LimelightSubsystem extends SubsystemBase {
   NetworkTable m_gamePieceTable;
   NetworkTable m_limelight_twoplus;
   public double sawAprilTag;
+  public boolean aprilTagSeen;
   /** Creates a new ExampleSubsystem. */
   public Pose2d m_visionPose2d = new Pose2d();
 
@@ -43,6 +44,7 @@ public class LimelightSubsystem extends SubsystemBase {
     publisher = poseEstimatorTable.getStructTopic("AprilTagPose", Pose2d.struct).publish();
 
     m_gamePieceTable = NetworkTableInstance.getDefault().getTable("limelight-two");
+    aprilTagSeen = false;
   }
 
   public double getDistanceTo(Pose2d robot, Pose2d fieldpose) {
@@ -103,6 +105,9 @@ public class LimelightSubsystem extends SubsystemBase {
           "angleToSpeaker", NetworkTableValue.makeDouble(getAngleTo(m_robotPose, LimelightConstants.aprilTag7)));
 
       publisher.set(m_robotPose);
+      if(!aprilTagSeen){
+        aprilTagSeen = true;
+      }
     }
 
     // double noteTV = m_gamePieceTable.getEntry("tv").getValue().getDouble();

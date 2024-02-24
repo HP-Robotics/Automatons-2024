@@ -46,9 +46,10 @@ public class DrivePointedToSpeakerCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_limelightSubsystem.sawAprilTag == 1) {
+    if (m_limelightSubsystem.aprilTagSeen) {
     m_drivesubsystem.drivePointedTowardsAngle(m_joystick, 
-    new Rotation2d(Math.toRadians(m_limelightSubsystem.getAngleTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag) - 180)));
+    new Rotation2d(Math.toRadians(m_limelightSubsystem.getAngleTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag) - 180)
+    ).minus(m_limelightSubsystem.m_visionPose2d.getRotation()).plus(m_drivesubsystem.getPose().getRotation()));
     } else {
       m_drivesubsystem.driveWithJoystick(m_joystick);
     }
