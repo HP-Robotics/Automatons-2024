@@ -172,6 +172,13 @@ public final class Constants {
     public static final double vanguardSpeed = -0.5;
   }
 
+  public static class SnuffilatorConstants {
+    public static final int stallCurrentLimit = 3;
+    public static final int freeCurrentLimit = 5;
+
+    public static final double snuffilatorSpeed = 0.05;
+  }
+
   public static class ShooterConstants {
 
     public static final double shooterSpeedFront = 50; // TODO: Is this correct? 50

@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-// import frc.robot.Constants.SnuffilatorConstants;
+import frc.robot.Constants.SnuffilatorConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
@@ -94,11 +94,10 @@ public class CommandBlocks {
     );
   }
   public Command moveSnuffilator(boolean goingUp) {
-    // if (goingUp) {
-    //   return new InstantCommand(() -> {m_snuffilatorSubsystem.move(SnuffilatorConstants.snuffilatorSpeed);});
-    // } else {
-    //   return new InstantCommand(() -> {m_snuffilatorSubsystem.move(-SnuffilatorConstants.snuffilatorSpeed);});
-    // }
-    return null;
+    if (goingUp) {
+      return new InstantCommand(() -> {m_snuffilatorSubsystem.move(SnuffilatorConstants.snuffilatorSpeed);});
+    } else {
+      return new InstantCommand(() -> {m_snuffilatorSubsystem.move(-SnuffilatorConstants.snuffilatorSpeed);});
+    }
   }
 }
