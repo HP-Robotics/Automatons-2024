@@ -4,25 +4,17 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.IDConstants;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.ShooterConstants;
 
 public class ClimbSubsystem extends SubsystemBase {
   CANSparkMax climbMotor = new CANSparkMax(IDConstants.climbMotorID, MotorType.kBrushless);
