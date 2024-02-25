@@ -38,6 +38,12 @@ public class TriggerStatesCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (m_subsystem.beambreakState && !m_beamBreak.beamBroken()) {
+      m_subsystem.beambreakState = false;
+    }
+    if (!m_subsystem.beambreakState && m_beamBreak.beamBroken()) {
+      m_subsystem.beambreakState = true;
+    }
     if (m_subsystem.triggerYuck) {
       m_subsystem.setTrigger(TriggerConstants.yuckSpeed);
     }
@@ -52,12 +58,6 @@ public class TriggerStatesCommand extends Command {
     }
     else {
       m_subsystem.m_triggerMotor.setControl(new NeutralOut());
-    }
-    if (m_subsystem.beambreakState && !m_beamBreak.beamBroken()) {
-      m_subsystem.beambreakState = false;
-    }
-    if (!m_subsystem.beambreakState && m_beamBreak.beamBroken()) {
-      m_subsystem.beambreakState = true;
     }
   }
 

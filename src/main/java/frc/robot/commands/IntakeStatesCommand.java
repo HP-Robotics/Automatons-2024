@@ -35,6 +35,12 @@ public class IntakeStatesCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (m_subsystem.beambreakState && !m_beamBreak.beamBroken()) {
+      m_subsystem.beambreakState = false;
+    }
+    if (!m_subsystem.beambreakState && m_beamBreak.beamBroken()) {
+      m_subsystem.beambreakState = true;
+    }
     if (m_subsystem.intakeYuck) {
       m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed), IntakeConstants.vanguardSpeed);
     }
@@ -49,12 +55,6 @@ public class IntakeStatesCommand extends Command {
     }
     else {
       m_subsystem.runIntake(0,0);
-    }
-    if (m_subsystem.beambreakState && !m_beamBreak.beamBroken()) {
-      m_subsystem.beambreakState = false;
-    }
-    if (!m_subsystem.beambreakState && m_beamBreak.beamBroken()) {
-      m_subsystem.beambreakState = true;
     }
   }
 
