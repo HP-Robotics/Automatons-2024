@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.MathUtil;
@@ -55,6 +57,10 @@ public class DriveSubsystem extends SubsystemBase {
   public final Field2d m_targetPose = new Field2d();
 
   private final Pigeon2 m_pGyro = new Pigeon2(IDConstants.PigeonID, "CANivore");
+
+  private StatusSignal m_pGyroPitch = m_pGyro.getPitch();
+  private StatusSignal m_pGyroYaw = m_pGyro.getYaw();
+  private StatusSignal m_pGyroRoll = m_pGyro.getRoll();
 
   SwerveDriveOdometry m_odometry;
   PIDController rotationController;
@@ -117,14 +123,15 @@ public class DriveSubsystem extends SubsystemBase {
 
 
         //TODO investigate why this takes so long
-    // m_frontLeft.updateShuffleboard();
-    // m_frontRight.updateShuffleboard();
-    // m_backRight.updateShuffleboard();
-    // m_backLeft.updateShuffleboard();
-
-    driveTrainTable.putValue("Pigeon Pitch", NetworkTableValue.makeDouble(m_pGyro.getPitch().getValue()));
-    driveTrainTable.putValue("Pigeon Yaw", NetworkTableValue.makeDouble(m_pGyro.getYaw().getValue()));
-    driveTrainTable.putValue("Pigeon Roll", NetworkTableValue.makeDouble(m_pGyro.getRoll().getValue()));
+      // m_frontLeft.updateShuffleboard();
+      // m_frontRight.updateShuffleboard();
+      // m_backRight.updateShuffleboard();
+      // m_backLeft.updateShuffleboard();
+    
+    BaseStatusSignal.refreshAll(m_pGyroPitch, m_pGyroYaw, m_pGyroRoll);
+    driveTrainTable.putValue("Pigeon Pitch", NetworkTableValue.makeDouble(m_pGyroPitch.getValueAsDouble()));
+    driveTrainTable.putValue("Pigeon Yaw", NetworkTableValue.makeDouble(m_pGyroYaw.getValueAsDouble()));
+    driveTrainTable.putValue("Pigeon Roll", NetworkTableValue.makeDouble(m_pGyroRoll.getValueAsDouble()));
     
     // m_poseEstimator.updatePoseEstimator(pigeonYaw,new SwerveModulePosition[] {
         // m_frontLeft.getPosition(),
