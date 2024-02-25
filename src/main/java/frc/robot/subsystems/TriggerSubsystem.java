@@ -48,13 +48,6 @@ public class TriggerSubsystem extends SubsystemBase {
     triggerTable.putValue("Trigger kP", NetworkTableValue.makeDouble(0));
     triggerTable.putValue("Trigger kI", NetworkTableValue.makeDouble(0));
     triggerTable.putValue("Trigger kD", NetworkTableValue.makeDouble(0));
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    triggerTable.putValue("triggerMotor Velocity", NetworkTableValue.makeDouble(m_triggerMotor.getVelocity().getValue()));
-    triggerTable.putValue("Beam Broken", NetworkTableValue.makeBoolean(m_beamBreak.beamBroken()));
 
     Slot0Configs slot0Configs = new Slot0Configs();
     slot0Configs.kV = TriggerConstants.triggerkV;
@@ -62,6 +55,13 @@ public class TriggerSubsystem extends SubsystemBase {
     slot0Configs.kI = TriggerConstants.triggerkI;
     slot0Configs.kD = TriggerConstants.triggerkD;
     m_triggerMotor.getConfigurator().apply(slot0Configs);
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    triggerTable.putValue("triggerMotor Velocity", NetworkTableValue.makeDouble(m_triggerMotor.getVelocity().getValue()));
+    triggerTable.putValue("Beam Broken", NetworkTableValue.makeBoolean(m_beamBreak.beamBroken()));
 
     triggerTable.putValue("Trigger On", NetworkTableValue.makeBoolean(triggerOn));
     triggerTable.putValue("Trigger Fire", NetworkTableValue.makeBoolean(triggerFire));
