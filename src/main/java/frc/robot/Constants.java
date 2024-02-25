@@ -248,11 +248,11 @@ public final class Constants {
 
     public static final double rampTimeTo300s = 10;
 
-    public static final double subwooferPosition = degreesToEncoder(61.2); //0.43
-    public static final double ampPosition = degreesToEncoder(122.4); //0.6
-    public static final double podiumPosition = degreesToEncoder(45); //0.385
-    public static final double note2Position = degreesToEncoder(42.12); //0.395
-    public static final double note1_3Position = degreesToEncoder(45.72); //0.385
+    public static final double subwooferPosition = degreesToEncoder(58.3); //0.43
+    public static final double ampPosition = degreesToEncoder(119.52); //0.6
+    public static final double podiumPosition = degreesToEncoder(42.12); //0.385
+    public static final double note2Position = degreesToEncoder(45.72); //0.395
+    public static final double note1_3Position = degreesToEncoder(42.12); //0.385
   }
 
   public static class IDConstants {
