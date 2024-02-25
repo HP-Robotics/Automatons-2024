@@ -103,7 +103,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void fireButtonPressed () {
-    if ((intakeOn || beambreakState) && !intakeYuck) {
+    if (!intakeYuck) {
       intakeFire = true;
     }
   }
