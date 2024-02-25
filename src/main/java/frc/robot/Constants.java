@@ -296,7 +296,7 @@ public final class Constants {
     public static final int BRAbsEncoder = 11;
     public static final int BLAbsEncoder = 13;
     
-    public static final int pivotAbsEncoderID = 8;
+    public static final int pivotAbsEncoderID = 16;
 
     public static final int TriggerBeamBreak = 9; // Beam Break port
     public static final int IntakeBeamBreak = 7;
