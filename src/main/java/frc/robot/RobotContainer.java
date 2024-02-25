@@ -96,8 +96,6 @@ public class RobotContainer {
 
   private final SendableChooser<String> m_chooseAutos;
 
-  private Command compoundShooter;
-  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -148,14 +146,6 @@ public class RobotContainer {
   }
 
   private void configureCommands() {
-    compoundShooter = new ParallelCommandGroup(
-        new SetShooterCommand(m_shooterSubsystem, null, null)
-            .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).asProxy(),
-        new WaitUntilCommand(m_shooterSubsystem::atSpeed)
-            .andThen(new StartEndCommand(() -> m_triggerSubsystem.setTrigger(-0.2), m_triggerSubsystem::stopTrigger))
-            .withTimeout(0.1)
-            .andThen(new TriggerCommand(m_triggerSubsystem, true, m_intakeSubsystem)
-                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)));
     NamedCommands.registerCommand("startIntaking", compoundCommands.startIntaking());
     NamedCommands.registerCommand("stopIntaking", compoundCommands.stopIntaking());
     NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, null, null));
@@ -191,8 +181,6 @@ public class RobotContainer {
               .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
       m_driveJoystick.button(OperatorConstants.yuckButton).whileTrue(compoundCommands.yuckButtonHold());
     }
-
-    m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble,0.5);
 
     if (SubsystemConstants.useClimber) {
       m_driveJoystick.button(OperatorConstants.climberButton).whileTrue(new ClimberCommand(m_climberSubsystem));
