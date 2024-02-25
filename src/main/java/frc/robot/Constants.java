@@ -169,7 +169,7 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final double intakeSpeed = -0.45;
-    public static final double vanguardSpeed = -0.5;
+    public static final double vanguardSpeed = -0.25;
   }
 
   public static class SnuffilatorConstants {
