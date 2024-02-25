@@ -42,15 +42,13 @@ public class IntakeStatesCommand extends Command {
       m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed), 0);
     }
     else if (m_subsystem.beambreakState) {
-      m_subsystem.m_motor.setControl(new NeutralOut());
-      m_subsystem.runOnlyVanguard(0);
+      m_subsystem.runIntake(0, 0);
     }
     else if (m_subsystem.intakeOn) {
       m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed), IntakeConstants.vanguardSpeed);
     }
     else {
-      m_subsystem.m_motor.setControl(new NeutralOut());
-      m_subsystem.runOnlyVanguard(0);
+      m_subsystem.runIntake(0,0);
     }
     if (m_subsystem.beambreakState && !m_beamBreak.beamBroken()) {
       m_subsystem.beambreakState = false;
