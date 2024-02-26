@@ -92,7 +92,7 @@ public class RobotContainer {
       ? new SnuffilatorSubsystem()
       : null;
 
-  private final PowerDistribution pdh = new PowerDistribution(1,ModuleType.kRev);
+  private final PowerDistribution pdh = new PowerDistribution();
 
   private final SendableChooser<String> m_chooseAutos;
 
