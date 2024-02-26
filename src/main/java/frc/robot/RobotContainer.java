@@ -83,7 +83,8 @@ public class RobotContainer {
       ? new LimelightSubsystem(m_PoseEstimatorSubsystem)
       : null;
 
-  private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem(m_opJoystick) : null;
+  private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem(m_opJoystick)
+      : null;
   private final IntakeSubsystem m_intakeSubsystem = SubsystemConstants.useIntake ? new IntakeSubsystem() : null;
   private final PivotSubsystem m_pivotSubsystem = SubsystemConstants.usePivot ? new PivotSubsystem() : null;
   private final ClimbSubsystem m_climberSubsystem = SubsystemConstants.useClimber ? new ClimbSubsystem() : null;
@@ -133,7 +134,7 @@ public class RobotContainer {
     m_chooseAutos.addOption("Four Piece Center", "FourPieceCenter");
     m_chooseAutos.addOption("Three Piece Center", "Three Piece Center");
     m_chooseAutos.addOption("Test Path 5", "TestPath5");
-    m_chooseAutos.addOption("Shoot Preload Far Away","ShootPreloadFarAway");
+    m_chooseAutos.addOption("Shoot Preload Far Away", "ShootPreloadFarAway");
     m_chooseAutos.addOption("Only Shoot", "OnlyShoot");
     m_chooseAutos.setDefaultOption("Do Nothing", "DoNothing");
 
@@ -149,16 +150,18 @@ public class RobotContainer {
   private void configureCommands() {
     NamedCommands.registerCommand("startIntaking", compoundCommands.startIntaking());
     NamedCommands.registerCommand("stopIntaking", compoundCommands.stopIntaking());
-    NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, null, null));
-    NamedCommands.registerCommand("stopShooter", new SetShooterCommand(m_shooterSubsystem, 0.0, 0.0));
+    if (SubsystemConstants.useShooter) {
+      NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, null, null));
+      NamedCommands.registerCommand("stopShooter", new SetShooterCommand(m_shooterSubsystem, 0.0, 0.0));
+    }
   }
 
   private void configureBindings() {
 
     if (SubsystemConstants.useDrive) {
       m_driveJoystick.button(ControllerConstants.resetYawButton).whileTrue(new InstantCommand(m_robotDrive::resetYaw)); // Flightstick
-                                                                                                                      // button
-                                                                                                                      // 11
+      // button
+      // 11
       Trigger fieldRelativeTrigger = ControllerConstants.useXbox
           ? new Trigger(m_driveJoystick.axisGreaterThan(2, 0.1))
           : new Trigger(m_driveJoystick.button(ControllerConstants.fieldRelativeButton));
@@ -217,7 +220,9 @@ public class RobotContainer {
     }
 
     if (SubsystemConstants.useSnuffilator) {
-      new Trigger(() -> {return m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;})
+      new Trigger(() -> {
+        return m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
+      })
           .onTrue(compoundCommands.moveSnuffilator(true))
           .onFalse(compoundCommands.moveSnuffilator(false));
     }
@@ -274,7 +279,7 @@ public class RobotContainer {
     }
   }
 
-  public Command getAutonomousCommand() { //TODO put by auto chooser
+  public Command getAutonomousCommand() { // TODO put by auto chooser
     if (m_chooseAutos.getSelected() == "CenterDown") {
       return Autos.CenterDown(compoundCommands, m_robotDrive, m_shooterSubsystem);
     }
@@ -283,7 +288,8 @@ public class RobotContainer {
           m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "FourPieceCenter") {
-      return Autos.FourPieceCenter(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
+      return Autos.FourPieceCenter(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem,
+          m_triggerSubsystem,
           m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "GrandTheftAuto") {
@@ -299,10 +305,12 @@ public class RobotContainer {
       return Autos.FiveMeterTest(m_robotDrive);
     }
     if (m_chooseAutos.getSelected() == "ShootPreloadFarAway") {
-      return Autos.ShootPreloadFarAway(compoundCommands, m_robotDrive, m_shooterSubsystem, m_limelightSubsystem, m_pivotSubsystem);
+      return Autos.ShootPreloadFarAway(compoundCommands, m_robotDrive, m_shooterSubsystem, m_limelightSubsystem,
+          m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "OnlyShoot") {
-      return Autos.OnlyShoot(compoundCommands, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem, m_pivotSubsystem);
+      return Autos.OnlyShoot(compoundCommands, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
+          m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "DoNothing") {
       return Autos.DoNothing();
