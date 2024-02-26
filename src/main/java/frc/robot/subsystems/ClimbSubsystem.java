@@ -21,7 +21,7 @@ public class ClimbSubsystem extends SubsystemBase {
   SparkPIDController climbController; 
   RelativeEncoder m_encoder;
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable climberTable = inst.getTable("climber-table");
+  NetworkTable climberTable = inst.getTable("climber-table"); // TODO: Make these names consistant (I like the table one)
   /** Creates a new ClimbSubsystem. */
   public ClimbSubsystem() {
     // TalonFXConfiguration config = new TalonFXConfiguration();
