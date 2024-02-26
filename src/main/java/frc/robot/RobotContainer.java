@@ -38,6 +38,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -90,14 +92,16 @@ public class RobotContainer {
       ? new SnuffilatorSubsystem()
       : null;
 
+  private final PowerDistribution pdh = new PowerDistribution();
+
   private final SendableChooser<String> m_chooseAutos;
 
-  private Command compoundShooter;
-  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
+    pdh.setSwitchableChannel(true);
 
     if (SubsystemConstants.useDataManager) {
       DataLogManager.start();
@@ -129,7 +133,8 @@ public class RobotContainer {
     m_chooseAutos.addOption("Four Piece Center", "FourPieceCenter");
     m_chooseAutos.addOption("Three Piece Center", "Three Piece Center");
     m_chooseAutos.addOption("Test Path 5", "TestPath5");
-    m_chooseAutos.addOption("Only Podium Preload","OnlyPodiumPreload");
+    m_chooseAutos.addOption("Shoot Preload Far Away","ShootPreloadFarAway");
+    m_chooseAutos.addOption("Only Shoot", "OnlyShoot");
     m_chooseAutos.setDefaultOption("Do Nothing", "DoNothing");
 
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
@@ -142,14 +147,6 @@ public class RobotContainer {
   }
 
   private void configureCommands() {
-    compoundShooter = new ParallelCommandGroup(
-        new SetShooterCommand(m_shooterSubsystem, null, null)
-            .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).asProxy(),
-        new WaitUntilCommand(m_shooterSubsystem::atSpeed)
-            .andThen(new StartEndCommand(() -> m_triggerSubsystem.setTrigger(-0.2), m_triggerSubsystem::stopTrigger))
-            .withTimeout(0.1)
-            .andThen(new TriggerCommand(m_triggerSubsystem, true, m_intakeSubsystem)
-                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)));
     NamedCommands.registerCommand("startIntaking", compoundCommands.startIntaking());
     NamedCommands.registerCommand("stopIntaking", compoundCommands.stopIntaking());
     NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, null, null));
@@ -187,8 +184,6 @@ public class RobotContainer {
               .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
       m_driveJoystick.button(ControllerConstants.yuckButton).whileTrue(compoundCommands.yuckButtonHold());
     }
-
-    m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble,0.5);
 
     if (SubsystemConstants.useClimber) {
       m_driveJoystick.button(ControllerConstants.climberButton).whileTrue(new ClimberCommand(m_climberSubsystem));
@@ -303,8 +298,11 @@ public class RobotContainer {
     if (m_chooseAutos.getSelected() == "TestPath5") {
       return Autos.FiveMeterTest(m_robotDrive);
     }
-    if (m_chooseAutos.getSelected() == "OnlyPodiumPreload") {
-      return Autos.OnlyPodiumPreload(compoundCommands, m_robotDrive, m_shooterSubsystem);
+    if (m_chooseAutos.getSelected() == "ShootPreloadFarAway") {
+      return Autos.ShootPreloadFarAway(compoundCommands, m_robotDrive, m_shooterSubsystem, m_limelightSubsystem, m_pivotSubsystem);
+    }
+    if (m_chooseAutos.getSelected() == "OnlyShoot") {
+      return Autos.OnlyShoot(compoundCommands, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem, m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "DoNothing") {
       return Autos.DoNothing();

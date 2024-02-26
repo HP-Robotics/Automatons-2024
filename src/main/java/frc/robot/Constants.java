@@ -169,7 +169,7 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final double intakeSpeed = -0.45;
-    public static final double vanguardSpeed = -0.5;
+    public static final double vanguardSpeed = -0.25;
   }
 
   public static class SnuffilatorConstants {
@@ -226,9 +226,9 @@ public final class Constants {
   }
 
   public static class PivotConstants {
-    public static final double kP = 3/2;//2
+    public static final double kP = 3;//2
     public static final double kI = 0.001;
-    public static final double kD = 0.08/2;
+    public static final double kD = 0.08;
     public static final double kG = -0.02;//0.02
     public static final boolean startWithPID = true;
     
@@ -248,11 +248,11 @@ public final class Constants {
 
     public static final double rampTimeTo300s = 10;
 
-    public static final double subwooferPosition = degreesToEncoder(61.2); //0.43
-    public static final double ampPosition = degreesToEncoder(122.4); //0.6
-    public static final double podiumPosition = degreesToEncoder(45); //0.385
-    public static final double note2Position = degreesToEncoder(42.12); //0.395
-    public static final double note1_3Position = degreesToEncoder(45.72); //0.385
+    public static final double subwooferPosition = degreesToEncoder(58.3); //0.43
+    public static final double ampPosition = degreesToEncoder(119.52); //0.6
+    public static final double podiumPosition = degreesToEncoder(42.12); //0.385
+    public static final double note2Position = degreesToEncoder(45.72); //0.395
+    public static final double note1_3Position = degreesToEncoder(42.12); //0.385
   }
 
   public static class IDConstants {
@@ -296,7 +296,7 @@ public final class Constants {
     public static final int BRAbsEncoder = 11;
     public static final int BLAbsEncoder = 13;
     
-    public static final int pivotAbsEncoderID = 8;
+    public static final int pivotAbsEncoderID = 16;
 
     public static final int TriggerBeamBreak = 9; // Beam Break port
     public static final int IntakeBeamBreak = 7;

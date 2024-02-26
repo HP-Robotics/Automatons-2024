@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
@@ -28,6 +29,8 @@ public class IntakeSubsystem extends SubsystemBase {
   public boolean intakeFire = false; //fire button is pressed
   public boolean intakeYuck = false; //yuck button is pressed
   public boolean beambreakState = false; //trigger beambreak sees note & intakeOn
+
+  public double m_lastOutput = 0.0;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable intakeTable = inst.getTable("intake-table");
@@ -60,8 +63,16 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void runIntake(double output, double vanguardOutput) {
-    m_motor.setControl(new DutyCycleOut(output));
-    m_vanguardLeft.set(vanguardOutput);
+    if (output != m_lastOutput) {
+      if (output == 0) {
+        m_motor.setControl(new NeutralOut());
+      }
+      else {
+        m_motor.setControl(new DutyCycleOut(output));
+      }
+      m_vanguardLeft.set(vanguardOutput);
+    }
+    m_lastOutput = output;
   };
 
   public void intakeButtonPressed () {
@@ -87,7 +98,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void fireButtonPressed () {
-    if ((intakeOn || beambreakState) && !intakeYuck) {
+    if (!intakeYuck) {
       intakeFire = true;
     }
   }

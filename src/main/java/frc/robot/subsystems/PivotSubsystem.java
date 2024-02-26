@@ -83,6 +83,7 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public void periodic() {
+    
     pivotTable.putValue("Absolute Encoder Position",
         NetworkTableValue.makeDouble(m_absEncoder.getAbsolutePosition()));
     double grav = -m_armGraivty.calculate(encoderToRadians(m_pivotController.getSetpoint()), 0);

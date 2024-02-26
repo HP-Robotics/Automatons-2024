@@ -76,12 +76,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTable.putValue("backMotor Velocity", NetworkTableValue.makeDouble(m_backMotor.getVelocity().getValue()));
     shooterTable.putValue("Shooter At Speed", NetworkTableValue.makeBoolean(this.atSpeed()));
 
-    if (m_frontMotor.getVelocity().getValue() > 0.1 || m_backMotor.getVelocity().getValue() > 0.1){
-      m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble,0.5);
-    }
-    else {
-      m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble,0.0);
-    }
+    
 
     // Slot0Configs slot0Configs = new Slot0Configs();
     // slot0Configs.kV = ShooterConstants.shooterMotorskV;
@@ -99,6 +94,13 @@ public class ShooterSubsystem extends SubsystemBase {
     m_backMotor.setControl(m_velocity.withVelocity(output2));
     // m_frontMotor.setControl(new DutyCycleOut(output1));
     // m_backMotor.setControl(new DutyCycleOut(output2));
+
+    if (output1 > 0.1 || output2 > 0.1){
+      m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble,0.5);
+    }
+    else {
+      m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble,0.0);
+    }
   }
 
   public boolean atSpeed() {
@@ -113,5 +115,6 @@ public class ShooterSubsystem extends SubsystemBase {
   public void stopShooter() {
     m_frontMotor.setControl(new DutyCycleOut(0));
     m_backMotor.setControl(new DutyCycleOut(0));
+    m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble, 0);
   }
 }
