@@ -83,6 +83,12 @@ public final class Autos {
     if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive || !SubsystemConstants.useShooter) {
       return null;
     }
+    /* There was a point where a version of the call to 'getDistanceTo' would cause the rio to apparently
+       start the robot over and over again.  It was cool; you'd get many printed messages of the robot
+       starting itself.  That occurred when trying to make the method static and use it.
+       It vanished by itself in a not entirely logical way.  Our best guess was that compile artifacts
+       needed to be cleaned more thoroughly than gradle could detect.  But this comment is here to remind us
+       if we ever see that error return.  -- Mentor Jeremy White */
     return new SequentialCommandGroup(
         new FollowPathCommandOurs(drive, "Center Down Part 1"),
         commandBlocks.fireGamePieceCommand(pivotSubsystem.getMagicAngle(
