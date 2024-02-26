@@ -57,7 +57,6 @@ public class IntakeSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     intakeTable.putValue("Beam Broken", NetworkTableValue.makeBoolean(m_beambreak.beamBroken()));
-
     intakeTable.putValue("Intake On", NetworkTableValue.makeBoolean(intakeOn));
     intakeTable.putValue("Intake Fire", NetworkTableValue.makeBoolean(intakeFire));
     intakeTable.putValue("Intake Yuck", NetworkTableValue.makeBoolean(intakeYuck));
@@ -102,7 +101,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void runOnlyVanguard (double output) {
-    m_vanguardLeft.set(output); // TODO: Add right
-  }
+    m_vanguardLeft.set(output);
 
+}
 }
