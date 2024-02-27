@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.SnuffilatorConstants;
@@ -16,14 +15,15 @@ import frc.robot.subsystems.SnuffilatorSubsystem;
 import frc.robot.subsystems.TriggerSubsystem;
 
 public class CommandBlocks {
-    IntakeSubsystem m_intakeSubsystem;
-    ShooterSubsystem m_shooterSubsystem;
-    TriggerSubsystem m_triggerSubsystem;
-    PivotSubsystem m_pivotSubsystem;
-    SnuffilatorSubsystem m_snuffilatorSubsystem;
-  
-  public CommandBlocks(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, 
-    ShooterSubsystem shooterSubsystem, TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem, SnuffilatorSubsystem snuffilatorSubsystem) {
+  IntakeSubsystem m_intakeSubsystem;
+  ShooterSubsystem m_shooterSubsystem;
+  TriggerSubsystem m_triggerSubsystem;
+  PivotSubsystem m_pivotSubsystem;
+  SnuffilatorSubsystem m_snuffilatorSubsystem;
+
+  public CommandBlocks(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem,
+      ShooterSubsystem shooterSubsystem, TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem,
+      SnuffilatorSubsystem snuffilatorSubsystem) {
     m_intakeSubsystem = intakeSubsystem;
     m_shooterSubsystem = shooterSubsystem;
     m_pivotSubsystem = pivotSubsystem;
@@ -32,16 +32,22 @@ public class CommandBlocks {
   }
 
   public Command fireGamePieceCommand(double pivotAngle) {
-    if (m_intakeSubsystem == null || m_triggerSubsystem == null || m_shooterSubsystem == null || m_pivotSubsystem == null) {
+    if (m_intakeSubsystem == null || m_triggerSubsystem == null || m_shooterSubsystem == null
+        || m_pivotSubsystem == null) {
       return new WaitCommand(0);
     }
-        return new ParallelDeadlineGroup(
-            new WaitCommand(1).until(() -> {/*System.out.println("wait for shooter");*/return m_shooterSubsystem.atSpeed() && m_pivotSubsystem.atPosition() && m_triggerSubsystem.beambreakState;})
-          .andThen(fireButtonHold().until(() -> {/*System.out.println("waiting for fire");*/return !m_triggerSubsystem.beambreakState;})),
-          new SetShooterCommand(m_shooterSubsystem, null, null),
-          new InstantCommand(() -> m_pivotSubsystem.setPosition(pivotAngle))//,
-          // new InstantCommand(() -> {System.out.println("firing game piece");})
-        );
+    return new ParallelDeadlineGroup(
+        new WaitCommand(1).until(() -> {
+          /* System.out.println("wait for shooter"); */return m_shooterSubsystem.atSpeed()
+              && m_pivotSubsystem.atPosition() && m_triggerSubsystem.beambreakState;
+        })
+            .andThen(fireButtonHold().until(() -> {
+              /* System.out.println("waiting for fire"); */return !m_triggerSubsystem.beambreakState;
+            })),
+        new SetShooterCommand(m_shooterSubsystem, null, null),
+        new InstantCommand(() -> m_pivotSubsystem.setPosition(pivotAngle))// ,
+    // new InstantCommand(() -> {System.out.println("firing game piece");})
+    );
   }
 
   public Command intakeButtonHold() {
@@ -49,9 +55,8 @@ public class CommandBlocks {
       return new WaitCommand(0);
     }
     return new ParallelCommandGroup(
-      new StartEndCommand(m_triggerSubsystem::intakeButtonPressed, m_triggerSubsystem::intakeButtonReleased), 
-      new StartEndCommand(m_intakeSubsystem::intakeButtonPressed, m_intakeSubsystem::intakeButtonReleased)
-    );
+        new StartEndCommand(m_triggerSubsystem::intakeButtonPressed, m_triggerSubsystem::intakeButtonReleased),
+        new StartEndCommand(m_intakeSubsystem::intakeButtonPressed, m_intakeSubsystem::intakeButtonReleased));
   }
 
   public Command startIntaking() {
@@ -60,8 +65,7 @@ public class CommandBlocks {
     }
     return new ParallelCommandGroup(
         new InstantCommand(m_intakeSubsystem::intakeButtonPressed),
-        new InstantCommand(m_triggerSubsystem::intakeButtonPressed)
-    );
+        new InstantCommand(m_triggerSubsystem::intakeButtonPressed));
   }
 
   public Command stopIntaking() {
@@ -70,18 +74,16 @@ public class CommandBlocks {
     }
     return new ParallelCommandGroup(
         new InstantCommand(m_intakeSubsystem::intakeButtonReleased),
-        new InstantCommand(m_triggerSubsystem::intakeButtonReleased)
-    );
+        new InstantCommand(m_triggerSubsystem::intakeButtonReleased));
   }
-  
+
   public Command fireButtonHold() {
     if (m_intakeSubsystem == null || m_triggerSubsystem == null) {
       return new WaitCommand(0);
     }
     return new ParallelCommandGroup(
-      new StartEndCommand(m_triggerSubsystem::fireButtonPressed, m_triggerSubsystem::fireButtonReleased), 
-      new StartEndCommand(m_intakeSubsystem::fireButtonPressed, m_intakeSubsystem::fireButtonReleased)
-    );
+        new StartEndCommand(m_triggerSubsystem::fireButtonPressed, m_triggerSubsystem::fireButtonReleased),
+        new StartEndCommand(m_intakeSubsystem::fireButtonPressed, m_intakeSubsystem::fireButtonReleased));
   }
 
   public Command yuckButtonHold() {
@@ -89,15 +91,19 @@ public class CommandBlocks {
       return new WaitCommand(0);
     }
     return new ParallelCommandGroup(
-      new StartEndCommand(m_triggerSubsystem::yuckButtonPressed, m_triggerSubsystem::yuckButtonReleased), 
-      new StartEndCommand(m_intakeSubsystem::yuckButtonPressed, m_intakeSubsystem::yuckButtonReleased)
-    );
+        new StartEndCommand(m_triggerSubsystem::yuckButtonPressed, m_triggerSubsystem::yuckButtonReleased),
+        new StartEndCommand(m_intakeSubsystem::yuckButtonPressed, m_intakeSubsystem::yuckButtonReleased));
   }
+
   public Command moveSnuffilator(boolean goingUp) {
     if (goingUp) {
-      return new InstantCommand(() -> {m_snuffilatorSubsystem.move(SnuffilatorConstants.snuffilatorSpeed);});
+      return new InstantCommand(() -> {
+        m_snuffilatorSubsystem.move(SnuffilatorConstants.snuffilatorSpeed);
+      });
     } else {
-      return new InstantCommand(() -> {m_snuffilatorSubsystem.move(-SnuffilatorConstants.snuffilatorSpeed);});
+      return new InstantCommand(() -> {
+        m_snuffilatorSubsystem.move(-SnuffilatorConstants.snuffilatorSpeed);
+      });
     }
   }
 }

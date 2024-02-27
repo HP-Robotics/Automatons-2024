@@ -17,9 +17,7 @@ import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IDConstants;
-import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -32,16 +30,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem(CommandJoystick joystick) {
-    m_frontMotor = new TalonFX(IDConstants.frontMotorID,"CANivore");
-    m_backMotor = new TalonFX(IDConstants.backMotorID,"CANivore");
+    m_frontMotor = new TalonFX(IDConstants.frontMotorID, "CANivore");
+    m_backMotor = new TalonFX(IDConstants.backMotorID, "CANivore");
     TalonFXConfiguration config = new TalonFXConfiguration();
     m_rumbleJoystick = joystick;
     var rampConfigs = new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(ShooterConstants.rampTimeTo300s);
     var currentConfigs = new CurrentLimitsConfigs()
-      .withSupplyCurrentLimit(ShooterConstants.currentLimit)
-      .withSupplyCurrentLimitEnable(true)
-      .withSupplyCurrentThreshold(ShooterConstants.currentThreshold)
-      .withSupplyTimeThreshold(ShooterConstants.currentTimeThreshold); // TODO: This isn't working we don't know why
+        .withSupplyCurrentLimit(ShooterConstants.currentLimit)
+        .withSupplyCurrentLimitEnable(true)
+        .withSupplyCurrentThreshold(ShooterConstants.currentThreshold)
+        .withSupplyTimeThreshold(ShooterConstants.currentTimeThreshold); // TODO: This isn't working we don't know why
 
     m_frontMotor.getConfigurator().apply(config);
     m_backMotor.getConfigurator().apply(config);
@@ -76,8 +74,6 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTable.putValue("backMotor Velocity", NetworkTableValue.makeDouble(m_backMotor.getVelocity().getValue()));
     shooterTable.putValue("Shooter At Speed", NetworkTableValue.makeBoolean(this.atSpeed()));
 
-    
-
     // Slot0Configs slot0Configs = new Slot0Configs();
     // slot0Configs.kV = ShooterConstants.shooterMotorskV;
     // slot0Configs.kP = ShooterConstants.shooterMotorskP;
@@ -95,18 +91,17 @@ public class ShooterSubsystem extends SubsystemBase {
     // m_frontMotor.setControl(new DutyCycleOut(output1));
     // m_backMotor.setControl(new DutyCycleOut(output2));
 
-    if (output1 > 0.1 || output2 > 0.1){
-      m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble,0.5);
-    }
-    else {
-      m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble,0.0);
+    if (output1 > 0.1 || output2 > 0.1) {
+      m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.5);
+    } else {
+      m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.0);
     }
   }
 
   public boolean atSpeed() {
     // return true;
-    if (Math.abs(m_frontMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold 
-     && Math.abs(m_backMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold) {
+    if (Math.abs(m_frontMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold
+        && Math.abs(m_backMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold) {
       return true;
     }
     return false;

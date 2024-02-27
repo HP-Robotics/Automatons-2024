@@ -18,14 +18,16 @@ import frc.robot.Constants.IDConstants;
 
 public class ClimbSubsystem extends SubsystemBase {
   CANSparkMax climbMotor = new CANSparkMax(IDConstants.climbMotorID, MotorType.kBrushless);
-  SparkPIDController climbController; 
+  SparkPIDController climbController;
   RelativeEncoder m_encoder;
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable climberTable = inst.getTable("climber-table"); // TODO: Make these names consistant (I like the table one)
+  NetworkTable climberTable = inst.getTable("climber-table"); // TODO: Make these names consistant (I like table)
+
   /** Creates a new ClimbSubsystem. */
   public ClimbSubsystem() {
     // TalonFXConfiguration config = new TalonFXConfiguration();
-    // climbMotor.getConfigurator().apply(config); // TODO: Is there a configuration for CANSparkMax?
+    // climbMotor.getConfigurator().apply(config); // TODO: Is there a configuration
+    // for CANSparkMax?
     climbMotor.restoreFactoryDefaults();
 
     climbController.setP(ClimberConstants.kP);
@@ -58,8 +60,7 @@ public class ClimbSubsystem extends SubsystemBase {
   public boolean atBottom() {
     if ((m_encoder.getVelocity() < Math.abs(0.1)) || (m_encoder.getVelocity() < 0)) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }

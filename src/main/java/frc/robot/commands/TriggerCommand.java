@@ -6,27 +6,23 @@ package frc.robot.commands;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.NetworkTableValue;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TriggerSubsystem;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TriggerConstants;
+
 public class TriggerCommand extends Command {
-   private final TriggerSubsystem m_subsystem;
-    boolean m_ignoreBeamBreak;
-    boolean m_currentbeambreak = false;
-    boolean pastBeamBroken = false;
-    IntakeSubsystem m_intakeSubsystem;
+  private final TriggerSubsystem m_subsystem;
+  boolean m_ignoreBeamBreak;
+  boolean m_currentbeambreak = false;
+  boolean pastBeamBroken = false;
+  IntakeSubsystem m_intakeSubsystem;
 
   /** Creates a new ShooterCommand. */
   public TriggerCommand(TriggerSubsystem subsystem, Boolean ignoreBeamBreak, IntakeSubsystem intakesubsystem) {
     // Use addRequirements() here to declare subsystem dependencies
     m_subsystem = subsystem;
-    m_intakeSubsystem = intakesubsystem; 
+    m_intakeSubsystem = intakesubsystem;
     addRequirements(subsystem);
     m_ignoreBeamBreak = ignoreBeamBreak;
   }
@@ -38,7 +34,7 @@ public class TriggerCommand extends Command {
   @Override
   public void initialize() {
     double output = triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed);
-    m_subsystem.setTrigger(output); 
+    m_subsystem.setTrigger(output);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -59,7 +55,7 @@ public class TriggerCommand extends Command {
     m_currentbeambreak = m_intakeSubsystem.m_beambreak.beamBroken();
     if (!m_ignoreBeamBreak) {
       if (pastBeamBroken != m_currentbeambreak && pastBeamBroken) {
-        //System.out.println("stopped");
+        // System.out.println("stopped");
         return true;
       }
     }
@@ -67,4 +63,5 @@ public class TriggerCommand extends Command {
   }
 }
 
-// From the moment I realized the weakdisness of my fleash, it discused me. I craved the certainty of steel. 
+// From the moment I realized the weakdisness of my fleash, it discused me. I
+// craved the certainty of steel.

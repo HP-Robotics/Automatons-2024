@@ -11,12 +11,13 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeCommand extends Command {
-    private final IntakeSubsystem m_subsystem;
-    Boolean pastBeamBroken = false;
-    Boolean currentbeambreak = false;
+  private final IntakeSubsystem m_subsystem;
+  Boolean pastBeamBroken = false;
+  Boolean currentbeambreak = false;
   /** Creates a new IntakeCommand. */
-    NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    NetworkTable intakeTable = inst.getTable("intake-table");
+  NetworkTableInstance inst = NetworkTableInstance.getDefault();
+  NetworkTable intakeTable = inst.getTable("intake-table");
+
   public IntakeCommand(IntakeSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
@@ -28,7 +29,7 @@ public class IntakeCommand extends Command {
   public void initialize() {
     double output = intakeTable.getEntry("Intake Speed").getDouble(IntakeConstants.intakeSpeed);
     double vanguardOutput = intakeTable.getEntry("Vanguard Speed").getDouble(IntakeConstants.vanguardSpeed);
-    m_subsystem.runIntake(output, vanguardOutput );
+    m_subsystem.runIntake(output, vanguardOutput);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,7 +41,7 @@ public class IntakeCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.runIntake(0.0, 0.0); // Turn intake off; 
+    m_subsystem.runIntake(0.0, 0.0); // Turn intake off;
   }
 
   // Returns true when the command should end.

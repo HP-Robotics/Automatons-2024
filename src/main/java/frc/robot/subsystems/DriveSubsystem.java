@@ -20,7 +20,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.networktables.StructPublisher;
@@ -121,25 +120,24 @@ public class DriveSubsystem extends SubsystemBase {
     driveTrainTable.putValue("Robot theta",
         NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getRotation().getDegrees()));
 
+    // TODO investigate why this takes so long
+    // m_frontLeft.updateShuffleboard();
+    // m_frontRight.updateShuffleboard();
+    // m_backRight.updateShuffleboard();
+    // m_backLeft.updateShuffleboard();
 
-        //TODO investigate why this takes so long
-      // m_frontLeft.updateShuffleboard();
-      // m_frontRight.updateShuffleboard();
-      // m_backRight.updateShuffleboard();
-      // m_backLeft.updateShuffleboard();
-    
     BaseStatusSignal.refreshAll(m_pGyroPitch, m_pGyroYaw, m_pGyroRoll);
     driveTrainTable.putValue("Pigeon Pitch", NetworkTableValue.makeDouble(m_pGyroPitch.getValueAsDouble()));
     driveTrainTable.putValue("Pigeon Yaw", NetworkTableValue.makeDouble(m_pGyroYaw.getValueAsDouble()));
     driveTrainTable.putValue("Pigeon Roll", NetworkTableValue.makeDouble(m_pGyroRoll.getValueAsDouble()));
-    
+
     // m_poseEstimator.updatePoseEstimator(pigeonYaw,new SwerveModulePosition[] {
-        // m_frontLeft.getPosition(),
-        // m_frontRight.getPosition(),
-        // m_backRight.getPosition(),
-        // m_backLeft.getPosition()
-    //});
-    
+    // m_frontLeft.getPosition(),
+    // m_frontRight.getPosition(),
+    // m_backRight.getPosition(),
+    // m_backLeft.getPosition()
+    // });
+
   }
 
   /**
@@ -177,17 +175,19 @@ public class DriveSubsystem extends SubsystemBase {
             * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(1),
                 ControllerConstants.driveJoystickDeadband), ControllerConstants.driveJoystickExponent)
             * -1 * DriveConstants.kMaxSpeed,
-         Math.signum(joystick.getRawAxis(0))
-            *  Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(0),
+        Math.signum(joystick.getRawAxis(0))
+            * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(0),
                 ControllerConstants.driveJoystickDeadband), ControllerConstants.driveJoystickExponent)
             * -1 * DriveConstants.kMaxSpeed,
-        MathUtil.applyDeadband(ControllerConstants.getRotation(joystick), ControllerConstants.driveJoystickDeadband) * -1
+        MathUtil.applyDeadband(ControllerConstants.getRotation(joystick), ControllerConstants.driveJoystickDeadband)
+            * -1
             * DriveConstants.kMaxAngularSpeed,
         m_fieldRelative);
   }
 
   public void drivePointedTowardsAngle(CommandJoystick joystick, Rotation2d targetAngle) {
-    double rot = rotationController.calculate(m_odometry.getPoseMeters().getRotation().getRadians(), targetAngle.getRadians());
+    double rot = rotationController.calculate(m_odometry.getPoseMeters().getRotation().getRadians(),
+        targetAngle.getRadians());
     drive(
         Math.signum(joystick.getRawAxis(1))
             * Math.pow(MathUtil.applyDeadband(joystick.getRawAxis(1),
@@ -200,7 +200,8 @@ public class DriveSubsystem extends SubsystemBase {
         rot * 1 * DriveConstants.kMaxAngularSpeed,
         true);
 
-    driveTrainTable.putValue("Rotation Current Angle", NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getRotation().getDegrees()));
+    driveTrainTable.putValue("Rotation Current Angle",
+        NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getRotation().getDegrees()));
     driveTrainTable.putValue("Rotation Target Angle", NetworkTableValue.makeDouble(targetAngle.getDegrees()));
     driveTrainTable.putValue("Rotation Power Input", NetworkTableValue.makeDouble(rot));
 
