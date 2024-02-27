@@ -9,19 +9,17 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.TriggerSubsystem;
 import frc.robot.BeamBreak;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.TriggerConstants;
 
 public class TriggerStatesCommand extends Command {
-    private final TriggerSubsystem m_subsystem;
-    private BeamBreak m_beamBreak;
+  private final TriggerSubsystem m_subsystem;
+  private BeamBreak m_beamBreak;
   /** Creates a new IntakeCommand. */
-    NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    NetworkTable triggerTable = inst.getTable("trigger-subsystem");
+  NetworkTableInstance inst = NetworkTableInstance.getDefault();
+  NetworkTable triggerTable = inst.getTable("trigger-subsystem");
+
   public TriggerStatesCommand(TriggerSubsystem subsystem, BeamBreak beambreak) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
@@ -32,7 +30,7 @@ public class TriggerStatesCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-   
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,17 +44,13 @@ public class TriggerStatesCommand extends Command {
     }
     if (m_subsystem.triggerYuck) {
       m_subsystem.setTrigger(TriggerConstants.yuckSpeed);
-    }
-    else if (m_subsystem.triggerFire ) {
+    } else if (m_subsystem.triggerFire) {
       m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed));
-    }
-    else if (m_subsystem.beambreakState) {
+    } else if (m_subsystem.beambreakState) {
       m_subsystem.m_triggerMotor.setControl(new NeutralOut());
-    }
-    else if (m_subsystem.triggerOn) {
+    } else if (m_subsystem.triggerOn) {
       m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed));
-    }
-    else {
+    } else {
       m_subsystem.m_triggerMotor.setControl(new NeutralOut());
     }
   }
@@ -64,7 +58,7 @@ public class TriggerStatesCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.setTrigger(0.0); // Turn intake off; 
+    m_subsystem.setTrigger(0.0); // Turn intake off;
   }
 
   // Returns true when the command should end.

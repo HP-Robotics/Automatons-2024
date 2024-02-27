@@ -15,17 +15,17 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
- /* The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean
- * constants. This class should not be used for any other purpose. All constants
- * should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the
- * constants are needed, to reduce verbosity.
- */
+/* The Constants class provides a convenient place for teams to hold robot-wide
+* numerical or boolean
+* constants. This class should not be used for any other purpose. All constants
+* should be declared
+* globally (i.e. public static). Do not put anything functional in this class.
+*
+* <p>
+* It is advised to statically import this class (or one of its inner classes)
+* wherever the
+* constants are needed, to reduce verbosity.
+*/
 
 public final class Constants {
 
@@ -39,24 +39,23 @@ public final class Constants {
 
     public static final double driveJoystickExponent = useXbox ? 2 : 2;
 
-    
     public static final int resetYawButton = useXbox ? 7 : 11;
     public static final int fieldRelativeButton = useXbox ? 8 : 8;
     public static final int yuckButton = useXbox ? 4 : 2;
     public static final int climberButton = useXbox ? 10 : 10;
-    public static final int intakeButton = useXbox ? 0 : 1; 
+    public static final int intakeButton = useXbox ? 0 : 1;
     public static final int drivePointedToSpeakerButton = useXbox ? 5 : 0;
-    public static double getRotation(CommandJoystick stick){
-      if(useXbox){
+
+    public static double getRotation(CommandJoystick stick) {
+      if (useXbox) {
         return stick.getRawAxis(4);
-      }
-      else {
+      } else {
         return stick.getRawAxis(2);
         // if (stick.povLeft().getAsBoolean()) {
         // return -0.5;
         // }
         // else if (stick.povRight().getAsBoolean()) {
-        //   return 0.5;
+        // return 0.5;
         // }
         // return 0;
       }
@@ -64,22 +63,22 @@ public final class Constants {
   }
 
   public static class SubsystemConstants {
-    public static final boolean useDrive = true;
-    public static final boolean useIntake = true;
-    public static final boolean useShooter = true;
-    public static final boolean useDataManager = true;
-    public static final boolean useLimelight = true;
-    public static final boolean usePivot = true;
-    public static final boolean useClimber = false; //TODO check if these work
-    public static final boolean useTrigger = true;
-    public static final boolean useSnuffilator = true;
+    public static final boolean useDrive = false;
+    public static final boolean useIntake = false;
+    public static final boolean useShooter = false;
+    public static final boolean useDataManager = false;
+    public static final boolean useLimelight = false;
+    public static final boolean usePivot = false;
+    public static final boolean useClimber = false; // TODO check if these work
+    public static final boolean useTrigger = false;
+    public static final boolean useSnuffilator = false;
   }
 
   public static class DriveConstants {
     public static final double kMaxSpeed = 4.0; // meters per second
-    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second 
+    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
     public static final double kSlowSpeed = 2.0;
-    public static final double kSlowAngularspeed = Math.PI / 2; // 1/4 rotation per second 
+    public static final double kSlowAngularspeed = Math.PI / 2; // 1/4 rotation per second
 
     public static final double kWheelRadius = 0.0508 * (218.5 / 225.6); // This is a fudge factor
     public static final double kEncoderResolution = 1.0;
@@ -87,8 +86,8 @@ public final class Constants {
     public static final double driveGearRatio = 6.75;
     public static final double turningGearRatio = 15.429;
 
-    public static final Translation2d kFrontLeftLocation = new Translation2d(0.308-0.038, 0.308);
-    public static final Translation2d kFrontRightLocation = new Translation2d(0.308-0.038, -0.308);
+    public static final Translation2d kFrontLeftLocation = new Translation2d(0.308 - 0.038, 0.308);
+    public static final Translation2d kFrontRightLocation = new Translation2d(0.308 - 0.038, -0.308);
     public static final Translation2d kBackLeftLocation = new Translation2d(-0.308, 0.308);
     public static final Translation2d kBackRightLocation = new Translation2d(-0.308, -0.308);
 
@@ -107,20 +106,19 @@ public final class Constants {
     public static final double turningControllerkP = 1;
     public static final double turningControllerkI = 0.0;
     public static final double turningControllerkD = 0.0;
-    
+
     // Absolute encoder values that make the wheels point forward
     public static final double absEncoderForwardFL = 0.98;
     public static final double absEncoderForwardFR = 0.708;
     public static final double absEncoderForwardBR = 0.74;
     public static final double absEncoderForwardBL = 0.55;
 
-    public static final HolonomicPathFollowerConfig holonomicConfig = new HolonomicPathFollowerConfig( 
-            new PIDConstants(5.0, 0.0, 0.0), 
-            new PIDConstants(5.0, 0.0, 0.0), 
-            4.5,
-            0.4, // Distance from robot center to furthest module.
-            new ReplanningConfig()
-        );
+    public static final HolonomicPathFollowerConfig holonomicConfig = new HolonomicPathFollowerConfig(
+        new PIDConstants(5.0, 0.0, 0.0),
+        new PIDConstants(5.0, 0.0, 0.0),
+        4.5,
+        0.4, // Distance from robot center to furthest module.
+        new ReplanningConfig());
 
     public static final double currentMax = 40.0;
     public static final double currentMin = -40.0;
@@ -182,9 +180,8 @@ public final class Constants {
   public static class ShooterConstants {
 
     public static final double shooterSpeedFront = 50; // TODO: Is this correct? 50
-    public static final double shooterSpeedBack = 50; //50
-    public static final double shooterSpeedAmp = 12.5; //15 
-    
+    public static final double shooterSpeedBack = 50; // 50
+    public static final double shooterSpeedAmp = 12.5; // 15
 
     public static final double shooterMotorskP = 0.4;
     public static final double shooterMotorskI = 0.01;
@@ -226,24 +223,25 @@ public final class Constants {
   }
 
   public static class PivotConstants {
-    public static final double kP = 3;//2
+    public static final double kP = 3;// 2
     public static final double kI = 0.001;
     public static final double kD = 0.08;
-    public static final double kG = -0.02;//0.02
+    public static final double kG = -0.02;// 0.02
     public static final boolean startWithPID = true;
     
-    public static final double[] magicConstants = {0.0, -0.0219711, 0.437724}; 
+    public static final double[] magicConstants = { 0.0, -0.0219711, 0.437724 }; 
     
-    // new line: {0.0, -0.0245526, 0.461092};
-    // new quadratic: {0.0025323, -0.0378195, 0.476864};
-    // old line: {0.0, -0.0219711, 0.437724};
+    // new line: { 0.0, -0.0245526, 0.461092 };
+    // new quadratic: { 0.0025323, -0.0378195, 0.476864 };
+    // old line: { 0.0, -0.0219711, 0.437724 };
 
     public static final double manualSpeed = 0.1;
 
     public static final double setpointChangeSpeed = 0.2;
     public static final double encoderAt90 = 0.518;
+
     public static double degreesToEncoder(double degrees) {
-      return (degrees-90) / 360 + PivotConstants.encoderAt90;
+      return (degrees - 90) / 360 + PivotConstants.encoderAt90;
     }
 
     public static final double currentLimit = 40.0;
@@ -252,15 +250,15 @@ public final class Constants {
 
     public static final double rampTimeTo300s = 10;
 
-    public static final double subwooferPosition = degreesToEncoder(58.3); //0.43
-    public static final double ampPosition = degreesToEncoder(119.5 + 3 + 1 +1 ); //0.6
-    public static final double podiumPosition = degreesToEncoder(42.12); //0.385
-    public static final double note2Position = degreesToEncoder(45.72); //0.395
-    public static final double note1_3Position = degreesToEncoder(42.12); //0.385
+    public static final double subwooferPosition = degreesToEncoder(58.3); // 0.43
+    public static final double ampPosition = degreesToEncoder(119.5 + 3 + 1 + 1); // 0.6
+    public static final double podiumPosition = degreesToEncoder(42.12); // 0.385
+    public static final double note2Position = degreesToEncoder(45.72); // 0.395
+    public static final double note1_3Position = degreesToEncoder(42.12); // 0.385
   }
 
   public static class IDConstants {
-    //Drive is 20s
+    // Drive is 20s
     public static final int FLDriveMotorID = 28;
     public static final int FRDriveMotorID = 22;
     public static final int BRDriveMotorID = 20;
@@ -271,26 +269,26 @@ public final class Constants {
     public static final int BRTurningMotorID = 21;
     public static final int BLTurningMotorID = 25;
 
-    //Intake is 10s
+    // Intake is 10s
     public static final int intakeMotorID = 10;
     public static final int vanguardLeftID = 11;
     public static final int vanguardRightID = 12;
 
-    //Shooter is 30s
+    // Shooter is 30s
     public static final int frontMotorID = 30;
     public static final int backMotorID = 31;
     public static final int triggerMotorID = 32;
 
-    //Pivot is 40s
+    // Pivot is 40s
     public static final int rightPivotID = 40;
     public static final int leftPivotID = 41;
 
-    //Climber is 50s
+    // Climber is 50s
     public static final int climbMotorID = 50;
-    
+
     public static final int PigeonID = 57;
 
-    //Snuffilator is 60s
+    // Snuffilator is 60s
     public static final int snuffilatorID = 60;
   }
 
@@ -299,11 +297,11 @@ public final class Constants {
     public static final int FRAbsEncoder = 12;
     public static final int BRAbsEncoder = 10;
     public static final int BLAbsEncoder = 13;
-    
+
     public static final int pivotAbsEncoderID = 16;
 
     public static final int TriggerBeamBreak = 9; // Beam Break port
     public static final int IntakeBeamBreak = 7;
   }
-    
+
 }

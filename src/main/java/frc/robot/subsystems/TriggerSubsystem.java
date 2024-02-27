@@ -28,14 +28,14 @@ public class TriggerSubsystem extends SubsystemBase {
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable triggerTable = inst.getTable("trigger-subsystem");
 
-  public boolean triggerOn = false; //intake button is pressed
-  public boolean triggerFire = false; //fire button is pressed
-  public boolean triggerYuck = false; //yuck button is pressed
-  public boolean beambreakState = false; //trigger beambreak sees note & intakeOn
+  public boolean triggerOn = false; // intake button is pressed
+  public boolean triggerFire = false; // fire button is pressed
+  public boolean triggerYuck = false; // yuck button is pressed
+  public boolean beambreakState = false; // trigger beambreak sees note & intakeOn
 
   /** Creates a new ShooterSubsystem. */
   public TriggerSubsystem() {
-    m_triggerMotor = new TalonFX(IDConstants.triggerMotorID,"CANivore");
+    m_triggerMotor = new TalonFX(IDConstants.triggerMotorID, "CANivore");
     m_beamBreak = new BeamBreak(PortConstants.TriggerBeamBreak);
 
     TalonFXConfiguration config = new TalonFXConfiguration();
@@ -60,14 +60,14 @@ public class TriggerSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    triggerTable.putValue("triggerMotor Velocity", NetworkTableValue.makeDouble(m_triggerMotor.getVelocity().getValue()));
+    triggerTable.putValue("triggerMotor Velocity",
+        NetworkTableValue.makeDouble(m_triggerMotor.getVelocity().getValue()));
     triggerTable.putValue("Beam Broken", NetworkTableValue.makeBoolean(m_beamBreak.beamBroken()));
 
     triggerTable.putValue("Trigger On", NetworkTableValue.makeBoolean(triggerOn));
     triggerTable.putValue("Trigger Fire", NetworkTableValue.makeBoolean(triggerFire));
     triggerTable.putValue("Trigger Yuck", NetworkTableValue.makeBoolean(triggerYuck));
     triggerTable.putValue("Trigger BeamBreak", NetworkTableValue.makeBoolean(beambreakState));
-
 
   }
 
@@ -80,35 +80,35 @@ public class TriggerSubsystem extends SubsystemBase {
     m_triggerMotor.setControl(new DutyCycleOut(0));
   }
 
-  public void intakeButtonPressed () {
+  public void intakeButtonPressed() {
     if (!triggerFire && !triggerYuck && !beambreakState) {
       triggerOn = true;
     }
   }
-  
-  public void intakeButtonReleased () {
+
+  public void intakeButtonReleased() {
     if (triggerOn) {
       triggerOn = false;
     }
   }
 
-  public void yuckButtonPressed () {
+  public void yuckButtonPressed() {
     if (!triggerFire) {
       triggerYuck = true;
     }
   }
 
-  public void yuckButtonReleased () {
+  public void yuckButtonReleased() {
     triggerYuck = false;
   }
 
-  public void fireButtonPressed () {
+  public void fireButtonPressed() {
     if (!triggerYuck) {
       triggerFire = true;
     }
   }
 
-  public void fireButtonReleased () {
+  public void fireButtonReleased() {
     triggerFire = false;
   }
 

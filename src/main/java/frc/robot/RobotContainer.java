@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import frc.robot.Constants.ClimberConstants;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.ShooterConstants;
@@ -16,36 +14,26 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.DrivePointedToSpeakerCommand;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.CommandBlocks;
-import frc.robot.commands.FollowPathCommandOurs;
-import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeStatesCommand;
 import frc.robot.commands.PivotMagicCommand;
 import frc.robot.commands.PivotManualCommand;
 import frc.robot.commands.SetShooterCommand;
-import frc.robot.commands.TriggerCommand;
 import frc.robot.commands.TriggerStatesCommand;
-import frc.robot.commands.Autos;
-import frc.robot.BeamBreak;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sound.sampled.CompoundControl;
+import java.util.Optional;
 
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
-import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -58,14 +46,8 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
-import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -357,15 +339,31 @@ public class RobotContainer {
       autoFile = "Shoot Preload Far Away";
     }
     if (autoFile != "") {
-      m_autoPose.setRobotPose(PathPlannerAuto.getStaringPoseFromAutoFile(autoFile));
+      Pose2d pose = PathPlannerAuto.getStaringPoseFromAutoFile(autoFile);
+      Optional<Alliance> ally = DriverStation.getAlliance();
+      if (ally.isPresent()) {
+        if (ally.get() == Alliance.Red) {
+          pose = new Pose2d(54 * 12 * 0.0254 - pose.getX(), pose.getY(),
+              new Rotation2d(Math.PI).minus(pose.getRotation()));
+        }
+      }
+      m_autoPose.setRobotPose(pose);
       PathPlannerAuto.getPathGroupFromAutoFile(autoFile).forEach(this::drawTrajectory);
       SmartDashboard.putData(m_autoPose);
     }
     m_autoPose.getObject("Auto Path").setPoses(m_autoPath);
-    //System.out.println(selection);
   }
 
   public void drawTrajectory(PathPlannerPath path) {
-    m_autoPath.addAll(path.getPathPoses());
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (ally.isPresent()) {
+      if (ally.get() == Alliance.Red) {
+        m_autoPath.addAll(path.flipPath().getPathPoses());
+      } else {
+        m_autoPath.addAll(path.getPathPoses());
+      }
+    } else {
+      m_autoPath.addAll(path.getPathPoses());
+    }
   }
 }
