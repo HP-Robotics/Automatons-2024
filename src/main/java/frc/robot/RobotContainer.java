@@ -199,7 +199,20 @@ public class RobotContainer {
     }
 
     if (SubsystemConstants.useClimber) {
-      m_driveJoystick.button(ControllerConstants.climberButton).whileTrue(new ClimberCommand(m_climberSubsystem));
+      m_driveJoystick.povUp().whileTrue(new StartEndCommand(
+          () -> {
+            m_climberSubsystem.climbMotorLeft.set(ClimberConstants.climbSpeed);
+          },
+          () -> {
+            m_climberSubsystem.climbMotorLeft.set(0);
+          }, m_climberSubsystem));
+      m_driveJoystick.povDown().whileTrue(new StartEndCommand(
+          () -> {
+            m_climberSubsystem.climbMotorLeft.set(-ClimberConstants.climbSpeed);
+          },
+          () -> {
+            m_climberSubsystem.climbMotorLeft.set(0);
+          }, m_climberSubsystem));
     }
 
     if (SubsystemConstants.useIntake) {
@@ -362,7 +375,7 @@ public class RobotContainer {
       SmartDashboard.putData(m_autoPose);
     }
     m_autoPose.getObject("Auto Path").setPoses(m_autoPath);
-    //System.out.println(selection);
+    // System.out.println(selection);
   }
 
   public void drawTrajectory(PathPlannerPath path) {

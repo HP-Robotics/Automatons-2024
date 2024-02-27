@@ -70,7 +70,7 @@ public final class Constants {
     public static final boolean useDataManager = true;
     public static final boolean useLimelight = true;
     public static final boolean usePivot = true;
-    public static final boolean useClimber = false; //TODO check if these work
+    public static final boolean useClimber = true; //TODO check if these work
     public static final boolean useTrigger = true;
     public static final boolean useSnuffilator = true;
   }
@@ -201,8 +201,8 @@ public final class Constants {
   }
 
   public static class ClimberConstants {
-    public static final double climbSpeed = 0.4; // TODO: Decide this (in RPM, so 500?)
-    public static final double topPosition = 0.0;
+    public static final double climbSpeed = 0.4; //TODO: Decide this (in RPM, so 500?)
+
 
     public static final double kP = 0.0;
     public static final double kI = 0.0;
@@ -282,7 +282,8 @@ public final class Constants {
     public static final int leftPivotID = 41;
 
     //Climber is 50s
-    public static final int climbMotorID = 50;
+    public static final int climbMotorRightID = 50;
+    public static final int climbMotorLeftID = 51;
     
     public static final int PigeonID = 57;
 
