@@ -77,9 +77,9 @@ public class LimelightSubsystem extends SubsystemBase {
 
       double tx = botpose[0];
       double ty = botpose[1];
-      double tz = botpose[2];
-      double rx = botpose[3];
-      double ry = botpose[4]; // TODO: Store tz, rx, and ry somewhere (Store 3D)
+      // double tz = botpose[2];
+      // double rx = botpose[3];
+      // double ry = botpose[4]; // TODO: Store tz, rx, and ry somewhere (Store 3D)
       double rz = botpose[5];
       double latency = botpose[6];
 
