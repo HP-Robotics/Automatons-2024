@@ -183,7 +183,7 @@ public final class Constants {
 
     public static final double shooterSpeedFront = 50; // TODO: Is this correct? 50
     public static final double shooterSpeedBack = 50; //50
-    public static final double shooterSpeedAmp = 15; 
+    public static final double shooterSpeedAmp = 12.5; //15 
     
 
     public static final double shooterMotorskP = 0.4;
@@ -249,7 +249,7 @@ public final class Constants {
     public static final double rampTimeTo300s = 10;
 
     public static final double subwooferPosition = degreesToEncoder(58.3); //0.43
-    public static final double ampPosition = degreesToEncoder(119.52); //0.6
+    public static final double ampPosition = degreesToEncoder(119.5 + 3 + 1 +1 ); //0.6
     public static final double podiumPosition = degreesToEncoder(42.12); //0.385
     public static final double note2Position = degreesToEncoder(45.72); //0.395
     public static final double note1_3Position = degreesToEncoder(42.12); //0.385
