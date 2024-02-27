@@ -22,7 +22,7 @@ public class ClimberCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.climbTo(ClimberConstants.topPosition);
+   //m_subsystem.climbTo(ClimberConstants.topPosition); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,7 +33,7 @@ public class ClimberCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.climbTo(0.0);
+   // m_subsystem.climbTo(0.0);  
   }
 
   // Returns true when the command should end.

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.ShooterConstants;
@@ -47,6 +48,7 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -181,7 +183,20 @@ public class RobotContainer {
     }
 
     if (SubsystemConstants.useClimber) {
-      m_driveJoystick.button(ControllerConstants.climberButton).whileTrue(new ClimberCommand(m_climberSubsystem));
+      m_driveJoystick.povUp().whileTrue(new StartEndCommand(
+          () -> {
+            m_climberSubsystem.climbMotorLeft.set(ClimberConstants.climbSpeed);
+          },
+          () -> {
+            m_climberSubsystem.climbMotorLeft.set(0);
+          }, m_climberSubsystem));
+      m_driveJoystick.povDown().whileTrue(new StartEndCommand(
+          () -> {
+            m_climberSubsystem.climbMotorLeft.set(-ClimberConstants.climbSpeed);
+          },
+          () -> {
+            m_climberSubsystem.climbMotorLeft.set(0);
+          }, m_climberSubsystem));
     }
 
     if (SubsystemConstants.useIntake) {
