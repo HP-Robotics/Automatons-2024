@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import frc.robot.Constants.ClimberConstants;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.ShooterConstants;
@@ -16,28 +14,27 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.DrivePointedToSpeakerCommand;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.CommandBlocks;
-import frc.robot.commands.FollowPathCommandOurs;
-import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeStatesCommand;
 import frc.robot.commands.PivotMagicCommand;
 import frc.robot.commands.PivotManualCommand;
 import frc.robot.commands.SetShooterCommand;
-import frc.robot.commands.TriggerCommand;
 import frc.robot.commands.TriggerStatesCommand;
-import frc.robot.commands.Autos;
-import frc.robot.BeamBreak;
-
-import javax.sound.sampled.CompoundControl;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
-import edu.wpi.first.hal.FRCNetComm.tResourceType;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -49,14 +46,8 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
-import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -73,6 +64,8 @@ public class RobotContainer {
   private final CommandJoystick m_driveJoystick = new CommandJoystick(ControllerConstants.kDriverControllerPort);
   private final CommandJoystick m_opJoystick = new CommandJoystick(ControllerConstants.kOperatorControllerPort);
   private CommandBlocks compoundCommands; // TODO: Pick a better name
+  public final Field2d m_autoPose = new Field2d();
+  public List<Pose2d> m_autoPath = new ArrayList<>();
 
   // The robot's subsystems and commands are defined here...
   private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem();
@@ -81,7 +74,8 @@ public class RobotContainer {
       ? new LimelightSubsystem(m_PoseEstimatorSubsystem)
       : null;
 
-  private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem(m_opJoystick) : null;
+  private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem(m_opJoystick)
+      : null;
   private final IntakeSubsystem m_intakeSubsystem = SubsystemConstants.useIntake ? new IntakeSubsystem() : null;
   private final PivotSubsystem m_pivotSubsystem = SubsystemConstants.usePivot ? new PivotSubsystem() : null;
   private final ClimbSubsystem m_climberSubsystem = SubsystemConstants.useClimber ? new ClimbSubsystem() : null;
@@ -90,14 +84,16 @@ public class RobotContainer {
       ? new SnuffilatorSubsystem()
       : null;
 
+  private final PowerDistribution pdh = new PowerDistribution();
+
   private final SendableChooser<String> m_chooseAutos;
 
-  private Command compoundShooter;
-  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
+    pdh.setSwitchableChannel(true);
 
     if (SubsystemConstants.useDataManager) {
       DataLogManager.start();
@@ -129,8 +125,10 @@ public class RobotContainer {
     m_chooseAutos.addOption("Four Piece Center", "FourPieceCenter");
     m_chooseAutos.addOption("Three Piece Center", "Three Piece Center");
     m_chooseAutos.addOption("Test Path 5", "TestPath5");
-    m_chooseAutos.addOption("Only Podium Preload","OnlyPodiumPreload");
+    m_chooseAutos.addOption("Shoot Preload Far Away", "ShootPreloadFarAway");
+    m_chooseAutos.addOption("Only Shoot", "OnlyShoot");
     m_chooseAutos.setDefaultOption("Do Nothing", "DoNothing");
+    m_chooseAutos.onChange(this::drawSelectedAuto);
 
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
 
@@ -142,26 +140,20 @@ public class RobotContainer {
   }
 
   private void configureCommands() {
-    compoundShooter = new ParallelCommandGroup(
-        new SetShooterCommand(m_shooterSubsystem, null, null)
-            .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).asProxy(),
-        new WaitUntilCommand(m_shooterSubsystem::atSpeed)
-            .andThen(new StartEndCommand(() -> m_triggerSubsystem.setTrigger(-0.2), m_triggerSubsystem::stopTrigger))
-            .withTimeout(0.1)
-            .andThen(new TriggerCommand(m_triggerSubsystem, true, m_intakeSubsystem)
-                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)));
     NamedCommands.registerCommand("startIntaking", compoundCommands.startIntaking());
     NamedCommands.registerCommand("stopIntaking", compoundCommands.stopIntaking());
-    NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, null, null));
-    NamedCommands.registerCommand("stopShooter", new SetShooterCommand(m_shooterSubsystem, 0.0, 0.0));
+    if (SubsystemConstants.useShooter) {
+      NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, null, null));
+      NamedCommands.registerCommand("stopShooter", new SetShooterCommand(m_shooterSubsystem, 0.0, 0.0));
+    }
   }
 
   private void configureBindings() {
 
     if (SubsystemConstants.useDrive) {
       m_driveJoystick.button(ControllerConstants.resetYawButton).whileTrue(new InstantCommand(m_robotDrive::resetYaw)); // Flightstick
-                                                                                                                      // button
-                                                                                                                      // 11
+      // button
+      // 11
       Trigger fieldRelativeTrigger = ControllerConstants.useXbox
           ? new Trigger(m_driveJoystick.axisGreaterThan(2, 0.1))
           : new Trigger(m_driveJoystick.button(ControllerConstants.fieldRelativeButton));
@@ -187,8 +179,6 @@ public class RobotContainer {
               .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
       m_driveJoystick.button(ControllerConstants.yuckButton).whileTrue(compoundCommands.yuckButtonHold());
     }
-
-    m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble,0.5);
 
     if (SubsystemConstants.useClimber) {
       m_driveJoystick.button(ControllerConstants.climberButton).whileTrue(new ClimberCommand(m_climberSubsystem));
@@ -222,7 +212,9 @@ public class RobotContainer {
     }
 
     if (SubsystemConstants.useSnuffilator) {
-      new Trigger(() -> {return m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;})
+      new Trigger(() -> {
+        return m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
+      })
           .onTrue(compoundCommands.moveSnuffilator(true))
           .onFalse(compoundCommands.moveSnuffilator(false));
     }
@@ -279,7 +271,7 @@ public class RobotContainer {
     }
   }
 
-  public Command getAutonomousCommand() { //TODO put by auto chooser
+  public Command getAutonomousCommand() { // TODO put by auto chooser
     if (m_chooseAutos.getSelected() == "CenterDown") {
       return Autos.CenterDown(compoundCommands, m_robotDrive, m_shooterSubsystem);
     }
@@ -288,7 +280,8 @@ public class RobotContainer {
           m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "FourPieceCenter") {
-      return Autos.FourPieceCenter(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
+      return Autos.FourPieceCenter(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem,
+          m_triggerSubsystem,
           m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "GrandTheftAuto") {
@@ -303,13 +296,74 @@ public class RobotContainer {
     if (m_chooseAutos.getSelected() == "TestPath5") {
       return Autos.FiveMeterTest(m_robotDrive);
     }
-    if (m_chooseAutos.getSelected() == "OnlyPodiumPreload") {
-      return Autos.OnlyPodiumPreload(compoundCommands, m_robotDrive, m_shooterSubsystem);
+    if (m_chooseAutos.getSelected() == "ShootPreloadFarAway") {
+      return Autos.ShootPreloadFarAway(compoundCommands, m_robotDrive, m_shooterSubsystem, m_limelightSubsystem,
+          m_pivotSubsystem);
+    }
+    if (m_chooseAutos.getSelected() == "OnlyShoot") {
+      return Autos.OnlyShoot(compoundCommands, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
+          m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "DoNothing") {
       return Autos.DoNothing();
     } else {
       return Autos.DoNothing();
+    }
+  }
+
+  public void drawSelectedAuto(String selection) {
+    m_autoPath = new ArrayList<>();
+    String autoFile = "";
+    if (selection == "FourPieceCenter") {
+      autoFile = "4 Piece Center";
+    }
+    if (selection == "ThreePieceCenter") {
+      autoFile = "3 Piece Center";
+    }
+    if (selection == "FourPiece") {
+      autoFile = "4 Piece Auto";
+    }
+    if (selection == "BasicAmp") {
+      autoFile = "Basic Amp";
+    }
+    if (selection == "CenterDown") {
+      autoFile = "Center Down";
+    }
+    if (selection == "GrandTheftAuto") {
+      autoFile = "Grand Theft Auto";
+    }
+    if (selection == "IntermediateAmp") {
+      autoFile = "Intermediate Amp";
+    }
+    if (selection == "ShootPreloadFarAway") {
+      autoFile = "Shoot Preload Far Away";
+    }
+    if (autoFile != "") {
+      Pose2d pose = PathPlannerAuto.getStaringPoseFromAutoFile(autoFile);
+      Optional<Alliance> ally = DriverStation.getAlliance();
+      if (ally.isPresent()) {
+        if (ally.get() == Alliance.Red) {
+          pose = new Pose2d(54 * 12 * 0.0254 - pose.getX(), pose.getY(),
+              new Rotation2d(Math.PI).minus(pose.getRotation()));
+        }
+      }
+      m_autoPose.setRobotPose(pose);
+      PathPlannerAuto.getPathGroupFromAutoFile(autoFile).forEach(this::drawTrajectory);
+      SmartDashboard.putData(m_autoPose);
+    }
+    m_autoPose.getObject("Auto Path").setPoses(m_autoPath);
+  }
+
+  public void drawTrajectory(PathPlannerPath path) {
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (ally.isPresent()) {
+      if (ally.get() == Alliance.Red) {
+        m_autoPath.addAll(path.flipPath().getPathPoses());
+      } else {
+        m_autoPath.addAll(path.getPathPoses());
+      }
+    } else {
+      m_autoPath.addAll(path.getPathPoses());
     }
   }
 }

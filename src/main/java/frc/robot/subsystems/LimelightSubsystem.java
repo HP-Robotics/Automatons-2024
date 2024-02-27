@@ -4,13 +4,8 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
@@ -67,32 +62,31 @@ public class LimelightSubsystem extends SubsystemBase {
   public void periodic() {
     // read values periodically
     sawAprilTag = m_limelight_twoplus.getEntry("tv").getDouble(0);
+    if (sawAprilTag == 1.0) {
+      double defaultValues[] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 
-    double defaultValues[] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+      NetworkTableValue blueBotpose = botpose_blue.getValue();
+      double[] botpose;
+      if (blueBotpose.getType() != NetworkTableType.kUnassigned) {
+        botpose = blueBotpose.getDoubleArray();
+      } else {
+        botpose = defaultValues;
+      }
 
-    NetworkTableValue blueBotpose = botpose_blue.getValue();
-    double[] botpose;
-    if (blueBotpose.getType() != NetworkTableType.kUnassigned) {
-      botpose = blueBotpose.getDoubleArray();
-    } else {
-      botpose = defaultValues;
-    }
+      botpose_blue.getLastChange();
 
-    botpose_blue.getLastChange();
+      double tx = botpose[0];
+      double ty = botpose[1];
+      // double tz = botpose[2];
+      // double rx = botpose[3];
+      // double ry = botpose[4]; // TODO: Store tz, rx, and ry somewhere (Store 3D)
+      double rz = botpose[5];
+      double latency = botpose[6];
 
-    double tx = botpose[0];
-    double ty = botpose[1];
-    double tz = botpose[2];
-    double rx = botpose[3];
-    double ry = botpose[4]; // TODO: Store tz, rx, and ry somewhere (Store 3D)
-    double rz = botpose[5];
-    double latency = botpose[6];
+      double timeStamp = (blueBotpose.getTime() * 1.0) / 1000000 - latency;
 
-    double timeStamp = (blueBotpose.getTime() * 1.0) / 1000000 - latency;
+      // specify the widget here
 
-    // specify the widget here
-
-    if (sawAprilTag == 1) {
       Pose2d m_robotPose = new Pose2d(tx, ty, new Rotation2d(Math.toRadians(rz)));
       m_visionPose2d = m_robotPose;
       m_poseEstimator.updateVision(m_robotPose, timeStamp);
@@ -105,7 +99,7 @@ public class LimelightSubsystem extends SubsystemBase {
           "angleToSpeaker", NetworkTableValue.makeDouble(getAngleTo(m_robotPose, LimelightConstants.aprilTag7)));
 
       publisher.set(m_robotPose);
-      if(!aprilTagSeen){
+      if (!aprilTagSeen) {
         aprilTagSeen = true;
       }
     }

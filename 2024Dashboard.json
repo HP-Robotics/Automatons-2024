@@ -63,21 +63,6 @@
               "_showGlyph": false
             }
           },
-          "6,2": {
-            "size": [
-              5,
-              3
-            ],
-            "content": {
-              "_type": "Field",
-              "_title": "Field",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Game/Game": "k2024Crescendo",
-              "Visuals/Robot Icon Size": 50.0,
-              "Visuals/Show Outside Circles": false
-            }
-          },
           "0,0": {
             "size": [
               5,
@@ -241,6 +226,23 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "6,2": {
+            "size": [
+              5,
+              3
+            ],
+            "content": {
+              "_type": "Field",
+              "_source0": "network_table:///SmartDashboard/Field",
+              "_title": "SmartDashboard/Field",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Game/Game": "k2024Crescendo",
+              "Visuals/Robot Icon Size": 50.0,
+              "Visuals/Show Outside Circles": false,
+              "Colors/Auto Path": "#FFFFFFFF"
+            }
           }
         }
       }
@@ -274,42 +276,22 @@
       }
     },
     {
-      "title": "Tab 3",
-      "autoPopulate": false,
-      "autoPopulatePrefix": "",
+      "title": "Limelight",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "limelight-subsystem",
       "widgetPane": {
         "gridSize": 128.0,
         "showGrid": true,
         "hgap": 16.0,
         "vgap": 16.0,
         "titleType": 0,
-        "tiles": {
-          "5,0": {
-            "size": [
-              5,
-              4
-            ],
-            "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///limelight-three/targetpose_robotspace",
-              "_title": "limelight-three/targetpose_robotspace",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Graph/Visible time": 30.0,
-              "Graph/X-axis auto scrolling": false,
-              "Y-axis/Automatic bounds": true,
-              "Y-axis/Upper bound": 1.0,
-              "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul"
-            }
-          }
-        }
+        "tiles": {}
       }
     },
     {
-      "title": "Tab 5",
-      "autoPopulate": false,
-      "autoPopulatePrefix": "",
+      "title": "Intake",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "intake-table",
       "widgetPane": {
         "gridSize": 128.0,
         "showGrid": true,
@@ -317,19 +299,6 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "4,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///drive-train/Pigeon Yaw",
-              "_title": "/drive-train/Pigeon Yaw",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
           "5,2": {
             "size": [
               2,
@@ -351,7 +320,7 @@
     {
       "title": "Shooter",
       "autoPopulate": true,
-      "autoPopulatePrefix": "shooter-speed-PID",
+      "autoPopulatePrefix": "shooter-subsystem",
       "widgetPane": {
         "gridSize": 128.0,
         "showGrid": true,
@@ -508,7 +477,7 @@
     {
       "title": "Trigger",
       "autoPopulate": true,
-      "autoPopulatePrefix": "trigger-velocity-PID",
+      "autoPopulatePrefix": "trigger-subsystem",
       "widgetPane": {
         "gridSize": 128.0,
         "showGrid": true,
@@ -805,12 +774,64 @@
           }
         }
       }
+    },
+    {
+      "title": "Climber",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "climber-table",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "Drive Train",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "drive-train",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "Pose Estimator",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "pose-estimator-table",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "Snuffilator",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "snuffy-table",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
     }
   ],
   "windowGeometry": {
-    "x": -6.400000095367432,
-    "y": 0.0,
-    "width": 1548.800048828125,
-    "height": 830.4000244140625
+    "x": -8.0,
+    "y": -8.0,
+    "width": 1936.0,
+    "height": 1056.0
   }
 }

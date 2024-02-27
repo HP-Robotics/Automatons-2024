@@ -11,6 +11,7 @@ import frc.robot.subsystems.PivotSubsystem;
 public class PivotManualCommand extends Command {
   private final PivotSubsystem m_subsystem;
   double m_speed;
+
   /** Creates a new pivotManualCommand. */
   public PivotManualCommand(PivotSubsystem subsystem, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -22,7 +23,7 @@ public class PivotManualCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(!m_subsystem.getUsePID()) {
+    if (!m_subsystem.getUsePID()) {
       m_subsystem.setSpeed(m_speed);
     }
   }
@@ -30,7 +31,7 @@ public class PivotManualCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_subsystem.getUsePID()) {
+    if (m_subsystem.getUsePID()) {
       m_subsystem.setPosition(m_subsystem.getCurrentPosition() + m_speed * PivotConstants.setpointChangeSpeed);
     }
   }
@@ -38,7 +39,7 @@ public class PivotManualCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if(m_subsystem.getUsePID()) {
+    if (m_subsystem.getUsePID()) {
       m_subsystem.setPosition(m_subsystem.getCurrentPosition());
     } else {
       m_subsystem.setSpeed(0.0);

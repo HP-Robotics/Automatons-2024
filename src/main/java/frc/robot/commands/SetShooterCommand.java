@@ -6,15 +6,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.NetworkTableValue;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants.ShooterConstants;
+
 public class SetShooterCommand extends Command {
   private final ShooterSubsystem m_subsystem;
   private final Double m_frontSpeed;
   private final Double m_backSpeed;
+
   /** Creates a new ShooterCommand. */
   public SetShooterCommand(ShooterSubsystem subsystem, Double frontSpeed, Double backSpeed) {
     // Use addRequirements() here to declare subsystem dependencies
@@ -22,7 +22,7 @@ public class SetShooterCommand extends Command {
     m_frontSpeed = frontSpeed;
     m_backSpeed = backSpeed;
     addRequirements(subsystem);
-  
+
   }
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -31,14 +31,19 @@ public class SetShooterCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double frontOutput = m_frontSpeed == null ? shooterTable.getEntry("frontMotor Setpoint").getDouble(ShooterConstants.shooterSpeedFront) : m_frontSpeed;
-    double backOutput = m_backSpeed == null ? shooterTable.getEntry("backMotor Setpoint").getDouble(ShooterConstants.shooterSpeedBack) : m_backSpeed;
-    m_subsystem.setShooter(frontOutput, backOutput); 
+    double frontOutput = m_frontSpeed == null
+        ? shooterTable.getEntry("frontMotor Setpoint").getDouble(ShooterConstants.shooterSpeedFront)
+        : m_frontSpeed;
+    double backOutput = m_backSpeed == null
+        ? shooterTable.getEntry("backMotor Setpoint").getDouble(ShooterConstants.shooterSpeedBack)
+        : m_backSpeed;
+    m_subsystem.setShooter(frontOutput, backOutput);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -53,4 +58,5 @@ public class SetShooterCommand extends Command {
   }
 }
 
-// From the moment I realized the weakdisness of my fleash, it discused me. I craved the certainty of steel. 
+// From the moment I realized the weakdisness of my fleash, it discused me. I
+// craved the certainty of steel.
