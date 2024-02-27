@@ -20,21 +20,20 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.PortConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  public TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID,"CANivore");
+  public TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID, "CANivore");
   CANSparkMax m_vanguardLeft = new CANSparkMax(IDConstants.vanguardLeftID, CANSparkLowLevel.MotorType.kBrushless);
   CANSparkMax m_vanguardRight = new CANSparkMax(IDConstants.vanguardRightID, CANSparkLowLevel.MotorType.kBrushless);
 
   public BeamBreak m_beambreak;
-  public boolean intakeOn = false; //intake button is pressed
-  public boolean intakeFire = false; //fire button is pressed
-  public boolean intakeYuck = false; //yuck button is pressed
-  public boolean beambreakState = false; //trigger beambreak sees note & intakeOn
+  public boolean intakeOn = false; // intake button is pressed
+  public boolean intakeFire = false; // fire button is pressed
+  public boolean intakeYuck = false; // yuck button is pressed
+  public boolean beambreakState = false; // trigger beambreak sees note & intakeOn
 
   public double m_lastOutput = 0.0;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable intakeTable = inst.getTable("intake-table");
-
 
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
@@ -66,8 +65,7 @@ public class IntakeSubsystem extends SubsystemBase {
     if (output != m_lastOutput) {
       if (output == 0) {
         m_motor.setControl(new NeutralOut());
-      }
-      else {
+      } else {
         m_motor.setControl(new DutyCycleOut(output));
       }
       m_vanguardLeft.set(vanguardOutput);
@@ -75,40 +73,40 @@ public class IntakeSubsystem extends SubsystemBase {
     m_lastOutput = output;
   };
 
-  public void intakeButtonPressed () {
+  public void intakeButtonPressed() {
     if (!intakeFire && !intakeYuck && !beambreakState) {
       intakeOn = true;
     }
   }
-  
-  public void intakeButtonReleased () {
+
+  public void intakeButtonReleased() {
     if (intakeOn) {
       intakeOn = false;
     }
   }
 
-  public void yuckButtonPressed () {
+  public void yuckButtonPressed() {
     if (!intakeFire) {
       intakeYuck = true;
     }
   }
 
-  public void yuckButtonReleased () {
+  public void yuckButtonReleased() {
     intakeYuck = false;
   }
 
-  public void fireButtonPressed () {
+  public void fireButtonPressed() {
     if (!intakeYuck) {
       intakeFire = true;
     }
   }
 
-  public void fireButtonReleased () {
+  public void fireButtonReleased() {
     intakeFire = false;
   }
 
-  public void runOnlyVanguard (double output) {
+  public void runOnlyVanguard(double output) {
     m_vanguardLeft.set(output);
 
-}
+  }
 }

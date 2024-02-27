@@ -6,15 +6,12 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.PortConstants;
-import frc.robot.Constants.ShooterConstants;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
@@ -22,7 +19,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PivotSubsystem extends SubsystemBase {
@@ -50,10 +46,10 @@ public class PivotSubsystem extends SubsystemBase {
     m_motorL.setNeutralMode(NeutralModeValue.Brake);
     var rampConfigs = new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(PivotConstants.rampTimeTo300s);
     var currentConfigs = new CurrentLimitsConfigs()
-      .withSupplyCurrentLimit(PivotConstants.currentLimit)
-      .withSupplyCurrentLimitEnable(true)
-      .withSupplyCurrentThreshold(PivotConstants.currentThreshold)
-      .withSupplyTimeThreshold(PivotConstants.currentTimeThreshold); // TODO: This isn't working we don't know why
+        .withSupplyCurrentLimit(PivotConstants.currentLimit)
+        .withSupplyCurrentLimitEnable(true)
+        .withSupplyCurrentThreshold(PivotConstants.currentThreshold)
+        .withSupplyTimeThreshold(PivotConstants.currentTimeThreshold); // TODO: This isn't working we don't know why
 
     pivotTable.putValue("kP", NetworkTableValue.makeDouble(PivotConstants.kP));
     pivotTable.putValue("kI", NetworkTableValue.makeDouble(PivotConstants.kI));
@@ -83,7 +79,7 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public void periodic() {
-    
+
     pivotTable.putValue("Absolute Encoder Position",
         NetworkTableValue.makeDouble(m_absEncoder.getAbsolutePosition()));
     double grav = -m_armGraivty.calculate(encoderToRadians(m_pivotController.getSetpoint()), 0);
@@ -100,8 +96,10 @@ public class PivotSubsystem extends SubsystemBase {
       }
       m_absoluteBroken = false;
       // pivotTable.putValue("Grav Propotion", NetworkTableValue.makeDouble(grav));
-      // pivotTable.putValue("Commanded Output", NetworkTableValue.makeDouble(output));
-      // pivotTable.putValue("Filtered Input", NetworkTableValue.makeDouble(filtered_Encoder));
+      // pivotTable.putValue("Commanded Output",
+      // NetworkTableValue.makeDouble(output));
+      // pivotTable.putValue("Filtered Input",
+      // NetworkTableValue.makeDouble(filtered_Encoder));
 
     } else {
       if (!m_absoluteBroken) {
@@ -114,9 +112,11 @@ public class PivotSubsystem extends SubsystemBase {
     // pivotTable.putValue("Pivot
     // Position",NetworkTableValue.makeDouble(m_motorR.getPosition().getValueAsDouble()));
     // pivotTable.putValue("P Proportion",
-    //     NetworkTableValue.makeDouble(m_pivotController.getPositionError() * m_pivotController.getP()));
+    // NetworkTableValue.makeDouble(m_pivotController.getPositionError() *
+    // m_pivotController.getP()));
     // pivotTable.putValue("D Proportion",
-    //     NetworkTableValue.makeDouble(m_pivotController.getVelocityError() * m_pivotController.getD()));
+    // NetworkTableValue.makeDouble(m_pivotController.getVelocityError() *
+    // m_pivotController.getD()));
     pivotTable.putValue("Pivot Setpoint", NetworkTableValue.makeDouble(m_pivotController.getSetpoint()));
     // pivotTable.putValue("Pivot
     // Error",NetworkTableValue.makeDouble(m_pivotController.getPositionError()));
@@ -166,7 +166,8 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public void setPosition(double position) { // TODO remove bad inputs
-    m_pivotController.setSetpoint(position); // TODO constrain setpoint to within limit switches--make setpoint safe method
+    m_pivotController.setSetpoint(position); // TODO constrain setpoint to within limit switches--make setpoint safe
+                                             // method
     m_setpoint = position;
     // System.out.println(position);
   };

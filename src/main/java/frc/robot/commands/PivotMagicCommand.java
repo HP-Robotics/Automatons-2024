@@ -37,8 +37,7 @@ public class PivotMagicCommand extends Command {
     if (DriverStation.getAlliance().isPresent()) {
       if (DriverStation.getAlliance().get() == Alliance.Blue) {
         m_targetAprilTag = LimelightConstants.aprilTag7;
-      }
-      else {
+      } else {
         m_targetAprilTag = LimelightConstants.aprilTag4;
       }
     } else {

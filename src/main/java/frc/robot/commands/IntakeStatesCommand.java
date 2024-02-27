@@ -4,8 +4,6 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix6.controls.NeutralOut;
-
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,11 +12,12 @@ import frc.robot.BeamBreak;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeStatesCommand extends Command {
-    private final IntakeSubsystem m_subsystem;
-    private BeamBreak m_beamBreak;
+  private final IntakeSubsystem m_subsystem;
+  private BeamBreak m_beamBreak;
   /** Creates a new IntakeCommand. */
-    NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    NetworkTable intakeTable = inst.getTable("intake-table");
+  NetworkTableInstance inst = NetworkTableInstance.getDefault();
+  NetworkTable intakeTable = inst.getTable("intake-table");
+
   public IntakeStatesCommand(IntakeSubsystem subsystem, BeamBreak beambreak) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
@@ -29,7 +28,7 @@ public class IntakeStatesCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-   
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,26 +41,24 @@ public class IntakeStatesCommand extends Command {
       m_subsystem.beambreakState = true;
     }
     if (m_subsystem.intakeYuck) {
-      m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed), IntakeConstants.vanguardSpeed);
-    }
-    else if (m_subsystem.intakeFire ) {
+      m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed),
+          IntakeConstants.vanguardSpeed);
+    } else if (m_subsystem.intakeFire) {
       m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed), 0);
-    }
-    else if (m_subsystem.beambreakState) {
+    } else if (m_subsystem.beambreakState) {
       m_subsystem.runIntake(0, 0);
-    }
-    else if (m_subsystem.intakeOn) {
-      m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed), IntakeConstants.vanguardSpeed);
-    }
-    else {
-      m_subsystem.runIntake(0,0);
+    } else if (m_subsystem.intakeOn) {
+      m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed),
+          IntakeConstants.vanguardSpeed);
+    } else {
+      m_subsystem.runIntake(0, 0);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.runIntake(0.0, 0.0); // Turn intake off; 
+    m_subsystem.runIntake(0.0, 0.0); // Turn intake off;
   }
 
   // Returns true when the command should end.
