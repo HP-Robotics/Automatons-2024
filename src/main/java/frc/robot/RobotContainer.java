@@ -29,6 +29,7 @@ import frc.robot.BeamBreak;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.sound.sampled.CompoundControl;
 
@@ -42,6 +43,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -357,15 +360,31 @@ public class RobotContainer {
       autoFile = "Shoot Preload Far Away";
     }
     if (autoFile != "") {
-      m_autoPose.setRobotPose(PathPlannerAuto.getStaringPoseFromAutoFile(autoFile));
+      Pose2d pose = PathPlannerAuto.getStaringPoseFromAutoFile(autoFile);
+      Optional<Alliance> ally = DriverStation.getAlliance();
+      if (ally.isPresent()) {
+        if (ally.get() == Alliance.Red) {
+          pose = new Pose2d(54 * 12 * 0.0254 - pose.getX(), pose.getY(),
+              new Rotation2d(Math.PI).minus(pose.getRotation()));
+        }
+      }
+      m_autoPose.setRobotPose(pose);
       PathPlannerAuto.getPathGroupFromAutoFile(autoFile).forEach(this::drawTrajectory);
       SmartDashboard.putData(m_autoPose);
     }
     m_autoPose.getObject("Auto Path").setPoses(m_autoPath);
-    //System.out.println(selection);
   }
 
   public void drawTrajectory(PathPlannerPath path) {
-    m_autoPath.addAll(path.getPathPoses());
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (ally.isPresent()) {
+      if (ally.get() == Alliance.Red) {
+        m_autoPath.addAll(path.flipPath().getPathPoses());
+      } else {
+        m_autoPath.addAll(path.getPathPoses());
+      }
+    } else {
+      m_autoPath.addAll(path.getPathPoses());
+    }
   }
 }
