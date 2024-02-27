@@ -27,12 +27,18 @@ import frc.robot.commands.TriggerStatesCommand;
 import frc.robot.commands.Autos;
 import frc.robot.BeamBreak;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.sound.sampled.CompoundControl;
 
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -40,6 +46,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -75,6 +82,8 @@ public class RobotContainer {
   private final CommandJoystick m_driveJoystick = new CommandJoystick(ControllerConstants.kDriverControllerPort);
   private final CommandJoystick m_opJoystick = new CommandJoystick(ControllerConstants.kOperatorControllerPort);
   private CommandBlocks compoundCommands; // TODO: Pick a better name
+  public final Field2d m_autoPose = new Field2d();
+  public List<Pose2d> m_autoPath = new ArrayList<>();
 
   // The robot's subsystems and commands are defined here...
   private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem();
@@ -137,6 +146,7 @@ public class RobotContainer {
     m_chooseAutos.addOption("Shoot Preload Far Away", "ShootPreloadFarAway");
     m_chooseAutos.addOption("Only Shoot", "OnlyShoot");
     m_chooseAutos.setDefaultOption("Do Nothing", "DoNothing");
+    m_chooseAutos.onChange(this::drawSelectedAuto);
 
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
 
@@ -317,5 +327,45 @@ public class RobotContainer {
     } else {
       return Autos.DoNothing();
     }
+  }
+
+  public void drawSelectedAuto(String selection) {
+    m_autoPath = new ArrayList<>();
+    String autoFile = "";
+    if (selection == "FourPieceCenter") {
+      autoFile = "4 Piece Center";
+    }
+    if (selection == "ThreePieceCenter") {
+      autoFile = "3 Piece Center";
+    }
+    if (selection == "FourPiece") {
+      autoFile = "4 Piece Auto";
+    }
+    if (selection == "BasicAmp") {
+      autoFile = "Basic Amp";
+    }
+    if (selection == "CenterDown") {
+      autoFile = "Center Down";
+    }
+    if (selection == "GrandTheftAuto") {
+      autoFile = "Grand Theft Auto";
+    }
+    if (selection == "IntermediateAmp") {
+      autoFile = "Intermediate Amp";
+    }
+    if (selection == "ShootPreloadFarAway") {
+      autoFile = "Shoot Preload Far Away";
+    }
+    if (autoFile != "") {
+      m_autoPose.setRobotPose(PathPlannerAuto.getStaringPoseFromAutoFile(autoFile));
+      PathPlannerAuto.getPathGroupFromAutoFile(autoFile).forEach(this::drawTrajectory);
+      SmartDashboard.putData(m_autoPose);
+    }
+    m_autoPose.getObject("Auto Path").setPoses(m_autoPath);
+    //System.out.println(selection);
+  }
+
+  public void drawTrajectory(PathPlannerPath path) {
+    m_autoPath.addAll(path.getPathPoses());
   }
 }
