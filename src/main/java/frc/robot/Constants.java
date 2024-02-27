@@ -232,7 +232,11 @@ public final class Constants {
     public static final double kG = -0.02;//0.02
     public static final boolean startWithPID = true;
     
-    public static final double[] magicConstants = {0.0, -0.0219711, 0.437724};
+    public static final double[] magicConstants = {0.0, -0.0219711, 0.437724}; 
+    
+    // new line: {0.0, -0.0245526, 0.461092};
+    // new quadratic: {0.0025323, -0.0378195, 0.476864};
+    // old line: {0.0, -0.0219711, 0.437724};
 
     public static final double manualSpeed = 0.1;
 
