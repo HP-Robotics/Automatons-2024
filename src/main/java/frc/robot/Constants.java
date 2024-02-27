@@ -293,7 +293,7 @@ public final class Constants {
   public static class PortConstants {
     public static final int FLAbsEncoder = 14;
     public static final int FRAbsEncoder = 12;
-    public static final int BRAbsEncoder = 11;
+    public static final int BRAbsEncoder = 10;
     public static final int BLAbsEncoder = 13;
     
     public static final int pivotAbsEncoderID = 16;
