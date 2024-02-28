@@ -95,14 +95,14 @@ public class CommandBlocks {
         new StartEndCommand(m_intakeSubsystem::yuckButtonPressed, m_intakeSubsystem::yuckButtonReleased));
   }
 
-  public Command moveSnuffilator(boolean goingUp) {
-    if (goingUp) {
+  public Command moveSnuffilator(boolean goingOut) {
+    if (goingOut) {
       return new InstantCommand(() -> {
-        m_snuffilatorSubsystem.move(SnuffilatorConstants.snuffilatorSpeed);
+        m_snuffilatorSubsystem.move(SnuffilatorConstants.snuffilatorOutSpeed);
       });
     } else {
       return new InstantCommand(() -> {
-        m_snuffilatorSubsystem.move(-SnuffilatorConstants.snuffilatorSpeed);
+        m_snuffilatorSubsystem.move(-SnuffilatorConstants.snuffilatorInSpeed);
       });
     }
   }

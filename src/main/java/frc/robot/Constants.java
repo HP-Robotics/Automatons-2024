@@ -174,7 +174,8 @@ public final class Constants {
     public static final int stallCurrentLimit = 3;
     public static final int freeCurrentLimit = 5;
 
-    public static final double snuffilatorSpeed = 0.05;
+    public static final double snuffilatorInSpeed = 0.05;
+    public static final double snuffilatorOutSpeed = 0.08;
   }
 
   public static class ShooterConstants {
@@ -198,7 +199,7 @@ public final class Constants {
   }
 
   public static class ClimberConstants {
-    public static final double climbSpeed = 0.4; //TODO: Decide this (in RPM, so 500?)
+    public static final double climbSpeed = 1; //TODO: Decide this (in RPM, so 500?)
 
 
     public static final double kP = 0.0;

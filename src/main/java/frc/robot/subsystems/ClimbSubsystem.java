@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -19,7 +20,7 @@ import frc.robot.Constants.IDConstants;
 
 public class ClimbSubsystem extends SubsystemBase {
   public CANSparkMax climbMotorLeft = new CANSparkMax(IDConstants.climbMotorLeftID, MotorType.kBrushless);
-  CANSparkMax climbMotorRight = new CANSparkMax(IDConstants.climbMotorRightID, MotorType.kBrushless); 
+  public CANSparkMax climbMotorRight = new CANSparkMax(IDConstants.climbMotorRightID, MotorType.kBrushless); 
   SparkPIDController climbController; 
   RelativeEncoder m_encoder;
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -42,10 +43,11 @@ public class ClimbSubsystem extends SubsystemBase {
 
     //climbController.setReference(500.0, CANSparkMax.ControlType.kPosition);
 
-    climbMotorRight.follow(climbMotorLeft,true);
-    climbMotorLeft.setSoftLimit(SoftLimitDirection.kForward, 50);
+    // climbMotorRight.follow(climbMotorLeft,true);
+    climbMotorRight.setInverted(true);
+    climbMotorLeft.setSoftLimit(SoftLimitDirection.kForward, 130);
     climbMotorLeft.setSoftLimit(SoftLimitDirection.kReverse, 0);
-    climbMotorRight.setSoftLimit(SoftLimitDirection.kForward, 50);
+    climbMotorRight.setSoftLimit(SoftLimitDirection.kForward, 130);
     climbMotorRight.setSoftLimit(SoftLimitDirection.kReverse, 0);
 
     climbMotorRight.enableSoftLimit(SoftLimitDirection.kForward, true);
@@ -53,9 +55,15 @@ public class ClimbSubsystem extends SubsystemBase {
     climbMotorLeft.enableSoftLimit(SoftLimitDirection.kForward, true);
     climbMotorLeft.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
+    climbMotorLeft.setIdleMode(IdleMode.kBrake);
+    climbMotorRight.setIdleMode(IdleMode.kBrake);
+
+     climbMotorLeft.getEncoder().setPosition(0);
+    climbMotorRight.getEncoder().setPosition(0);
+
     climbMotorLeft.burnFlash();
     climbMotorRight.burnFlash();
-
+   
     climberTable.putValue("Climber kP", NetworkTableValue.makeDouble(ClimberConstants.kP));
     climberTable.putValue("Climber kI", NetworkTableValue.makeDouble(ClimberConstants.kI));
     climberTable.putValue("Climber kD", NetworkTableValue.makeDouble(ClimberConstants.kD));
@@ -71,6 +79,7 @@ public class ClimbSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     climberTable.putValue("Climber Left Motor Encoder", NetworkTableValue.makeDouble(climbMotorLeft.getEncoder().getPosition()));
     climberTable.putValue("Climber Right Motor Encoder", NetworkTableValue.makeDouble(climbMotorRight.getEncoder().getPosition()));
+    
   }
 
   // public void climbTo(double output) {

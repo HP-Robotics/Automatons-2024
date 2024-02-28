@@ -186,16 +186,20 @@ public class RobotContainer {
       m_driveJoystick.povUp().whileTrue(new StartEndCommand(
           () -> {
             m_climberSubsystem.climbMotorLeft.set(ClimberConstants.climbSpeed);
+            m_climberSubsystem.climbMotorRight.set(ClimberConstants.climbSpeed);
           },
           () -> {
             m_climberSubsystem.climbMotorLeft.set(0);
+            m_climberSubsystem.climbMotorRight.set(0);
           }, m_climberSubsystem));
       m_driveJoystick.povDown().whileTrue(new StartEndCommand(
           () -> {
             m_climberSubsystem.climbMotorLeft.set(-ClimberConstants.climbSpeed);
+            m_climberSubsystem.climbMotorRight.set(-ClimberConstants.climbSpeed);
           },
           () -> {
             m_climberSubsystem.climbMotorLeft.set(0);
+            m_climberSubsystem.climbMotorRight.set(0);
           }, m_climberSubsystem));
     }
 
