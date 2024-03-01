@@ -10,6 +10,8 @@ import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.GeometryUtil;
+
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -69,17 +71,12 @@ public class FollowPathCommandOurs extends Command {
     Optional<Alliance> ally = DriverStation.getAlliance();
     if (ally.isPresent()) {
       if (ally.get() == Alliance.Red) {
-        m_drive.resetOdometry(mirrorPose(m_path.getPreviewStartingHolonomicPose())); // TODO: only reset odometry once
+        m_drive.resetOdometry(GeometryUtil.flipFieldPose(m_path.getPreviewStartingHolonomicPose())); // TODO: only reset odometry once
       }
     }
     m_pathPlannerCommand.initialize();
   }
 
-  public Pose2d mirrorPose(Pose2d inputPose2d) {
-    Pose2d output = new Pose2d(54 * 12 * 0.0254 - inputPose2d.getX(), inputPose2d.getY(),
-        new Rotation2d(Math.PI).minus(inputPose2d.getRotation()));
-    return output;
-  }
   // public Optional<Rotation2d> getRotationTargetOverride() {
   // // Some condition that should decide if we want to override rotation
   // if(Limelight.hasGamePieceTarget()) {

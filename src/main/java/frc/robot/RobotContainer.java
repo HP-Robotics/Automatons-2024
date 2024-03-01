@@ -28,6 +28,7 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.GeometryUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -173,12 +174,14 @@ public class RobotContainer {
 
     if (SubsystemConstants.useShooter) {
       m_opJoystick.axisGreaterThan(3, 0.1).whileTrue(
-          new SetShooterCommand(m_shooterSubsystem, null, null));
+          new SetShooterCommand(m_shooterSubsystem, null, null)
+          .andThen(new InstantCommand(m_shooterSubsystem::stopShooter)));
       // TODO add trigger if statement
       m_opJoystick.button(3).whileTrue(compoundCommands.fireButtonHold());
       m_opJoystick.button(6).whileTrue(
           new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp, ShooterConstants.shooterSpeedAmp)
-              .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
+              .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
+              .andThen(new InstantCommand(m_shooterSubsystem::stopShooter)));
       m_driveJoystick.button(ControllerConstants.yuckButton).whileTrue(compoundCommands.yuckButtonHold());
     }
 
@@ -270,12 +273,14 @@ public class RobotContainer {
       return;
     }
     m_triggerSubsystem.beambreakState = true;
+    m_triggerSubsystem.beambreakCount = 0;
     if (m_triggerSubsystem.triggerYuck || m_triggerSubsystem.triggerFire) {
       return;
     }
     // NeutralOut neutral = new NeutralOut();
     // neutral.UpdateFreqHz = 1000;
     m_triggerSubsystem.m_triggerMotor.setControl(new NeutralOut());
+    //System.out.println("quick stop");
   }
 
   /**
@@ -300,8 +305,7 @@ public class RobotContainer {
     }
     if (m_chooseAutos.getSelected() == "FourPieceCenter") {
       return Autos.FourPieceCenter(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem,
-          m_triggerSubsystem,
-          m_pivotSubsystem);
+          m_triggerSubsystem, m_pivotSubsystem, m_limelightSubsystem);
     }
     if (m_chooseAutos.getSelected() == "GrandTheftAuto") {
       return Autos.GrandTheftAuto(m_robotDrive);
@@ -362,8 +366,7 @@ public class RobotContainer {
       Optional<Alliance> ally = DriverStation.getAlliance();
       if (ally.isPresent()) {
         if (ally.get() == Alliance.Red) {
-          pose = new Pose2d(54 * 12 * 0.0254 - pose.getX(), pose.getY(),
-              new Rotation2d(Math.PI).minus(pose.getRotation()));
+          pose = GeometryUtil.flipFieldPose(pose);
         }
       }
       m_autoPose.setRobotPose(pose);

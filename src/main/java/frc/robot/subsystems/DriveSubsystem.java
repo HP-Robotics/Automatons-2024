@@ -121,10 +121,10 @@ public class DriveSubsystem extends SubsystemBase {
         NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getRotation().getDegrees()));
 
     // TODO investigate why this takes so long
-    // m_frontLeft.updateShuffleboard();
-    // m_frontRight.updateShuffleboard();
-    // m_backRight.updateShuffleboard();
-    // m_backLeft.updateShuffleboard();
+    m_frontLeft.updateShuffleboard();
+    m_frontRight.updateShuffleboard();
+    m_backRight.updateShuffleboard();
+    m_backLeft.updateShuffleboard();
 
     BaseStatusSignal.refreshAll(m_pGyroPitch, m_pGyroYaw, m_pGyroRoll);
     driveTrainTable.putValue("Pigeon Pitch", NetworkTableValue.makeDouble(m_pGyroPitch.getValueAsDouble()));

@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AutoConstants;
@@ -45,18 +46,31 @@ public final class Autos {
 
   public static Command FourPieceCenter(CommandBlocks commandBlocks, DriveSubsystem drive,
       IntakeSubsystem intakeSubsystem, ShooterSubsystem shooterSubsystem,
-      TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem) {
+      TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem, LimelightSubsystem limelightSubsystem) {
     if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive || !SubsystemConstants.useShooter) {
       return null;
     }
     return new SequentialCommandGroup(
+        new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.subwooferPosition)),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
+        new InstantCommand(() -> pivotSubsystem.setPosition(pivotSubsystem.getMagicAngle(
+            limelightSubsystem.getDistanceTo(new Pose2d(2.65, 6.83, Rotation2d.fromDegrees(35.33)),
+                LimelightConstants.aprilTag7)))),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 1"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position),
+        commandBlocks.fireGamePieceCommand(pivotSubsystem.getMagicAngle(
+            limelightSubsystem.getDistanceTo(new Pose2d(2.65, 6.83, Rotation2d.fromDegrees(35.33)),
+                LimelightConstants.aprilTag7))),
+        new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.note2Position)),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 2"),
         commandBlocks.fireGamePieceCommand(PivotConstants.note2Position),
+        new InstantCommand(() -> pivotSubsystem.setPosition(pivotSubsystem.getMagicAngle(
+            limelightSubsystem.getDistanceTo(new Pose2d(2.9, 4.25, Rotation2d.fromDegrees(-26.33)),
+                LimelightConstants.aprilTag7)))),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 3"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position));
+        commandBlocks.fireGamePieceCommand(pivotSubsystem.getMagicAngle(
+            limelightSubsystem.getDistanceTo(new Pose2d(2.9, 4.25, Rotation2d.fromDegrees(-26.33)),
+                LimelightConstants.aprilTag7))),
+        new InstantCommand(shooterSubsystem::stopShooter));
   }
 
   public static Command CenterDown(CommandBlocks commandBlocks, DriveSubsystem drive,

@@ -31,13 +31,19 @@ public class SetShooterCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    
     double frontOutput = m_frontSpeed == null
         ? shooterTable.getEntry("frontMotor Setpoint").getDouble(ShooterConstants.shooterSpeedFront)
         : m_frontSpeed;
     double backOutput = m_backSpeed == null
         ? shooterTable.getEntry("backMotor Setpoint").getDouble(ShooterConstants.shooterSpeedBack)
         : m_backSpeed;
-    m_subsystem.setShooter(frontOutput, backOutput);
+    if(frontOutput == 0 && backOutput == 0){
+      m_subsystem.stopShooter();
+    }
+    else{
+      m_subsystem.setShooter(frontOutput, backOutput);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,7 +54,9 @@ public class SetShooterCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.stopShooter();
+    if(!interrupted){
+      m_subsystem.stopShooter();
+    }  
   }
 
   // Returns true when the command should end.
