@@ -188,30 +188,30 @@ public class SwerveModule {
   }
 
   public void updateShuffleboard() {
-    driveTrainTable.putValue(m_name + " Drive Power", NetworkTableValue.makeDouble(drivePower()));
-    driveTrainTable.putValue(m_name + " Drive Velocity", NetworkTableValue.makeDouble(driveSpeed()));
-    driveTrainTable.putValue(m_name + " Turn Power", NetworkTableValue.makeDouble(turnPower()));
-    driveTrainTable.putValue(m_name + " Turn Angle", NetworkTableValue.makeDouble(getEncoderAngle()));
+    // driveTrainTable.putValue(m_name + " Drive Power", NetworkTableValue.makeDouble(drivePower()));
+    // driveTrainTable.putValue(m_name + " Drive Velocity", NetworkTableValue.makeDouble(driveSpeed()));
+    // driveTrainTable.putValue(m_name + " Turn Power", NetworkTableValue.makeDouble(turnPower()));
+    // driveTrainTable.putValue(m_name + " Turn Angle", NetworkTableValue.makeDouble(getEncoderAngle()));
     driveTrainTable.putValue(m_name + " Abs Encoder", NetworkTableValue.makeDouble(m_absEncoder.getAbsolutePosition()));
 
-    driveTrainTable.putValue(m_name + " Turning kD Proportion",
-        NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopDerivativeOutput().getValue()));
-    driveTrainTable.putValue(m_name + " Turning kP Proportion",
-        NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopProportionalOutput().getValue()));
-    driveTrainTable.putValue(m_name + " Turning kI Proportion",
-        NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopIntegratedOutput().getValue()));
-    driveTrainTable.putValue(m_name + " Turning kF Proportion",
-        NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopFeedForward().getValue()));
+    // driveTrainTable.putValue(m_name + " Turning kD Proportion",
+    //     NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopDerivativeOutput().getValue()));
+    // driveTrainTable.putValue(m_name + " Turning kP Proportion",
+    //     NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopProportionalOutput().getValue()));
+    // driveTrainTable.putValue(m_name + " Turning kI Proportion",
+    //     NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopIntegratedOutput().getValue()));
+    // driveTrainTable.putValue(m_name + " Turning kF Proportion",
+    //     NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopFeedForward().getValue()));
 
-    driveTrainTable.putValue(m_name + " Driving kD Proportion",
-        NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopDerivativeOutput().getValue()));
-    driveTrainTable.putValue(m_name + " Driving Error",
-        NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopError().getValue()));
-    driveTrainTable.putValue(m_name + " Driving kP Proportion",
-        NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopProportionalOutput().getValue()));
-    driveTrainTable.putValue(m_name + " Driving kI Proportion",
-        NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopIntegratedOutput().getValue()));
-    driveTrainTable.putValue(m_name + " Driving kF Proportion",
-        NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopFeedForward().getValue()));
+    // driveTrainTable.putValue(m_name + " Driving kD Proportion",
+    //     NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopDerivativeOutput().getValue()));
+    // driveTrainTable.putValue(m_name + " Driving Error",
+    //     NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopError().getValue()));
+    // driveTrainTable.putValue(m_name + " Driving kP Proportion",
+    //     NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopProportionalOutput().getValue()));
+    // driveTrainTable.putValue(m_name + " Driving kI Proportion",
+    //     NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopIntegratedOutput().getValue()));
+    // driveTrainTable.putValue(m_name + " Driving kF Proportion",
+    //     NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopFeedForward().getValue()));
   }
 }

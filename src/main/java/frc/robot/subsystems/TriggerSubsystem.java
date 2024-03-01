@@ -24,6 +24,7 @@ public class TriggerSubsystem extends SubsystemBase {
   public TalonFX m_triggerMotor;
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
   public BeamBreak m_beamBreak;
+  public int beambreakCount = 0;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable triggerTable = inst.getTable("trigger-subsystem");
