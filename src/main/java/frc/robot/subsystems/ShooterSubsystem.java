@@ -91,11 +91,11 @@ public class ShooterSubsystem extends SubsystemBase {
     // m_frontMotor.setControl(new DutyCycleOut(output1));
     // m_backMotor.setControl(new DutyCycleOut(output2));
 
-    if (output1 > 0.1 || output2 > 0.1) {
-      m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.5);
-    } else {
-      m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.0);
-    }
+    // if (output1 > 0.1 || output2 > 0.1) {
+    //   m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.5);
+    // } else {
+    //   m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.0);
+    // }
   }
 
   public boolean atSpeed() {
@@ -110,6 +110,6 @@ public class ShooterSubsystem extends SubsystemBase {
   public void stopShooter() {
     m_frontMotor.setControl(new DutyCycleOut(0));
     m_backMotor.setControl(new DutyCycleOut(0));
-    m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble, 0);
+    //m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble, 0);
   }
 }

@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants.LimelightConstants;
@@ -50,6 +51,7 @@ public class DrivePointedToSpeakerCommand extends Command {
   public void execute() {
     if (m_limelightSubsystem.sawAprilTag == 1) {
       m_offset = (m_limelightSubsystem.m_visionPose2d.getRotation()).minus(m_drivesubsystem.getPose().getRotation());
+      m_joystick.getHID().setRumble(RumbleType.kBothRumble, 0.2);
     }
     if (m_limelightSubsystem.aprilTagSeen) {
       m_drivesubsystem.drivePointedTowardsAngle(m_joystick,
@@ -58,12 +60,14 @@ public class DrivePointedToSpeakerCommand extends Command {
               .minus(m_offset));
     } else {
       m_drivesubsystem.driveWithJoystick(m_joystick);
+      m_joystick.getHID().setRumble(RumbleType.kBothRumble, 0);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_joystick.getHID().setRumble(RumbleType.kBothRumble, 0);
   }
 
   // Returns true when the command should end.

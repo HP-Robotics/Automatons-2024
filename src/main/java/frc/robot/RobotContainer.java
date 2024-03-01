@@ -221,7 +221,7 @@ public class RobotContainer {
       m_driveJoystick.button(ControllerConstants.drivePointedToSpeakerButton)
           .whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick)); // Flightstick
                                                                                                              // button 2
-      m_opJoystick.axisGreaterThan(2, 0.1).whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem)); // Flightstick
+      m_opJoystick.axisGreaterThan(2, 0.1).whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_opJoystick)); // Flightstick
                                                                                                                      // button
                                                                                                                      // 2
     }
