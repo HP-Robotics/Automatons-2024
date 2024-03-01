@@ -293,7 +293,7 @@ public class RobotContainer {
       return Autos.FiveMeterTest(m_robotDrive);
     }
     if (m_chooseAutos.getSelected() == "ShootPreloadFarAway") {
-      return Autos.ShootPreloadFarAway(compoundCommands, m_robotDrive, m_shooterSubsystem, m_limelightSubsystem, m_pivotSubsystem);
+      return Autos.ShootPreloadFarAway(compoundCommands, m_robotDrive, m_shooterSubsystem);
     }
     if (m_chooseAutos.getSelected() == "OnlyShoot") {
       return Autos.OnlyShoot(compoundCommands, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem, m_pivotSubsystem);

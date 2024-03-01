@@ -47,7 +47,7 @@ public class LimelightSubsystem extends SubsystemBase {
     aprilTagSeen = false;
   }
 
-  public double getDistanceTo(Pose2d robot, Pose2d fieldpose) {
+  public static double getDistanceTo(Pose2d robot, Pose2d fieldpose) {
     double turnToSpeakerA = fieldpose.getX() - robot.getX();
     double turnToSpeakerB = fieldpose.getY() - robot.getY();
     double distanceToSpeaker = Math.sqrt(Math.pow(turnToSpeakerA, 2) + Math.pow(turnToSpeakerB, 2));

@@ -79,8 +79,8 @@ public final class Autos {
   }
 
   public static Command ShootPreloadFarAway(CommandBlocks commandBlocks, DriveSubsystem drive,
-      ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, PivotSubsystem pivotSubsystem) {
-    if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive || !SubsystemConstants.useShooter) {
+      ShooterSubsystem shooterSubsystem) {
+          if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive || !SubsystemConstants.useShooter) {
       return null;
     }
     /* There was a point where a version of the call to 'getDistanceTo' would cause the rio to apparently
@@ -91,8 +91,8 @@ public final class Autos {
        if we ever see that error return.  -- Mentor Jeremy White */
     return new SequentialCommandGroup(
         new FollowPathCommandOurs(drive, "Center Down Part 1"),
-        commandBlocks.fireGamePieceCommand(pivotSubsystem.getMagicAngle(
-          limelightSubsystem.getDistanceTo(new Pose2d(3.38, 3.1, Rotation2d.fromDegrees(-35.94)), LimelightConstants.aprilTag7))));
+        commandBlocks.fireGamePieceCommand(PivotSubsystem.getMagicAngle(
+          LimelightSubsystem.getDistanceTo(new Pose2d(3.38, 3.1, Rotation2d.fromDegrees(-35.94)), LimelightConstants.aprilTag7))));
           // TODO: Load the last point from the path
   }
 
