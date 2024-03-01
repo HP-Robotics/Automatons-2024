@@ -48,6 +48,7 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
@@ -178,10 +179,6 @@ public class RobotContainer {
           .andThen(new InstantCommand(m_shooterSubsystem::stopShooter)));
       // TODO add trigger if statement
       m_opJoystick.button(3).whileTrue(compoundCommands.fireButtonHold());
-      m_opJoystick.button(6).whileTrue(
-          new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp, ShooterConstants.shooterSpeedAmp)
-              .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
-              .andThen(new InstantCommand(m_shooterSubsystem::stopShooter)));
       m_driveJoystick.button(ControllerConstants.yuckButton).whileTrue(compoundCommands.yuckButtonHold());
     }
 
@@ -219,8 +216,12 @@ public class RobotContainer {
       m_opJoystick.button(7).onTrue(new InstantCommand(m_pivotSubsystem::togglePID));
       m_opJoystick.button(1)
           .onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.subwooferPosition)));
-      m_opJoystick.button(2)
-          .whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.ampPosition)));
+      m_opJoystick.button(2).whileTrue(
+       new ParallelCommandGroup(
+        new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.ampPosition)),
+        new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp, ShooterConstants.shooterSpeedAmp)
+              .withInterruptBehavior(InterruptionBehavior.kCancelIncoming))
+       .andThen(new InstantCommand(m_shooterSubsystem::stopShooter)));
       m_opJoystick.button(4)
           .whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.podiumPosition)));
     }
