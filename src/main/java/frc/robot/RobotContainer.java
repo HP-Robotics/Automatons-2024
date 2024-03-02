@@ -181,6 +181,13 @@ public class RobotContainer {
       m_opJoystick.button(3).whileTrue(compoundCommands.fireButtonHold());
       m_driveJoystick.button(ControllerConstants.yuckButton).whileTrue(compoundCommands.yuckButtonHold());
     }
+    if (SubsystemConstants.useShooter && SubsystemConstants.usePivot){
+      new Trigger(() -> {
+        return m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
+      })
+          .onTrue(new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp, ShooterConstants.shooterSpeedAmp))
+          .onFalse(new SetShooterCommand(m_shooterSubsystem, null, null));
+    }
 
     if (SubsystemConstants.useClimber) {
       m_driveJoystick.povUp().whileTrue(new StartEndCommand(
@@ -218,20 +225,15 @@ public class RobotContainer {
           .onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.subwooferPosition)));
       m_opJoystick.button(2).whileTrue(
        new ParallelCommandGroup(
-        new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.ampPosition)),
-        new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp, ShooterConstants.shooterSpeedAmp)
-              .withInterruptBehavior(InterruptionBehavior.kCancelIncoming))
-       .andThen(new InstantCommand(m_shooterSubsystem::stopShooter)));
+        new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.ampPosition))));
       m_opJoystick.button(4)
           .whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.podiumPosition)));
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
       m_driveJoystick.button(ControllerConstants.drivePointedToSpeakerButton)
-          .whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick)); // Flightstick
-                                                                                                             // button 2
-      m_opJoystick.axisGreaterThan(2, 0.1).whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem)); // Flightstick
-                                                                                                                     // button
-                                                                                                                     // 2
+          .whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick));
+      m_opJoystick.axisGreaterThan(2, 0.1)
+        .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem));
     }
 
     if (SubsystemConstants.useSnuffilator) {
@@ -306,7 +308,7 @@ public class RobotContainer {
     }
     if (m_chooseAutos.getSelected() == "FourPieceCenter") {
       return Autos.FourPieceCenter(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem,
-          m_triggerSubsystem, m_pivotSubsystem, m_limelightSubsystem);
+          m_triggerSubsystem, m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "GrandTheftAuto") {
       return Autos.GrandTheftAuto(m_robotDrive);
