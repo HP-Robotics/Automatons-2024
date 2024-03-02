@@ -21,6 +21,7 @@ public class DrivePointedToSpeakerCommand extends Command {
   private final CommandJoystick m_joystick;
   private Pose2d m_targetAprilTag;
   private Rotation2d m_offset;
+  private boolean m_aprilTagSeen = false;
 
   /** Creates a new IntakeCommand. */
   public DrivePointedToSpeakerCommand(DriveSubsystem drivesubsystem, LimelightSubsystem limelightsubsystem,
@@ -51,6 +52,9 @@ public class DrivePointedToSpeakerCommand extends Command {
   public void execute() {
     if (m_limelightSubsystem.sawAprilTag == 1) {
       m_offset = (m_limelightSubsystem.m_visionPose2d.getRotation()).minus(m_drivesubsystem.getPose().getRotation());
+      if (!m_aprilTagSeen) {
+        m_aprilTagSeen = true;
+      }
       if (m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag) < 3.5) {
         m_joystick.getHID().setRumble(RumbleType.kBothRumble, 0.2);
       }
@@ -61,7 +65,7 @@ public class DrivePointedToSpeakerCommand extends Command {
     else {
         m_joystick.getHID().setRumble(RumbleType.kBothRumble, 0);
     }
-    if (m_limelightSubsystem.aprilTagSeen) {
+    if (m_aprilTagSeen) {
       m_drivesubsystem.drivePointedTowardsAngle(m_joystick,
           new Rotation2d(Math
               .toRadians(m_limelightSubsystem.getAngleTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag) - 180))
