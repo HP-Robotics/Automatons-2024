@@ -256,6 +256,9 @@ public final class Constants {
     public static final double podiumPosition = degreesToEncoder(42.12 - 3); // 0.385
     public static final double note2Position = degreesToEncoder(45.72 - 3); // 0.395
     public static final double note1_3Position = degreesToEncoder(42.12); // 0.385
+    public static final double noteA1Position = 0.3722;
+    public static final double noteA3Position = 0.3752;
+    public static final double preloadFarAwayPosition = 0.363;
   }
 
   public static class IDConstants {

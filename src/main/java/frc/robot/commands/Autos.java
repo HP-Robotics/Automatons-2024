@@ -46,30 +46,22 @@ public final class Autos {
 
   public static Command FourPieceCenter(CommandBlocks commandBlocks, DriveSubsystem drive,
       IntakeSubsystem intakeSubsystem, ShooterSubsystem shooterSubsystem,
-      TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem, LimelightSubsystem limelightSubsystem) {
+      TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem) {
     if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive || !SubsystemConstants.useShooter) {
       return null;
     }
     return new SequentialCommandGroup(
         new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.subwooferPosition)),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
-        new InstantCommand(() -> pivotSubsystem.setPosition(pivotSubsystem.getMagicAngle(
-            limelightSubsystem.getDistanceTo(new Pose2d(2.65, 6.83, Rotation2d.fromDegrees(35.33)),
-                LimelightConstants.aprilTag7)))),
+        new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.noteA1Position)),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 1"),
-        commandBlocks.fireGamePieceCommand(pivotSubsystem.getMagicAngle(
-            limelightSubsystem.getDistanceTo(new Pose2d(2.65, 6.83, Rotation2d.fromDegrees(35.33)),
-                LimelightConstants.aprilTag7))),
+        commandBlocks.fireGamePieceCommand(PivotConstants.noteA1Position),
         new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.note2Position)),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 2"),
         commandBlocks.fireGamePieceCommand(PivotConstants.note2Position),
-        new InstantCommand(() -> pivotSubsystem.setPosition(pivotSubsystem.getMagicAngle(
-            limelightSubsystem.getDistanceTo(new Pose2d(2.9, 4.25, Rotation2d.fromDegrees(-26.33)),
-                LimelightConstants.aprilTag7)))),
+        new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.noteA3Position)),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 3"),
-        commandBlocks.fireGamePieceCommand(pivotSubsystem.getMagicAngle(
-            limelightSubsystem.getDistanceTo(new Pose2d(2.9, 4.25, Rotation2d.fromDegrees(-26.33)),
-                LimelightConstants.aprilTag7))),
+        commandBlocks.fireGamePieceCommand(PivotConstants.noteA3Position),
         new InstantCommand(shooterSubsystem::stopShooter));
   }
 
@@ -107,9 +99,7 @@ public final class Autos {
      */
     return new SequentialCommandGroup(
         new FollowPathCommandOurs(drive, "Center Down Part 1"),
-        commandBlocks.fireGamePieceCommand(pivotSubsystem.getMagicAngle(
-            limelightSubsystem.getDistanceTo(new Pose2d(3.38, 3.1, Rotation2d.fromDegrees(-35.94)),
-                LimelightConstants.aprilTag7))));
+        commandBlocks.fireGamePieceCommand(PivotConstants.preloadFarAwayPosition));
     // TODO: Load the last point from the path
   }
 
