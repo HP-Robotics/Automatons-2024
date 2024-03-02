@@ -106,6 +106,7 @@ public final class Constants {
     public static final double turningControllerkP = 1;
     public static final double turningControllerkI = 0.0;
     public static final double turningControllerkD = 0.0;
+    public static final double turningControllerTolerance = Math.toRadians(2);
 
     // Absolute encoder values that make the wheels point forward
     public static final double absEncoderForwardFL = 0.98;

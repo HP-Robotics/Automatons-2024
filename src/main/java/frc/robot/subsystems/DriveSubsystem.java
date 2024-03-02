@@ -95,6 +95,7 @@ public class DriveSubsystem extends SubsystemBase {
     rotationController = new PIDController(DriveConstants.turningControllerkP, DriveConstants.turningControllerkI,
         DriveConstants.turningControllerkD);
     rotationController.enableContinuousInput(-Math.PI, Math.PI);
+    rotationController.setTolerance(DriveConstants.turningControllerTolerance);
 
     drivePublisher = poseEstimatorTable.getStructTopic("Drive Pose", Pose2d.struct).publish();
 
@@ -211,6 +212,9 @@ public class DriveSubsystem extends SubsystemBase {
         NetworkTableValue.makeDouble(rotationController.getPositionError()));
     driveTrainTable.putValue("Rotation Controller Setpoint",
         NetworkTableValue.makeDouble(rotationController.getSetpoint()));
+  }
+  public boolean pointedTowardsAngle(){
+    return rotationController.atSetpoint();
   }
 
   public Pose2d getPose() {
