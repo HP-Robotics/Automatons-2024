@@ -174,8 +174,14 @@ public class RobotContainer {
     }
 
     if (SubsystemConstants.useShooter) {
+      // m_opJoystick.axisGreaterThan(3, 0.1).whileTrue(
+      //     new SetShooterCommand(m_shooterSubsystem, null, null)
+      //     .andThen(new InstantCommand(m_shooterSubsystem::stopShooter)));
       m_opJoystick.axisGreaterThan(3, 0.1).whileTrue(
-          new SetShooterCommand(m_shooterSubsystem, null, null)
+        new ConditionalCommand(
+          new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp, ShooterConstants.shooterSpeedAmp),
+          new SetShooterCommand(m_shooterSubsystem, null, null),
+          () -> { return m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;})
           .andThen(new InstantCommand(m_shooterSubsystem::stopShooter)));
       // TODO add trigger if statement
       m_opJoystick.button(3).whileTrue(compoundCommands.fireButtonHold());
