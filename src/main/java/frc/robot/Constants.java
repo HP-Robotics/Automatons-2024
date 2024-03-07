@@ -255,10 +255,10 @@ public final class Constants {
     public static final double subwooferPosition = degreesToEncoder(58.3); // 0.43
     public static final double ampPosition = degreesToEncoder(119.5 + 3); // 0.6
     public static final double podiumPosition = degreesToEncoder(42.12 - 3); // 0.385
-    public static final double note2Position = degreesToEncoder(45.72 - 3); // 0.395
+    public static final double note2Position = degreesToEncoder(45.72 - 3.25); // 0.395
     public static final double note1_3Position = degreesToEncoder(42.12); // 0.385
     public static final double noteA1Position = 0.3722;
-    public static final double noteA3Position = 0.3752;
+    public static final double noteA3Position = 0.3772;
     public static final double preloadFarAwayPosition = 0.363;
   }
 
