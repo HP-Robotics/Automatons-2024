@@ -47,6 +47,8 @@ public final class Constants {
     public static final int drivePointedToSpeakerButton = useXbox ? 5 : 0;
     public static final int drivePointedToNoteAxis = useXbox ? 2 : 0;
 
+    // TODO: Add operator joystick constants
+
     public static double getRotation(CommandJoystick stick) {
       if (useXbox) {
         return stick.getRawAxis(4);
