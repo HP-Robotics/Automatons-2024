@@ -45,6 +45,7 @@ public final class Constants {
     public static final int climberButton = useXbox ? 10 : 10;
     public static final int intakeButton = useXbox ? 0 : 1;
     public static final int drivePointedToSpeakerButton = useXbox ? 5 : 0;
+    public static final int drivePointedToNoteAxis = useXbox ? 2 : 0;
 
     public static double getRotation(CommandJoystick stick) {
       if (useXbox) {

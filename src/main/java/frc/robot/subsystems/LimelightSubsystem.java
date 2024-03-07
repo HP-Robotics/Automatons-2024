@@ -4,8 +4,8 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.LimelightConstants;
+import java.util.Optional;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
@@ -14,6 +14,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableType;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.LimelightConstants;
 
 public class LimelightSubsystem extends SubsystemBase {
   NetworkTableEntry botpose_blue;
@@ -56,6 +58,17 @@ public class LimelightSubsystem extends SubsystemBase {
     double angleToSpeaker = Math.atan2(turnToSpeakerB, turnToSpeakerA);
 
     return Math.toDegrees(angleToSpeaker);
+  }
+
+  public Optional<Double> getNoteTX() {
+    double noteTV = m_gamePieceTable.getEntry("tv").getValue().getDouble();
+    double noteTX = m_gamePieceTable.getEntry("tx").getValue().getDouble();
+
+    if (noteTV == 1) {
+      return Optional.of(noteTX);
+    } else {
+      return Optional.empty();
+    }
   }
 
   // This method will be called once per scheduler run
@@ -103,9 +116,5 @@ public class LimelightSubsystem extends SubsystemBase {
         aprilTagSeen = true;
       }
     }
-
-    // double noteTV = m_gamePieceTable.getEntry("tv").getValue().getDouble();
-    // double noteTX = m_gamePieceTable.getEntry("tx").getValue().getDouble();
-    // double noteTY = m_gamePieceTable.getEntry("ty").getValue().getDouble();
   }
 }
