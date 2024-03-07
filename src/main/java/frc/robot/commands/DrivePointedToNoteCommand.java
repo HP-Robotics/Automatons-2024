@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class DrivePointedToNoteCommand extends Command {
   @Override
   public void execute() {
     Optional<Double> angle = m_limelightSubsystem.getNoteTX();
-    if (angle.isPresent() && Math.abs(angle.get()) < 2.0) {
+    if (angle.isPresent() && Math.abs(angle.get()) < LimelightConstants.allowableNoteAngleError) {
       m_drivesubsystem.drivePointedTowardsAngle(m_joystick,
           new Rotation2d(Math
               .toRadians(angle.get())).plus(m_drivesubsystem.getPose().getRotation()));

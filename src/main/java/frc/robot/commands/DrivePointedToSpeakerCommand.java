@@ -55,7 +55,7 @@ public class DrivePointedToSpeakerCommand extends Command {
       if (!m_aprilTagSeen) {
         m_aprilTagSeen = true;
       }
-      if (m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag) < 3.5) {
+      if (m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag) < LimelightConstants.allowableSpeakerDistanceError) {
         m_joystick.getHID().setRumble(RumbleType.kBothRumble, 0.2);
       }
       else {
