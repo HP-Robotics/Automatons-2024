@@ -6,6 +6,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;
+
+import java.util.function.DoubleToIntFunction;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
@@ -14,13 +17,15 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableType;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.Timer;
 
 public class LimelightSubsystem extends SubsystemBase {
   NetworkTableEntry botpose_blue;
   NetworkTable m_gamePieceTable;
   NetworkTable m_limelight_twoplus;
-  public double sawAprilTag;
+  public boolean sawAprilTag;
   public boolean aprilTagSeen;
+  public int m_targetAprilTagID;
   /** Creates a new ExampleSubsystem. */
   public Pose2d m_visionPose2d = new Pose2d();
 
@@ -61,19 +66,26 @@ public class LimelightSubsystem extends SubsystemBase {
   // This method will be called once per scheduler run
   public void periodic() {
     // read values periodically
-    sawAprilTag = m_limelight_twoplus.getEntry("tv").getDouble(0);
-    if (sawAprilTag == 1.0) {
+    double[] botpose = null;
+    double timeStamp = 0;
+    double latency = 0;
+    if (m_limelight_twoplus.getEntry("tv").getDouble(0) == 1.0) {
+      m_targetAprilTagID = (int) m_limelight_twoplus.getEntry("tid").getInteger(0);
       double defaultValues[] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 
       NetworkTableValue blueBotpose = botpose_blue.getValue();
-      double[] botpose;
+
       if (blueBotpose.getType() != NetworkTableType.kUnassigned) {
         botpose = blueBotpose.getDoubleArray();
       } else {
         botpose = defaultValues;
       }
-
-      botpose_blue.getLastChange();
+      latency = botpose[6];
+      timeStamp = blueBotpose.getTime() - latency / 1000;
+    }
+    sawAprilTag = m_limelight_twoplus.getEntry("tv").getDouble(0) == 1.0 && botpose != null;
+    limelightMagicTable.putValue("Saw April Tag", NetworkTableValue.makeBoolean(sawAprilTag));
+    if (sawAprilTag) {
 
       double tx = botpose[0];
       double ty = botpose[1];
@@ -81,24 +93,27 @@ public class LimelightSubsystem extends SubsystemBase {
       // double rx = botpose[3];
       // double ry = botpose[4]; // TODO: Store tz, rx, and ry somewhere (Store 3D)
       double rz = botpose[5];
-      double latency = botpose[6];
-
-      double timeStamp = (blueBotpose.getTime() * 1.0) / 1000000 - latency;
 
       // specify the widget here
 
       Pose2d m_robotPose = new Pose2d(tx, ty, new Rotation2d(Math.toRadians(rz)));
       m_visionPose2d = m_robotPose;
-      m_poseEstimator.updateVision(m_robotPose, timeStamp);
-      // System.out.println("saw apriltag: " + timeStamp);
+      if (m_poseEstimator != null && 0 <= m_targetAprilTagID && m_targetAprilTagID <= 16) {
+        if (botpose[0] != 0 || botpose[1] != 0 || botpose[5] != 0) {
+          publisher.set(m_robotPose);
+          m_poseEstimator.updateVision(m_robotPose, timeStamp,
+              getDistanceTo(m_robotPose, LimelightConstants.aprilTagList[m_targetAprilTagID]));
+          // System.out.println("saw apriltag: " + timeStamp + " latency: " + latency);
+        }
+      }
 
-      getDistanceTo(m_robotPose, LimelightConstants.aprilTag7);
       limelightMagicTable.putValue(
-          "distanceToSpeaker", NetworkTableValue.makeDouble(getDistanceTo(m_robotPose, LimelightConstants.aprilTag7)));
+          "distanceToSpeaker",
+          NetworkTableValue.makeDouble(getDistanceTo(m_robotPose, LimelightConstants.aprilTagList[7])));
       limelightMagicTable.putValue(
-          "angleToSpeaker", NetworkTableValue.makeDouble(getAngleTo(m_robotPose, LimelightConstants.aprilTag7)));
+          "angleToSpeaker", NetworkTableValue.makeDouble(getAngleTo(m_robotPose, LimelightConstants.aprilTagList[7])));
 
-      publisher.set(m_robotPose);
+      
       if (!aprilTagSeen) {
         aprilTagSeen = true;
       }
