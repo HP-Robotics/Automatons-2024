@@ -159,6 +159,9 @@ public final class Constants {
       new Pose2d(182.73* inToM, 177.10 * inToM, new Rotation2d(Math.PI * 2/3)),   // 15
       new Pose2d(182.73 * inToM, 146.19 * inToM, new Rotation2d(Math.PI * 4/3))   // 16
     };
+
+    public static double allowableNoteAngleError = 2.5;
+    public static double allowableSpeakerDistanceError = 2.5; // Make these good
   }
 
   public static final class PoseEstimatorConstants {

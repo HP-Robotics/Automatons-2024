@@ -40,12 +40,12 @@ public class LimelightSubsystem extends SubsystemBase {
   PoseEstimatorSubsystem m_poseEstimator;
 
   public LimelightSubsystem(PoseEstimatorSubsystem PoseEstimatorSubsystem) {
-    m_limelight_twoplus = NetworkTableInstance.getDefault().getTable("limelight-twoplus");
+    m_limelight_twoplus = NetworkTableInstance.getDefault().getTable("limelight-twoplus"); // TODO: Change to limelight-fight
     botpose_blue = m_limelight_twoplus.getEntry("botpose_wpiblue"); // TODO: Look into Megatag
     m_poseEstimator = PoseEstimatorSubsystem;
     publisher = poseEstimatorTable.getStructTopic("AprilTagPose", Pose2d.struct).publish();
 
-    m_gamePieceTable = NetworkTableInstance.getDefault().getTable("limelight-two");
+    m_gamePieceTable = NetworkTableInstance.getDefault().getTable("limelight-bite");
     aprilTagSeen = false;
   }
 
