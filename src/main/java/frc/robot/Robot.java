@@ -102,7 +102,7 @@ public class Robot extends TimedRobot {
     if (SubsystemConstants.useDrive) {
       m_robotContainer.m_robotDrive.initializePoseEstimator(new Pose2d(0, 0, new Rotation2d(0)));
       m_robotContainer.m_robotDrive
-          .resetOdometry(LimelightConstants.aprilTag7.plus(new Transform2d(2, 0, new Rotation2d(0))));
+          .resetOdometry(LimelightConstants.aprilTagList[7].plus(new Transform2d(2, 0, new Rotation2d(0))));
     }
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

@@ -127,18 +127,19 @@ public class DriveSubsystem extends SubsystemBase {
     m_backRight.updateShuffleboard();
     m_backLeft.updateShuffleboard();
 
-    BaseStatusSignal.refreshAll(m_pGyroPitch, m_pGyroYaw, m_pGyroRoll);
+    // BaseStatusSignal.refreshAll(m_pGyroPitch, m_pGyroYaw, m_pGyroRoll);
     driveTrainTable.putValue("Pigeon Pitch", NetworkTableValue.makeDouble(m_pGyroPitch.getValueAsDouble()));
     driveTrainTable.putValue("Pigeon Yaw", NetworkTableValue.makeDouble(m_pGyroYaw.getValueAsDouble()));
     driveTrainTable.putValue("Pigeon Roll", NetworkTableValue.makeDouble(m_pGyroRoll.getValueAsDouble()));
 
-    // m_poseEstimator.updatePoseEstimator(pigeonYaw,new SwerveModulePosition[] {
-    // m_frontLeft.getPosition(),
-    // m_frontRight.getPosition(),
-    // m_backRight.getPosition(),
-    // m_backLeft.getPosition()
-    // });
-
+    if (m_poseEstimator != null) {
+      m_poseEstimator.updatePoseEstimator(pigeonYaw, new SwerveModulePosition[] {
+          m_frontLeft.getPosition(),
+          m_frontRight.getPosition(),
+          m_backRight.getPosition(),
+          m_backLeft.getPosition()
+      });
+    }
   }
 
   /**
@@ -213,7 +214,8 @@ public class DriveSubsystem extends SubsystemBase {
     driveTrainTable.putValue("Rotation Controller Setpoint",
         NetworkTableValue.makeDouble(rotationController.getSetpoint()));
   }
-  public boolean pointedTowardsAngle(){
+
+  public boolean pointedTowardsAngle() {
     return rotationController.atSetpoint();
   }
 
@@ -238,14 +240,15 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void initializePoseEstimator(Pose2d pose) {
-    m_poseEstimator.createPoseEstimator(DriveConstants.kDriveKinematics,
-        new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue())), new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_backRight.getPosition(),
-            m_backLeft.getPosition()
-        }, pose);
-
+    if (m_poseEstimator != null) {
+      m_poseEstimator.createPoseEstimator(DriveConstants.kDriveKinematics,
+          new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue())), new SwerveModulePosition[] {
+              m_frontLeft.getPosition(),
+              m_frontRight.getPosition(),
+              m_backRight.getPosition(),
+              m_backLeft.getPosition()
+          }, pose);
+    }
   }
 
   public void resetOffsets() { // Turn encoder offset

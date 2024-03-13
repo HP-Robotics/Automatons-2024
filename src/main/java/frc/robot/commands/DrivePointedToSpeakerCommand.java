@@ -38,19 +38,19 @@ public class DrivePointedToSpeakerCommand extends Command {
   public void initialize() {
     if (DriverStation.getAlliance().isPresent()) {
       if (DriverStation.getAlliance().get() == Alliance.Blue) {
-        m_targetAprilTag = LimelightConstants.aprilTag7;
+        m_targetAprilTag = LimelightConstants.aprilTagList[7];
       } else {
-        m_targetAprilTag = LimelightConstants.aprilTag4;
+        m_targetAprilTag = LimelightConstants.aprilTagList[4];
       }
     } else {
-      m_targetAprilTag = LimelightConstants.aprilTag7;
+      m_targetAprilTag = LimelightConstants.aprilTagList[7];
     }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_limelightSubsystem.sawAprilTag == 1) {
+    if (m_limelightSubsystem.sawAprilTag) {
       m_offset = (m_limelightSubsystem.m_visionPose2d.getRotation()).minus(m_drivesubsystem.getPose().getRotation());
       if (!m_aprilTagSeen) {
         m_aprilTagSeen = true;
