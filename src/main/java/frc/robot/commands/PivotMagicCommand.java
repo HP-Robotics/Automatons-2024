@@ -48,7 +48,7 @@ public class PivotMagicCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_limelightSubsystem.sawAprilTag) {
+    if (m_limelightSubsystem.m_sawAprilTag) {
       m_subsystem.setPosition(m_subsystem.getMagicAngle(
           m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag)));
       pivotTable.putValue(
