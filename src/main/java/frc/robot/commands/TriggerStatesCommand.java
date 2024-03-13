@@ -40,16 +40,18 @@ public class TriggerStatesCommand extends Command {
       m_subsystem.beambreakState = false;
     }
     if (!m_subsystem.beambreakState && m_beamBreak.beamBroken()) {
+      m_subsystem.beambreakCount = 0;
       m_subsystem.beambreakState = true;
     }
     if (m_subsystem.triggerYuck) {
       m_subsystem.setTrigger(TriggerConstants.yuckSpeed);
-    } else if (m_subsystem.triggerFire) {
+    } else if (m_subsystem.triggerFire && m_subsystem.beambreakCount > 2) {
       m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed));
     } else if (m_subsystem.beambreakState) {
+      m_subsystem.beambreakCount += 1;
       m_subsystem.m_triggerMotor.setControl(new NeutralOut());
     } else if (m_subsystem.triggerOn) {
-      m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed));
+      m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed));//divide this by two if triger toasters 
     } else {
       m_subsystem.m_triggerMotor.setControl(new NeutralOut());
     }

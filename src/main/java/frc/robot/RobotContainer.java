@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.ShooterConstants;
@@ -11,10 +12,11 @@ import frc.robot.Constants.SubsystemConstants;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.commands.Autos;
+import frc.robot.commands.DrivePointedToNoteCommand;
 import frc.robot.commands.DrivePointedToSpeakerCommand;
-import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.CommandBlocks;
 import frc.robot.commands.IntakeStatesCommand;
+import frc.robot.commands.OperatorRumbleCommand;
 import frc.robot.commands.PivotMagicCommand;
 import frc.robot.commands.PivotManualCommand;
 import frc.robot.commands.SetShooterCommand;
@@ -27,9 +29,9 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.GeometryUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -45,9 +47,11 @@ import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -74,7 +78,7 @@ public class RobotContainer {
       ? new LimelightSubsystem(m_PoseEstimatorSubsystem)
       : null;
 
-  private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem(m_opJoystick)
+  private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem()
       : null;
   private final IntakeSubsystem m_intakeSubsystem = SubsystemConstants.useIntake ? new IntakeSubsystem() : null;
   private final PivotSubsystem m_pivotSubsystem = SubsystemConstants.usePivot ? new PivotSubsystem() : null;
@@ -170,18 +174,46 @@ public class RobotContainer {
     }
 
     if (SubsystemConstants.useShooter) {
+      // m_opJoystick.axisGreaterThan(3, 0.1).whileTrue(
+      //     new SetShooterCommand(m_shooterSubsystem, null, null)
+      //     .andThen(new InstantCommand(m_shooterSubsystem::stopShooter)));
       m_opJoystick.axisGreaterThan(3, 0.1).whileTrue(
-          new SetShooterCommand(m_shooterSubsystem, null, null));
+        new ConditionalCommand(
+          new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp, ShooterConstants.shooterSpeedAmp),
+          new SetShooterCommand(m_shooterSubsystem, null, null),
+          () -> { return m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;})
+          .andThen(new InstantCommand(m_shooterSubsystem::stopShooter)));
       // TODO add trigger if statement
       m_opJoystick.button(3).whileTrue(compoundCommands.fireButtonHold());
-      m_opJoystick.button(6).whileTrue(
-          new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp, ShooterConstants.shooterSpeedAmp)
-              .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
       m_driveJoystick.button(ControllerConstants.yuckButton).whileTrue(compoundCommands.yuckButtonHold());
+    }
+    if (SubsystemConstants.useShooter && SubsystemConstants.usePivot){
+      new Trigger(() -> {
+        return m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
+      })
+          .onTrue(new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp, ShooterConstants.shooterSpeedAmp))
+          .onFalse(new SetShooterCommand(m_shooterSubsystem, null, null));
     }
 
     if (SubsystemConstants.useClimber) {
-      m_driveJoystick.button(ControllerConstants.climberButton).whileTrue(new ClimberCommand(m_climberSubsystem));
+      m_driveJoystick.povUp().whileTrue(new StartEndCommand(
+          () -> {
+            m_climberSubsystem.climbMotorLeft.set(ClimberConstants.climbSpeed);
+            m_climberSubsystem.climbMotorRight.set(ClimberConstants.climbSpeed);
+          },
+          () -> {
+            m_climberSubsystem.climbMotorLeft.set(0);
+            m_climberSubsystem.climbMotorRight.set(0);
+          }, m_climberSubsystem));
+      m_driveJoystick.povDown().whileTrue(new StartEndCommand(
+          () -> {
+            m_climberSubsystem.climbMotorLeft.set(-ClimberConstants.climbSpeed);
+            m_climberSubsystem.climbMotorRight.set(-ClimberConstants.climbSpeed);
+          },
+          () -> {
+            m_climberSubsystem.climbMotorLeft.set(0);
+            m_climberSubsystem.climbMotorRight.set(0);
+          }, m_climberSubsystem));
     }
 
     if (SubsystemConstants.useIntake) {
@@ -194,21 +226,24 @@ public class RobotContainer {
     if (SubsystemConstants.usePivot) {
       m_opJoystick.povRight().whileTrue(new PivotManualCommand(m_pivotSubsystem, PivotConstants.manualSpeed));
       m_opJoystick.povLeft().whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
-      m_opJoystick.button(7).onTrue(new InstantCommand(m_pivotSubsystem::togglePID));
+      // m_opJoystick.button(7).onTrue(new InstantCommand(m_pivotSubsystem::togglePID));
+      m_opJoystick.button(8).onTrue(new InstantCommand(m_shooterSubsystem::stopShooter));
       m_opJoystick.button(1)
           .onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.subwooferPosition)));
-      m_opJoystick.button(2)
-          .whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.ampPosition)));
+      m_opJoystick.button(2).whileTrue(
+       new ParallelCommandGroup(
+        new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.ampPosition))));
       m_opJoystick.button(4)
           .whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.podiumPosition)));
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
       m_driveJoystick.button(ControllerConstants.drivePointedToSpeakerButton)
-          .whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick)); // Flightstick
-                                                                                                             // button 2
-      m_opJoystick.axisGreaterThan(2, 0.1).whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem)); // Flightstick
-                                                                                                                     // button
-                                                                                                                     // 2
+          .whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick));
+      m_driveJoystick.axisGreaterThan(ControllerConstants.drivePointedToNoteAxis, 0.1)
+          .whileTrue(new DrivePointedToNoteCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick));
+      m_opJoystick.axisGreaterThan(2, 0.1)
+        .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem))
+        .whileTrue(new OperatorRumbleCommand(m_pivotSubsystem, m_robotDrive, m_limelightSubsystem, m_shooterSubsystem, m_opJoystick));
     }
 
     if (SubsystemConstants.useSnuffilator) {
@@ -251,12 +286,14 @@ public class RobotContainer {
       return;
     }
     m_triggerSubsystem.beambreakState = true;
+    m_triggerSubsystem.beambreakCount = 0;
     if (m_triggerSubsystem.triggerYuck || m_triggerSubsystem.triggerFire) {
       return;
     }
     // NeutralOut neutral = new NeutralOut();
     // neutral.UpdateFreqHz = 1000;
     m_triggerSubsystem.m_triggerMotor.setControl(new NeutralOut());
+    //System.out.println("quick stop");
   }
 
   /**
@@ -281,8 +318,7 @@ public class RobotContainer {
     }
     if (m_chooseAutos.getSelected() == "FourPieceCenter") {
       return Autos.FourPieceCenter(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem,
-          m_triggerSubsystem,
-          m_pivotSubsystem);
+          m_triggerSubsystem, m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "GrandTheftAuto") {
       return Autos.GrandTheftAuto(m_robotDrive);
@@ -343,8 +379,7 @@ public class RobotContainer {
       Optional<Alliance> ally = DriverStation.getAlliance();
       if (ally.isPresent()) {
         if (ally.get() == Alliance.Red) {
-          pose = new Pose2d(54 * 12 * 0.0254 - pose.getX(), pose.getY(),
-              new Rotation2d(Math.PI).minus(pose.getRotation()));
+          pose = GeometryUtil.flipFieldPose(pose);
         }
       }
       m_autoPose.setRobotPose(pose);

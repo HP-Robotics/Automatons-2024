@@ -8,10 +8,14 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
@@ -45,6 +49,9 @@ public final class Constants {
     public static final int climberButton = useXbox ? 10 : 10;
     public static final int intakeButton = useXbox ? 0 : 1;
     public static final int drivePointedToSpeakerButton = useXbox ? 5 : 0;
+    public static final int drivePointedToNoteAxis = useXbox ? 2 : 0;
+
+    // TODO: Add operator joystick constants
 
     public static double getRotation(CommandJoystick stick) {
       if (useXbox) {
@@ -63,15 +70,15 @@ public final class Constants {
   }
 
   public static class SubsystemConstants {
-    public static final boolean useDrive = false;
-    public static final boolean useIntake = false;
-    public static final boolean useShooter = false;
-    public static final boolean useDataManager = false;
-    public static final boolean useLimelight = false;
-    public static final boolean usePivot = false;
-    public static final boolean useClimber = false; // TODO check if these work
-    public static final boolean useTrigger = false;
-    public static final boolean useSnuffilator = false;
+    public static final boolean useDrive = true;
+    public static final boolean useIntake = true;
+    public static final boolean useShooter = true;
+    public static final boolean useDataManager = true;
+    public static final boolean useLimelight = true;
+    public static final boolean usePivot = true;
+    public static final boolean useClimber = false; //TODO check if these work
+    public static final boolean useTrigger = true;
+    public static final boolean useSnuffilator = true;
   }
 
   public static class DriveConstants {
@@ -106,10 +113,11 @@ public final class Constants {
     public static final double turningControllerkP = 1;
     public static final double turningControllerkI = 0.0;
     public static final double turningControllerkD = 0.0;
+    public static final double turningControllerTolerance = Math.toRadians(2);
 
     // Absolute encoder values that make the wheels point forward
     public static final double absEncoderForwardFL = 0.98;
-    public static final double absEncoderForwardFR = 0.708;
+    public static final double absEncoderForwardFR = 0.719; //.708
     public static final double absEncoderForwardBR = 0.74;
     public static final double absEncoderForwardBL = 0.55;
 
@@ -132,8 +140,33 @@ public final class Constants {
 
   public static final class LimelightConstants {
     public static final double inToM = 0.0254;
-    public static final Pose2d aprilTag7 = new Pose2d(-1.5 * inToM, 218.42 * inToM, new Rotation2d(0));
-    public static final Pose2d aprilTag4 = new Pose2d(652.73 * inToM, 218.42 * inToM, new Rotation2d(Math.PI));
+    public static final Pose2d aprilTagList[] = { // 0 is empty, april tag number is that number in list
+      new Pose2d(),
+      new Pose2d(593.68 * inToM, 9.68 * inToM, new Rotation2d(Math.PI * 2/3)),    // 1
+      new Pose2d(637.21 * inToM, 34.79 * inToM, new Rotation2d(Math.PI * 2/3)),   // 2
+      new Pose2d(652.73 * inToM, 196.17 * inToM, new Rotation2d(Math.PI)),        // 3
+      new Pose2d(652.73 * inToM, 218.42 * inToM, new Rotation2d(Math.PI)),        // 4
+      new Pose2d(578.77 * inToM, 323.00 * inToM, new Rotation2d(Math.PI * 3/2)),  // 5
+      new Pose2d(72.5 * inToM, 323.00 * inToM, new Rotation2d(Math.PI * 3/2)),    // 6
+      new Pose2d(-1.5 * inToM, 218.42 * inToM, new Rotation2d(0)),          // 7
+      new Pose2d(-1.5 * inToM, 196.17 * inToM, new Rotation2d(0)),          // 8
+      new Pose2d(14.02 * inToM, 34.79 * inToM, new Rotation2d(Math.PI/3)),        // 9
+      new Pose2d(57.54 * inToM, 9.68 * inToM, new Rotation2d(Math.PI/3)),         // 10
+      new Pose2d(468.69 * inToM, 146.19 * inToM, new Rotation2d(Math.PI * 5/3)),  // 11
+      new Pose2d(468.69 * inToM, 177.10 * inToM, new Rotation2d(Math.PI/3)),      // 12
+      new Pose2d(441.74 * inToM, 161.62 * inToM, new Rotation2d(Math.PI)),        // 13
+      new Pose2d(209.48 * inToM, 161.62 * inToM, new Rotation2d(0)),        // 14
+      new Pose2d(182.73* inToM, 177.10 * inToM, new Rotation2d(Math.PI * 2/3)),   // 15
+      new Pose2d(182.73 * inToM, 146.19 * inToM, new Rotation2d(Math.PI * 4/3))   // 16
+    };
+  }
+
+  public static final class PoseEstimatorConstants {
+    public static final Matrix<N3,N1> driveStandardDev = VecBuilder.fill(0.02,0.02,0.02);
+    public static final Matrix<N3,N1> statesStandardDev = VecBuilder.fill(0.001,0.001,0.001);
+    public static final double visionXStandardDev = 0.01;
+    public static final double visionYStandardDev = 0.01;
+    public static final double visionHeadingStandardDev = 0.1;
   }
 
   public static final class AutoConstants {
@@ -174,7 +207,8 @@ public final class Constants {
     public static final int stallCurrentLimit = 3;
     public static final int freeCurrentLimit = 5;
 
-    public static final double snuffilatorSpeed = 0.05;
+    public static final double snuffilatorInSpeed = 0.05;
+    public static final double snuffilatorOutSpeed = 0.08;
   }
 
   public static class ShooterConstants {
@@ -198,8 +232,8 @@ public final class Constants {
   }
 
   public static class ClimberConstants {
-    public static final double climbSpeed = 0.4; // TODO: Decide this (in RPM, so 500?)
-    public static final double topPosition = 0.0;
+    public static final double climbSpeed = 1; //TODO: Decide this (in RPM, so 500?)
+
 
     public static final double kP = 0.0;
     public static final double kI = 0.0;
@@ -251,10 +285,13 @@ public final class Constants {
     public static final double rampTimeTo300s = 10;
 
     public static final double subwooferPosition = degreesToEncoder(58.3); // 0.43
-    public static final double ampPosition = degreesToEncoder(119.5 + 3 + 1 + 1); // 0.6
-    public static final double podiumPosition = degreesToEncoder(42.12); // 0.385
-    public static final double note2Position = degreesToEncoder(45.72); // 0.395
+    public static final double ampPosition = degreesToEncoder(119.5 + 3); // 0.6
+    public static final double podiumPosition = degreesToEncoder(42.12 - 3); // 0.385
+    public static final double note2Position = degreesToEncoder(45.72 - 3.25); // 0.395
     public static final double note1_3Position = degreesToEncoder(42.12); // 0.385
+    public static final double noteA1Position = 0.3722;
+    public static final double noteA3Position = 0.3772;
+    public static final double preloadFarAwayPosition = 0.363;
   }
 
   public static class IDConstants {
@@ -283,9 +320,10 @@ public final class Constants {
     public static final int rightPivotID = 40;
     public static final int leftPivotID = 41;
 
-    // Climber is 50s
-    public static final int climbMotorID = 50;
-
+    //Climber is 50s
+    public static final int climbMotorRightID = 50;
+    public static final int climbMotorLeftID = 51;
+    
     public static final int PigeonID = 57;
 
     // Snuffilator is 60s
@@ -295,7 +333,7 @@ public final class Constants {
   public static class PortConstants {
     public static final int FLAbsEncoder = 14;
     public static final int FRAbsEncoder = 12;
-    public static final int BRAbsEncoder = 10;
+    public static final int BRAbsEncoder = 11;
     public static final int BLAbsEncoder = 13;
 
     public static final int pivotAbsEncoderID = 16;

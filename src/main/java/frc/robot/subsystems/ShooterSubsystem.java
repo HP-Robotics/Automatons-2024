@@ -14,7 +14,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants.IDConstants;
@@ -24,16 +23,14 @@ public class ShooterSubsystem extends SubsystemBase {
   private TalonFX m_frontMotor;
   private TalonFX m_backMotor;
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
-  private final CommandJoystick m_rumbleJoystick;
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable shooterTable = inst.getTable("shooter-subsystem");
 
   /** Creates a new ShooterSubsystem. */
-  public ShooterSubsystem(CommandJoystick joystick) {
+  public ShooterSubsystem() {
     m_frontMotor = new TalonFX(IDConstants.frontMotorID, "CANivore");
     m_backMotor = new TalonFX(IDConstants.backMotorID, "CANivore");
     TalonFXConfiguration config = new TalonFXConfiguration();
-    m_rumbleJoystick = joystick;
     var rampConfigs = new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(ShooterConstants.rampTimeTo300s);
     var currentConfigs = new CurrentLimitsConfigs()
         .withSupplyCurrentLimit(ShooterConstants.currentLimit)
@@ -90,12 +87,6 @@ public class ShooterSubsystem extends SubsystemBase {
     m_backMotor.setControl(m_velocity.withVelocity(output2));
     // m_frontMotor.setControl(new DutyCycleOut(output1));
     // m_backMotor.setControl(new DutyCycleOut(output2));
-
-    if (output1 > 0.1 || output2 > 0.1) {
-      m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.5);
-    } else {
-      m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.0);
-    }
   }
 
   public boolean atSpeed() {
@@ -110,6 +101,5 @@ public class ShooterSubsystem extends SubsystemBase {
   public void stopShooter() {
     m_frontMotor.setControl(new DutyCycleOut(0));
     m_backMotor.setControl(new DutyCycleOut(0));
-    m_rumbleJoystick.getHID().setRumble(RumbleType.kBothRumble, 0);
   }
 }
