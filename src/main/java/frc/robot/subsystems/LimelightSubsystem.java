@@ -70,6 +70,7 @@ public class LimelightSubsystem extends SubsystemBase {
     double noteTX = m_gamePieceTable.getEntry("tx").getValue().getDouble();
 
     if (noteTV == 1) {
+      limelightMagicTable.putValue("noteTX", NetworkTableValue.makeDouble(noteTX));
       return Optional.of(noteTX);
     } else {
       return Optional.empty();

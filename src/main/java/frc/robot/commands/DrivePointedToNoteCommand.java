@@ -36,10 +36,10 @@ public class DrivePointedToNoteCommand extends Command {
   @Override
   public void execute() {
     Optional<Double> angle = m_limelightSubsystem.getNoteTX();
-    if (angle.isPresent() && Math.abs(angle.get()) < LimelightConstants.allowableNoteAngleError) {
+    if (angle.isPresent() && Math.abs(angle.get()) > LimelightConstants.allowableNoteAngleError) {
       m_drivesubsystem.drivePointedTowardsAngle(m_joystick,
           new Rotation2d(Math
-              .toRadians(angle.get())).plus(m_drivesubsystem.getPose().getRotation()));
+              .toRadians(-angle.get())).plus(m_drivesubsystem.getPose().getRotation()));
     }
   }
 
