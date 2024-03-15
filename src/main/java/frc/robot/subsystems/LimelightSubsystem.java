@@ -66,7 +66,7 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   public Optional<Double> getNoteTX() {
-    double noteTV = m_gamePieceTable.getEntry("tv").getValue().getDouble();
+    double noteTV = m_gamePieceTable.getEntry("tv").getValue().getDouble(); // TODO: Is this safe to call if we don't have a limelight?
     double noteTX = m_gamePieceTable.getEntry("tx").getValue().getDouble();
 
     if (noteTV == 1) {
