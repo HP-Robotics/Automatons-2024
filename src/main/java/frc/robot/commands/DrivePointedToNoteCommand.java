@@ -13,18 +13,18 @@ import frc.robot.subsystems.LimelightSubsystem;
 import java.util.Optional;
 
 public class DrivePointedToNoteCommand extends Command {
-  private final DriveSubsystem m_drivesubsystem;
+  private final DriveSubsystem m_driveSubsystem;
   private final LimelightSubsystem m_limelightSubsystem;
   private final CommandJoystick m_joystick;
 
   /** Creates a new IntakeCommand. */
-  public DrivePointedToNoteCommand(DriveSubsystem drivesubsystem, LimelightSubsystem limelightsubsystem,
+  public DrivePointedToNoteCommand(DriveSubsystem driveSubsystem, LimelightSubsystem limelightSubsystem,
       CommandJoystick joystick) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drivesubsystem = drivesubsystem;
-    m_limelightSubsystem = limelightsubsystem;
+    m_driveSubsystem = driveSubsystem;
+    m_limelightSubsystem = limelightSubsystem;
     m_joystick = joystick;
-    addRequirements(drivesubsystem);
+    addRequirements(driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -37,9 +37,9 @@ public class DrivePointedToNoteCommand extends Command {
   public void execute() {
     Optional<Double> angle = m_limelightSubsystem.getNoteTX();
     if (angle.isPresent() && Math.abs(angle.get()) > LimelightConstants.allowableNoteAngleError) {
-      m_drivesubsystem.drivePointedTowardsAngle(m_joystick,
+      m_driveSubsystem.drivePointedTowardsAngle(m_joystick,
           new Rotation2d(Math
-              .toRadians(-angle.get())).plus(m_drivesubsystem.getPose().getRotation()));
+              .toRadians(-angle.get())).plus(m_driveSubsystem.getPose().getRotation()));
     }
   }
 
