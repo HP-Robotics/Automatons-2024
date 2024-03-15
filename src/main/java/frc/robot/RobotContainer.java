@@ -14,6 +14,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DrivePointedToNoteCommand;
 import frc.robot.commands.DrivePointedToSpeakerCommand;
+import frc.robot.commands.DriveToNoteCommand;
 import frc.robot.commands.CommandBlocks;
 import frc.robot.commands.IntakeStatesCommand;
 import frc.robot.commands.OperatorRumbleCommand;
@@ -243,7 +244,11 @@ public class RobotContainer {
           .whileTrue(new DrivePointedToNoteCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick));
       m_opJoystick.axisGreaterThan(2, 0.1)
         .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem))
-        .whileTrue(new OperatorRumbleCommand(m_pivotSubsystem, m_robotDrive, m_limelightSubsystem, m_shooterSubsystem, m_opJoystick));
+          .whileTrue(new OperatorRumbleCommand(m_pivotSubsystem, m_robotDrive, m_limelightSubsystem, m_shooterSubsystem,
+              m_opJoystick));
+      m_driveJoystick.button(1)
+          .whileTrue(new DriveToNoteCommand(m_robotDrive, m_limelightSubsystem, m_intakeSubsystem, m_triggerSubsystem,
+              m_driveJoystick));
     }
 
     if (SubsystemConstants.useSnuffilator) {
