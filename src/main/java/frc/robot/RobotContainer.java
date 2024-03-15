@@ -265,7 +265,7 @@ public class RobotContainer {
     if (!SubsystemConstants.useIntake) {
       return;
     }
-    if (m_intakeSubsystem.beambreakState
+    if (m_intakeSubsystem.beambreakState // TODO: Maybe rename this?
         || (!m_intakeSubsystem.intakeFire && !m_intakeSubsystem.intakeOn && !m_intakeSubsystem.intakeYuck)) {
       return;
     }
@@ -273,6 +273,15 @@ public class RobotContainer {
       return;
     }
     m_intakeSubsystem.beambreakState = true;
+    new Trigger(() -> {
+      return m_intakeSubsystem.m_beambreak.beamBroken();
+    })
+        .onTrue(new InstantCommand(() -> {
+          m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.2);
+        }))
+        .onFalse(new InstantCommand(() -> {
+          m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.0);
+        }));
     if (m_intakeSubsystem.intakeYuck || m_intakeSubsystem.intakeFire) {
       return;
     }
