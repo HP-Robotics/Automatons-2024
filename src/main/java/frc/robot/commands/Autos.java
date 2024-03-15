@@ -112,7 +112,7 @@ public final class Autos {
         new FollowPathCommandOurs(drive, "Basic Amp Part 1"),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
         new FollowPathCommandOurs(drive, "Basic Amp Part 2"),
-        new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime));
+        commandBlocks.startIntaking());
   }
 
   public static Command GrandTheftAuto(DriveSubsystem drive) {
@@ -134,7 +134,7 @@ public final class Autos {
         new FollowPathCommandOurs(drive, "Intermediate Amp Part 2"),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
         new FollowPathCommandOurs(drive, "Intermediate Amp Part 3"),
-        new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime));
+        commandBlocks.startIntaking());
   }
 
   public static Command ThreePieceCenter(CommandBlocks commandBlocks, DriveSubsystem drive,
