@@ -169,7 +169,9 @@ public class RobotContainer {
     PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
     NamedCommands.registerCommand("startIntaking", compoundCommands.startIntaking());
     NamedCommands.registerCommand("stopIntaking", compoundCommands.stopIntaking());
-    NamedCommands.registerCommand("cancelIfNote", new InstantCommand(() -> {m_robotDrive.m_pathPlannerCancelIfNoteSeen = true;}));
+    NamedCommands.registerCommand("cancelIfNote", new InstantCommand(() -> {
+      m_robotDrive.m_pathPlannerCancelIfNoteSeen = true;
+    }));
     NamedCommands.registerCommand("driveToNote", new InstantCommand(() -> {
       m_robotDrive.m_pathplannerUsingNoteVision = true;
     }));
@@ -253,6 +255,15 @@ public class RobotContainer {
           ? new Trigger(m_driveJoystick.axisGreaterThan(3, 0.1))
           : new Trigger(m_driveJoystick.button(ControllerConstants.intakeButton));
       intakeTrigger.whileTrue(compoundCommands.intakeButtonHold());
+      new Trigger(() -> {
+        return m_intakeSubsystem.m_beambreak.beamBroken();
+      })
+          .onTrue(new InstantCommand(() -> {
+            m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.2);
+          }))
+          .onFalse(new InstantCommand(() -> {
+            m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.0);
+          }));
     }
 
     if (SubsystemConstants.usePivot) {
@@ -305,15 +316,7 @@ public class RobotContainer {
       return;
     }
     m_intakeSubsystem.beambreakState = true;
-    new Trigger(() -> {
-      return m_intakeSubsystem.m_beambreak.beamBroken();
-    })
-        .onTrue(new InstantCommand(() -> {
-          m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.2);
-        }))
-        .onFalse(new InstantCommand(() -> {
-          m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.0);
-        }));
+
     if (m_intakeSubsystem.intakeYuck || m_intakeSubsystem.intakeFire) {
       return;
     }
