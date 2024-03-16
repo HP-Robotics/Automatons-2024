@@ -72,6 +72,7 @@ public class DrivePointedToSpeakerCommand extends Command {
               .minus(m_offset));
     } else {
       m_drivesubsystem.driveWithJoystick(m_joystick);
+      m_joystick.getHID().setRumble(RumbleType.kBothRumble, 0);
     }
   }
 
