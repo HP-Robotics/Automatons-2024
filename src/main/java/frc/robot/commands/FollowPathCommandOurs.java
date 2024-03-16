@@ -14,12 +14,14 @@ import com.pathplanner.lib.util.GeometryUtil;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class FollowPathCommandOurs extends Command {
   DriveSubsystem m_driveSubsystem;
+  Optional<LimelightSubsystem> m_limelightSubsystem = Optional.empty();
   String m_pathName;
   PathPlannerPath m_path;
 
@@ -33,6 +35,11 @@ public class FollowPathCommandOurs extends Command {
     m_path = PathPlannerPath.fromPathFile(pathName);
     m_pathPlannerCommand = PathCommand();
     addRequirements(driveSubsystem);
+  }
+
+  public FollowPathCommandOurs(DriveSubsystem driveSubsystem, LimelightSubsystem limelightSubsystem, String pathName) {
+    this(driveSubsystem, pathName);
+    m_limelightSubsystem = Optional.of(limelightSubsystem);
   }
 
   /** Creates a new PathCommand. */
@@ -69,13 +76,12 @@ public class FollowPathCommandOurs extends Command {
     Optional<Alliance> ally = DriverStation.getAlliance();
     if (ally.isPresent()) {
       if (ally.get() == Alliance.Red) {
-        m_driveSubsystem.resetOdometry(GeometryUtil.flipFieldPose(m_path.getPreviewStartingHolonomicPose())); // TODO: only reset odometry once
+        // TODO: only reset odometry once
+        m_driveSubsystem.resetOdometry(GeometryUtil.flipFieldPose(m_path.getPreviewStartingHolonomicPose()));
       }
     }
     m_pathPlannerCommand.initialize();
   }
-
-  
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -94,6 +100,11 @@ public class FollowPathCommandOurs extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_pathPlannerCommand.isFinished() || m_driveSubsystem.m_pathPlannerCancelIfNoteSeen; // TODO: Actually check if we see the note
+    if (m_limelightSubsystem.isPresent()) {
+      return m_pathPlannerCommand.isFinished()
+          || (m_driveSubsystem.m_pathPlannerCancelIfNoteSeen && m_limelightSubsystem.get().getNoteTX().isPresent());
+    } else {
+      return m_pathPlannerCommand.isFinished();
+    }
   }
 }
