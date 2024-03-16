@@ -222,7 +222,7 @@ public class DriveSubsystem extends SubsystemBase {
         noteAngle.getRadians());
     drive(
         speed * DriveConstants.kMaxSpeed,
-        0, // speed * -1 * DriveConstants.kMaxSpeed, // TODO: One of these needs to be positive and I don't know which
+        0, // speed * -1 * DriveConstants.kMaxSpeed,
         rot * DriveConstants.kMaxAngularSpeed,
         false);
 
