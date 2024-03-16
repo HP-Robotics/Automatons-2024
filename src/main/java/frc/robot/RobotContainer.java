@@ -79,8 +79,7 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem();
-  final DriveSubsystem m_robotDrive = SubsystemConstants.useDrive ? new DriveSubsystem(m_PoseEstimatorSubsystem) : null; // TODO:
-                                                                                                                         // m_driveSubsystem
+  final DriveSubsystem m_driveSubsystem = SubsystemConstants.useDrive ? new DriveSubsystem(m_PoseEstimatorSubsystem) : null; 
   private final LimelightSubsystem m_limelightSubsystem = SubsystemConstants.useLimelight
       ? new LimelightSubsystem(m_PoseEstimatorSubsystem)
       : null;
@@ -111,13 +110,13 @@ public class RobotContainer {
     }
 
     if (SubsystemConstants.useDrive) {
-      m_robotDrive.setDefaultCommand(
+      m_driveSubsystem.setDefaultCommand(
 
           new RunCommand(
               () -> {
-                m_robotDrive.driveWithJoystick(m_driveJoystick);
+                m_driveSubsystem.driveWithJoystick(m_driveJoystick);
               },
-              m_robotDrive));
+              m_driveSubsystem));
     }
 
     if (SubsystemConstants.useIntake && SubsystemConstants.useTrigger) {
@@ -143,7 +142,7 @@ public class RobotContainer {
 
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
 
-    compoundCommands = new CommandBlocks(m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
+    compoundCommands = new CommandBlocks(m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
         m_pivotSubsystem, m_snuffilatorSubsystem);
     configureCommands();
     configureBindings();
@@ -153,11 +152,11 @@ public class RobotContainer {
   public Optional<Rotation2d> getRotationTargetOverride() {
     // Some condition that should decide if we want to override rotation
     Optional<Double> angle = m_limelightSubsystem.getNoteTX();
-    if (angle.isPresent() && m_robotDrive.m_pathplannerUsingNoteVision) {
+    if (angle.isPresent() && m_driveSubsystem.m_pathplannerUsingNoteVision) {
       // Return an optional containing the rotation override (this should be a
       // field relative rotation)
       return Optional.of(new Rotation2d(Math
-          .toRadians(-angle.get())).plus(m_robotDrive.getPose().getRotation()));
+          .toRadians(-angle.get())).plus(m_driveSubsystem.getPose().getRotation()));
     } else {
       // return an empty optional when we don't want to override the path's
       // rotation
@@ -170,10 +169,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("startIntaking", compoundCommands.startIntaking());
     NamedCommands.registerCommand("stopIntaking", compoundCommands.stopIntaking());
     NamedCommands.registerCommand("cancelIfNote", new InstantCommand(() -> {
-      m_robotDrive.m_pathPlannerCancelIfNoteSeen = true;
+      m_driveSubsystem.m_pathPlannerCancelIfNoteSeen = true;
     }));
     NamedCommands.registerCommand("driveToNote", new InstantCommand(() -> {
-      m_robotDrive.m_pathplannerUsingNoteVision = true;
+      m_driveSubsystem.m_pathplannerUsingNoteVision = true;
     }));
 
     if (SubsystemConstants.useShooter) {
@@ -185,7 +184,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     if (SubsystemConstants.useDrive) {
-      m_driveJoystick.button(ControllerConstants.resetYawButton).whileTrue(new InstantCommand(m_robotDrive::resetYaw)); // Flightstick
+      m_driveJoystick.button(ControllerConstants.resetYawButton).whileTrue(new InstantCommand(m_driveSubsystem::resetYaw)); // Flightstick
       // button
       // 11
       Trigger fieldRelativeTrigger = ControllerConstants.useXbox
@@ -282,15 +281,15 @@ public class RobotContainer {
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
       m_driveJoystick.button(ControllerConstants.drivePointedToSpeakerButton)
-          .whileTrue(new DrivePointedToSpeakerCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick));
+          .whileTrue(new DrivePointedToSpeakerCommand(m_driveSubsystem, m_limelightSubsystem, m_driveJoystick));
       m_driveJoystick.axisGreaterThan(ControllerConstants.drivePointedToNoteAxis, 0.1)
-          .whileTrue(new DrivePointedToNoteCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick));
+          .whileTrue(new DrivePointedToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_driveJoystick));
       m_opJoystick.axisGreaterThan(2, 0.1)
           .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem))
-          .whileTrue(new OperatorRumbleCommand(m_pivotSubsystem, m_robotDrive, m_limelightSubsystem, m_shooterSubsystem,
+          .whileTrue(new OperatorRumbleCommand(m_pivotSubsystem, m_driveSubsystem, m_limelightSubsystem, m_shooterSubsystem,
               m_opJoystick));
       m_driveJoystick.button(1)
-          .whileTrue(new DriveToNoteCommand(m_robotDrive, m_limelightSubsystem, m_intakeSubsystem, m_triggerSubsystem,
+          .whileTrue(new DriveToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_intakeSubsystem, m_triggerSubsystem,
               m_driveJoystick));
     }
 
@@ -353,36 +352,36 @@ public class RobotContainer {
 
   public void resetDriveOffsets() {
     if (SubsystemConstants.useDrive) {
-      m_robotDrive.resetOffsets();
+      m_driveSubsystem.resetOffsets();
     }
   }
 
   public Command getAutonomousCommand() { // TODO put by auto chooser
     if (m_chooseAutos.getSelected() == "CenterDown") {
-      return Autos.CenterDown(compoundCommands, m_robotDrive, m_shooterSubsystem);
+      return Autos.CenterDown(compoundCommands, m_driveSubsystem, m_shooterSubsystem);
     }
     if (m_chooseAutos.getSelected() == "FourPiece") {
-      return Autos.FourPiece(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
+      return Autos.FourPiece(compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
           m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "FourPieceCenter") {
-      return Autos.FourPieceCenter(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem,
+      return Autos.FourPieceCenter(compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
           m_triggerSubsystem, m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "GrandTheftAuto") {
-      return Autos.GrandTheftAuto(m_robotDrive);
+      return Autos.GrandTheftAuto(m_driveSubsystem);
     }
     if (m_chooseAutos.getSelected() == "BasicAmp") {
-      return Autos.BasicAmp(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem);
+      return Autos.BasicAmp(compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem);
     }
     if (m_chooseAutos.getSelected() == "IntermediateAmp") {
-      return Autos.IntermediateAmp(compoundCommands, m_robotDrive, m_intakeSubsystem, m_shooterSubsystem);
+      return Autos.IntermediateAmp(compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem);
     }
     if (m_chooseAutos.getSelected() == "TestPath5") {
-      return Autos.FiveMeterTest(m_robotDrive);
+      return Autos.FiveMeterTest(m_driveSubsystem);
     }
     if (m_chooseAutos.getSelected() == "ShootPreloadFarAway") {
-      return Autos.ShootPreloadFarAway(compoundCommands, m_robotDrive, m_shooterSubsystem, m_limelightSubsystem,
+      return Autos.ShootPreloadFarAway(compoundCommands, m_driveSubsystem, m_shooterSubsystem, m_limelightSubsystem,
           m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "OnlyShoot") {
