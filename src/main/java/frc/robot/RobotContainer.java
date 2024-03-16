@@ -37,6 +37,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -94,7 +95,7 @@ public class RobotContainer {
   private final SnuffilatorSubsystem m_snuffilatorSubsystem = SubsystemConstants.useSnuffilator
       ? new SnuffilatorSubsystem()
       : null;
-
+  private final TriangleInterpolator m_magicInterpolator = new TriangleInterpolator(4);
   private final PowerDistribution pdh = new PowerDistribution();
 
   private final SendableChooser<String> m_chooseAutos;
@@ -103,6 +104,13 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
+    m_magicInterpolator.addCalibratedPoint(0, 0, 0, 0, 0, 0);
+    m_magicInterpolator.addCalibratedPoint(10, 0, 255, 255, 0, 0);
+    m_magicInterpolator.addCalibratedPoint(5, 10, 5, 5, 5, 0);
+    m_magicInterpolator.makeTriangles();
+    m_magicInterpolator.draw("/home/lvuser/ourTestImage.png", 100, 100, 0, 10, 10, 0);
+    System.out.println(Filesystem.getOperatingDirectory());
 
     pdh.setSwitchableChannel(true);
 

@@ -70,15 +70,15 @@ public final class Constants {
   }
 
   public static class SubsystemConstants {
-    public static final boolean useDrive = true;
-    public static final boolean useIntake = true;
-    public static final boolean useShooter = true;
-    public static final boolean useDataManager = true;
-    public static final boolean useLimelight = true;
-    public static final boolean usePivot = true;
+    public static final boolean useDrive = false;
+    public static final boolean useIntake = false;
+    public static final boolean useShooter = false;
+    public static final boolean useDataManager = false;
+    public static final boolean useLimelight = false;
+    public static final boolean usePivot = false;
     public static final boolean useClimber = false; //TODO check if these work
-    public static final boolean useTrigger = true;
-    public static final boolean useSnuffilator = true;
+    public static final boolean useTrigger = false;
+    public static final boolean useSnuffilator = false;
   }
 
   public static class DriveConstants {
