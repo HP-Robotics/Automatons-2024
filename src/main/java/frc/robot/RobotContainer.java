@@ -97,8 +97,8 @@ public class RobotContainer {
   private final SnuffilatorSubsystem m_snuffilatorSubsystem = SubsystemConstants.useSnuffilator
       ? new SnuffilatorSubsystem()
       : null;
-  private final TriangleInterpolator m_triangleInterpolator = new TriangleInterpolator(4);
-  private final PowerDistribution pdh = new PowerDistribution();
+  private final TriangleInterpolator m_triangleInterpolator = new TriangleInterpolator(4); // JPW TODO magic number...
+  private final PowerDistribution pdh = new PowerDistribution(); // JPW TODO m_pdd...
 
   private final SendableChooser<String> m_chooseAutos = new SendableChooser<>();
 
@@ -194,7 +194,7 @@ public class RobotContainer {
       m_driveJoystick.button(ControllerConstants.resetYawButton)
           .whileTrue(new InstantCommand(m_driveSubsystem::resetYaw));
       Trigger fieldRelativeTrigger = ControllerConstants.useXbox
-          ? new Trigger(m_driveJoystick.axisGreaterThan(2, 0.1))
+          ? new Trigger(m_driveJoystick.axisGreaterThan(2, 0.1)) // JPW TODO magic number...
           : new Trigger(m_driveJoystick.button(ControllerConstants.fieldRelativeButton));
       // m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test
       // Path"));
@@ -203,7 +203,7 @@ public class RobotContainer {
     }
 
     if (SubsystemConstants.useShooter) {
-      m_opJoystick.axisGreaterThan(3, 0.1).onTrue(
+      m_opJoystick.axisGreaterThan(3, 0.1).onTrue( // JPW TODO magic numbers...
           new ConditionalCommand(
               new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp,
                   ShooterConstants.shooterSpeedAmp),
@@ -212,7 +212,7 @@ public class RobotContainer {
                 return m_pivotSubsystem != null && m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
               }));
       if (SubsystemConstants.useTrigger) {
-        m_opJoystick.button(3).whileTrue(m_compoundCommands.fireButtonHold());
+        m_opJoystick.button(3).whileTrue(m_compoundCommands.fireButtonHold()); // JPW TODO magic number
       }
       m_opJoystick.button(8).onTrue(new InstantCommand(m_shooterSubsystem::stopShooter));
     }
@@ -263,12 +263,12 @@ public class RobotContainer {
       m_opJoystick.povLeft().whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
       // m_opJoystick.button(7).onTrue(new
       // InstantCommand(m_pivotSubsystem::togglePID));
-      m_opJoystick.button(1)
+      m_opJoystick.button(1) // JPW TODO magic number...
           .onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.subwooferPosition)));
-      m_opJoystick.button(2).whileTrue(
+      m_opJoystick.button(2).whileTrue( // JPW TODO magic number...
           new ParallelCommandGroup(
               new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.ampPosition))));
-      m_opJoystick.button(4)
+      m_opJoystick.button(4) // JPW TODO magic number...
           .whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.podiumPosition)));
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
@@ -277,7 +277,7 @@ public class RobotContainer {
               m_driveJoystick, m_triangleInterpolator)); // TODO use pose estimator constant
       m_driveJoystick.button(ControllerConstants.drivePointedToNoteButton)
           .whileTrue(new DrivePointedToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_driveJoystick));
-      m_opJoystick.axisGreaterThan(2, 0.1)
+      m_opJoystick.axisGreaterThan(2, 0.1) // JPW TODO magic numbers...
           .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator,
               m_poseEstimatorSubsystem))
           .whileTrue(
@@ -287,7 +287,7 @@ public class RobotContainer {
                                                                                 // statement
           .whileTrue(
               new DriveToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_intakeSubsystem, m_triggerSubsystem,
-                  m_driveJoystick, () -> {return m_driveJoystick.getRawAxis(2);}));
+                  m_driveJoystick, () -> {return m_driveJoystick.getRawAxis(2);})); // JPW TODO magic number
     }
 
     if (SubsystemConstants.useSnuffilator) {

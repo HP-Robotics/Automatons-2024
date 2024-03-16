@@ -23,7 +23,7 @@ public class DriveToNoteCommand extends Command {
   private final IntakeSubsystem m_intakeSubsystem;
   private final TriggerSubsystem m_triggerSubsystem;
   private Optional<CommandJoystick> m_joystick = Optional.empty();
-  Boolean pastBeamBroken = false;
+  Boolean pastBeamBroken = false; // JPW TODO - m_
   Boolean currentbeambreak = false;
   Boolean m_seenNote = false;
   Rotation2d m_noteHeading;
@@ -87,6 +87,7 @@ public class DriveToNoteCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // JPW TODO - feels like this could use a comment.  The naive thing is to just use beamBroken() - why isn't that enough?
     currentbeambreak = m_intakeSubsystem.m_beambreak.beamBroken();
     if (pastBeamBroken != currentbeambreak && !pastBeamBroken) {
       return true;
