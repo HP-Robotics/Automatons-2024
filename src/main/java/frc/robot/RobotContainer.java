@@ -133,7 +133,7 @@ public class RobotContainer {
     m_chooseAutos.addOption("Basic Amp", "BasicAmp");
     m_chooseAutos.addOption("Intermediate Amp", "IntermediateAmp");
     m_chooseAutos.addOption("Four Piece Center", "FourPieceCenter");
-    m_chooseAutos.addOption("Three Piece Center", "Three Piece Center");
+    m_chooseAutos.addOption("Three Piece Center", "ThreePieceCenter");
     m_chooseAutos.addOption("Test Path 5", "TestPath5");
     m_chooseAutos.addOption("Shoot Preload Far Away", "ShootPreloadFarAway");
     m_chooseAutos.addOption("Only Shoot", "OnlyShoot");
