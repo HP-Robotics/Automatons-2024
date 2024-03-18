@@ -49,7 +49,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
       poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(
           PoseEstimatorConstants.visionXStandardDev * distance,
           PoseEstimatorConstants.visionYStandardDev * distance,
-          PoseEstimatorConstants.visionHeadingStandardDev));
+          PoseEstimatorConstants.visionHeadingStandardDev * distance));
       poseEstimator.addVisionMeasurement(vPose, vTime);
       // System.out.println(vTime);
     }
