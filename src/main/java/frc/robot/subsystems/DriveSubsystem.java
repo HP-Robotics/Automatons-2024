@@ -112,7 +112,18 @@ public class DriveSubsystem extends SubsystemBase {
             m_backRight.getPosition(),
             m_backLeft.getPosition()
         });
+    if (m_poseEstimator != null) {
+      m_poseEstimator.updatePoseEstimator(pigeonYaw, new SwerveModulePosition[] {
+          m_frontLeft.getPosition(),
+          m_frontRight.getPosition(),
+          m_backRight.getPosition(),
+          m_backLeft.getPosition()
+      });
+    }
+  }
 
+  @Override
+  public void periodic() {
     m_field.setRobotPose(getPose());
     drivePublisher.set(getPose());
     driveTrainTable.putValue("Robot x", NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getX()));
