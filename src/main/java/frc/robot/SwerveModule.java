@@ -72,9 +72,6 @@ public class SwerveModule {
 
     // BaseStatusSignal.setUpdateFrequencyForAll(50,m_driveMotor.getClosedLoopError(),
     // m_driveMotor.getClosedLoopDerivativeOutput(),m_driveMotor.getClosedLoopIntegratedOutput(),m_driveMotor.getClosedLoopProportionalOutput(),m_driveMotor.getClosedLoopFeedForward());
-    if (SubsystemConstants.useDataManager) {
-      // SignalLogger.start();
-    }
 
     m_turningMotor = new TalonFX(turningMotorChannel, "CANivore");
     var turningConfig = new Slot0Configs();

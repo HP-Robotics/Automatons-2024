@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -98,6 +97,10 @@ public class DriveSubsystem extends SubsystemBase {
     rotationController.setTolerance(DriveConstants.turningControllerTolerance);
 
     drivePublisher = poseEstimatorTable.getStructTopic("Drive Pose", Pose2d.struct).publish();
+
+    if (SubsystemConstants.useDataManager) {
+      // SignalLogger.start();
+    }
 
   }
 
