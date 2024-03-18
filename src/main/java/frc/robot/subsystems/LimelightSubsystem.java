@@ -117,6 +117,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
       if (!m_aprilTagSeen) {
         m_aprilTagSeen = true;
+        //possible pose estimaotr initialization point
       }
 
       // double noteTV = m_gamePieceTable.getEntry("tv").getValue().getDouble();
