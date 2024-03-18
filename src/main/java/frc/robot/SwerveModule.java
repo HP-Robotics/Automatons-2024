@@ -157,6 +157,11 @@ public class SwerveModule {
 
   }
 
+  public double getModifiedAbsolute() {
+    double absValue = m_absEncoder.getAbsolutePosition()-m_absEncoderForward;
+    return absValue * 2 * Math.PI;
+  }
+
   public double motorValueToTicks(double position) {
     return position - m_turningOffset;
   }
@@ -166,6 +171,12 @@ public class SwerveModule {
   }
 
   public SwerveModulePosition getPosition() {
+    // driveTrainTable.putValue(m_name + "currentAngle", NetworkTableValue.makeDouble(ticksToRadians(motorValueToTicks(m_turningMotor.getRotorPosition().getValue()))));
+    // driveTrainTable.putValue(m_name + "testAngle", NetworkTableValue.makeDouble(getModifiedAbsolute()));
+    if(m_absEncoder.getAbsolutePosition() != 0){
+      return new SwerveModulePosition(
+        ticksToMeters(m_driveMotor.getRotorPosition().getValue()),new Rotation2d(getModifiedAbsolute()));
+    }
     return new SwerveModulePosition(
         ticksToMeters(m_driveMotor.getRotorPosition().getValue()),
         new Rotation2d(ticksToRadians(motorValueToTicks(m_turningMotor.getRotorPosition().getValue()))));
