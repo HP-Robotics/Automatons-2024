@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
       m_robotContainer.fastBeamBreakCheckTrigger();
     }, 0.001);
     addPeriodic(() -> {
-      m_robotContainer.m_robotDrive.updateOdometry();
+      m_robotContainer.m_driveSubsystem.updateOdometry();
     }, 0.01);
   }
 
@@ -103,8 +103,8 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     m_robotContainer.resetDriveOffsets();
     if (SubsystemConstants.useDrive) {
-      m_robotContainer.m_robotDrive.initializePoseEstimator(new Pose2d(0, 0, new Rotation2d(0)));
-      m_robotContainer.m_robotDrive
+      m_robotContainer.m_driveSubsystem.initializePoseEstimator(new Pose2d(0, 0, new Rotation2d(0)));
+      m_robotContainer.m_driveSubsystem
           .resetOdometry(LimelightConstants.aprilTagList[7].plus(new Transform2d(2, 0, new Rotation2d(0))));
     }
     // This makes sure that the autonomous stops running when

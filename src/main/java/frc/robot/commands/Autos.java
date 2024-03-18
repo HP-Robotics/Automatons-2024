@@ -27,6 +27,8 @@ public final class Autos {
   // return Commands.sequence(subsystem.exampleMethodCommand(), new
   // ExampleCommand(subsystem));
   // }
+  
+  // TODO: pass limelightSubsystem for note detection
 
   public static Command FourPiece(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
       ShooterSubsystem shooterSubsystem,
@@ -112,7 +114,7 @@ public final class Autos {
         new FollowPathCommandOurs(drive, "Basic Amp Part 1"),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
         new FollowPathCommandOurs(drive, "Basic Amp Part 2"),
-        new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime));
+        commandBlocks.startIntaking());
   }
 
   public static Command GrandTheftAuto(DriveSubsystem drive) {
@@ -134,7 +136,7 @@ public final class Autos {
         new FollowPathCommandOurs(drive, "Intermediate Amp Part 2"),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
         new FollowPathCommandOurs(drive, "Intermediate Amp Part 3"),
-        new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime));
+        commandBlocks.startIntaking());
   }
 
   public static Command ThreePieceCenter(CommandBlocks commandBlocks, DriveSubsystem drive,
@@ -166,6 +168,16 @@ public final class Autos {
       return new WaitCommand(0);
     }
     return commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition);
+  }
+
+  public static Command NoteCancelTest(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
+      ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem) {
+    if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
+      return null;
+    }
+    return new SequentialCommandGroup(
+        new FollowPathCommandOurs(drive, limelightSubsystem,  "Note Cancel Test"),
+        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem));
   }
 
   public static Command DoNothing() {

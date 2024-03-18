@@ -4,6 +4,11 @@
 
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
+
+import java.util.function.DoubleToIntFunction;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
@@ -39,13 +44,13 @@ public class LimelightSubsystem extends SubsystemBase {
   PoseEstimatorSubsystem m_poseEstimator;
 
   public LimelightSubsystem(PoseEstimatorSubsystem PoseEstimatorSubsystem) {
-    m_limelight_twoplus = NetworkTableInstance.getDefault().getTable("limelight-twoplus");
+    m_limelight_twoplus = NetworkTableInstance.getDefault().getTable("limelight-twoplus"); // TODO: Change to limelight-fight
     botpose_blue = m_limelight_twoplus.getEntry("botpose_wpiblue"); // TODO: Look into Megatag
     m_poseEstimator = PoseEstimatorSubsystem;
     publisher = poseEstimatorTable.getStructTopic("AprilTagPose", Pose2d.struct).publish();
     limeSub = m_limelight_twoplus.getDoubleArrayTopic("botpose_wpiblue").subscribe(defaultValues);
 
-    m_gamePieceTable = NetworkTableInstance.getDefault().getTable("limelight-two");
+    m_gamePieceTable = NetworkTableInstance.getDefault().getTable("limelight-bite");
     m_aprilTagSeen = false;
   }
 
@@ -63,6 +68,18 @@ public class LimelightSubsystem extends SubsystemBase {
     double angleToSpeaker = Math.atan2(turnToSpeakerB, turnToSpeakerA);
 
     return Math.toDegrees(angleToSpeaker);
+  }
+
+  public Optional<Double> getNoteTX() {
+    double noteTV = m_gamePieceTable.getEntry("tv").getValue().getDouble(); // TODO: Is this safe to call if we don't have a limelight?
+    double noteTX = m_gamePieceTable.getEntry("tx").getValue().getDouble();
+
+    if (noteTV == 1) {
+      limelightMagicTable.putValue("noteTX", NetworkTableValue.makeDouble(noteTX));
+      return Optional.of(noteTX);
+    } else {
+      return Optional.empty();
+    }
   }
 
   // This method will be called once per scheduler run

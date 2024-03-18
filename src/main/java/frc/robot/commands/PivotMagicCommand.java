@@ -10,7 +10,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
@@ -49,8 +51,10 @@ public class PivotMagicCommand extends Command {
   @Override
   public void execute() {
     if (m_limelightSubsystem.m_sawAprilTag) {
-      m_subsystem.setPosition(m_subsystem.getMagicAngle(
+      if (m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag) < 3.6) {
+        m_subsystem.setPosition(m_subsystem.getMagicAngle(
           m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag)));
+      }
       pivotTable.putValue(
           "magicEncoderValue", NetworkTableValue.makeDouble(m_subsystem.getMagicAngle(
               m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag))));

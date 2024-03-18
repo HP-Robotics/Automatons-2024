@@ -58,7 +58,7 @@ public class DrivePointedToSpeakerCommand extends Command {
       m_drivesubsystem.drivePointedTowardsAngle(m_joystick,
           new Rotation2d(Math
               .toRadians(m_limelightSubsystem.getAngleTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag))));
-      if (m_limelightSubsystem.getDistanceTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag) < 3.5) {
+      if (m_limelightSubsystem.getDistanceTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag) < LimelightConstants.allowableSpeakerDistanceError) {
         m_joystick.getHID().setRumble(RumbleType.kBothRumble, 0.2);
       } else {
         m_joystick.getHID().setRumble(RumbleType.kBothRumble, 0);

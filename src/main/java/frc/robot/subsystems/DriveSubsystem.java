@@ -49,6 +49,8 @@ public class DriveSubsystem extends SubsystemBase {
   };
 
   public boolean m_fieldRelative = true;
+  public boolean m_pathplannerUsingNoteVision = false;
+  public boolean m_pathPlannerCancelIfNoteSeen = false;
 
   public final Field2d m_field = new Field2d();
   public final Field2d m_currentPose = new Field2d();
@@ -209,6 +211,28 @@ public class DriveSubsystem extends SubsystemBase {
     driveTrainTable.putValue("Rotation Current Angle",
         NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getRotation().getDegrees()));
     driveTrainTable.putValue("Rotation Target Angle", NetworkTableValue.makeDouble(targetAngle.getDegrees()));
+    driveTrainTable.putValue("Rotation Power Input", NetworkTableValue.makeDouble(rot));
+
+    driveTrainTable.putValue("Rotation Controller P",
+        NetworkTableValue.makeDouble(rotationController.getP() * rotationController.getPositionError()));
+    driveTrainTable.putValue("Rotation Controller Position Error",
+        NetworkTableValue.makeDouble(rotationController.getPositionError()));
+    driveTrainTable.putValue("Rotation Controller Setpoint",
+        NetworkTableValue.makeDouble(rotationController.getSetpoint()));
+  }
+
+  public void driveToNote(double speed, Rotation2d noteAngle) {
+    double rot = rotationController.calculate(m_odometry.getPoseMeters().getRotation().getRadians(),
+        noteAngle.getRadians());
+    drive(
+        speed * DriveConstants.kMaxSpeed,
+        0, // speed * -1 * DriveConstants.kMaxSpeed,
+        rot * DriveConstants.kMaxAngularSpeed,
+        false);
+
+    driveTrainTable.putValue("Rotation Current Angle",
+        NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getRotation().getDegrees()));
+    driveTrainTable.putValue("Rotation Target Angle", NetworkTableValue.makeDouble(noteAngle.getDegrees()));
     driveTrainTable.putValue("Rotation Power Input", NetworkTableValue.makeDouble(rot));
 
     driveTrainTable.putValue("Rotation Controller P",
