@@ -137,6 +137,7 @@ public class RobotContainer {
     m_chooseAutos.addOption("Test Path 5", "TestPath5");
     m_chooseAutos.addOption("Shoot Preload Far Away", "ShootPreloadFarAway");
     m_chooseAutos.addOption("Only Shoot", "OnlyShoot");
+    m_chooseAutos.addOption("Note Cancel Test", "NoteCancelTest");
     m_chooseAutos.setDefaultOption("Do Nothing", "DoNothing");
     m_chooseAutos.onChange(this::drawSelectedAuto);
 
@@ -387,6 +388,9 @@ public class RobotContainer {
     if (m_chooseAutos.getSelected() == "OnlyShoot") {
       return Autos.OnlyShoot(compoundCommands, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
           m_pivotSubsystem);
+    }
+    if (m_chooseAutos.getSelected() == "NoteCancelTest") {
+      return Autos.NoteCancelTest(compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_limelightSubsystem, m_triggerSubsystem);
     }
     if (m_chooseAutos.getSelected() == "DoNothing") {
       return Autos.DoNothing();

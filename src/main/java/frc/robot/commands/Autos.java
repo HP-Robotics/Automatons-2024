@@ -176,7 +176,7 @@ public final class Autos {
       return null;
     }
     return new SequentialCommandGroup(
-        new FollowPathCommandOurs(drive, "Note Cancel Test"),
+        new FollowPathCommandOurs(drive, limelightSubsystem,  "Note Cancel Test"),
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem));
   }
 
