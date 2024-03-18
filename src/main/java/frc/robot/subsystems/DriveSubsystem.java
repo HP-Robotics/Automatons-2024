@@ -141,15 +141,6 @@ public class DriveSubsystem extends SubsystemBase {
     driveTrainTable.putValue("Pigeon Pitch", NetworkTableValue.makeDouble(m_pGyroPitch.getValueAsDouble()));
     driveTrainTable.putValue("Pigeon Yaw", NetworkTableValue.makeDouble(m_pGyroYaw.getValueAsDouble()));
     driveTrainTable.putValue("Pigeon Roll", NetworkTableValue.makeDouble(m_pGyroRoll.getValueAsDouble()));
-
-    if (m_poseEstimator != null) {
-      m_poseEstimator.updatePoseEstimator(pigeonYaw, new SwerveModulePosition[] {
-          m_frontLeft.getPosition(),
-          m_frontRight.getPosition(),
-          m_backRight.getPosition(),
-          m_backLeft.getPosition()
-      });
-    }
   }
 
   /**
