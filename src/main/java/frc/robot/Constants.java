@@ -79,8 +79,8 @@ public final class Constants {
   }
 
   public static class DriveConstants {
-    public static final double kMaxSpeed = 4.0; // meters per second
-    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
+    public static final double kMaxSpeed = 4.4; // meters per second 
+    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second //auto is 540
     public static final double kSlowSpeed = 2.0;
     public static final double kSlowAngularspeed = Math.PI / 2; // 1/4 rotation per second
 
@@ -88,7 +88,7 @@ public final class Constants {
     public static final double kEncoderResolution = 1.0;
 
     public static final double driveGearRatio = 6.75;
-    public static final double turningGearRatio = 15.429;
+    public static final double turningGearRatio = 540/35;
 
     public static final Translation2d kFrontLeftLocation = new Translation2d(0.308 - 0.038, 0.308);
     public static final Translation2d kFrontRightLocation = new Translation2d(0.308 - 0.038, -0.308);
