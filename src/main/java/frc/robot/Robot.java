@@ -43,6 +43,9 @@ public class Robot extends TimedRobot {
       m_robotContainer.fastBeamBreakCheckIntake();
       m_robotContainer.fastBeamBreakCheckTrigger();
     }, 0.001);
+    addPeriodic(() -> {
+      m_robotContainer.m_robotDrive.updateOdometry();
+    }, 0.01);
   }
 
   /**

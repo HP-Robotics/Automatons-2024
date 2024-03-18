@@ -101,8 +101,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   }
 
-  @Override
-  public void periodic() {
+  public void updateOdometry() {
     var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
     // Update the odometry in the periodic block
     m_odometry.update(
