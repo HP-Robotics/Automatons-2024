@@ -159,11 +159,10 @@ public final class Constants {
   }
 
   public static final class PoseEstimatorConstants {
-    public static final Matrix<N3,N1> driveStandardDev = VecBuilder.fill(0.02,0.02,0.02);
-    public static final Matrix<N3,N1> statesStandardDev = VecBuilder.fill(0.001,0.001,0.001);
+    public static final Matrix<N3,N1> statesStandardDev = VecBuilder.fill(0.001,0.001,0.005);
     public static final double visionXStandardDev = 0.01;
     public static final double visionYStandardDev = 0.01;
-    public static final double visionHeadingStandardDev = 0.1;
+    public static final double visionHeadingStandardDev = 0.05;
   }
 
   public static final class AutoConstants {
