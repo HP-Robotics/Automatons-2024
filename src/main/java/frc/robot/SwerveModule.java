@@ -204,7 +204,6 @@ public class SwerveModule {
     // driveTrainTable.putValue(m_name + " Turn Power", NetworkTableValue.makeDouble(turnPower()));
     // driveTrainTable.putValue(m_name + " Turn Angle", NetworkTableValue.makeDouble(getEncoderAngle()));
     driveTrainTable.putValue(m_name + " Abs Encoder", NetworkTableValue.makeDouble(m_absEncoder.getAbsolutePosition()));
-
     // driveTrainTable.putValue(m_name + " Turning kD Proportion",
     //     NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopDerivativeOutput().getValue()));
     // driveTrainTable.putValue(m_name + " Turning kP Proportion",
