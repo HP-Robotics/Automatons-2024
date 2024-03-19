@@ -10,29 +10,36 @@ import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.GeometryUtil;
+
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.subsystems.LimelightSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class FollowPathCommandOurs extends Command {
-  DriveSubsystem m_drive;
+  DriveSubsystem m_driveSubsystem;
+  Optional<LimelightSubsystem> m_limelightSubsystem = Optional.empty();
   String m_pathName;
   PathPlannerPath m_path;
 
   public FollowPathCommand m_pathPlannerCommand;
   public PPHolonomicDriveController m_HolonomicDriveController;
 
-  public FollowPathCommandOurs(DriveSubsystem Drive, String PathName) {
-    m_drive = Drive;
-    m_pathName = PathName;
+  public FollowPathCommandOurs(DriveSubsystem driveSubsystem, String pathName) {
+    m_driveSubsystem = driveSubsystem;
+    m_pathName = pathName;
 
-    m_path = PathPlannerPath.fromPathFile(PathName);
+    m_path = PathPlannerPath.fromPathFile(pathName);
     m_pathPlannerCommand = PathCommand();
-    addRequirements(Drive);
+    addRequirements(driveSubsystem);
+  }
+
+  public FollowPathCommandOurs(DriveSubsystem driveSubsystem, LimelightSubsystem limelightSubsystem, String pathName) {
+    this(driveSubsystem, pathName);
+    m_limelightSubsystem = Optional.of(limelightSubsystem);
   }
 
   /** Creates a new PathCommand. */
@@ -40,9 +47,9 @@ public class FollowPathCommandOurs extends Command {
 
     return new FollowPathHolonomic(
         m_path,
-        m_drive::getPose,
-        m_drive::getCurrentspeeds, // MUST BE ROBOT RELATIVE
-        m_drive::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        m_driveSubsystem::getPose,
+        m_driveSubsystem::getCurrentspeeds, // MUST BE ROBOT RELATIVE
+        m_driveSubsystem::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         DriveConstants.holonomicConfig,
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red
@@ -57,41 +64,24 @@ public class FollowPathCommandOurs extends Command {
           }
           return false;
         },
-        m_drive // Reference to this subsystem to set requirements
+        m_driveSubsystem // Reference to this subsystem to set requirements
     );
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drive.resetOdometry(m_path.getPreviewStartingHolonomicPose());
+    m_driveSubsystem.resetOdometry(m_path.getPreviewStartingHolonomicPose());
 
     Optional<Alliance> ally = DriverStation.getAlliance();
     if (ally.isPresent()) {
       if (ally.get() == Alliance.Red) {
-        m_drive.resetOdometry(mirrorPose(m_path.getPreviewStartingHolonomicPose())); // TODO: only reset odometry once
+        // TODO: only reset odometry once
+        m_driveSubsystem.resetOdometry(GeometryUtil.flipFieldPose(m_path.getPreviewStartingHolonomicPose()));
       }
     }
     m_pathPlannerCommand.initialize();
   }
-
-  public Pose2d mirrorPose(Pose2d inputPose2d) {
-    Pose2d output = new Pose2d(54 * 12 * 0.0254 - inputPose2d.getX(), inputPose2d.getY(),
-        new Rotation2d(Math.PI).minus(inputPose2d.getRotation()));
-    return output;
-  }
-  // public Optional<Rotation2d> getRotationTargetOverride() {
-  // // Some condition that should decide if we want to override rotation
-  // if(Limelight.hasGamePieceTarget()) {
-  // // Return an optional containing the rotation override (this should be a
-  // field relative rotation)
-  // return Optional.of(Limelight.getRobotToGamePieceRotation());
-  // } else {
-  // // return an empty optional when we don't want to override the path's
-  // rotation
-  // return Optional.empty();
-  // }
-  // }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -103,11 +93,18 @@ public class FollowPathCommandOurs extends Command {
   @Override
   public void end(boolean interrupted) {
     m_pathPlannerCommand.end(interrupted);
+    m_driveSubsystem.m_pathplannerUsingNoteVision = false;
+    m_driveSubsystem.m_pathPlannerCancelIfNoteSeen = false;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_pathPlannerCommand.isFinished();
+    if (m_limelightSubsystem.isPresent()) {
+      return m_pathPlannerCommand.isFinished()
+          || (m_driveSubsystem.m_pathPlannerCancelIfNoteSeen && m_limelightSubsystem.get().getNoteTX().isPresent());
+    } else {
+      return m_pathPlannerCommand.isFinished();
+    }
   }
 }

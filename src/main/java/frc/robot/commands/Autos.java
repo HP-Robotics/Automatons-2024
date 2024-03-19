@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AutoConstants;
@@ -26,6 +27,7 @@ public final class Autos {
   // return Commands.sequence(subsystem.exampleMethodCommand(), new
   // ExampleCommand(subsystem));
   // }
+  
 
   public static Command FourPiece(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
       ShooterSubsystem shooterSubsystem,
@@ -50,13 +52,18 @@ public final class Autos {
       return null;
     }
     return new SequentialCommandGroup(
+        new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.subwooferPosition)),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
+        new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.noteA1Position)),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 1"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position),
+        commandBlocks.fireGamePieceCommand(PivotConstants.noteA1Position),
+        new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.note2Position)),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 2"),
         commandBlocks.fireGamePieceCommand(PivotConstants.note2Position),
+        new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.noteA3Position)),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 3"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position));
+        commandBlocks.fireGamePieceCommand(PivotConstants.noteA3Position),
+        new InstantCommand(shooterSubsystem::stopShooter));
   }
 
   public static Command CenterDown(CommandBlocks commandBlocks, DriveSubsystem drive,
@@ -93,10 +100,7 @@ public final class Autos {
      */
     return new SequentialCommandGroup(
         new FollowPathCommandOurs(drive, "Center Down Part 1"),
-        commandBlocks.fireGamePieceCommand(pivotSubsystem.getMagicAngle(
-            limelightSubsystem.getDistanceTo(new Pose2d(3.38, 3.1, Rotation2d.fromDegrees(-35.94)),
-                LimelightConstants.aprilTag7))));
-    // TODO: Load the last point from the path
+        commandBlocks.fireGamePieceCommand(PivotConstants.preloadFarAwayPosition));
   }
 
   public static Command BasicAmp(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
@@ -108,7 +112,7 @@ public final class Autos {
         new FollowPathCommandOurs(drive, "Basic Amp Part 1"),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
         new FollowPathCommandOurs(drive, "Basic Amp Part 2"),
-        new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime));
+        commandBlocks.startIntaking());
   }
 
   public static Command GrandTheftAuto(DriveSubsystem drive) {
@@ -130,7 +134,7 @@ public final class Autos {
         new FollowPathCommandOurs(drive, "Intermediate Amp Part 2"),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
         new FollowPathCommandOurs(drive, "Intermediate Amp Part 3"),
-        new IntakeCommand(intakeSubsystem).withTimeout(AutoConstants.additionalIntakeTime));
+        commandBlocks.startIntaking());
   }
 
   public static Command ThreePieceCenter(CommandBlocks commandBlocks, DriveSubsystem drive,
@@ -162,6 +166,16 @@ public final class Autos {
       return new WaitCommand(0);
     }
     return commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition);
+  }
+
+  public static Command NoteCancelTest(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
+      ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem) {
+    if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
+      return null;
+    }
+    return new SequentialCommandGroup(
+        new FollowPathCommandOurs(drive, limelightSubsystem,  "Note Cancel Test"),
+        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem));
   }
 
   public static Command DoNothing() {

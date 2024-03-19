@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -14,6 +15,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.PoseEstimatorConstants;
 
 public class PoseEstimatorSubsystem extends SubsystemBase {
 
@@ -31,7 +33,9 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
   public void createPoseEstimator(SwerveDriveKinematics kinematics, Rotation2d angle,
       SwerveModulePosition[] swervePositions, Pose2d initialPose) {
-    poseEstimator = new SwerveDrivePoseEstimator(kinematics, angle, swervePositions, initialPose);
+    poseEstimator = new SwerveDrivePoseEstimator(kinematics, angle, swervePositions, initialPose,
+        PoseEstimatorConstants.statesStandardDev,
+        VecBuilder.fill(0.1, 0.1, 0.1));
   }
 
   public void updatePoseEstimator(Rotation2d angle, SwerveModulePosition[] positions) {
@@ -40,9 +44,22 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     }
   }
 
-  public void updateVision(Pose2d vPose, double vTime) {
+  public void updateVision(Pose2d vPose, double vTime, double distance) {
     if (poseEstimator != null) {
+      poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(
+          PoseEstimatorConstants.visionXStandardDev * distance,
+          PoseEstimatorConstants.visionYStandardDev * distance,
+          PoseEstimatorConstants.visionHeadingStandardDev * distance));
       poseEstimator.addVisionMeasurement(vPose, vTime);
+      // System.out.println(vTime);
+    }
+  }
+
+  public Pose2d getPose() {
+    if (poseEstimator != null) {
+      return poseEstimator.getEstimatedPosition();
+    } else {
+      return null;
     }
   }
 
@@ -50,6 +67,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   public void periodic() {
     if (poseEstimator != null) {
       posePublisher.set(poseEstimator.getEstimatedPosition());
+      VecBuilder.fill(0, 0, 0);
     }
   }
 }

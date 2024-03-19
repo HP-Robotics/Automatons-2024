@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.75,
-        "y": 5.55
+        "x": 1.0,
+        "y": 7.1173234983049545
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8729384168170045,
-        "y": 5.351199374478521
+        "x": 1.4291001399454624,
+        "y": 7.1173234983049545
       },
       "isLocked": false,
-      "linkedName": "Grab piece 2A"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.5401208637175103,
-        "y": 4.280060525933018
+        "x": 2.4699559370628714,
+        "y": 7.1173234983049545
       },
       "prevControl": {
-        "x": 1.9320248327106337,
-        "y": 4.256672217048138
+        "x": 2.460206178846015,
+        "y": 7.1173234983049545
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.45,
+      "waypointRelativePos": 0.1,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,24 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "startIntaking"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.15,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "stopIntaking"
+                "name": "cancelIfNote"
               }
             }
           ]
@@ -67,21 +50,18 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -26.565051177078022,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "3 Piece Center",
-  "previewStartingState": {
-    "rotation": 0,
-    "velocity": 0
-  },
+  "folder": "Test Paths",
+  "previewStartingState": null,
   "useDefaultConstraints": false
 }

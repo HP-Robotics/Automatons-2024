@@ -3,13 +3,14 @@
   "robotLength": 0.914,
   "holonomicMode": true,
   "pathFolders": [
+    "3 Piece Center",
     "4 Piece Center",
     "Basic Amp",
     "Center Down",
     "Four Piece",
     "Grand Theft Auto",
     "Intermediate Amp",
-    "3 Piece Center",
+    "Side Two Piece ",
     "Test Paths"
   ],
   "autoFolders": [],

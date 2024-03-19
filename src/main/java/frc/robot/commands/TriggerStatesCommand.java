@@ -36,20 +36,22 @@ public class TriggerStatesCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_subsystem.beambreakState && !m_beamBreak.beamBroken()) {
-      m_subsystem.beambreakState = false;
+    if (m_subsystem.m_isLoaded && !m_beamBreak.beamBroken()) {
+      m_subsystem.m_isLoaded = false;
     }
-    if (!m_subsystem.beambreakState && m_beamBreak.beamBroken()) {
-      m_subsystem.beambreakState = true;
+    if (!m_subsystem.m_isLoaded && m_beamBreak.beamBroken()) {
+      m_subsystem.beambreakCount = 0;
+      m_subsystem.m_isLoaded = true;
     }
-    if (m_subsystem.triggerYuck) {
+    if (m_subsystem.m_isYucking) {
       m_subsystem.setTrigger(TriggerConstants.yuckSpeed);
-    } else if (m_subsystem.triggerFire) {
+    } else if (m_subsystem.m_isFiring && m_subsystem.beambreakCount > 2) {
       m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed));
-    } else if (m_subsystem.beambreakState) {
+    } else if (m_subsystem.m_isLoaded) {
+      m_subsystem.beambreakCount += 1;
       m_subsystem.m_triggerMotor.setControl(new NeutralOut());
-    } else if (m_subsystem.triggerOn) {
-      m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed));
+    } else if (m_subsystem.m_isIntaking) {
+      m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed));//divide this by two if triger toasters 
     } else {
       m_subsystem.m_triggerMotor.setControl(new NeutralOut());
     }
