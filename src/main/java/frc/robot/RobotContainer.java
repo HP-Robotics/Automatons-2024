@@ -108,8 +108,14 @@ public class RobotContainer {
     m_magicInterpolator.addCalibratedPoint(0, 0, 0, 0, 0, 0);
     m_magicInterpolator.addCalibratedPoint(10, 0, 255, 255, 0, 0);
     m_magicInterpolator.addCalibratedPoint(5, 10, 5, 5, 5, 0);
+    m_magicInterpolator.addCalibratedPoint(1, 9, 190, 0, 0, 0);
     m_magicInterpolator.makeTriangles();
-    m_magicInterpolator.draw("/home/lvuser/ourTestImage.png", 100, 100, 0, 10, 10, 0);
+    m_magicInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png", 1000, 500, 0, 16.54, 8.27, 0, 0, 0, 100);
+    m_magicInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png", 1000, 500, 0, 16.54, 8.27, 0, 1, 100, 255);
+    m_magicInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 1000, 500, 0, 16.54, 8.27, 0, 2, 0, 5);
+    m_magicInterpolator.draw("/home/lvuser/headingTestImage.png", 1000, 500, 0, 16.54, 8.27, 0, 3, 0, 1);
+
+
     System.out.println(Filesystem.getOperatingDirectory());
 
     pdh.setSwitchableChannel(true);

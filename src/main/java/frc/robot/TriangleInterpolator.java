@@ -88,7 +88,7 @@ public class TriangleInterpolator {
 
   }
 
-  public void draw(String fileName, int width, int height, double minX, double maxX, double maxY, double minY) {
+  public void draw(String fileName, int width, int height, double minX, double maxX, double maxY, double minY, int dataIndex, double dataMin, double dataMax) {
     BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     double currentX = minX;
     double currentY = minY;
@@ -101,7 +101,14 @@ public class TriangleInterpolator {
         Optional<double[]> colorData = getTriangulatedOutput(new Pose2d(currentX, currentY, new Rotation2d()));
         int color = 0;
         if (colorData.isPresent()) {
-          color = (int)colorData.get()[0];
+          double input = colorData.get()[dataIndex];
+          color = (int)(255 * ((input - dataMin)/(dataMax - dataMin)));
+          if (color > 255) {
+            color = 255;
+          }
+          if (color < 0) {
+            color = 0;
+          }
         }
         image.setRGB(i, j, new Color(color, color, color).getRGB());
         currentY += (maxY-minY)/(double)height;
