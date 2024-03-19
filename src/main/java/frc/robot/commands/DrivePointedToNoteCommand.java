@@ -39,7 +39,9 @@ public class DrivePointedToNoteCommand extends Command {
     if (angle.isPresent() && Math.abs(angle.get()) > LimelightConstants.allowableNoteAngleError) {
       m_driveSubsystem.drivePointedTowardsAngle(m_joystick,
           new Rotation2d(Math
-              .toRadians(-angle.get())).plus(m_driveSubsystem.getPose().getRotation()));
+              .toRadians(-angle.get())).plus(m_driveSubsystem.getPose().getRotation())); // TODO: Add intaking
+    } else {
+      m_driveSubsystem.driveWithJoystick(m_joystick);
     }
   }
 
