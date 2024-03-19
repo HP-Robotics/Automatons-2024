@@ -48,8 +48,9 @@ public final class Constants {
     public static final int yuckButton = useXbox ? 4 : 2;
     public static final int climberButton = useXbox ? 10 : 10;
     public static final int intakeButton = useXbox ? 0 : 1;
-    public static final int drivePointedToSpeakerButton = useXbox ? 5 : 0;
-    public static final int drivePointedToNoteAxis = useXbox ? 2 : 0;
+    public static final int drivePointedToSpeakerButton = useXbox ? 6 : 0;
+    public static final int drivePointedToNoteButton = useXbox ? 5 : 0;
+    public static final int driveToNoteAxis = useXbox ? 2 : 0;
 
     // TODO: Add operator joystick constants
 
@@ -137,7 +138,7 @@ public final class Constants {
     public static final double currentThreshold = 40.0;
     public static final double currentTimeThreshold = 0.04;
 
-    public static final double driveToNoteSpeed = 0.3;
+    public static final double driveToNoteSpeed = 0.8;
   }
 
   public static final class LimelightConstants {
