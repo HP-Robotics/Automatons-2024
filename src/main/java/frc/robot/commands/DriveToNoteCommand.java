@@ -41,6 +41,8 @@ public class DriveToNoteCommand extends Command {
     m_triggerSubsystem = triggerSubsystem;
     m_speed = speed;
     addRequirements(driveSubsystem);
+
+    // JPW TODO - add other requirements?
   }
 
   public DriveToNoteCommand(DriveSubsystem driveSubsystem, LimelightSubsystem limelightSubsystem,

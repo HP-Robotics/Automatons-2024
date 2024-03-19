@@ -30,8 +30,8 @@ public class PivotMagicCommand extends Command {
   private Pose2d m_targetAprilTag;
   private TriangleInterpolator m_triangleInterpolator;
 
-  NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable pivotTable = inst.getTable("pivot-table");
+  NetworkTableInstance inst = NetworkTableInstance.getDefault();  // JPW TODO - m_
+  NetworkTable pivotTable = inst.getTable("pivot-table");  // JPW TODO - m_
 
   /** Creates a new pivotMagicCommand. */
   public PivotMagicCommand(PivotSubsystem subsystem, LimelightSubsystem limelightSubsystem,
@@ -43,6 +43,8 @@ public class PivotMagicCommand extends Command {
     m_poseEstimatorSubsystem = poseEstimatorSubsystem;
 
     addRequirements(subsystem);
+
+    // JPW TODO - add limelight subsystem to requirements?
   }
 
   // Called when the command is initially scheduled.

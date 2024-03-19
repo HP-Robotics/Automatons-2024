@@ -25,6 +25,7 @@ public class DrivePointedToNoteCommand extends Command {
     m_limelightSubsystem = limelightSubsystem;
     m_joystick = joystick;
     addRequirements(driveSubsystem);
+    // JPW TODO - add limelight system as requirement?
   }
 
   // Called when the command is initially scheduled.

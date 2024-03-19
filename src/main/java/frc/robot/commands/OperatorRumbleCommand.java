@@ -27,6 +27,8 @@ public class OperatorRumbleCommand extends Command {
     m_limelight = limelight;
     m_shooter = shooter;
     m_joystick = joystick;
+
+    // JPW TODO - addrequirements?  Maybe not?
   }
 
   // Called when the command is initially scheduled.

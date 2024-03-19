@@ -17,8 +17,8 @@ public class TriggerStatesCommand extends Command {
   private final TriggerSubsystem m_subsystem;
   private BeamBreak m_beamBreak;
   /** Creates a new IntakeCommand. */
-  NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable triggerTable = inst.getTable("trigger-subsystem");
+  NetworkTableInstance inst = NetworkTableInstance.getDefault();  // JPW TODO m_
+  NetworkTable triggerTable = inst.getTable("trigger-subsystem");  // JPW TODO m_
 
   public TriggerStatesCommand(TriggerSubsystem subsystem, BeamBreak beambreak) {
     // Use addRequirements() here to declare subsystem dependencies.

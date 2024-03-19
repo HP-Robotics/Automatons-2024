@@ -15,8 +15,8 @@ public class IntakeStatesCommand extends Command {
   private final IntakeSubsystem m_subsystem;
   private BeamBreak m_beamBreak;
   /** Creates a new IntakeCommand. */
-  NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable intakeTable = inst.getTable("intake-table");
+  NetworkTableInstance inst = NetworkTableInstance.getDefault();  // JPW TODO - m_
+  NetworkTable intakeTable = inst.getTable("intake-table"); // JPW TODO - m_
 
   public IntakeStatesCommand(IntakeSubsystem subsystem, BeamBreak beambreak) {
     // Use addRequirements() here to declare subsystem dependencies.

@@ -25,10 +25,12 @@ public class TriggerCommand extends Command {
     m_intakeSubsystem = intakesubsystem;
     addRequirements(subsystem);
     m_ignoreBeamBreak = ignoreBeamBreak;
+
+    // JPW TODO - add requirement to intake subsystem?
   }
 
-  NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable triggerTable = inst.getTable("trigger-subsystem");
+  NetworkTableInstance inst = NetworkTableInstance.getDefault(); // JPW TODO m_
+  NetworkTable triggerTable = inst.getTable("trigger-subsystem"); // JPW TODO m_
 
   // Called when the command is initially scheduled.
   @Override

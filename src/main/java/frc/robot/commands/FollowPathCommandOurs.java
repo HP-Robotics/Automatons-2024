@@ -52,6 +52,8 @@ public class FollowPathCommandOurs extends Command {
   public FollowPathCommandOurs(DriveSubsystem driveSubsystem, LimelightSubsystem limelightSubsystem, String pathName) {
     this(driveSubsystem, pathName, false);
     m_limelightSubsystem = Optional.of(limelightSubsystem);
+
+    // JPW TODO - addrequirements?
   }
 
   /** Creates a new PathCommand. */

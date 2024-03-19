@@ -50,8 +50,8 @@ public class SetShooterCommand extends Command {
     m_magicTriangles = triangle;
   }
 
-  NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable shooterTable = inst.getTable("shooter-subsystem");
+  NetworkTableInstance inst = NetworkTableInstance.getDefault(); // JPW TODO - m_
+  NetworkTable shooterTable = inst.getTable("shooter-subsystem"); // JPW TODO - m_
 
   // Called when the command is initially scheduled.
   @Override
@@ -79,6 +79,7 @@ public class SetShooterCommand extends Command {
         backOutput = triangleData.get()[1];
       }
       else{
+        // JPW TODO - we do a lot of this getting entries.  That's nice when we're tuning, but maybe not great for prod?
         frontOutput = shooterTable.getEntry("frontMotor Setpoint").getDouble(ShooterConstants.shooterSpeedFront);
         backOutput = shooterTable.getEntry("backMotor Setpoint").getDouble(ShooterConstants.shooterSpeedBack);
       }

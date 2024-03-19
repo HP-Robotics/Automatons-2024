@@ -42,6 +42,7 @@ public class DrivePointedToSpeakerCommand extends Command {
     m_joystick = joystick;
     m_triangleInterpolator = magicTriangles;
     addRequirements(drivesubsystem);
+    // JPW TODO - add limelight system to requirements?
   }
 
   // Called when the command is initially scheduled.

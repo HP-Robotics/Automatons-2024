@@ -35,6 +35,7 @@ public class CommandBlocks {
     m_snuffilatorSubsystem = snuffilatorSubsystem;
     m_poseEstimator = poseEstimator;
     m_triangleInterpolator = triangleInterpolator;
+    // JPW TODO - we don't do any sort of add requirements on any of the subsystems.  Maybe each command should do that?
   }
 
   public Command fireGamePieceCommand(double pivotAngle) {

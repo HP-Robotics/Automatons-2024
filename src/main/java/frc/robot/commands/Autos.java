@@ -30,6 +30,7 @@ public final class Autos {
   // ExampleCommand(subsystem));
   // }
 
+  // JPW TODO - we might want to add a bunch of @SuppressWarnings("unused") to make it shut up
   public static Command FourPiece(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
       ShooterSubsystem shooterSubsystem,
       TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem) {

@@ -45,9 +45,9 @@ public class ClimbSubsystem extends SubsystemBase {
 
     // climbMotorRight.follow(climbMotorLeft,true);
     climbMotorRight.setInverted(true);
-    climbMotorLeft.setSoftLimit(SoftLimitDirection.kForward, 130);
+    climbMotorLeft.setSoftLimit(SoftLimitDirection.kForward, 130);  // JPW TODO - magic number
     climbMotorLeft.setSoftLimit(SoftLimitDirection.kReverse, 0);
-    climbMotorRight.setSoftLimit(SoftLimitDirection.kForward, 130);
+    climbMotorRight.setSoftLimit(SoftLimitDirection.kForward, 130);  // JPW TODO - magic number
     climbMotorRight.setSoftLimit(SoftLimitDirection.kReverse, 0);
 
     climbMotorRight.enableSoftLimit(SoftLimitDirection.kForward, true);
@@ -87,7 +87,7 @@ public class ClimbSubsystem extends SubsystemBase {
   // }
 
   public boolean atBottom() {
-    if ((m_encoder.getVelocity() < Math.abs(0.1)) || (m_encoder.getVelocity() < 0)) {
+    if ((m_encoder.getVelocity() < Math.abs(0.1)) || (m_encoder.getVelocity() < 0)) { // JPW TODO - magic number
       return true;
     } else {
       return false;
