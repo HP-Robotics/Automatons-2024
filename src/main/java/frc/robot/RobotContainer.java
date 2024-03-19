@@ -109,6 +109,9 @@ public class RobotContainer {
       DataLogManager.start();
     }
 
+    m_compoundCommands = new CommandBlocks(m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
+        m_pivotSubsystem, m_snuffilatorSubsystem);
+
     if (SubsystemConstants.useDrive) {
       m_driveSubsystem.setDefaultCommand(
 
@@ -131,12 +134,8 @@ public class RobotContainer {
       intakeTrigger.whileTrue(m_compoundCommands.intakeButtonHold());
     }
     configureAutoSelector();
-    
-    m_compoundCommands = new CommandBlocks(m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
-        m_pivotSubsystem, m_snuffilatorSubsystem);
     configureNamedCommands();
     configureButtonBindings();
-
   }
 
   private void configureNamedCommands() {
