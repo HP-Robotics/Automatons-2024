@@ -89,7 +89,7 @@ public class SwerveModule {
         .withSupplyCurrentLimit(DriveConstants.currentLimit)
         .withSupplyCurrentLimitEnable(true)
         .withSupplyCurrentThreshold(DriveConstants.currentThreshold)
-        .withSupplyTimeThreshold(DriveConstants.currentTimeThreshold); // TODO: This isn't working we don't know why
+        .withSupplyTimeThreshold(DriveConstants.currentTimeThreshold);
 
     m_turningMotor.getConfigurator().apply(currentConfigsTurning);
     m_turningMotor.getConfigurator().apply(rampConfigsTurning);

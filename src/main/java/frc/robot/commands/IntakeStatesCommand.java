@@ -34,20 +34,20 @@ public class IntakeStatesCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_subsystem.beambreakState && !m_beamBreak.beamBroken()) {
-      m_subsystem.beambreakState = false;
+    if (m_subsystem.m_isLoaded && !m_beamBreak.beamBroken()) {
+      m_subsystem.m_isLoaded = false;
     }
-    if (!m_subsystem.beambreakState && m_beamBreak.beamBroken()) {
-      m_subsystem.beambreakState = true;
+    if (!m_subsystem.m_isLoaded && m_beamBreak.beamBroken()) {
+      m_subsystem.m_isLoaded = true;
     }
-    if (m_subsystem.intakeYuck) {
+    if (m_subsystem.m_isYucking) {
       m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed),
           IntakeConstants.vanguardSpeed);
-    } else if (m_subsystem.intakeFire) {
+    } else if (m_subsystem.m_isFiring) {
       m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed), 0);
-    } else if (m_subsystem.beambreakState) {
+    } else if (m_subsystem.m_isLoaded) {
       m_subsystem.runIntake(0, 0);
-    } else if (m_subsystem.intakeOn) {
+    } else if (m_subsystem.m_isIntaking) {
       m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed),
           IntakeConstants.vanguardSpeed);
     } else {

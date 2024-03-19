@@ -76,7 +76,7 @@ public final class Constants {
     public static final boolean useDataManager = true;
     public static final boolean useLimelight = true;
     public static final boolean usePivot = true;
-    public static final boolean useClimber = false; //TODO check if these work
+    public static final boolean useClimber = false;
     public static final boolean useTrigger = true;
     public static final boolean useSnuffilator = true;
   }
@@ -174,7 +174,7 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 5.0; // TODO look at these
+    public static final double kMaxSpeedMetersPerSecond = 5.0;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kFastAutoVelocity = 4.5;
@@ -217,7 +217,7 @@ public final class Constants {
 
   public static class ShooterConstants {
 
-    public static final double shooterSpeedFront = 50; // TODO: Is this correct? 50
+    public static final double shooterSpeedFront = 50; // 50
     public static final double shooterSpeedBack = 50; // 50
     public static final double shooterSpeedAmp = 12.5; // 15
 

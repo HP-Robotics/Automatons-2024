@@ -86,7 +86,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         });
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-      m_currentPose.setRobotPose(pose); // TODO: not working, AdvantageScope might say how to fix
+      m_currentPose.setRobotPose(pose);
     });
     PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
       m_targetPose.setRobotPose(pose);

@@ -28,7 +28,6 @@ public final class Autos {
   // ExampleCommand(subsystem));
   // }
   
-  // TODO: pass limelightSubsystem for note detection
 
   public static Command FourPiece(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
       ShooterSubsystem shooterSubsystem,
@@ -102,7 +101,6 @@ public final class Autos {
     return new SequentialCommandGroup(
         new FollowPathCommandOurs(drive, "Center Down Part 1"),
         commandBlocks.fireGamePieceCommand(PivotConstants.preloadFarAwayPosition));
-    // TODO: Load the last point from the path
   }
 
   public static Command BasicAmp(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,

@@ -103,7 +103,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     m_robotContainer.resetDriveOffsets();
     if (SubsystemConstants.useDrive) {
-      m_robotContainer.m_driveSubsystem.initializePoseEstimator(new Pose2d(0, 0, new Rotation2d(0)));
+      m_robotContainer.m_driveSubsystem.initializePoseEstimator(new Pose2d(0, 0, new Rotation2d(0))); //TODO when and where to initialize Pose Estimator(and reset odometrey)
       m_robotContainer.m_driveSubsystem
           .resetOdometry(LimelightConstants.aprilTagList[7].plus(new Transform2d(2, 0, new Rotation2d(0))));
     }
