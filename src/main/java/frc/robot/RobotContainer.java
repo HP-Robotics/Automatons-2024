@@ -248,7 +248,7 @@ public class RobotContainer {
               m_opJoystick)); //TODO change with pose estimator
       m_driveJoystick.axisGreaterThan(ControllerConstants.driveToNoteAxis, 0.1) //TODO change button, and put in if statement
           .whileTrue(new DriveToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_intakeSubsystem, m_triggerSubsystem,
-              m_driveJoystick));
+              m_driveJoystick, () -> {return m_driveJoystick.getRawAxis(2);}));
     }
 
     if (SubsystemConstants.useSnuffilator) {

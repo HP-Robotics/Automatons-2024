@@ -5,13 +5,13 @@
 package frc.robot.commands;
 
 import java.util.Optional;
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -27,24 +27,26 @@ public class DriveToNoteCommand extends Command {
   Boolean currentbeambreak = false;
   Boolean m_seenNote = false;
   Rotation2d m_noteHeading;
+  DoubleSupplier m_speed;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable intakeTable = inst.getTable("intake-table");
 
   public DriveToNoteCommand(DriveSubsystem driveSubsystem, LimelightSubsystem limelightSubsystem,
-      IntakeSubsystem intakeSubsystem, TriggerSubsystem triggerSubsystem) {
+      IntakeSubsystem intakeSubsystem, TriggerSubsystem triggerSubsystem, DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_driveSubsystem = driveSubsystem;
     m_limelightSubsystem = limelightSubsystem;
     m_intakeSubsystem = intakeSubsystem;
     m_triggerSubsystem = triggerSubsystem;
+    m_speed = speed;
     addRequirements(driveSubsystem);
   }
 
   public DriveToNoteCommand(DriveSubsystem driveSubsystem, LimelightSubsystem limelightSubsystem,
-      IntakeSubsystem intakeSubsystem, TriggerSubsystem triggerSubsystem, CommandJoystick joystick) {
+      IntakeSubsystem intakeSubsystem, TriggerSubsystem triggerSubsystem, CommandJoystick joystick, DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this(driveSubsystem, limelightSubsystem, intakeSubsystem, triggerSubsystem);
+    this(driveSubsystem, limelightSubsystem, intakeSubsystem, triggerSubsystem, speed);
     m_joystick = Optional.of(joystick);
   }
 
@@ -65,7 +67,7 @@ public class DriveToNoteCommand extends Command {
       m_noteHeading = new Rotation2d(Math.toRadians(-angle.get())).plus(m_driveSubsystem.getPose().getRotation());
     }
     if (m_seenNote == true) {
-      m_driveSubsystem.driveToNote(DriveConstants.driveToNoteSpeed, m_noteHeading);
+      m_driveSubsystem.driveToNote(m_speed.getAsDouble(), m_noteHeading);
     } else if (m_joystick.isPresent()) {
       m_driveSubsystem.driveWithJoystick(m_joystick.get());
     }
