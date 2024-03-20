@@ -62,7 +62,6 @@ public class DriveSubsystem extends SubsystemBase {
   private StatusSignal m_pGyroYaw = m_pGyro.getYaw();
   private StatusSignal m_pGyroRoll = m_pGyro.getRoll();
 
-  SwerveDriveOdometry m_odometry;
   PIDController rotationController;
   PoseEstimatorSubsystem m_poseEstimator;
 
@@ -75,16 +74,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_poseEstimator = poseEstimator;
     m_pGyro.setYaw(0);
     var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
-    m_odometry = new SwerveDriveOdometry(
-        DriveConstants.kDriveKinematics,
-        pigeonYaw,
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_backRight.getPosition(),
-            m_backLeft.getPosition()
 
-        });
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
       m_currentPose.setRobotPose(pose);
     });
@@ -109,14 +99,6 @@ public class DriveSubsystem extends SubsystemBase {
   public void updateOdometry() {
     var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
     // Update the odometry in the periodic block
-    m_odometry.update(
-        pigeonYaw,
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_backRight.getPosition(),
-            m_backLeft.getPosition()
-        });
     if (m_poseEstimator != null) {
       m_poseEstimator.updatePoseEstimator(pigeonYaw, new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
@@ -129,13 +111,13 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    m_field.setRobotPose(getPose());
-    drivePublisher.set(getPose());
-    driveTrainTable.putValue("Robot x", NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getX()));
-    driveTrainTable.putValue("Robot y", NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getY()));
+    if(getPose() != null){
+      m_field.setRobotPose(getPose());
+    }
+    driveTrainTable.putValue("Robot x", NetworkTableValue.makeDouble(m_poseEstimator.getPose().getX()));
+    driveTrainTable.putValue("Robot y", NetworkTableValue.makeDouble(m_poseEstimator.getPose().getY()));
     driveTrainTable.putValue("Robot theta",
-        NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getRotation().getDegrees()));
-
+        NetworkTableValue.makeDouble(m_poseEstimator.getPose().getRotation().getDegrees()));
     // TODO investigate why this takes so long
     m_frontLeft.updateShuffleboard();
     m_frontRight.updateShuffleboard();
@@ -194,7 +176,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void drivePointedTowardsAngle(CommandJoystick joystick, Rotation2d targetAngle) {
-    double rot = rotationController.calculate(m_odometry.getPoseMeters().getRotation().getRadians(),
+    double rot = rotationController.calculate(m_poseEstimator.getPose().getRotation().getRadians(),
         targetAngle.getRadians());
     drive(
         Math.signum(joystick.getRawAxis(1))
@@ -209,7 +191,7 @@ public class DriveSubsystem extends SubsystemBase {
         true);
 
     driveTrainTable.putValue("Rotation Current Angle",
-        NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getRotation().getDegrees()));
+        NetworkTableValue.makeDouble(m_poseEstimator.getPose().getRotation().getDegrees()));
     driveTrainTable.putValue("Rotation Target Angle", NetworkTableValue.makeDouble(targetAngle.getDegrees()));
     driveTrainTable.putValue("Rotation Power Input", NetworkTableValue.makeDouble(rot));
 
@@ -222,7 +204,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void driveToNote(double speed, Rotation2d noteAngle) {
-    double rot = rotationController.calculate(m_odometry.getPoseMeters().getRotation().getRadians(),
+    double rot = rotationController.calculate(m_poseEstimator.getPose().getRotation().getRadians(),
         noteAngle.getRadians());
     drive(
         speed * DriveConstants.kMaxSpeed,
@@ -231,7 +213,7 @@ public class DriveSubsystem extends SubsystemBase {
         false);
 
     driveTrainTable.putValue("Rotation Current Angle",
-        NetworkTableValue.makeDouble(m_odometry.getPoseMeters().getRotation().getDegrees()));
+        NetworkTableValue.makeDouble(m_poseEstimator.getPose().getRotation().getDegrees()));
     driveTrainTable.putValue("Rotation Target Angle", NetworkTableValue.makeDouble(noteAngle.getDegrees()));
     driveTrainTable.putValue("Rotation Power Input", NetworkTableValue.makeDouble(rot));
 
@@ -248,7 +230,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    return m_poseEstimator.getPose();
   }
 
   public ChassisSpeeds getCurrentspeeds() {
@@ -286,12 +268,13 @@ public class DriveSubsystem extends SubsystemBase {
     m_backLeft.resetOffset();
   }
 
-  public void resetOdometry(Pose2d pose) {
-    if (pose == null) {
+
+  public void resetPoseEstimator(Pose2d pose){
+    if (pose == null){
       return;
     }
     var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
-    m_odometry.resetPosition(
+    m_poseEstimator.resetPosition(
         pigeonYaw,
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
@@ -299,14 +282,16 @@ public class DriveSubsystem extends SubsystemBase {
             m_backRight.getPosition(),
             m_backLeft.getPosition()
         },
-        pose);
-    setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds()));
+        pose); 
+    // setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds()));
+
   }
 
   /**
    * Resets robot's conception of field orientation
    */
   public void resetYaw() {
-    m_pGyro.setYaw(0);
+    m_pGyro.setYaw(0);//TODO how do we want this to interact with pose estimator?
+    //add offset (and a wraparound to avoid the offset breaking things)
   }
 }

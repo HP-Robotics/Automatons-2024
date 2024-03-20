@@ -78,10 +78,10 @@ public class RobotContainer {
   public List<Pose2d> m_autoPath = new ArrayList<>();
 
   // The robot's subsystems and commands are defined here...
-  private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem(); //TODO add optional initializatoin
-  final DriveSubsystem m_driveSubsystem = SubsystemConstants.useDrive ? new DriveSubsystem(m_PoseEstimatorSubsystem) : null; 
+  private final PoseEstimatorSubsystem m_poseEstimatorSubsystem = new PoseEstimatorSubsystem(); //TODO add optional initializatoin
+  final DriveSubsystem m_driveSubsystem = SubsystemConstants.useDrive ? new DriveSubsystem(m_poseEstimatorSubsystem) : null; 
   private final LimelightSubsystem m_limelightSubsystem = SubsystemConstants.useLimelight
-      ? new LimelightSubsystem(m_PoseEstimatorSubsystem)
+      ? new LimelightSubsystem(m_poseEstimatorSubsystem)
       : null;
 
   private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem()
@@ -239,11 +239,11 @@ public class RobotContainer {
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
       m_driveJoystick.button(ControllerConstants.drivePointedToSpeakerButton)
-          .whileTrue(new DrivePointedToSpeakerCommand(m_driveSubsystem, m_limelightSubsystem, m_PoseEstimatorSubsystem, m_driveJoystick)); //TODO use pose estimator constant
+          .whileTrue(new DrivePointedToSpeakerCommand(m_driveSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem, m_driveJoystick)); //TODO use pose estimator constant
       m_driveJoystick.button(ControllerConstants.drivePointedToNoteButton)
           .whileTrue(new DrivePointedToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_driveJoystick));
       m_opJoystick.axisGreaterThan(2, 0.1)
-          .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem))
+          .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem))
           .whileTrue(new OperatorRumbleCommand(m_pivotSubsystem, m_driveSubsystem, m_limelightSubsystem, m_shooterSubsystem,
               m_opJoystick)); //TODO change with pose estimator
       m_driveJoystick.axisGreaterThan(ControllerConstants.driveToNoteAxis, 0.1) //TODO change button, and put in if statement
