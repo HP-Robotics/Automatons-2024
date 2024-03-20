@@ -71,14 +71,16 @@ public class FollowPathCommandOurs extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_driveSubsystem.resetOdometry(m_path.getPreviewStartingHolonomicPose());
-
     Optional<Alliance> ally = DriverStation.getAlliance();
     if (ally.isPresent()) {
       if (ally.get() == Alliance.Red) {
         // TODO: only reset odometry once
-        m_driveSubsystem.resetOdometry(GeometryUtil.flipFieldPose(m_path.getPreviewStartingHolonomicPose()));
+        m_driveSubsystem.resetPoseEstimator(GeometryUtil.flipFieldPose(m_path.getPreviewStartingHolonomicPose()));
+      } else {
+        m_driveSubsystem.resetPoseEstimator(m_path.getPreviewStartingHolonomicPose());
       }
+    } else {
+      m_driveSubsystem.resetPoseEstimator(m_path.getPreviewStartingHolonomicPose());
     }
     m_pathPlannerCommand.initialize();
   }

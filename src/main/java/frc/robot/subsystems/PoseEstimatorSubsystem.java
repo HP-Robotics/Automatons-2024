@@ -55,6 +55,12 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     }
   }
 
+  public void resetPosition(Rotation2d angle, SwerveModulePosition[] positions, Pose2d pose){
+    if (poseEstimator != null) {
+      poseEstimator.resetPosition(angle, positions, pose);
+    }
+  }
+
   public Pose2d getPose() {
     if (poseEstimator != null) {
       return poseEstimator.getEstimatedPosition();

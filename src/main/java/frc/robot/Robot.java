@@ -46,6 +46,9 @@ public class Robot extends TimedRobot {
     addPeriodic(() -> {
       m_robotContainer.m_driveSubsystem.updateOdometry();
     }, 0.01);
+    if (SubsystemConstants.useDrive) {
+      m_robotContainer.m_driveSubsystem.initializePoseEstimator(new Pose2d(0, 0, new Rotation2d(0))); //TODO when and where to initialize Pose Estimator(and reset odometrey)
+    }
   }
 
   /**
@@ -102,11 +105,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     m_robotContainer.resetDriveOffsets();
-    if (SubsystemConstants.useDrive) {
-      m_robotContainer.m_driveSubsystem.initializePoseEstimator(new Pose2d(0, 0, new Rotation2d(0))); //TODO when and where to initialize Pose Estimator(and reset odometrey)
-      m_robotContainer.m_driveSubsystem
-          .resetOdometry(LimelightConstants.aprilTagList[7].plus(new Transform2d(2, 0, new Rotation2d(0))));
-    }
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
