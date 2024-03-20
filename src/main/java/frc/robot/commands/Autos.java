@@ -37,7 +37,7 @@ public final class Autos {
     }
     return new SequentialCommandGroup(
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
-        new FollowPathCommandOurs(drive, "4 Piece part 1"),
+        new FollowPathCommandOurs(drive, "4 Piece part 1", true),
         commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position),
         new FollowPathCommandOurs(drive, "4 Piece part 2"),
         commandBlocks.fireGamePieceCommand(PivotConstants.note2Position),
@@ -55,7 +55,7 @@ public final class Autos {
         new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.subwooferPosition)),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
         new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.noteA1Position)),
-        new FollowPathCommandOurs(drive, "4 Piece Center Part 1"),
+        new FollowPathCommandOurs(drive, "4 Piece Center Part 1", true),
         commandBlocks.fireGamePieceCommand(PivotConstants.noteA1Position),
         new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.note2Position)),
         new FollowPathCommandOurs(drive, "4 Piece Center Part 2"),
@@ -72,7 +72,7 @@ public final class Autos {
       return null;
     }
     return new SequentialCommandGroup(
-        new FollowPathCommandOurs(drive, "Center Down Part 1"),
+        new FollowPathCommandOurs(drive, "Center Down Part 1", true),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
         new FollowPathCommandOurs(drive, "Center Down Part 2"),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
@@ -99,7 +99,7 @@ public final class Autos {
      * if we ever see that error return. -- Mentor Jeremy White
      */
     return new SequentialCommandGroup(
-        new FollowPathCommandOurs(drive, "Center Down Part 1"),
+        new FollowPathCommandOurs(drive, "Center Down Part 1", true),
         commandBlocks.fireGamePieceCommand(PivotConstants.preloadFarAwayPosition));
   }
 
@@ -109,7 +109,7 @@ public final class Autos {
       return null;
     }
     return new SequentialCommandGroup(
-        new FollowPathCommandOurs(drive, "Basic Amp Part 1"),
+        new FollowPathCommandOurs(drive, "Basic Amp Part 1", true),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
         new FollowPathCommandOurs(drive, "Basic Amp Part 2"),
         commandBlocks.startIntaking());
@@ -120,7 +120,7 @@ public final class Autos {
       return null;
     }
     return new SequentialCommandGroup(
-        new FollowPathCommandOurs(drive, "Grand Theft Auto Part 1"));
+        new FollowPathCommandOurs(drive, "Grand Theft Auto Part 1", true));
   }
 
   public static Command IntermediateAmp(CommandBlocks commandBlocks, DriveSubsystem drive,
@@ -129,7 +129,7 @@ public final class Autos {
       return null;
     }
     return new SequentialCommandGroup(
-        new FollowPathCommandOurs(drive, "Intermediate Amp Part 1"),
+        new FollowPathCommandOurs(drive, "Intermediate Amp Part 1", true),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
         new FollowPathCommandOurs(drive, "Intermediate Amp Part 2"),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
@@ -145,7 +145,7 @@ public final class Autos {
     }
     return new SequentialCommandGroup(
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
-        new FollowPathCommandOurs(drive, "3 Piece Center Part 1"),
+        new FollowPathCommandOurs(drive, "3 Piece Center Part 1", true),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
         new FollowPathCommandOurs(drive, "3 Piece Center Part 2"),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition));
@@ -155,7 +155,7 @@ public final class Autos {
     if (!SubsystemConstants.useDrive) {
       return null;
     } else {
-      return new FollowPathCommandOurs(drive, "Test Path 5 Meters");
+      return new FollowPathCommandOurs(drive, "Test Path 5 Meters", true);
     }
   }
 

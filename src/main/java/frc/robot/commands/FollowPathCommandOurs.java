@@ -24,21 +24,32 @@ public class FollowPathCommandOurs extends Command {
   Optional<LimelightSubsystem> m_limelightSubsystem = Optional.empty();
   String m_pathName;
   PathPlannerPath m_path;
+  Boolean m_resetPosition;
 
   public FollowPathCommand m_pathPlannerCommand;
   public PPHolonomicDriveController m_HolonomicDriveController;
 
-  public FollowPathCommandOurs(DriveSubsystem driveSubsystem, String pathName) {
+  public FollowPathCommandOurs(DriveSubsystem driveSubsystem, String pathName, Boolean resetPosition) {
     m_driveSubsystem = driveSubsystem;
     m_pathName = pathName;
+    m_resetPosition = resetPosition;
 
     m_path = PathPlannerPath.fromPathFile(pathName);
     m_pathPlannerCommand = PathCommand();
     addRequirements(driveSubsystem);
   }
 
+  public FollowPathCommandOurs(DriveSubsystem driveSubsystem, String pathName) {
+    this(driveSubsystem, pathName, false);
+  }
+
+  public FollowPathCommandOurs(DriveSubsystem driveSubsystem, LimelightSubsystem limelightSubsystem, String pathName, Boolean resetPosition) {
+    this(driveSubsystem, pathName, resetPosition);
+    m_limelightSubsystem = Optional.of(limelightSubsystem);
+  }
+
   public FollowPathCommandOurs(DriveSubsystem driveSubsystem, LimelightSubsystem limelightSubsystem, String pathName) {
-    this(driveSubsystem, pathName);
+    this(driveSubsystem, pathName, false);
     m_limelightSubsystem = Optional.of(limelightSubsystem);
   }
 
@@ -72,17 +83,19 @@ public class FollowPathCommandOurs extends Command {
   @Override
   public void initialize() {
     Optional<Alliance> ally = DriverStation.getAlliance();
-    if (ally.isPresent()) {
-      if (ally.get() == Alliance.Red) {
-        // TODO: only reset odometry once
-        m_driveSubsystem.resetPoseEstimator(GeometryUtil.flipFieldPose(m_path.getPreviewStartingHolonomicPose()));
+    if(m_resetPosition){
+      if (ally.isPresent()) {
+        if (ally.get() == Alliance.Red) {
+          // TODO: only reset odometry once
+          m_driveSubsystem.resetPoseEstimator(GeometryUtil.flipFieldPose(m_path.getPreviewStartingHolonomicPose()));
+        } else {
+          m_driveSubsystem.resetPoseEstimator(m_path.getPreviewStartingHolonomicPose());
+        }
       } else {
         m_driveSubsystem.resetPoseEstimator(m_path.getPreviewStartingHolonomicPose());
       }
-    } else {
-      m_driveSubsystem.resetPoseEstimator(m_path.getPreviewStartingHolonomicPose());
     }
-    m_pathPlannerCommand.initialize();
+      m_pathPlannerCommand.initialize();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
