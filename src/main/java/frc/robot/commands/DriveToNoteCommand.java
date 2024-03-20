@@ -22,7 +22,7 @@ public class DriveToNoteCommand extends Command {
   private final LimelightSubsystem m_limelightSubsystem;
   private final IntakeSubsystem m_intakeSubsystem;
   private final TriggerSubsystem m_triggerSubsystem;
-  private final CommandJoystick m_joystick;
+  private Optional<CommandJoystick> m_joystick = Optional.empty();
   Boolean pastBeamBroken = false;
   Boolean currentbeambreak = false;
   Boolean m_seenNote = false;
@@ -32,14 +32,20 @@ public class DriveToNoteCommand extends Command {
   NetworkTable intakeTable = inst.getTable("intake-table");
 
   public DriveToNoteCommand(DriveSubsystem driveSubsystem, LimelightSubsystem limelightSubsystem,
-      IntakeSubsystem intakeSubsystem, TriggerSubsystem triggerSubsystem, CommandJoystick joystick) {
+      IntakeSubsystem intakeSubsystem, TriggerSubsystem triggerSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_driveSubsystem = driveSubsystem;
     m_limelightSubsystem = limelightSubsystem;
     m_intakeSubsystem = intakeSubsystem;
     m_triggerSubsystem = triggerSubsystem;
-    m_joystick = joystick;
     addRequirements(driveSubsystem);
+  }
+
+  public DriveToNoteCommand(DriveSubsystem driveSubsystem, LimelightSubsystem limelightSubsystem,
+      IntakeSubsystem intakeSubsystem, TriggerSubsystem triggerSubsystem, CommandJoystick joystick) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this(driveSubsystem, limelightSubsystem, intakeSubsystem, triggerSubsystem);
+    m_joystick = Optional.of(joystick);
   }
 
   // Called when the command is initially scheduled.
@@ -60,8 +66,8 @@ public class DriveToNoteCommand extends Command {
     }
     if (m_seenNote == true) {
       m_driveSubsystem.driveToNote(DriveConstants.driveToNoteSpeed, m_noteHeading);
-    } else {
-      m_driveSubsystem.driveWithJoystick(m_joystick);
+    } else if (m_joystick.isPresent()) {
+      m_driveSubsystem.driveWithJoystick(m_joystick.get());
     }
     pastBeamBroken = currentbeambreak;
   }

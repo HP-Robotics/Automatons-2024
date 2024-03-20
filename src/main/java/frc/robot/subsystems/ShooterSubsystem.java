@@ -36,7 +36,7 @@ public class ShooterSubsystem extends SubsystemBase {
         .withSupplyCurrentLimit(ShooterConstants.currentLimit)
         .withSupplyCurrentLimitEnable(true)
         .withSupplyCurrentThreshold(ShooterConstants.currentThreshold)
-        .withSupplyTimeThreshold(ShooterConstants.currentTimeThreshold); // TODO: This isn't working we don't know why
+        .withSupplyTimeThreshold(ShooterConstants.currentTimeThreshold);
 
     m_frontMotor.getConfigurator().apply(config);
     m_backMotor.getConfigurator().apply(config);

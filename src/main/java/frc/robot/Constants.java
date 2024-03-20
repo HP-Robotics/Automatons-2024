@@ -48,8 +48,9 @@ public final class Constants {
     public static final int yuckButton = useXbox ? 4 : 2;
     public static final int climberButton = useXbox ? 10 : 10;
     public static final int intakeButton = useXbox ? 0 : 1;
-    public static final int drivePointedToSpeakerButton = useXbox ? 5 : 0;
-    public static final int drivePointedToNoteAxis = useXbox ? 2 : 0;
+    public static final int drivePointedToSpeakerButton = useXbox ? 6 : 0;
+    public static final int drivePointedToNoteButton = useXbox ? 5 : 0;
+    public static final int driveToNoteAxis = useXbox ? 2 : 0;
 
     // TODO: Add operator joystick constants
 
@@ -76,14 +77,14 @@ public final class Constants {
     public static final boolean useDataManager = true;
     public static final boolean useLimelight = true;
     public static final boolean usePivot = true;
-    public static final boolean useClimber = false; //TODO check if these work
+    public static final boolean useClimber = false;
     public static final boolean useTrigger = true;
     public static final boolean useSnuffilator = true;
   }
 
   public static class DriveConstants {
-    public static final double kMaxSpeed = 4.0; // meters per second
-    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
+    public static final double kMaxSpeed = 4.4; // meters per second 
+    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second //auto is 540
     public static final double kSlowSpeed = 2.0;
     public static final double kSlowAngularspeed = Math.PI / 2; // 1/4 rotation per second
 
@@ -91,7 +92,7 @@ public final class Constants {
     public static final double kEncoderResolution = 1.0;
 
     public static final double driveGearRatio = 6.75;
-    public static final double turningGearRatio = 15.429;
+    public static final double turningGearRatio = 540/35;
 
     public static final Translation2d kFrontLeftLocation = new Translation2d(0.308 - 0.038, 0.308);
     public static final Translation2d kFrontRightLocation = new Translation2d(0.308 - 0.038, -0.308);
@@ -137,7 +138,7 @@ public final class Constants {
     public static final double currentThreshold = 40.0;
     public static final double currentTimeThreshold = 0.04;
 
-    public static final double driveToNoteSpeed = 0.3;
+    public static final double driveToNoteSpeed = 0.8;
   }
 
   public static final class LimelightConstants {
@@ -167,15 +168,14 @@ public final class Constants {
   }
 
   public static final class PoseEstimatorConstants {
-    public static final Matrix<N3,N1> driveStandardDev = VecBuilder.fill(0.02,0.02,0.02);
-    public static final Matrix<N3,N1> statesStandardDev = VecBuilder.fill(0.001,0.001,0.001);
+    public static final Matrix<N3,N1> statesStandardDev = VecBuilder.fill(0.001,0.001,0.005);
     public static final double visionXStandardDev = 0.01;
     public static final double visionYStandardDev = 0.01;
-    public static final double visionHeadingStandardDev = 0.1;
+    public static final double visionHeadingStandardDev = 0.05;
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 5.0; // TODO look at these
+    public static final double kMaxSpeedMetersPerSecond = 5.0;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kFastAutoVelocity = 4.5;
@@ -218,7 +218,7 @@ public final class Constants {
 
   public static class ShooterConstants {
 
-    public static final double shooterSpeedFront = 50; // TODO: Is this correct? 50
+    public static final double shooterSpeedFront = 50; // 50
     public static final double shooterSpeedBack = 50; // 50
     public static final double shooterSpeedAmp = 12.5; // 15
 

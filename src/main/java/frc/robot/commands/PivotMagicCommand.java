@@ -19,10 +19,12 @@ import frc.robot.TriangleInterpolator;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.PoseEstimatorSubsystem;
 
 public class PivotMagicCommand extends Command {
   private final PivotSubsystem m_subsystem;
   private final LimelightSubsystem m_limelightSubsystem;
+  private final PoseEstimatorSubsystem m_poseEstimatorSubsystem;
   private Pose2d m_targetAprilTag;
   private TriangleInterpolator m_magicTriangles;
 
@@ -30,11 +32,13 @@ public class PivotMagicCommand extends Command {
   NetworkTable pivotTable = inst.getTable("pivot-table");
 
   /** Creates a new pivotMagicCommand. */
-  public PivotMagicCommand(PivotSubsystem subsystem, LimelightSubsystem limelightSubsystem, TriangleInterpolator magicTriangles) {
+  public PivotMagicCommand(PivotSubsystem subsystem, LimelightSubsystem limelightSubsystem, TriangleInterpolator magicTriangles, PoseEstimatorSubsystem poseEstimatorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
     m_limelightSubsystem = limelightSubsystem;
     m_magicTriangles = magicTriangles;
+    m_poseEstimatorSubsystem = poseEstimatorSubsystem;
+
     addRequirements(subsystem);
   }
 
@@ -56,9 +60,10 @@ public class PivotMagicCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_limelightSubsystem.sawAprilTag) {
-      if (true || m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag) < 3.6) {
-        //System.out.println("Getting Data");
+    if (m_limelightSubsystem.getDistanceTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag) < 3.6) {
+      m_subsystem.setPosition(m_subsystem.getMagicAngle(
+        m_limelightSubsystem.getDistanceTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag)));
+      //System.out.println("Getting Data");
         Optional<double[]> triangleData = m_magicTriangles.getTriangulatedOutput(m_limelightSubsystem.m_visionPose2d);
         //TODO: Code for reflect if red 
         if (triangleData.isPresent()) {
@@ -67,11 +72,10 @@ public class PivotMagicCommand extends Command {
         }
         // m_subsystem.setPosition(m_subsystem.getMagicAngle(
         //   m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag))); */
-      }
-      pivotTable.putValue(
-          "magicEncoderValue", NetworkTableValue.makeDouble(m_subsystem.getMagicAngle(
-              m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag))));
     }
+    pivotTable.putValue(
+        "magicEncoderValue", NetworkTableValue.makeDouble(m_subsystem.getMagicAngle(
+            m_limelightSubsystem.getDistanceTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag))));
   }
 
   // Called once the command ends or is interrupted.

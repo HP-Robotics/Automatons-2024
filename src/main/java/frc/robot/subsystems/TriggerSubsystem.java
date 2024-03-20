@@ -24,15 +24,15 @@ public class TriggerSubsystem extends SubsystemBase {
   public TalonFX m_triggerMotor;
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
   public BeamBreak m_beamBreak;
-  public int beambreakCount = 0;
+  public int beambreakCount = 0; //TODO remove for shooter v2?
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable triggerTable = inst.getTable("trigger-subsystem");
 
-  public boolean triggerOn = false; // intake button is pressed
-  public boolean triggerFire = false; // fire button is pressed
-  public boolean triggerYuck = false; // yuck button is pressed
-  public boolean beambreakState = false; // trigger beambreak sees note & intakeOn
+  public boolean m_isIntaking = false; // intake button is pressed
+  public boolean m_isFiring = false; // fire button is pressed
+  public boolean m_isYucking = false; // yuck button is pressed
+  public boolean m_isLoaded = false; // trigger beambreak sees note & intakeOn
 
   /** Creates a new ShooterSubsystem. */
   public TriggerSubsystem() {
@@ -65,10 +65,10 @@ public class TriggerSubsystem extends SubsystemBase {
         NetworkTableValue.makeDouble(m_triggerMotor.getVelocity().getValue()));
     triggerTable.putValue("Beam Broken", NetworkTableValue.makeBoolean(m_beamBreak.beamBroken()));
 
-    triggerTable.putValue("Trigger On", NetworkTableValue.makeBoolean(triggerOn));
-    triggerTable.putValue("Trigger Fire", NetworkTableValue.makeBoolean(triggerFire));
-    triggerTable.putValue("Trigger Yuck", NetworkTableValue.makeBoolean(triggerYuck));
-    triggerTable.putValue("Trigger BeamBreak", NetworkTableValue.makeBoolean(beambreakState));
+    triggerTable.putValue("Trigger On", NetworkTableValue.makeBoolean(m_isIntaking));
+    triggerTable.putValue("Trigger Fire", NetworkTableValue.makeBoolean(m_isFiring));
+    triggerTable.putValue("Trigger Yuck", NetworkTableValue.makeBoolean(m_isYucking));
+    triggerTable.putValue("Trigger BeamBreak", NetworkTableValue.makeBoolean(m_isLoaded));
 
   }
 
@@ -82,35 +82,35 @@ public class TriggerSubsystem extends SubsystemBase {
   }
 
   public void intakeButtonPressed() {
-    if (!triggerFire && !triggerYuck && !beambreakState) {
-      triggerOn = true;
+    if (!m_isFiring && !m_isYucking && !m_isLoaded) {
+      m_isIntaking = true;
     }
   }
 
   public void intakeButtonReleased() {
-    if (triggerOn) {
-      triggerOn = false;
+    if (m_isIntaking) {
+      m_isIntaking = false;
     }
   }
 
   public void yuckButtonPressed() {
-    if (!triggerFire) {
-      triggerYuck = true;
+    if (!m_isFiring) {
+      m_isYucking = true;
     }
   }
 
   public void yuckButtonReleased() {
-    triggerYuck = false;
+    m_isYucking = false;
   }
 
   public void fireButtonPressed() {
-    if (!triggerYuck) {
-      triggerFire = true;
+    if (!m_isYucking) {
+      m_isFiring = true;
     }
   }
 
   public void fireButtonReleased() {
-    triggerFire = false;
+    m_isFiring = false;
   }
 
 }

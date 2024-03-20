@@ -72,9 +72,6 @@ public class SwerveModule {
 
     // BaseStatusSignal.setUpdateFrequencyForAll(50,m_driveMotor.getClosedLoopError(),
     // m_driveMotor.getClosedLoopDerivativeOutput(),m_driveMotor.getClosedLoopIntegratedOutput(),m_driveMotor.getClosedLoopProportionalOutput(),m_driveMotor.getClosedLoopFeedForward());
-    if (SubsystemConstants.useDataManager) {
-      // SignalLogger.start();
-    }
 
     m_turningMotor = new TalonFX(turningMotorChannel, "CANivore");
     var turningConfig = new Slot0Configs();
@@ -92,7 +89,7 @@ public class SwerveModule {
         .withSupplyCurrentLimit(DriveConstants.currentLimit)
         .withSupplyCurrentLimitEnable(true)
         .withSupplyCurrentThreshold(DriveConstants.currentThreshold)
-        .withSupplyTimeThreshold(DriveConstants.currentTimeThreshold); // TODO: This isn't working we don't know why
+        .withSupplyTimeThreshold(DriveConstants.currentTimeThreshold);
 
     m_turningMotor.getConfigurator().apply(currentConfigsTurning);
     m_turningMotor.getConfigurator().apply(rampConfigsTurning);
@@ -157,6 +154,11 @@ public class SwerveModule {
 
   }
 
+  public double getModifiedAbsolute() {
+    double absValue = m_absEncoder.getAbsolutePosition()-m_absEncoderForward;
+    return absValue * 2 * Math.PI;
+  }
+
   public double motorValueToTicks(double position) {
     return position - m_turningOffset;
   }
@@ -166,6 +168,12 @@ public class SwerveModule {
   }
 
   public SwerveModulePosition getPosition() {
+    // driveTrainTable.putValue(m_name + "currentAngle", NetworkTableValue.makeDouble(ticksToRadians(motorValueToTicks(m_turningMotor.getRotorPosition().getValue()))));
+    // driveTrainTable.putValue(m_name + "testAngle", NetworkTableValue.makeDouble(getModifiedAbsolute()));
+    if(m_absEncoder.getAbsolutePosition() != 0){
+      return new SwerveModulePosition(
+        ticksToMeters(m_driveMotor.getRotorPosition().getValue()),new Rotation2d(getModifiedAbsolute()));
+    }
     return new SwerveModulePosition(
         ticksToMeters(m_driveMotor.getRotorPosition().getValue()),
         new Rotation2d(ticksToRadians(motorValueToTicks(m_turningMotor.getRotorPosition().getValue()))));
@@ -193,7 +201,6 @@ public class SwerveModule {
     // driveTrainTable.putValue(m_name + " Turn Power", NetworkTableValue.makeDouble(turnPower()));
     // driveTrainTable.putValue(m_name + " Turn Angle", NetworkTableValue.makeDouble(getEncoderAngle()));
     driveTrainTable.putValue(m_name + " Abs Encoder", NetworkTableValue.makeDouble(m_absEncoder.getAbsolutePosition()));
-
     // driveTrainTable.putValue(m_name + " Turning kD Proportion",
     //     NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopDerivativeOutput().getValue()));
     // driveTrainTable.putValue(m_name + " Turning kP Proportion",

@@ -49,7 +49,7 @@ public class PivotSubsystem extends SubsystemBase {
         .withSupplyCurrentLimit(PivotConstants.currentLimit)
         .withSupplyCurrentLimitEnable(true)
         .withSupplyCurrentThreshold(PivotConstants.currentThreshold)
-        .withSupplyTimeThreshold(PivotConstants.currentTimeThreshold); // TODO: This isn't working we don't know why
+        .withSupplyTimeThreshold(PivotConstants.currentTimeThreshold);
 
     pivotTable.putValue("kP", NetworkTableValue.makeDouble(PivotConstants.kP));
     pivotTable.putValue("kI", NetworkTableValue.makeDouble(PivotConstants.kI));

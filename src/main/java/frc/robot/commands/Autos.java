@@ -27,6 +27,7 @@ public final class Autos {
   // return Commands.sequence(subsystem.exampleMethodCommand(), new
   // ExampleCommand(subsystem));
   // }
+  
 
   public static Command FourPiece(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
       ShooterSubsystem shooterSubsystem,
@@ -100,7 +101,6 @@ public final class Autos {
     return new SequentialCommandGroup(
         new FollowPathCommandOurs(drive, "Center Down Part 1"),
         commandBlocks.fireGamePieceCommand(PivotConstants.preloadFarAwayPosition));
-    // TODO: Load the last point from the path
   }
 
   public static Command BasicAmp(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
@@ -166,6 +166,16 @@ public final class Autos {
       return new WaitCommand(0);
     }
     return commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition);
+  }
+
+  public static Command NoteCancelTest(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
+      ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem) {
+    if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
+      return null;
+    }
+    return new SequentialCommandGroup(
+        new FollowPathCommandOurs(drive, limelightSubsystem,  "Note Cancel Test"),
+        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem));
   }
 
   public static Command DoNothing() {

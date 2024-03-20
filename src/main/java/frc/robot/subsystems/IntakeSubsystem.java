@@ -25,10 +25,10 @@ public class IntakeSubsystem extends SubsystemBase {
   CANSparkMax m_vanguardRight = new CANSparkMax(IDConstants.vanguardRightID, CANSparkLowLevel.MotorType.kBrushless);
 
   public BeamBreak m_beambreak;
-  public boolean intakeOn = false; // intake button is pressed
-  public boolean intakeFire = false; // fire button is pressed
-  public boolean intakeYuck = false; // yuck button is pressed
-  public boolean beambreakState = false; // trigger beambreak sees note & intakeOn
+  public boolean m_isIntaking = false; // intake button is pressed
+  public boolean m_isFiring = false; // fire button is pressed
+  public boolean m_isYucking = false; // yuck button is pressed
+  public boolean m_isLoaded = false; // trigger beambreak sees note & intakeOn
 
   public double m_lastOutput = 0.0;
 
@@ -55,10 +55,10 @@ public class IntakeSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     intakeTable.putValue("Beam Broken", NetworkTableValue.makeBoolean(m_beambreak.beamBroken()));
-    intakeTable.putValue("Intake On", NetworkTableValue.makeBoolean(intakeOn));
-    intakeTable.putValue("Intake Fire", NetworkTableValue.makeBoolean(intakeFire));
-    intakeTable.putValue("Intake Yuck", NetworkTableValue.makeBoolean(intakeYuck));
-    intakeTable.putValue("Intake BeamBreak", NetworkTableValue.makeBoolean(beambreakState));
+    intakeTable.putValue("Intake On", NetworkTableValue.makeBoolean(m_isIntaking));
+    intakeTable.putValue("Intake Fire", NetworkTableValue.makeBoolean(m_isFiring));
+    intakeTable.putValue("Intake Yuck", NetworkTableValue.makeBoolean(m_isYucking));
+    intakeTable.putValue("Intake BeamBreak", NetworkTableValue.makeBoolean(m_isLoaded));
   }
 
   public void runIntake(double output, double vanguardOutput) {
@@ -74,35 +74,35 @@ public class IntakeSubsystem extends SubsystemBase {
   };
 
   public void intakeButtonPressed() {
-    if (!intakeFire && !intakeYuck && !beambreakState) {
-      intakeOn = true;
+    if (!m_isFiring && !m_isYucking && !m_isLoaded) {
+      m_isIntaking = true;
     }
   }
 
   public void intakeButtonReleased() {
-    if (intakeOn) {
-      intakeOn = false;
+    if (m_isIntaking) {
+      m_isIntaking = false;
     }
   }
 
   public void yuckButtonPressed() {
-    if (!intakeFire) {
-      intakeYuck = true;
+    if (!m_isFiring) {
+      m_isYucking = true;
     }
   }
 
   public void yuckButtonReleased() {
-    intakeYuck = false;
+    m_isYucking = false;
   }
 
   public void fireButtonPressed() {
-    if (!intakeYuck) {
-      intakeFire = true;
+    if (!m_isYucking) {
+      m_isFiring = true;
     }
   }
 
   public void fireButtonReleased() {
-    intakeFire = false;
+    m_isFiring = false;
   }
 
   public void runOnlyVanguard(double output) {

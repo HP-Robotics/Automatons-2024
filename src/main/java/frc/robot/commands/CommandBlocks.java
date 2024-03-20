@@ -39,10 +39,10 @@ public class CommandBlocks {
     return new ParallelDeadlineGroup(
         new WaitCommand(1).until(() -> {
           /* System.out.println("wait for shooter"); */return m_shooterSubsystem.atSpeed()
-              && m_pivotSubsystem.atPosition() && m_triggerSubsystem.beambreakState;
+              && m_pivotSubsystem.atPosition() && m_triggerSubsystem.m_isLoaded;
         })
             .andThen(fireButtonHold().until(() -> {
-              /* System.out.println("waiting for fire"); */return !m_triggerSubsystem.beambreakState;
+              /* System.out.println("waiting for fire"); */return !m_triggerSubsystem.m_isLoaded;
             })),
         new SetShooterCommand(m_shooterSubsystem, null, null),
         new InstantCommand(() -> m_pivotSubsystem.setPosition(pivotAngle))// ,
