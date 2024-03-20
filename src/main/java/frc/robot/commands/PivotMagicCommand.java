@@ -16,20 +16,23 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.PoseEstimatorSubsystem;
 
 public class PivotMagicCommand extends Command {
   private final PivotSubsystem m_subsystem;
   private final LimelightSubsystem m_limelightSubsystem;
+  private final PoseEstimatorSubsystem m_poseEstimatorSubsystem;
   private Pose2d m_targetAprilTag;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable pivotTable = inst.getTable("pivot-table");
 
   /** Creates a new pivotMagicCommand. */
-  public PivotMagicCommand(PivotSubsystem subsystem, LimelightSubsystem limelightSubsystem) {
+  public PivotMagicCommand(PivotSubsystem subsystem, LimelightSubsystem limelightSubsystem, PoseEstimatorSubsystem poseEstimatorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
     m_limelightSubsystem = limelightSubsystem;
+    m_poseEstimatorSubsystem = poseEstimatorSubsystem;
     addRequirements(subsystem);
   }
 
@@ -50,15 +53,13 @@ public class PivotMagicCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_limelightSubsystem.m_sawAprilTag) {
-      if (m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag) < 3.6) {
-        m_subsystem.setPosition(m_subsystem.getMagicAngle(
-          m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag)));
-      }
-      pivotTable.putValue(
-          "magicEncoderValue", NetworkTableValue.makeDouble(m_subsystem.getMagicAngle(
-              m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag))));
+    if (m_limelightSubsystem.getDistanceTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag) < 3.6) {
+      m_subsystem.setPosition(m_subsystem.getMagicAngle(
+        m_limelightSubsystem.getDistanceTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag)));
     }
+    pivotTable.putValue(
+        "magicEncoderValue", NetworkTableValue.makeDouble(m_subsystem.getMagicAngle(
+            m_limelightSubsystem.getDistanceTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag))));
   }
 
   // Called once the command ends or is interrupted.
