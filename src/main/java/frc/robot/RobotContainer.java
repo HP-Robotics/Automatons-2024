@@ -109,6 +109,9 @@ public class RobotContainer {
       DataLogManager.start();
     }
 
+    m_compoundCommands = new CommandBlocks(m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
+        m_pivotSubsystem, m_snuffilatorSubsystem);
+
     if (SubsystemConstants.useDrive) {
       m_driveSubsystem.setDefaultCommand(
 
@@ -131,12 +134,8 @@ public class RobotContainer {
       intakeTrigger.whileTrue(m_compoundCommands.intakeButtonHold());
     }
     configureAutoSelector();
-    
-    m_compoundCommands = new CommandBlocks(m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
-        m_pivotSubsystem, m_snuffilatorSubsystem);
     configureNamedCommands();
     configureButtonBindings();
-
   }
 
   private void configureNamedCommands() {
@@ -241,13 +240,13 @@ public class RobotContainer {
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
       m_driveJoystick.button(ControllerConstants.drivePointedToSpeakerButton)
           .whileTrue(new DrivePointedToSpeakerCommand(m_driveSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem, m_driveJoystick)); //TODO use pose estimator constant
-      m_driveJoystick.axisGreaterThan(ControllerConstants.drivePointedToNoteAxis, 0.1)
+      m_driveJoystick.button(ControllerConstants.drivePointedToNoteButton)
           .whileTrue(new DrivePointedToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_driveJoystick));
       m_opJoystick.axisGreaterThan(2, 0.1)
           .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem))
           .whileTrue(new OperatorRumbleCommand(m_pivotSubsystem, m_driveSubsystem, m_limelightSubsystem, m_shooterSubsystem,
               m_opJoystick)); //TODO change with pose estimator
-      m_driveJoystick.button(1) //TODO change button, and put in if statement
+      m_driveJoystick.axisGreaterThan(ControllerConstants.driveToNoteAxis, 0.1) //TODO change button, and put in if statement
           .whileTrue(new DriveToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_intakeSubsystem, m_triggerSubsystem,
               m_driveJoystick));
     }
