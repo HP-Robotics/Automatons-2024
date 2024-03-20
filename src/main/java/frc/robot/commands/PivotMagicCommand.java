@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.Optional;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -13,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import frc.robot.TriangleInterpolator;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
@@ -21,21 +24,24 @@ public class PivotMagicCommand extends Command {
   private final PivotSubsystem m_subsystem;
   private final LimelightSubsystem m_limelightSubsystem;
   private Pose2d m_targetAprilTag;
+  private TriangleInterpolator m_magicTriangles;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable pivotTable = inst.getTable("pivot-table");
 
   /** Creates a new pivotMagicCommand. */
-  public PivotMagicCommand(PivotSubsystem subsystem, LimelightSubsystem limelightSubsystem) {
+  public PivotMagicCommand(PivotSubsystem subsystem, LimelightSubsystem limelightSubsystem, TriangleInterpolator magicTriangles) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
     m_limelightSubsystem = limelightSubsystem;
+    m_magicTriangles = magicTriangles;
     addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    //System.out.println("Started Magic owo");
     if (DriverStation.getAlliance().isPresent()) {
       if (DriverStation.getAlliance().get() == Alliance.Blue) {
         m_targetAprilTag = LimelightConstants.aprilTagList[7];
@@ -51,9 +57,16 @@ public class PivotMagicCommand extends Command {
   @Override
   public void execute() {
     if (m_limelightSubsystem.sawAprilTag) {
-      if (m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag) < 3.6) {
-        m_subsystem.setPosition(m_subsystem.getMagicAngle(
-          m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag)));
+      if (true || m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag) < 3.6) {
+        //System.out.println("Getting Data");
+        Optional<double[]> triangleData = m_magicTriangles.getTriangulatedOutput(m_limelightSubsystem.m_visionPose2d);
+        //TODO: Code for reflect if red 
+        if (triangleData.isPresent()) {
+          //System.out.println("Recived Data");
+          m_subsystem.setPosition(triangleData.get()[2]);
+        }
+        // m_subsystem.setPosition(m_subsystem.getMagicAngle(
+        //   m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag))); */
       }
       pivotTable.putValue(
           "magicEncoderValue", NetworkTableValue.makeDouble(m_subsystem.getMagicAngle(

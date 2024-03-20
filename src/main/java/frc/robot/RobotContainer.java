@@ -303,7 +303,7 @@ public class RobotContainer {
       m_driveJoystick.axisGreaterThan(ControllerConstants.drivePointedToNoteAxis, 0.1)
           .whileTrue(new DrivePointedToNoteCommand(m_robotDrive, m_limelightSubsystem, m_driveJoystick));
       m_opJoystick.axisGreaterThan(2, 0.1)
-          .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem))
+          .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_magicInterpolator))
           .whileTrue(new OperatorRumbleCommand(m_pivotSubsystem, m_robotDrive, m_limelightSubsystem, m_shooterSubsystem,
               m_opJoystick));
       m_driveJoystick.button(1)
