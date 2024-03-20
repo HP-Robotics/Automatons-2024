@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.SubsystemConstants;
@@ -175,7 +176,7 @@ public final class Autos {
     }
     return new SequentialCommandGroup(
         new FollowPathCommandOurs(drive, limelightSubsystem,  "Note Cancel Test"),
-        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem));
+        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {return DriveConstants.driveToNoteSpeed;}));
   }
 
   public static Command DoNothing() {
