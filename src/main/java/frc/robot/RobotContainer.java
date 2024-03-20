@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -105,16 +106,18 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    m_magicInterpolator.addCalibratedPoint(0, 0, 0, 0, 0, 0);
-    m_magicInterpolator.addCalibratedPoint(10, 0, 255, 255, 0, 0);
-    m_magicInterpolator.addCalibratedPoint(5, 10, 5, 5, 5, 0);
-    m_magicInterpolator.addCalibratedPoint(1, 9, 190, 0, 0, 0);
+    TriangleInterpolator.addDuluthMagic(m_magicInterpolator);
+    m_magicInterpolator.addCalibratedPoint(2.0, 7.78, 0, 0, 0.374, 0);
+    double startTime = Timer.getFPGATimestamp();
     m_magicInterpolator.makeTriangles();
-    m_magicInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png", 1000, 500, 0, 16.54, 8.27, 0, 0, 0, 100);
-    m_magicInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png", 1000, 500, 0, 16.54, 8.27, 0, 1, 100, 255);
-    m_magicInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 1000, 500, 0, 16.54, 8.27, 0, 2, 0, 5);
-    m_magicInterpolator.draw("/home/lvuser/headingTestImage.png", 1000, 500, 0, 16.54, 8.27, 0, 3, 0, 1);
-
+    double triangleTime = Timer.getFPGATimestamp();
+    // m_magicInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png", 500, 500, 0, 8.27, 8.27, 0, 0, 40, 60);
+    // m_magicInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png", 500, 500, 0, 8.27, 8.27, 0, 1, 40, 60);
+    m_magicInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 100, 100, 0, 8.27, 8.27, 0, 2, 0.3, 0.5);
+    // m_magicInterpolator.draw("/home/lvuser/headingTestImage.png", 500, 500, 0, 8.27, 8.27, 0, 3, 0, 2 * Math.PI);
+    double TenKTesTime = Timer.getFPGATimestamp();
+    System.out.println(triangleTime-startTime);
+    System.out.println(TenKTesTime-triangleTime);
 
     System.out.println(Filesystem.getOperatingDirectory());
 
