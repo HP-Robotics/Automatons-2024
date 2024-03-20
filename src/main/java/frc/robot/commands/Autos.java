@@ -169,6 +169,16 @@ public final class Autos {
     return commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition);
   }
 
+  // public static Command AmpCenter4Piece(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
+  //     ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem) {
+  //   if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
+  //     return null;
+  //   }
+  //   return new SequentialCommandGroup(
+  //     new FollowPathCommandOurs(drive, null)
+  //   )
+  // }
+
   public static Command NoteCancelTest(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
       ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem) {
     if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {

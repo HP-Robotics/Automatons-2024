@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.62,
+        "y": 6.98
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.62,
+        "y": 6.98
+      },
+      "isLocked": true,
+      "linkedName": "AC 1A"
+    },
+    {
+      "anchor": {
+        "x": 8.007013068657967,
+        "y": 7.439065519461206
+      },
+      "prevControl": {
+        "x": 7.007013068657967,
+        "y": 7.439065519461206
+      },
+      "nextControl": null,
+      "isLocked": true,
+      "linkedName": "AC 1C"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.7,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "cancelIfNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 480.0,
+    "maxAngularAcceleration": 640.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Amp Center 4 Piece",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
