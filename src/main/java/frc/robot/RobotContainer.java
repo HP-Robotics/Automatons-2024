@@ -128,7 +128,7 @@ public class RobotContainer {
     }
 
     m_compoundCommands = new CommandBlocks(m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
-        m_pivotSubsystem, m_snuffilatorSubsystem);
+        m_pivotSubsystem, m_snuffilatorSubsystem, m_poseEstimatorSubsystem, m_magicInterpolator);
 
     if (SubsystemConstants.useDrive) {
       m_driveSubsystem.setDefaultCommand(
@@ -168,7 +168,7 @@ public class RobotContainer {
     }));
 
     if (SubsystemConstants.useShooter) {
-      NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, null, null));
+      NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_magicInterpolator));
       NamedCommands.registerCommand("stopShooter", new SetShooterCommand(m_shooterSubsystem, 0.0, 0.0));
     }
   }
@@ -191,7 +191,7 @@ public class RobotContainer {
           new ConditionalCommand(
               new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp,
                   ShooterConstants.shooterSpeedAmp),
-              new SetShooterCommand(m_shooterSubsystem, null, null),
+              new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_magicInterpolator),
               () -> {
                 return m_pivotSubsystem!=null && m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
               }));
@@ -206,7 +206,7 @@ public class RobotContainer {
       })
           .onTrue(new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp,
               ShooterConstants.shooterSpeedAmp))
-          .onFalse(new SetShooterCommand(m_shooterSubsystem, null, null));
+          .onFalse(new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_magicInterpolator));
     }
 
     if (SubsystemConstants.useClimber) {
