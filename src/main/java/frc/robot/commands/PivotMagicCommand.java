@@ -6,6 +6,8 @@ package frc.robot.commands;
 
 import java.util.Optional;
 
+import com.pathplanner.lib.util.GeometryUtil;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -32,7 +34,8 @@ public class PivotMagicCommand extends Command {
   NetworkTable pivotTable = inst.getTable("pivot-table");
 
   /** Creates a new pivotMagicCommand. */
-  public PivotMagicCommand(PivotSubsystem subsystem, LimelightSubsystem limelightSubsystem, TriangleInterpolator magicTriangles, PoseEstimatorSubsystem poseEstimatorSubsystem) {
+  public PivotMagicCommand(PivotSubsystem subsystem, LimelightSubsystem limelightSubsystem,
+      TriangleInterpolator magicTriangles, PoseEstimatorSubsystem poseEstimatorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
     m_limelightSubsystem = limelightSubsystem;
@@ -45,7 +48,7 @@ public class PivotMagicCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //System.out.println("Started Magic owo");
+    // System.out.println("Started Magic owo");
     if (DriverStation.getAlliance().isPresent()) {
       if (DriverStation.getAlliance().get() == Alliance.Blue) {
         m_targetAprilTag = LimelightConstants.aprilTagList[7];
@@ -60,22 +63,25 @@ public class PivotMagicCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_limelightSubsystem.getDistanceTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag) < 3.6) {
-      m_subsystem.setPosition(m_subsystem.getMagicAngle(
-        m_limelightSubsystem.getDistanceTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag)));
-      //System.out.println("Getting Data");
-        Optional<double[]> triangleData = m_magicTriangles.getTriangulatedOutput(m_limelightSubsystem.m_visionPose2d);
-        //TODO: Code for reflect if red 
-        if (triangleData.isPresent()) {
-          //System.out.println("Recived Data");
-          m_subsystem.setPosition(triangleData.get()[2]);
-        }
-        // m_subsystem.setPosition(m_subsystem.getMagicAngle(
-        //   m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d, m_targetAprilTag))); */
+    Pose2d currentPose = m_poseEstimatorSubsystem.getPose();
+    if (currentPose != null) {
+      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+        currentPose = GeometryUtil.flipFieldPose(currentPose);
+      }
+      // System.out.println("Getting Data");
+      Optional<double[]> triangleData = m_magicTriangles.getTriangulatedOutput(currentPose);
+      // TODO: Code for reflect if red
+      if (triangleData.isPresent()) {
+        // System.out.println("Recived Data");
+        m_subsystem.setPosition(triangleData.get()[2]);
+      }
+      // m_subsystem.setPosition(m_subsystem.getMagicAngle(
+      // m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d,
+      // m_targetAprilTag))); */
+      pivotTable.putValue(
+          "magicEncoderValue", NetworkTableValue.makeDouble(m_subsystem.getMagicAngle(
+              m_limelightSubsystem.getDistanceTo(currentPose, m_targetAprilTag))));
     }
-    pivotTable.putValue(
-        "magicEncoderValue", NetworkTableValue.makeDouble(m_subsystem.getMagicAngle(
-            m_limelightSubsystem.getDistanceTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag))));
   }
 
   // Called once the command ends or is interrupted.
