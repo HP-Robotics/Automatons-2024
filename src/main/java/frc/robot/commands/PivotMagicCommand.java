@@ -28,7 +28,7 @@ public class PivotMagicCommand extends Command {
   private final LimelightSubsystem m_limelightSubsystem;
   private final PoseEstimatorSubsystem m_poseEstimatorSubsystem;
   private Pose2d m_targetAprilTag;
-  private TriangleInterpolator m_magicTriangles;
+  private TriangleInterpolator m_triangleInterpolator;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable pivotTable = inst.getTable("pivot-table");
@@ -39,7 +39,7 @@ public class PivotMagicCommand extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
     m_limelightSubsystem = limelightSubsystem;
-    m_magicTriangles = magicTriangles;
+    m_triangleInterpolator = magicTriangles;
     m_poseEstimatorSubsystem = poseEstimatorSubsystem;
 
     addRequirements(subsystem);
@@ -69,7 +69,7 @@ public class PivotMagicCommand extends Command {
         currentPose = GeometryUtil.flipFieldPose(currentPose);
       }
       // System.out.println("Getting Data");
-      Optional<double[]> triangleData = m_magicTriangles.getTriangulatedOutput(currentPose);
+      Optional<double[]> triangleData = m_triangleInterpolator.getTriangulatedOutput(currentPose);
       // TODO: Code for reflect if red
       if (triangleData.isPresent()) {
         // System.out.println("Recived Data");

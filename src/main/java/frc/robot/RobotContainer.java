@@ -95,7 +95,7 @@ public class RobotContainer {
   private final SnuffilatorSubsystem m_snuffilatorSubsystem = SubsystemConstants.useSnuffilator
       ? new SnuffilatorSubsystem()
       : null;
-  private final TriangleInterpolator m_magicInterpolator = new TriangleInterpolator(4);
+  private final TriangleInterpolator m_triangleInterpolator = new TriangleInterpolator(4);
   private final PowerDistribution pdh = new PowerDistribution();
 
   private final SendableChooser<String> m_chooseAutos = new SendableChooser<>();
@@ -105,14 +105,14 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    TriangleInterpolator.addDuluthMagic(m_magicInterpolator);
-    m_magicInterpolator.addCalibratedPoint(2.0, 7.78, 0, 0, 0.374, 0);
+    TriangleInterpolator.addDuluthMagic(m_triangleInterpolator);
+    m_triangleInterpolator.addCalibratedPoint(2.0, 7.78, 0, 0, 0.374, 0);
     double startTime = Timer.getFPGATimestamp();
-    m_magicInterpolator.makeTriangles();
+    m_triangleInterpolator.makeTriangles();
     double triangleTime = Timer.getFPGATimestamp();
     // m_magicInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png", 500, 500, 0, 8.27, 8.27, 0, 0, 40, 60);
     // m_magicInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png", 500, 500, 0, 8.27, 8.27, 0, 1, 40, 60);
-    m_magicInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 100, 100, 0, 8.27, 8.27, 0, 2, 0.3, 0.5);
+    m_triangleInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 100, 100, 0, 8.27, 8.27, 0, 2, 0.3, 0.5);
     // m_magicInterpolator.draw("/home/lvuser/headingTestImage.png", 500, 500, 0, 8.27, 8.27, 0, 3, 0, 2 * Math.PI);
     double TenKTesTime = Timer.getFPGATimestamp();
     System.out.println(triangleTime-startTime);
@@ -128,7 +128,7 @@ public class RobotContainer {
     }
 
     m_compoundCommands = new CommandBlocks(m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
-        m_pivotSubsystem, m_snuffilatorSubsystem, m_poseEstimatorSubsystem, m_magicInterpolator);
+        m_pivotSubsystem, m_snuffilatorSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
 
     if (SubsystemConstants.useDrive) {
       m_driveSubsystem.setDefaultCommand(
@@ -168,7 +168,7 @@ public class RobotContainer {
     }));
 
     if (SubsystemConstants.useShooter) {
-      NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_magicInterpolator));
+      NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator));
       NamedCommands.registerCommand("stopShooter", new SetShooterCommand(m_shooterSubsystem, 0.0, 0.0));
     }
   }
@@ -191,7 +191,7 @@ public class RobotContainer {
           new ConditionalCommand(
               new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp,
                   ShooterConstants.shooterSpeedAmp),
-              new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_magicInterpolator),
+              new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator),
               () -> {
                 return m_pivotSubsystem!=null && m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
               }));
@@ -206,7 +206,7 @@ public class RobotContainer {
       })
           .onTrue(new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp,
               ShooterConstants.shooterSpeedAmp))
-          .onFalse(new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_magicInterpolator));
+          .onFalse(new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator));
     }
 
     if (SubsystemConstants.useClimber) {
@@ -261,7 +261,7 @@ public class RobotContainer {
       m_driveJoystick.button(ControllerConstants.drivePointedToNoteButton)
           .whileTrue(new DrivePointedToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_driveJoystick));
       m_opJoystick.axisGreaterThan(2, 0.1)
-          .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_magicInterpolator, m_poseEstimatorSubsystem))
+          .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator, m_poseEstimatorSubsystem))
           .whileTrue(new OperatorRumbleCommand(m_pivotSubsystem, m_driveSubsystem, m_limelightSubsystem, m_shooterSubsystem,
               m_opJoystick)); //TODO change with pose estimator
       m_driveJoystick.axisGreaterThan(ControllerConstants.driveToNoteAxis, 0.1) //TODO change button, and put in if statement
