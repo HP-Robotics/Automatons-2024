@@ -51,7 +51,6 @@ public class DriveSubsystem extends SubsystemBase {
   public boolean m_fieldRelative = true;
   public boolean m_pathplannerUsingNoteVision = false;
   public boolean m_pathPlannerCancelIfNoteSeen = false;
-  public boolean m_poseEstimatorCreated = false;
 
   public final Field2d m_field = new Field2d();
   public final Field2d m_currentPose = new Field2d();
@@ -63,7 +62,6 @@ public class DriveSubsystem extends SubsystemBase {
   private StatusSignal m_pGyroYaw = m_pGyro.getYaw();
   private StatusSignal m_pGyroRoll = m_pGyro.getRoll();
 
-  SwerveDriveOdometry m_odometry;
   PIDController rotationController;
   PoseEstimatorSubsystem m_poseEstimator;
 
@@ -76,16 +74,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_poseEstimator = poseEstimator;
     m_pGyro.setYaw(0);
     var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
-    m_odometry = new SwerveDriveOdometry(
-        DriveConstants.kDriveKinematics,
-        pigeonYaw,
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_backRight.getPosition(),
-            m_backLeft.getPosition()
 
-        });
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
       m_currentPose.setRobotPose(pose);
     });
@@ -110,14 +99,6 @@ public class DriveSubsystem extends SubsystemBase {
   public void updateOdometry() {
     var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
     // Update the odometry in the periodic block
-    m_odometry.update(
-        pigeonYaw,
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_backRight.getPosition(),
-            m_backLeft.getPosition()
-        });
     if (m_poseEstimator != null) {
       m_poseEstimator.updatePoseEstimator(pigeonYaw, new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
@@ -130,8 +111,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    m_field.setRobotPose(getPose());
-    drivePublisher.set(m_odometry.getPoseMeters());
+    if(getPose() != null){
+      m_field.setRobotPose(getPose());
+    }
     driveTrainTable.putValue("Robot x", NetworkTableValue.makeDouble(m_poseEstimator.getPose().getX()));
     driveTrainTable.putValue("Robot y", NetworkTableValue.makeDouble(m_poseEstimator.getPose().getY()));
     driveTrainTable.putValue("Robot theta",
@@ -276,7 +258,6 @@ public class DriveSubsystem extends SubsystemBase {
               m_backRight.getPosition(),
               m_backLeft.getPosition()
           }, pose);
-      m_poseEstimatorCreated = true;
     }
   }
 
@@ -287,22 +268,6 @@ public class DriveSubsystem extends SubsystemBase {
     m_backLeft.resetOffset();
   }
 
-  public void resetOdometry(Pose2d pose) {
-    if (pose == null) {
-      return;
-    }
-    var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
-    m_odometry.resetPosition(
-        pigeonYaw,
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_backRight.getPosition(),
-            m_backLeft.getPosition()
-        },
-        pose);
-    setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds()));
-  }
 
   public void resetPoseEstimator(Pose2d pose){
     if (pose == null){
