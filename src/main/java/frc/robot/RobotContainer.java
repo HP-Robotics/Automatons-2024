@@ -112,8 +112,8 @@ public class RobotContainer {
     double triangleTime = Timer.getFPGATimestamp();
     // m_magicInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png", 500, 500, 0, 8.27, 8.27, 0, 0, 40, 60);
     // m_magicInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png", 500, 500, 0, 8.27, 8.27, 0, 1, 40, 60);
-    m_triangleInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 100, 100, 0, 8.27, 8.27, 0, 2, 0.3, 0.5);
-    // m_magicInterpolator.draw("/home/lvuser/headingTestImage.png", 500, 500, 0, 8.27, 8.27, 0, 3, 0, 2 * Math.PI);
+    // m_triangleInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 100, 100, 0, 8.27, 8.27, 0, 2, 0.3, 0.5);
+    //m_triangleInterpolator.draw("/home/lvuser/headingTestImage.png", 500, 500, 0, 8.27, 8.27, 0, 3, (-Math.PI)/2, (Math.PI)/2);
     double TenKTesTime = Timer.getFPGATimestamp();
     System.out.println(triangleTime-startTime);
     System.out.println(TenKTesTime-triangleTime);
@@ -187,7 +187,7 @@ public class RobotContainer {
     }
 
     if (SubsystemConstants.useShooter) {
-      m_opJoystick.axisGreaterThan(3, 0.1).whileTrue(
+      m_opJoystick.axisGreaterThan(3, 0.1).onTrue(
           new ConditionalCommand(
               new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp,
                   ShooterConstants.shooterSpeedAmp),
@@ -257,7 +257,7 @@ public class RobotContainer {
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
       m_driveJoystick.button(ControllerConstants.drivePointedToSpeakerButton)
-          .whileTrue(new DrivePointedToSpeakerCommand(m_driveSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem, m_driveJoystick)); //TODO use pose estimator constant
+          .whileTrue(new DrivePointedToSpeakerCommand(m_driveSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem, m_driveJoystick, m_triangleInterpolator)); //TODO use pose estimator constant
       m_driveJoystick.button(ControllerConstants.drivePointedToNoteButton)
           .whileTrue(new DrivePointedToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_driveJoystick));
       m_opJoystick.axisGreaterThan(2, 0.1)
