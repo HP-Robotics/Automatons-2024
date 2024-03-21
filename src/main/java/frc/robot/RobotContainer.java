@@ -4,8 +4,10 @@
 
 package frc.robot;
 
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.SubsystemConstants;
@@ -80,8 +82,10 @@ public class RobotContainer {
   public List<Pose2d> m_autoPath = new ArrayList<>();
 
   // The robot's subsystems and commands are defined here...
-  private final PoseEstimatorSubsystem m_poseEstimatorSubsystem = new PoseEstimatorSubsystem(); //TODO add optional initializatoin
-  final DriveSubsystem m_driveSubsystem = SubsystemConstants.useDrive ? new DriveSubsystem(m_poseEstimatorSubsystem) : null; 
+  private final PoseEstimatorSubsystem m_poseEstimatorSubsystem = new PoseEstimatorSubsystem(); // TODO add optional
+                                                                                                // initializatoin
+  final DriveSubsystem m_driveSubsystem = SubsystemConstants.useDrive ? new DriveSubsystem(m_poseEstimatorSubsystem)
+      : null;
   private final LimelightSubsystem m_limelightSubsystem = SubsystemConstants.useLimelight
       ? new LimelightSubsystem(m_poseEstimatorSubsystem)
       : null;
@@ -110,18 +114,21 @@ public class RobotContainer {
     double startTime = Timer.getFPGATimestamp();
     m_triangleInterpolator.makeTriangles();
     double triangleTime = Timer.getFPGATimestamp();
-    // m_magicInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png", 500, 500, 0, 8.27, 8.27, 0, 0, 40, 60);
-    // m_magicInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png", 500, 500, 0, 8.27, 8.27, 0, 1, 40, 60);
-    // m_triangleInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 100, 100, 0, 8.27, 8.27, 0, 2, 0.3, 0.5);
-    //m_triangleInterpolator.draw("/home/lvuser/headingTestImage.png", 500, 500, 0, 8.27, 8.27, 0, 3, (-Math.PI)/2, (Math.PI)/2);
+    // m_magicInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png", 500,
+    // 500, 0, 8.27, 8.27, 0, 0, 40, 60);
+    // m_magicInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png", 500,
+    // 500, 0, 8.27, 8.27, 0, 1, 40, 60);
+    // m_triangleInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 100, 100,
+    // 0, 8.27, 8.27, 0, 2, 0.3, 0.5);
+    // m_triangleInterpolator.draw("/home/lvuser/headingTestImage.png", 500, 500, 0,
+    // 8.27, 8.27, 0, 3, (-Math.PI)/2, (Math.PI)/2);
     double TenKTesTime = Timer.getFPGATimestamp();
-    System.out.println(triangleTime-startTime);
-    System.out.println(TenKTesTime-triangleTime);
+    System.out.println(triangleTime - startTime);
+    System.out.println(TenKTesTime - triangleTime);
 
     System.out.println(Filesystem.getOperatingDirectory());
 
-    
-    pdh.setSwitchableChannel(true); //TODO are we still using this?
+    pdh.setSwitchableChannel(true); // TODO are we still using this?
 
     if (SubsystemConstants.useDataManager) {
       DataLogManager.start();
@@ -163,12 +170,22 @@ public class RobotContainer {
     NamedCommands.registerCommand("cancelIfNote", new InstantCommand(() -> {
       m_driveSubsystem.m_pathPlannerCancelIfNoteSeen = true;
     }));
-    NamedCommands.registerCommand("pointAtNote", new InstantCommand(() -> { 
+    NamedCommands.registerCommand("pointAtNote", new InstantCommand(() -> {
       m_driveSubsystem.m_pathplannerUsingNoteVision = true;
     }));
+    NamedCommands.registerCommand("pointAtSpeaker", new InstantCommand(() -> {
+      AutoConstants.pathplannerOveridePointToSpeaker = true;
+    }));
+    NamedCommands.registerCommand("stopOverrideRotations", new InstantCommand(() -> {
+      AutoConstants.pathplannerOveridePointToSpeaker = false;
+      m_driveSubsystem.m_pathplannerUsingNoteVision = false;
+    }));
+    NamedCommands.registerCommand("magicPivot", new PivotMagicCommand(
+        m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator, m_poseEstimatorSubsystem));
 
     if (SubsystemConstants.useShooter) {
-      NamedCommands.registerCommand("runShooter", new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator));
+      NamedCommands.registerCommand("runShooter",
+          new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator));
       NamedCommands.registerCommand("stopShooter", new SetShooterCommand(m_shooterSubsystem, 0.0, 0.0));
     }
   }
@@ -176,7 +193,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     if (SubsystemConstants.useDrive) {
-      m_driveJoystick.button(ControllerConstants.resetYawButton).whileTrue(new InstantCommand(m_driveSubsystem::resetYaw));
+      m_driveJoystick.button(ControllerConstants.resetYawButton)
+          .whileTrue(new InstantCommand(m_driveSubsystem::resetYaw));
       Trigger fieldRelativeTrigger = ControllerConstants.useXbox
           ? new Trigger(m_driveJoystick.axisGreaterThan(2, 0.1))
           : new Trigger(m_driveJoystick.button(ControllerConstants.fieldRelativeButton));
@@ -193,12 +211,12 @@ public class RobotContainer {
                   ShooterConstants.shooterSpeedAmp),
               new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator),
               () -> {
-                return m_pivotSubsystem!=null && m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
+                return m_pivotSubsystem != null && m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
               }));
-      if(SubsystemConstants.useTrigger){
+      if (SubsystemConstants.useTrigger) {
         m_opJoystick.button(3).whileTrue(m_compoundCommands.fireButtonHold());
       }
-    m_opJoystick.button(8).onTrue(new InstantCommand(m_shooterSubsystem::stopShooter));
+      m_opJoystick.button(8).onTrue(new InstantCommand(m_shooterSubsystem::stopShooter));
     }
     if (SubsystemConstants.useShooter && SubsystemConstants.usePivot) {
       new Trigger(() -> {
@@ -257,16 +275,21 @@ public class RobotContainer {
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
       m_driveJoystick.button(ControllerConstants.drivePointedToSpeakerButton)
-          .whileTrue(new DrivePointedToSpeakerCommand(m_driveSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem, m_driveJoystick, m_triangleInterpolator)); //TODO use pose estimator constant
+          .whileTrue(new DrivePointedToSpeakerCommand(m_driveSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem,
+              m_driveJoystick, m_triangleInterpolator)); // TODO use pose estimator constant
       m_driveJoystick.button(ControllerConstants.drivePointedToNoteButton)
           .whileTrue(new DrivePointedToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_driveJoystick));
       m_opJoystick.axisGreaterThan(2, 0.1)
-          .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator, m_poseEstimatorSubsystem))
-          .whileTrue(new OperatorRumbleCommand(m_pivotSubsystem, m_driveSubsystem, m_limelightSubsystem, m_shooterSubsystem,
-              m_opJoystick)); //TODO change with pose estimator
-      m_driveJoystick.axisGreaterThan(ControllerConstants.driveToNoteAxis, 0.1) //TODO change button, and put in if statement
-          .whileTrue(new DriveToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_intakeSubsystem, m_triggerSubsystem,
-              m_driveJoystick));
+          .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator,
+              m_poseEstimatorSubsystem))
+          .whileTrue(
+              new OperatorRumbleCommand(m_pivotSubsystem, m_driveSubsystem, m_limelightSubsystem, m_shooterSubsystem,
+                  m_opJoystick)); // TODO change with pose estimator
+      m_driveJoystick.axisGreaterThan(ControllerConstants.driveToNoteAxis, 0.1) // TODO change button, and put in if
+                                                                                // statement
+          .whileTrue(
+              new DriveToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_intakeSubsystem, m_triggerSubsystem,
+                  m_driveJoystick));
     }
 
     if (SubsystemConstants.useSnuffilator) {
@@ -331,6 +354,7 @@ public class RobotContainer {
       m_driveSubsystem.resetOffsets();
     }
   }
+
   public void configureAutoSelector() {
     m_chooseAutos.addOption("Center Down", "CenterDown");
     m_chooseAutos.addOption("Four Piece", "FourPiece");
@@ -349,12 +373,14 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
 
   }
+
   public Command getAutonomousCommand() {
     if (m_chooseAutos.getSelected() == "CenterDown") {
       return Autos.CenterDown(m_compoundCommands, m_driveSubsystem, m_shooterSubsystem);
     }
     if (m_chooseAutos.getSelected() == "FourPiece") {
-      return Autos.FourPiece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
+      return Autos.FourPiece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
+          m_triggerSubsystem,
           m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "FourPieceCenter") {
@@ -382,7 +408,8 @@ public class RobotContainer {
           m_pivotSubsystem);
     }
     if (m_chooseAutos.getSelected() == "NoteCancelTest") {
-      return Autos.NoteCancelTest(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_limelightSubsystem, m_triggerSubsystem);
+      return Autos.NoteCancelTest(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
+          m_limelightSubsystem, m_triggerSubsystem);
     }
     if (m_chooseAutos.getSelected() == "DoNothing") {
       return Autos.DoNothing();
@@ -445,6 +472,7 @@ public class RobotContainer {
       m_autoPath.addAll(path.getPathPoses());
     }
   }
+
   public Optional<Rotation2d> getRotationTargetOverride() {
     // Some condition that should decide if we want to override rotation
     Optional<Double> angle = m_limelightSubsystem.getNoteTX();
@@ -453,6 +481,28 @@ public class RobotContainer {
       // field relative rotation)
       return Optional.of(new Rotation2d(Math
           .toRadians(-angle.get())).plus(m_driveSubsystem.getPose().getRotation()));
+    } else if (AutoConstants.pathplannerOveridePointToSpeaker) {
+      Pose2d currentPose = m_poseEstimatorSubsystem.getPose();
+      if (currentPose == null) {
+        return Optional.empty();
+      }
+      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+        currentPose = GeometryUtil.flipFieldPose(currentPose);
+      }
+      Optional<double[]> triangleData = m_triangleInterpolator.getTriangulatedOutput(currentPose);
+      Rotation2d heading;
+      if (triangleData.isPresent()) {
+        heading = new Rotation2d(triangleData.get()[3]);
+      } else {
+        heading = new Rotation2d(Math
+            .toRadians(m_limelightSubsystem.getAngleTo(currentPose, LimelightConstants.aprilTagList[7]))
+            + Math.PI);
+      }
+      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+        heading = GeometryUtil.flipFieldRotation(heading);
+      }
+      return Optional.of(heading);
+
     } else {
       // return an empty optional when we don't want to override the path's
       // rotation

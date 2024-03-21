@@ -12,6 +12,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.GeometryUtil;
 
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -97,6 +98,7 @@ public class FollowPathCommandOurs extends Command {
     m_pathPlannerCommand.end(interrupted);
     m_driveSubsystem.m_pathplannerUsingNoteVision = false;
     m_driveSubsystem.m_pathPlannerCancelIfNoteSeen = false;
+    AutoConstants.pathplannerOveridePointToSpeaker = false;
   }
 
   // Returns true when the command should end.

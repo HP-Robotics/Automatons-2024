@@ -196,6 +196,8 @@ public final class Constants {
     public static final double additionalIntakeTime = 0.5;
     public static final double additionalShootTime = 0.3;
 
+    public static boolean pathplannerOveridePointToSpeaker = false; 
+
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
