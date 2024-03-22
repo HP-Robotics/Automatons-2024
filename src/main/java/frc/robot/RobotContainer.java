@@ -78,7 +78,7 @@ public class RobotContainer {
   public List<Pose2d> m_autoPath = new ArrayList<>();
 
   // The robot's subsystems and commands are defined here...
-  private final PoseEstimatorSubsystem m_poseEstimatorSubsystem = new PoseEstimatorSubsystem(); //TODO add optional initializatoin
+  final PoseEstimatorSubsystem m_poseEstimatorSubsystem = new PoseEstimatorSubsystem(); //TODO add optional initializatoin
   final DriveSubsystem m_driveSubsystem = SubsystemConstants.useDrive ? new DriveSubsystem(m_poseEstimatorSubsystem) : null; 
   private final LimelightSubsystem m_limelightSubsystem = SubsystemConstants.useLimelight
       ? new LimelightSubsystem(m_poseEstimatorSubsystem)
@@ -87,7 +87,7 @@ public class RobotContainer {
   private final ShooterSubsystem m_shooterSubsystem = SubsystemConstants.useShooter ? new ShooterSubsystem()
       : null;
   private final IntakeSubsystem m_intakeSubsystem = SubsystemConstants.useIntake ? new IntakeSubsystem() : null;
-  private final PivotSubsystem m_pivotSubsystem = SubsystemConstants.usePivot ? new PivotSubsystem() : null;
+  final PivotSubsystem m_pivotSubsystem = SubsystemConstants.usePivot ? new PivotSubsystem() : null;
   private final ClimbSubsystem m_climberSubsystem = SubsystemConstants.useClimber ? new ClimbSubsystem() : null;
   private final TriggerSubsystem m_triggerSubsystem = SubsystemConstants.useShooter ? new TriggerSubsystem() : null;
   private final SnuffilatorSubsystem m_snuffilatorSubsystem = SubsystemConstants.useSnuffilator

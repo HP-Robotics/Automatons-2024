@@ -45,6 +45,7 @@ public class CommandBlocks {
               /* System.out.println("waiting for fire"); */return !m_triggerSubsystem.m_isLoaded;
             })),
         new SetShooterCommand(m_shooterSubsystem, null, null),
+        intakeButtonHold(),
         new InstantCommand(() -> m_pivotSubsystem.setPosition(pivotAngle))// ,
     // new InstantCommand(() -> {System.out.println("firing game piece");})
     );
