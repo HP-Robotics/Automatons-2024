@@ -147,7 +147,10 @@ public class PivotSubsystem extends SubsystemBase {
       setPosition(m_absEncoder.getAbsolutePosition());// TODO constrain setpoint to within limit switches
     }
   }
-
+  
+  public void clearPIDError() {
+    m_pivotController.reset();
+  }
   public boolean getUsePID() {
     return m_usePID;
   }
