@@ -29,7 +29,7 @@ public final class Autos {
   // return Commands.sequence(subsystem.exampleMethodCommand(), new
   // ExampleCommand(subsystem));
   // }
-  
+
   public static Command FourPiece(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
       ShooterSubsystem shooterSubsystem,
       TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem) {
@@ -196,12 +196,45 @@ public final class Autos {
       new WaitCommand(1)
     );
   }
+
+  public static Command MiddleAllianceFourPiece(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
+      ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem, PoseEstimatorSubsystem poseEstimatorSubsystem) {
     if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
       return null;
     }
     return new SequentialCommandGroup(
-        new FollowPathCommandOurs(drive, limelightSubsystem,  "Note Cancel Test"),
-        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {return DriveConstants.driveToNoteSpeed;}));
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
+      new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 4 Piece Part 1", true),
+      new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+          return DriveConstants.driveToNoteSpeed;
+        }).withTimeout(1),
+      commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position).withTimeout(1.5),// TODO: Add magic to these
+      new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 4 Piece Part 2"),
+      new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+          return DriveConstants.driveToNoteSpeed;
+        }).withTimeout(1),
+      commandBlocks.fireGamePieceCommand(PivotConstants.note2Position).withTimeout(1.5),// TODO: Add magic to these
+      new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 4 Piece Part 3"),
+      new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+          return DriveConstants.driveToNoteSpeed;
+        }).withTimeout(1),
+      commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position).withTimeout(1.5),// TODO: Add magic to these
+      new WaitCommand(1)
+    );
+  }
+
+  public static Command NoteCancelTest(CommandBlocks commandBlocks, DriveSubsystem drive,
+      IntakeSubsystem intakeSubsystem,
+      ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem) {
+    if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter
+        || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
+      return null;
+    }
+    return new SequentialCommandGroup(
+        new FollowPathCommandOurs(drive, limelightSubsystem, "Note Cancel Test"),
+        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+          return DriveConstants.driveToNoteSpeed;
+        }));
   }
 
   public static Command DoNothing() {
