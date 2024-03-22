@@ -19,6 +19,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TriggerSubsystem;
 
@@ -29,7 +30,6 @@ public final class Autos {
   // ExampleCommand(subsystem));
   // }
   
-
   public static Command FourPiece(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
       ShooterSubsystem shooterSubsystem,
       TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem) {
@@ -169,18 +169,33 @@ public final class Autos {
     return commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition);
   }
 
-  // public static Command AmpCenter4Piece(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
-  //     ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem) {
-  //   if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
-  //     return null;
-  //   }
-  //   return new SequentialCommandGroup(
-  //     new FollowPathCommandOurs(drive, null)
-  //   )
-  // }
-
-  public static Command NoteCancelTest(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
-      ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem) {
+  public static Command AmpCenter4Piece(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
+      ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem, PoseEstimatorSubsystem poseEstimatorSubsystem) {
+    if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
+      return null;
+    }
+    return new SequentialCommandGroup(
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
+      new FollowPathCommandOurs(drive, limelightSubsystem, "Amp Center 4 Piece Part 1", true),
+      new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+          return DriveConstants.driveToNoteSpeed;
+        }).withTimeout(1),
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5), // TODO: Add magic to these
+      new FollowPathCommandOurs(drive, limelightSubsystem, "Amp Center 4 Piece Part 2"),
+      new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+          return DriveConstants.driveToNoteSpeed;
+        }).withTimeout(2),
+      new FollowPathCommandOurs(drive, "Amp Center 4 Piece Part 3"),
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
+      new FollowPathCommandOurs(drive, limelightSubsystem, "Amp Center 4 Piece Part 4"),
+      new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+          return DriveConstants.driveToNoteSpeed;
+        }).withTimeout(2),
+      new FollowPathCommandOurs(drive, "Amp Center 4 Piece Part 5"),
+      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
+      new WaitCommand(1)
+    );
+  }
     if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
       return null;
     }

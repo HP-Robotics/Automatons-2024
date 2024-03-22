@@ -325,6 +325,7 @@ public class RobotContainer {
     m_chooseAutos.addOption("Shoot Preload Far Away", "ShootPreloadFarAway");
     m_chooseAutos.addOption("Only Shoot", "OnlyShoot");
     m_chooseAutos.addOption("Note Cancel Test", "NoteCancelTest");
+    m_chooseAutos.addOption("Amp Center 4 Piece", "AmpCenter4Piece");
     m_chooseAutos.setDefaultOption("Do Nothing", "DoNothing");
     m_chooseAutos.onChange(this::drawSelectedAuto);
 
@@ -365,6 +366,9 @@ public class RobotContainer {
     }
     if (m_chooseAutos.getSelected() == "NoteCancelTest") {
       return Autos.NoteCancelTest(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_limelightSubsystem, m_triggerSubsystem);
+    }
+    if (m_chooseAutos.getSelected() == "AmpCenter4Piece") {
+      return Autos.AmpCenter4Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem);
     }
     if (m_chooseAutos.getSelected() == "DoNothing") {
       return Autos.DoNothing();

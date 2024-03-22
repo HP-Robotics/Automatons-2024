@@ -11,7 +11,7 @@
         "x": 5.107109781915527,
         "y": 6.971077125052112
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "AC Shoot"
     },
     {
@@ -39,7 +39,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.7,
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "parallel",
         "data": {
@@ -69,7 +69,7 @@
   "reversed": false,
   "folder": "Amp Center 4 Piece",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 25.124615892416358,
     "velocity": 0
   },
   "useDefaultConstraints": true
