@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.SnuffilatorConstants;
 
-public class SnuffilatorSubsystem extends SubsystemBase {
+public class SnuffilatorSubsystem extends SubsystemBase { // TODO: make this the correct spelling
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable snuffyTable = inst.getTable("snuffy-table");
   CANSparkMax m_snuffilator = new CANSparkMax(IDConstants.snuffilatorID, CANSparkLowLevel.MotorType.kBrushless);

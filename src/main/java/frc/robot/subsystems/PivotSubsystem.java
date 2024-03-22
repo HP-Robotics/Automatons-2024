@@ -169,6 +169,12 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public void setPosition(double position) { // TODO remove bad inputs
+    if(position < PivotConstants.minimumPosition) {
+      position = PivotConstants.minimumPosition;
+    }
+    if(position > PivotConstants.maximumPosition) {
+      position = PivotConstants.maximumPosition;
+    }
     m_pivotController.setSetpoint(position); // TODO constrain setpoint to within limit switches--make setpoint safe
                                              // method
     m_setpoint = position;
