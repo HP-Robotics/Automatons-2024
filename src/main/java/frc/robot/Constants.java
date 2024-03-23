@@ -214,8 +214,8 @@ public final class Constants {
     public static final int stallCurrentLimit = 3;
     public static final int freeCurrentLimit = 5;
 
-    public static final double snuffilatorInSpeed = 0.05;
-    public static final double snuffilatorOutSpeed = 0.08;
+    public static final double snuffilatorInSpeed = 0.15;
+    public static final double snuffilatorOutSpeed = 0.24;
   }
 
   public static class ShooterConstants {
