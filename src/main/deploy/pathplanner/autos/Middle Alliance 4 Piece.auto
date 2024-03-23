@@ -28,6 +28,18 @@
           "data": {
             "pathName": "Middle Alliance 4 Piece Part 3"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle Alliance 5 Piece Part 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle Alliance 5 Piece Part 5"
+          }
         }
       ]
     }

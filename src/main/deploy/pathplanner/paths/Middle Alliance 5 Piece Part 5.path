@@ -3,52 +3,34 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.77400395256631,
-        "y": 5.537862667174266
+        "x": 8.17275895834452,
+        "y": 4.085148692862707
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.753451351706809,
-        "y": 5.962707555400342
+        "x": 4.809092373529166,
+        "y": 3.685408605971607
       },
       "isLocked": false,
-      "linkedName": "MA 2A"
+      "linkedName": "MA 3C"
     },
     {
       "anchor": {
         "x": 2.77400395256631,
-        "y": 6.958021893251764
+        "y": 5.537862667174266
       },
       "prevControl": {
-        "x": 1.0634962396028529,
-        "y": 6.9244559273341935
+        "x": 3.9608634086626853,
+        "y": 5.5086133925236975
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MA 1A"
+      "linkedName": "MA 2A"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.65,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "cancelIfNote"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.5,
@@ -57,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -1.5911889809472424,
+    "rotation": -5.119766740569947,
     "rotateFast": false
   },
   "reversed": false,

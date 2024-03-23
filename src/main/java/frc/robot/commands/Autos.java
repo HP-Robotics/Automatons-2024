@@ -232,7 +232,13 @@ public final class Autos {
         }).withTimeout(1),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
         commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position).withTimeout(1.5), // TODO: Add magic to these
-        new WaitCommand(1));
+        new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 5 Piece Part 4"),
+        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+          return DriveConstants.driveToNoteSpeed;
+        }).withTimeout(1.5),
+        new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 5 Piece Part 5"),
+        new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
+        commandBlocks.fireGamePieceCommand(PivotConstants.podiumPosition));
   }
 
   public static Command NoteCancelTest(CommandBlocks commandBlocks, DriveSubsystem drive,
