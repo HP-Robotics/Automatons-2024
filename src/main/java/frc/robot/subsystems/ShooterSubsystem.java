@@ -46,7 +46,8 @@ public class ShooterSubsystem extends SubsystemBase {
     m_leftMotor.getConfigurator().apply(currentConfigs);
     m_rightMotor.getConfigurator().apply(currentConfigs);
 
-    m_leftMotor.setInverted(true);
+    m_leftMotor.setInverted(false);
+    m_rightMotor.setInverted(true);
 
     shooterTable.putValue("leftMotor Setpoint", NetworkTableValue.makeDouble(ShooterConstants.shooterSpeedLeft));
     shooterTable.putValue("rightMotor Setpoint", NetworkTableValue.makeDouble(ShooterConstants.shooterSpeedRight));
