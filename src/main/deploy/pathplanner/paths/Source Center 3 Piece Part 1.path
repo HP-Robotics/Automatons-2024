@@ -3,37 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.77400395256631,
-        "y": 5.537862667174266
+        "x": 0.727843583953202,
+        "y": 4.40494076237559
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.753451351706809,
-        "y": 5.962707555400342
+        "x": 0.8311910210486549,
+        "y": 0.8872279977368961
       },
       "isLocked": false,
-      "linkedName": "MA 2A"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.77400395256631,
-        "y": 6.958021893251764
+        "x": 8.04601210152217,
+        "y": 0.7799806573514784
       },
       "prevControl": {
-        "x": 1.0634962396028529,
-        "y": 6.9244559273341935
+        "x": 2.654395807600746,
+        "y": 0.7019825916166292
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MA 1A"
+      "linkedName": "SC C5"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.65,
+      "waypointRelativePos": 0.85,
       "command": {
         "type": "parallel",
         "data": {
@@ -57,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -1.5911889809472424,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Middle Alliance 4 Piece",
+  "folder": "Source Center 3 Piece",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -60.06848815949218,
     "velocity": 0
   },
   "useDefaultConstraints": true

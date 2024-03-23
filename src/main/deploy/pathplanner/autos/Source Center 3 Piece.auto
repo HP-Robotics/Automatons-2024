@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3601616480916998,
-      "y": 5.4935044960977635
+      "x": 0.727843583953202,
+      "y": 4.40494076237559
     },
-    "rotation": 0
+    "rotation": -60.14660409887898
   },
   "command": {
     "type": "sequential",
@@ -14,31 +14,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Alliance 4 Piece Part 1"
+            "pathName": "Source Center 3 Piece Part 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Alliance 4 Piece Part 2"
+            "pathName": "Source Center 3 Piece Part 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Alliance 4 Piece Part 3"
+            "pathName": "Source Center 3 Piece Part 3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Alliance 5 Piece Part 4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Middle Alliance 5 Piece Part 5"
+            "pathName": "Source Center 3 Piece Part 4"
           }
         }
       ]
