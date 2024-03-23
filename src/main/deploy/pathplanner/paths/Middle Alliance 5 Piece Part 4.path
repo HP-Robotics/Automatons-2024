@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.77400395256631,
+        "y": 6.958021893251764
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.243606396951512,
+        "y": 6.766332202498135
+      },
+      "isLocked": false,
+      "linkedName": "MA 1A"
+    },
+    {
+      "anchor": {
+        "x": 8.17275895834452,
+        "y": 4.085148692862707
+      },
+      "prevControl": {
+        "x": 2.147408380327451,
+        "y": 4.065649176428995
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "MA 3C"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.85,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "cancelIfNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 480.0,
+    "maxAngularAcceleration": 640.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.8303154862579802,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Middle Alliance 4 Piece",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

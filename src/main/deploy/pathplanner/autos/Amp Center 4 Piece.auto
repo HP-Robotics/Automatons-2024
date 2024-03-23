@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7224667370911348,
+      "y": 6.71
+    },
+    "rotation": 60.09612576917425
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Center 4 Piece Part 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Center 4 Piece Part 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Center 4 Piece Part 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Center 4 Piece Part 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Center 4 Piece Part 5"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

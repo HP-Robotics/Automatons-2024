@@ -211,8 +211,8 @@
             ],
             "content": {
               "_type": "Camera Stream",
-              "_source0": "camera_server://limelight-twoplus",
-              "_title": "limelight-twoplus",
+              "_source0": "camera_server://limelight-fight",
+              "_title": "limelight-fight",
               "_glyph": 148,
               "_showGlyph": false,
               "Crosshair/Show crosshair": true,

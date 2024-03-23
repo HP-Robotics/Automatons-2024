@@ -78,7 +78,7 @@ public class DriveToNoteCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     m_driveSubsystem.drive(0, 0, 0, true);
-    if (interrupted) {
+    if (interrupted && m_joystick.isPresent()) {
       m_intakeSubsystem.intakeButtonReleased();
       m_triggerSubsystem.intakeButtonReleased();
     }

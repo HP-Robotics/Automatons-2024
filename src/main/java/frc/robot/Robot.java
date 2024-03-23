@@ -90,8 +90,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    if(SubsystemConstants.usePivot) {
+      m_robotContainer.m_pivotSubsystem.clearPIDError();
+    }
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    if (SubsystemConstants.useDrive) {
+      m_robotContainer.resetDriveOffsets();
+    }
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

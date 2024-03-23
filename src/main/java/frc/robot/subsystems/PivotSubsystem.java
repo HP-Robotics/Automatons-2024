@@ -147,7 +147,10 @@ public class PivotSubsystem extends SubsystemBase {
       setPosition(m_absEncoder.getAbsolutePosition());// TODO constrain setpoint to within limit switches
     }
   }
-
+  
+  public void clearPIDError() {
+    m_pivotController.reset();
+  }
   public boolean getUsePID() {
     return m_usePID;
   }
@@ -166,6 +169,12 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public void setPosition(double position) { // TODO remove bad inputs
+    if(position < PivotConstants.minimumPosition) {
+      position = PivotConstants.minimumPosition;
+    }
+    if(position > PivotConstants.maximumPosition) {
+      position = PivotConstants.maximumPosition;
+    }
     m_pivotController.setSetpoint(position); // TODO constrain setpoint to within limit switches--make setpoint safe
                                              // method
     m_setpoint = position;

@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3601616480916998,
+      "y": 5.4935044960977635
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle Alliance 4 Piece Part 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle Alliance 4 Piece Part 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle Alliance 4 Piece Part 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle Alliance 5 Piece Part 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle Alliance 5 Piece Part 5"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
