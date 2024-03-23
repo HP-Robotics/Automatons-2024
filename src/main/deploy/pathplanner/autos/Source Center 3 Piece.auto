@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.727843583953202,
+      "y": 4.40494076237559
+    },
+    "rotation": -60.14660409887898
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source Center 3 Piece Part 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source Center 3 Piece Part 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source Center 3 Piece Part 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source Center 3 Piece Part 4"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
