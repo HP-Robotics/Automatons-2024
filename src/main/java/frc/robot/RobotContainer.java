@@ -479,6 +479,15 @@ public class RobotContainer {
     if (selection == "ShootPreloadFarAway") {
       autoFile = "Shoot Preload Far Away";
     }
+    if (selection == "AmpCenter4Piece") {
+      autoFile = "Amp Center 4 Piece";
+    }
+    if (selection == "MidAlliance4Piece") {
+      autoFile = "Middle Alliance 4 Piece";
+    }
+    if (selection == "SourceCenter3Piece") {
+      autoFile = "Source Center 3 Piece";
+    }
     if (autoFile != "") {
       Pose2d pose = PathPlannerAuto.getStaringPoseFromAutoFile(autoFile);
       Optional<Alliance> ally = DriverStation.getAlliance();
