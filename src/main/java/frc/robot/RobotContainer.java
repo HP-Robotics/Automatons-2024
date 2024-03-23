@@ -109,7 +109,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    // TriangleInterpolator.addDuluthMagic(m_triangleInterpolator);
+    TriangleInterpolator.addDuluthMagic(m_triangleInterpolator);
     // m_triangleInterpolator.addCalibratedPoint(2.0, 7.78, 0, 0, 0.374, 0);
     TriangleInterpolator.addv2Magic(m_triangleInterpolator);
     double startTime = Timer.getFPGATimestamp();
@@ -305,8 +305,11 @@ public class RobotContainer {
           .onFalse(m_compoundCommands.moveSnuffilator(false));
     }
 
-    if (SubsystemConstants.useShooter && SubsystemConstants.usePivot && SubsystemConstants.useDrive && m_poseEstimatorSubsystem.getPose() != null) {
+    if (SubsystemConstants.useShooter && SubsystemConstants.usePivot && SubsystemConstants.useDrive) {
       m_opJoystick.button(7).onTrue(new InstantCommand(() -> {
+        if( m_poseEstimatorSubsystem.getPose() == null) {
+          return;
+        }
         Pose2d robotPose = m_poseEstimatorSubsystem.getPose();
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
           robotPose = GeometryUtil.flipFieldPose(robotPose);
