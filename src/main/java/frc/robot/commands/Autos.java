@@ -246,6 +246,32 @@ public final class Autos {
         }));
   }
 
+  public static Command SourceCenter3Piece(CommandBlocks commandBlocks, DriveSubsystem drive,
+      IntakeSubsystem intakeSubsystem,
+      ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem,
+      PoseEstimatorSubsystem poseEstimatorSubsystem, TriangleInterpolator triangles) {
+    if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter
+        || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
+      return null;
+    }
+    return new SequentialCommandGroup(
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
+        new FollowPathCommandOurs(drive, limelightSubsystem, "Source Center 3 Piece Part 1", true),
+        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+          return DriveConstants.driveToNoteSpeed;
+        }).withTimeout(1.5),
+        new FollowPathCommandOurs(drive, limelightSubsystem, "Source Center 3 Piece Part 2"),
+        new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
+        commandBlocks.fireGamePieceCommand(PivotConstants.podiumPosition).withTimeout(1.5),
+        new FollowPathCommandOurs(drive, limelightSubsystem, "Source Center 3 Piece Part 3"),
+        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+          return DriveConstants.driveToNoteSpeed;
+        }).withTimeout(1.5),
+        new FollowPathCommandOurs(drive, limelightSubsystem, "Source Center 3 Piece Part 4"),
+        new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
+        commandBlocks.fireGamePieceCommand(PivotConstants.podiumPosition).withTimeout(1.5));
+  }
+
   public static Command DoNothing() {
     return new WaitCommand(10);
   }
