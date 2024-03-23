@@ -24,7 +24,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private TalonFX m_backMotor;
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable shooterTable = inst.getTable("shooter-subsystem");
+  public NetworkTable shooterTable = inst.getTable("shooter-subsystem");
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {

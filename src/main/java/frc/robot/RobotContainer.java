@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.xml.crypto.Data;
+
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -213,8 +215,12 @@ public class RobotContainer {
               }));
       if (SubsystemConstants.useTrigger) {
         m_opJoystick.button(3).whileTrue(m_compoundCommands.fireButtonHold());
+        m_opJoystick.button(3).onTrue(new InstantCommand(() -> {
+          DataLogManager.log("Shot taken from:  " + m_poseEstimatorSubsystem.getPose().toString());
+        }));
       }
       m_opJoystick.button(8).onTrue(new InstantCommand(m_shooterSubsystem::stopShooter));
+      m_opJoystick.povUp().onTrue(new SetShooterCommand(m_shooterSubsystem));
     }
     if (SubsystemConstants.useShooter && SubsystemConstants.usePivot) {
       new Trigger(() -> {
@@ -296,6 +302,23 @@ public class RobotContainer {
       })
           .onTrue(m_compoundCommands.moveSnuffilator(true))
           .onFalse(m_compoundCommands.moveSnuffilator(false));
+    }
+
+    if (SubsystemConstants.useShooter && SubsystemConstants.usePivot && SubsystemConstants.useDrive && m_poseEstimatorSubsystem.getPose() != null) {
+      m_opJoystick.button(7).onTrue(new InstantCommand(() -> {
+        Pose2d robotPose = m_poseEstimatorSubsystem.getPose();
+        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+          robotPose = GeometryUtil.flipFieldPose(robotPose);
+        } //TODO: Make this a Pose estimator function?
+        DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);", 
+          robotPose.getX(),
+          robotPose.getY(),
+          m_shooterSubsystem.shooterTable.getEntry("frontMotor Setpoint").getDouble(ShooterConstants.shooterSpeedFront),
+          m_shooterSubsystem.shooterTable.getEntry("backMotor Setpoint").getDouble(ShooterConstants.shooterSpeedBack),
+          m_pivotSubsystem.getCurrentPosition(),
+          robotPose.getRotation().getRadians()
+        ));
+      }));
     }
   }
 
