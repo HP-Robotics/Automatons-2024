@@ -218,8 +218,8 @@ public final class Constants {
 
   public static class ShooterConstants {
 
-    public static final double shooterSpeedFront = 50; // 50
-    public static final double shooterSpeedBack = 50; // 50
+    public static final double shooterSpeedLeft = 50; // 50
+    public static final double shooterSpeedRight = 50; // 50
     public static final double shooterSpeedAmp = 12.5; // 15
 
     public static final double shooterMotorskP = 0.4;
@@ -317,8 +317,8 @@ public final class Constants {
     public static final int vanguardRightID = 12;
 
     // Shooter is 30s
-    public static final int frontMotorID = 30;
-    public static final int backMotorID = 31;
+    public static final int leftMotorID = 30;
+    public static final int rightMotorID = 31;
     public static final int triggerMotorID = 32;
 
     // Pivot is 40s

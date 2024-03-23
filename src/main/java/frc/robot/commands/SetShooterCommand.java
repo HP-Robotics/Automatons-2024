@@ -12,15 +12,15 @@ import frc.robot.Constants.ShooterConstants;
 
 public class SetShooterCommand extends Command {
   private final ShooterSubsystem m_subsystem;
-  private final Double m_frontSpeed;
-  private final Double m_backSpeed;
+  private final Double m_leftSpeed;
+  private final Double m_rightSpeed;
 
   /** Creates a new ShooterCommand. */
-  public SetShooterCommand(ShooterSubsystem subsystem, Double frontSpeed, Double backSpeed) {
+  public SetShooterCommand(ShooterSubsystem subsystem, Double leftSpeed, Double rightSpeed) {
     // Use addRequirements() here to declare subsystem dependencies
     m_subsystem = subsystem;
-    m_frontSpeed = frontSpeed;
-    m_backSpeed = backSpeed;
+    m_leftSpeed = leftSpeed;
+    m_rightSpeed = rightSpeed;
     addRequirements(subsystem);
 
   }
@@ -32,17 +32,17 @@ public class SetShooterCommand extends Command {
   @Override
   public void initialize() {
     
-    double frontOutput = m_frontSpeed == null
-        ? shooterTable.getEntry("frontMotor Setpoint").getDouble(ShooterConstants.shooterSpeedFront)
-        : m_frontSpeed;
-    double backOutput = m_backSpeed == null
-        ? shooterTable.getEntry("backMotor Setpoint").getDouble(ShooterConstants.shooterSpeedBack)
-        : m_backSpeed;
-    if(frontOutput == 0 && backOutput == 0){
+    double leftOutput = m_leftSpeed == null
+        ? shooterTable.getEntry("leftMotor Setpoint").getDouble(ShooterConstants.shooterSpeedLeft)
+        : m_leftSpeed;
+    double rightOutput = m_rightSpeed == null
+        ? shooterTable.getEntry("rightMotor Setpoint").getDouble(ShooterConstants.shooterSpeedRight)
+        : m_rightSpeed;
+    if(leftOutput == 0 && rightOutput == 0){
       m_subsystem.stopShooter();
     }
     else{
-      m_subsystem.setShooter(frontOutput, backOutput);
+      m_subsystem.setShooter(leftOutput, rightOutput);
     }
   }
 

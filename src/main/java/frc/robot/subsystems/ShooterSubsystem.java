@@ -20,16 +20,16 @@ import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
-  private TalonFX m_frontMotor;
-  private TalonFX m_backMotor;
+  private TalonFX m_leftMotor;
+  private TalonFX m_rightMotor;
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable shooterTable = inst.getTable("shooter-subsystem");
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
-    m_frontMotor = new TalonFX(IDConstants.frontMotorID, "CANivore");
-    m_backMotor = new TalonFX(IDConstants.backMotorID, "CANivore");
+    m_leftMotor = new TalonFX(IDConstants.leftMotorID, "CANivore");
+    m_rightMotor = new TalonFX(IDConstants.rightMotorID, "CANivore");
     TalonFXConfiguration config = new TalonFXConfiguration();
     var rampConfigs = new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(ShooterConstants.rampTimeTo300s);
     var currentConfigs = new CurrentLimitsConfigs()
@@ -38,18 +38,18 @@ public class ShooterSubsystem extends SubsystemBase {
         .withSupplyCurrentThreshold(ShooterConstants.currentThreshold)
         .withSupplyTimeThreshold(ShooterConstants.currentTimeThreshold);
 
-    m_frontMotor.getConfigurator().apply(config);
-    m_backMotor.getConfigurator().apply(config);
+    m_leftMotor.getConfigurator().apply(config);
+    m_rightMotor.getConfigurator().apply(config);
 
-    m_frontMotor.getConfigurator().apply(rampConfigs);
-    m_backMotor.getConfigurator().apply(rampConfigs);
-    m_frontMotor.getConfigurator().apply(currentConfigs);
-    m_backMotor.getConfigurator().apply(currentConfigs);
+    m_leftMotor.getConfigurator().apply(rampConfigs);
+    m_rightMotor.getConfigurator().apply(rampConfigs);
+    m_leftMotor.getConfigurator().apply(currentConfigs);
+    m_rightMotor.getConfigurator().apply(currentConfigs);
 
-    m_frontMotor.setInverted(true);
+    m_leftMotor.setInverted(true);
 
-    shooterTable.putValue("frontMotor Setpoint", NetworkTableValue.makeDouble(ShooterConstants.shooterSpeedFront));
-    shooterTable.putValue("backMotor Setpoint", NetworkTableValue.makeDouble(ShooterConstants.shooterSpeedBack));
+    shooterTable.putValue("leftMotor Setpoint", NetworkTableValue.makeDouble(ShooterConstants.shooterSpeedLeft));
+    shooterTable.putValue("rightMotor Setpoint", NetworkTableValue.makeDouble(ShooterConstants.shooterSpeedRight));
     shooterTable.putValue("Shooter kV", NetworkTableValue.makeDouble(ShooterConstants.shooterMotorskV));
     shooterTable.putValue("Shooter kP", NetworkTableValue.makeDouble(ShooterConstants.shooterMotorskP));
     shooterTable.putValue("Shooter kI", NetworkTableValue.makeDouble(ShooterConstants.shooterMotorskI));
@@ -60,15 +60,15 @@ public class ShooterSubsystem extends SubsystemBase {
     slot0Configs.kP = ShooterConstants.shooterMotorskP;
     slot0Configs.kI = ShooterConstants.shooterMotorskI;
     slot0Configs.kD = ShooterConstants.shooterMotorskD;
-    m_frontMotor.getConfigurator().apply(slot0Configs);
-    m_backMotor.getConfigurator().apply(slot0Configs);
+    m_leftMotor.getConfigurator().apply(slot0Configs);
+    m_rightMotor.getConfigurator().apply(slot0Configs);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    shooterTable.putValue("frontMotor Velocity", NetworkTableValue.makeDouble(m_frontMotor.getVelocity().getValue()));
-    shooterTable.putValue("backMotor Velocity", NetworkTableValue.makeDouble(m_backMotor.getVelocity().getValue()));
+    shooterTable.putValue("leftMotor Velocity", NetworkTableValue.makeDouble(m_leftMotor.getVelocity().getValue()));
+    shooterTable.putValue("rightMotor Velocity", NetworkTableValue.makeDouble(m_rightMotor.getVelocity().getValue()));
     shooterTable.putValue("Shooter At Speed", NetworkTableValue.makeBoolean(this.atSpeed()));
 
     // Slot0Configs slot0Configs = new Slot0Configs();
@@ -76,30 +76,30 @@ public class ShooterSubsystem extends SubsystemBase {
     // slot0Configs.kP = ShooterConstants.shooterMotorskP;
     // slot0Configs.kI = ShooterConstants.shooterMotorskI;
     // slot0Configs.kD = ShooterConstants.shooterMotorskD;
-    // m_frontMotor.getConfigurator().apply(slot0Configs);
-    // m_backMotor.getConfigurator().apply(slot0Configs);
+    // m_leftMotor.getConfigurator().apply(slot0Configs);
+    // m_rightMotor.getConfigurator().apply(slot0Configs);
 
   }
 
   public void setShooter(double output1, double output2) {
     m_velocity.Slot = 0;
-    m_frontMotor.setControl(m_velocity.withVelocity(output1));
-    m_backMotor.setControl(m_velocity.withVelocity(output2));
-    // m_frontMotor.setControl(new DutyCycleOut(output1));
-    // m_backMotor.setControl(new DutyCycleOut(output2));
+    m_leftMotor.setControl(m_velocity.withVelocity(output1));
+    m_rightMotor.setControl(m_velocity.withVelocity(output2));
+    // m_leftMotor.setControl(new DutyCycleOut(output1));
+    // m_rightMotor.setControl(new DutyCycleOut(output2));
   }
 
   public boolean atSpeed() {
     // return true;
-    if (Math.abs(m_frontMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold
-        && Math.abs(m_backMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold) {
+    if (Math.abs(m_leftMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold
+        && Math.abs(m_rightMotor.getClosedLoopError().getValue()) < ShooterConstants.errorThreshold) {
       return true;
     }
     return false;
   }
 
   public void stopShooter() {
-    m_frontMotor.setControl(new DutyCycleOut(0));
-    m_backMotor.setControl(new DutyCycleOut(0));
+    m_leftMotor.setControl(new DutyCycleOut(0));
+    m_rightMotor.setControl(new DutyCycleOut(0));
   }
 }
