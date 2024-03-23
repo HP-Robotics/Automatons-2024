@@ -170,66 +170,69 @@ public final class Autos {
     return commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition);
   }
 
-  public static Command AmpCenter4Piece(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
-      ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem, 
-      PoseEstimatorSubsystem poseEstimatorSubsystem, TriangleInterpolator triangles) {
-    if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
-      return null;
-    }
-    return new SequentialCommandGroup(
-      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
-      new FollowPathCommandOurs(drive, limelightSubsystem, "Amp Center 4 Piece Part 1", true),
-      new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
-          return DriveConstants.driveToNoteSpeed;
-        }).withTimeout(1),
-      new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
-      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5), // TODO: Add magic to these
-      new FollowPathCommandOurs(drive, limelightSubsystem, "Amp Center 4 Piece Part 2"),
-      new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
-          return DriveConstants.driveToNoteSpeed;
-        }).withTimeout(2),
-      new FollowPathCommandOurs(drive, "Amp Center 4 Piece Part 3"),
-      new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
-      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
-      new FollowPathCommandOurs(drive, limelightSubsystem, "Amp Center 4 Piece Part 4"),
-      new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
-          return DriveConstants.driveToNoteSpeed;
-        }).withTimeout(2),
-      new FollowPathCommandOurs(drive, "Amp Center 4 Piece Part 5"),
-      new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
-      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
-      new WaitCommand(1)
-    );
-  }
-
-  public static Command MiddleAllianceFourPiece(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
+  public static Command AmpCenter4Piece(CommandBlocks commandBlocks, DriveSubsystem drive,
+      IntakeSubsystem intakeSubsystem,
       ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem,
       PoseEstimatorSubsystem poseEstimatorSubsystem, TriangleInterpolator triangles) {
-    if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
+    if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter
+        || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
       return null;
     }
     return new SequentialCommandGroup(
-      commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
-      new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 4 Piece Part 1", true),
-      new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
+        new FollowPathCommandOurs(drive, limelightSubsystem, "Amp Center 4 Piece Part 1", true),
+        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(1),
-      new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
-      commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position).withTimeout(1.5),// TODO: Add magic to these
-      new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 4 Piece Part 2"),
-      new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+        new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5), // TODO: Add magic to
+                                                                                               // these
+        new FollowPathCommandOurs(drive, limelightSubsystem, "Amp Center 4 Piece Part 2"),
+        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+          return DriveConstants.driveToNoteSpeed;
+        }).withTimeout(2),
+        new FollowPathCommandOurs(drive, "Amp Center 4 Piece Part 3"),
+        new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
+        new FollowPathCommandOurs(drive, limelightSubsystem, "Amp Center 4 Piece Part 4"),
+        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+          return DriveConstants.driveToNoteSpeed;
+        }).withTimeout(2),
+        new FollowPathCommandOurs(drive, "Amp Center 4 Piece Part 5"),
+        new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
+        new WaitCommand(1));
+  }
+
+  public static Command MiddleAllianceFourPiece(CommandBlocks commandBlocks, DriveSubsystem drive,
+      IntakeSubsystem intakeSubsystem,
+      ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem,
+      PoseEstimatorSubsystem poseEstimatorSubsystem, TriangleInterpolator triangles) {
+    if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter
+        || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
+      return null;
+    }
+    return new SequentialCommandGroup(
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
+        new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 4 Piece Part 1", true),
+        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(1),
-      new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
-      commandBlocks.fireGamePieceCommand(PivotConstants.note2Position).withTimeout(1.5),// TODO: Add magic to these
-      new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 4 Piece Part 3"),
-      new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+        new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
+        commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position).withTimeout(1.5), // TODO: Add magic to these
+        new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 4 Piece Part 2"),
+        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(1),
-      new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
-      commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position).withTimeout(1.5),// TODO: Add magic to these
-      new WaitCommand(1)
-    );
+        new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
+        commandBlocks.fireGamePieceCommand(PivotConstants.note2Position).withTimeout(1.5), // TODO: Add magic to these
+        new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 4 Piece Part 3"),
+        new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
+          return DriveConstants.driveToNoteSpeed;
+        }).withTimeout(1),
+        new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
+        commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position).withTimeout(1.5), // TODO: Add magic to these
+        new WaitCommand(1));
   }
 
   public static Command NoteCancelTest(CommandBlocks commandBlocks, DriveSubsystem drive,
