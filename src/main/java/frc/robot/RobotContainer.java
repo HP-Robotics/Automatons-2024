@@ -109,8 +109,9 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    TriangleInterpolator.addDuluthMagic(m_triangleInterpolator);
-    m_triangleInterpolator.addCalibratedPoint(2.0, 7.78, 0, 0, 0.374, 0);
+    // TriangleInterpolator.addDuluthMagic(m_triangleInterpolator);
+    // m_triangleInterpolator.addCalibratedPoint(2.0, 7.78, 0, 0, 0.374, 0);
+    TriangleInterpolator.addv2Magic(m_triangleInterpolator);
     double startTime = Timer.getFPGATimestamp();
     m_triangleInterpolator.makeTriangles();
     double triangleTime = Timer.getFPGATimestamp();

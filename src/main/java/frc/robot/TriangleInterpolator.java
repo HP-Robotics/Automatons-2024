@@ -158,6 +158,10 @@ public class TriangleInterpolator {
     return Optional.empty();
   }
 
+  public static void addv2Magic(TriangleInterpolator m_triangleInterpolator) {
+    
+  }
+
   public static void addDuluthMagic(TriangleInterpolator m_triangleInterpolator) {
     m_triangleInterpolator.addCalibratedPoint(1.41314058, 5.277596247, 50.0, 50.0, 0.4299444444, 0.018391);
     m_triangleInterpolator.addCalibratedPoint(2.63832003, 4.041083114, 50.0, 50.0, 0.3752, -0.5839633072);
