@@ -135,6 +135,13 @@ public class TriangleInterpolator {
     }
   }
 
+  /**
+   * 
+   * @param robotPose
+   * @return Optional double array where 0th element is left shooter speed, 1st is
+   *         right shooter speed, 2nd is pivot angle, 3rd is heading
+   * 
+   */
   public Optional<double[]> getTriangulatedOutput(Pose2d robotPose) {
     List<DelaunayTriangle> triangles = m_pointSet.getTriangles();
     for (DelaunayTriangle triangle : triangles) {
@@ -159,7 +166,7 @@ public class TriangleInterpolator {
   }
 
   public static void addv2Magic(TriangleInterpolator m_triangleInterpolator) {
-    
+
   }
 
   public static void addDuluthMagic(TriangleInterpolator m_triangleInterpolator) {
