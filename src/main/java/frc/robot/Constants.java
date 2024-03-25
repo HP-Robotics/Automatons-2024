@@ -33,6 +33,18 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
 public final class Constants {
 
+  public static class SubsystemConstants {
+    public static final boolean useDrive = true;
+    public static final boolean useIntake = true;
+    public static final boolean useShooter = true;
+    public static final boolean useDataManager = true;
+    public static final boolean useLimelight = true;
+    public static final boolean usePivot = true;
+    public static final boolean useClimber = false;
+    public static final boolean useTrigger = true;
+    public static final boolean useSnuffilator = true;
+  }
+
   public static class ControllerConstants {
     public static final boolean useXbox = true;
 
@@ -68,18 +80,6 @@ public final class Constants {
         // return 0;
       }
     }
-  }
-
-  public static class SubsystemConstants {
-    public static final boolean useDrive = true;
-    public static final boolean useIntake = true;
-    public static final boolean useShooter = true;
-    public static final boolean useDataManager = true;
-    public static final boolean useLimelight = true;
-    public static final boolean usePivot = true;
-    public static final boolean useClimber = false;
-    public static final boolean useTrigger = true;
-    public static final boolean useSnuffilator = true;
   }
 
   public static class DriveConstants {
