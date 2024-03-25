@@ -30,7 +30,8 @@ public class CommandBlocks {
 
   public CommandBlocks(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem,
       ShooterSubsystem shooterSubsystem, TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem,
-      SnuffilatorSubsystem snuffilatorSubsystem, LimelightSubsystem limelightSubsystem, PoseEstimatorSubsystem poseEstimator, TriangleInterpolator triangleInterpolator) {
+      SnuffilatorSubsystem snuffilatorSubsystem, LimelightSubsystem limelightSubsystem,
+      PoseEstimatorSubsystem poseEstimator, TriangleInterpolator triangleInterpolator) {
     m_driveSubsystem = driveSubsystem;
     m_intakeSubsystem = intakeSubsystem;
     m_shooterSubsystem = shooterSubsystem;
@@ -47,19 +48,20 @@ public class CommandBlocks {
         || m_pivotSubsystem == null) {
       return new WaitCommand(0);
     }
-    return new ParallelDeadlineGroup(
-        new WaitCommand(1).until(() -> {
-          /* System.out.println("wait for shooter"); */return m_shooterSubsystem.atSpeed()
-              && m_pivotSubsystem.atPosition() && m_triggerSubsystem.m_isLoaded;
-        })
-            .andThen(fireButtonHold().until(() -> {
-              /* System.out.println("waiting for fire"); */return !m_triggerSubsystem.m_isLoaded;
-            })),
+    return new ParallelCommandGroup(
         new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator),
-        intakeButtonHold(),
-        new InstantCommand(() -> m_pivotSubsystem.setPosition(pivotAngle))// ,
-    // new InstantCommand(() -> {System.out.println("firing game piece");})
-    );
+        new InstantCommand(() -> m_pivotSubsystem.setPosition(pivotAngle)))
+        .andThen(
+            new ParallelDeadlineGroup(
+                new WaitCommand(1).until(() -> {
+                  /* System.out.println("wait for shooter"); */return m_shooterSubsystem.atSpeed()
+                      && m_pivotSubsystem.atPosition() && m_triggerSubsystem.m_isLoaded;
+                }).andThen(fireButtonHold().until(() -> {
+                  /* System.out.println("waiting for fire"); */return !m_triggerSubsystem.m_isLoaded;
+                })),
+                intakeButtonHold()
+            // new InstantCommand(() -> {System.out.println("firing game piece");})
+            ));
   }
 
   public Command intakeButtonHold() {
@@ -122,14 +124,12 @@ public class CommandBlocks {
   public Command followPathWithPresetShot(String pathName, boolean useLimelight, boolean resetPosition) {
     if (useLimelight) {
       return new ParallelCommandGroup(
-        new FollowPathCommandOurs(m_driveSubsystem, m_limelightSubsystem, pathName, resetPosition),
-        new PresetShotForPathCommand(m_pivotSubsystem, m_shooterSubsystem, m_triangleInterpolator, pathName)
-      );
+          new FollowPathCommandOurs(m_driveSubsystem, m_limelightSubsystem, pathName, resetPosition),
+          new PresetShotForPathCommand(m_pivotSubsystem, m_shooterSubsystem, m_triangleInterpolator, pathName));
     } else {
       return new ParallelCommandGroup(
-        new FollowPathCommandOurs(m_driveSubsystem, pathName, resetPosition),
-        new PresetShotForPathCommand(m_pivotSubsystem, m_shooterSubsystem, m_triangleInterpolator, pathName)
-      );
+          new FollowPathCommandOurs(m_driveSubsystem, pathName, resetPosition),
+          new PresetShotForPathCommand(m_pivotSubsystem, m_shooterSubsystem, m_triangleInterpolator, pathName));
     }
   }
 
