@@ -136,7 +136,7 @@ public class RobotContainer {
     }
 
     m_compoundCommands = new CommandBlocks(m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
-        m_pivotSubsystem, m_snuffilatorSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
+        m_pivotSubsystem, m_snuffilatorSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
 
     if (SubsystemConstants.useDrive) {
       m_driveSubsystem.setDefaultCommand(

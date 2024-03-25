@@ -10,6 +10,7 @@ import frc.robot.TriangleInterpolator;
 import frc.robot.Constants.SnuffilatorConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -17,22 +18,26 @@ import frc.robot.subsystems.SnuffilatorSubsystem;
 import frc.robot.subsystems.TriggerSubsystem;
 
 public class CommandBlocks {
+  DriveSubsystem m_driveSubsystem;
   IntakeSubsystem m_intakeSubsystem;
   ShooterSubsystem m_shooterSubsystem;
   TriggerSubsystem m_triggerSubsystem;
   PivotSubsystem m_pivotSubsystem;
   SnuffilatorSubsystem m_snuffilatorSubsystem;
+  LimelightSubsystem m_limelightSubsystem;
   PoseEstimatorSubsystem m_poseEstimator;
   TriangleInterpolator m_triangleInterpolator;
 
   public CommandBlocks(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem,
       ShooterSubsystem shooterSubsystem, TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem,
-      SnuffilatorSubsystem snuffilatorSubsystem, PoseEstimatorSubsystem poseEstimator, TriangleInterpolator triangleInterpolator) {
+      SnuffilatorSubsystem snuffilatorSubsystem, LimelightSubsystem limelightSubsystem, PoseEstimatorSubsystem poseEstimator, TriangleInterpolator triangleInterpolator) {
+    m_driveSubsystem = driveSubsystem;
     m_intakeSubsystem = intakeSubsystem;
     m_shooterSubsystem = shooterSubsystem;
     m_pivotSubsystem = pivotSubsystem;
     m_triggerSubsystem = triggerSubsystem;
     m_snuffilatorSubsystem = snuffilatorSubsystem;
+    m_limelightSubsystem = limelightSubsystem;
     m_poseEstimator = poseEstimator;
     m_triangleInterpolator = triangleInterpolator;
   }
@@ -112,5 +117,23 @@ public class CommandBlocks {
         m_snuffilatorSubsystem.move(-SnuffilatorConstants.snuffilatorInSpeed);
       });
     }
+  }
+
+  public Command followPathWithPresetShot(String pathName, boolean useLimelight, boolean resetPosition) {
+    if (useLimelight) {
+      return new ParallelCommandGroup(
+        new FollowPathCommandOurs(m_driveSubsystem, m_limelightSubsystem, pathName, resetPosition),
+        new PresetShotForPathCommand(m_pivotSubsystem, m_shooterSubsystem, m_triangleInterpolator, pathName)
+      );
+    } else {
+      return new ParallelCommandGroup(
+        new FollowPathCommandOurs(m_driveSubsystem, pathName, resetPosition),
+        new PresetShotForPathCommand(m_pivotSubsystem, m_shooterSubsystem, m_triangleInterpolator, pathName)
+      );
+    }
+  }
+
+  public Command followPathWithPresetShot(String pathName, boolean useLimelight) {
+    return followPathWithPresetShot(pathName, useLimelight, false);
   }
 }
