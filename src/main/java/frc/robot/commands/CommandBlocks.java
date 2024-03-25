@@ -49,7 +49,7 @@ public class CommandBlocks {
       return new WaitCommand(0);
     }
     return new ParallelCommandGroup(
-        new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator),
+        new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator), // TODO This is not instant and will block
         new InstantCommand(() -> m_pivotSubsystem.setPosition(pivotAngle)))
         .andThen(
             new ParallelDeadlineGroup(
