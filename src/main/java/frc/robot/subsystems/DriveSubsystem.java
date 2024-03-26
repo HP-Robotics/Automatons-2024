@@ -203,7 +203,7 @@ public class DriveSubsystem extends SubsystemBase {
         NetworkTableValue.makeDouble(rotationController.getSetpoint()));
   }
 
-  public void driveToNote(double speed, Rotation2d noteAngle) { // TODO: PLEASE CHANGE NAME
+  public void driveForwardWithAngle(double speed, Rotation2d noteAngle) {
     double rot = rotationController.calculate(m_poseEstimator.getPose().getRotation().getRadians(),
         noteAngle.getRadians());
     drive(
