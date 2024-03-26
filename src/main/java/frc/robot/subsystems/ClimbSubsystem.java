@@ -24,7 +24,7 @@ public class ClimbSubsystem extends SubsystemBase {
   SparkPIDController climbController; 
   RelativeEncoder m_encoder;
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  NetworkTable climberTable = inst.getTable("climber-table"); // TODO: Make these names consistant (I like table)
+  NetworkTable climberTable = inst.getTable("climber-table");
 
   /** Creates a new ClimbSubsystem. */
   public ClimbSubsystem() {
@@ -39,9 +39,9 @@ public class ClimbSubsystem extends SubsystemBase {
     // climbController.setD(ClimberConstants.kD);
     // climbController.setIZone(ClimberConstants.kIz);
     // climbController.setFF(ClimberConstants.kFF);
-    // climbController.setOutputRange(ClimberConstants.kMinOutput, ClimberConstants.kMaxOutput);
+    // // climbController.setOutputRange(ClimberConstants.kMinOutput, ClimberConstants.kMaxOutput);
 
-    //climbController.setReference(500.0, CANSparkMax.ControlType.kPosition);
+    // climbController.setReference(500.0, CANSparkMax.ControlType.kPosition);
 
     // climbMotorRight.follow(climbMotorLeft,true);
     climbMotorRight.setInverted(true);
