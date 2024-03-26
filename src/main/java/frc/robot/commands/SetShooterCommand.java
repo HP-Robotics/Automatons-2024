@@ -26,16 +26,26 @@ public class SetShooterCommand extends Command {
   private TriangleInterpolator m_magicTriangles = null;
   private PoseEstimatorSubsystem m_poseEstimator = null;
 
-  /** Creates a new ShooterCommand. */
+  /**
+   * Creates a new ShooterCommand with left and right speeds. *
+   * 
+   * @param subsystem
+   * @param frontSpeed
+   * @param backSpeed
+   */
   public SetShooterCommand(ShooterSubsystem subsystem, Double frontSpeed, Double backSpeed) {
     // Use addRequirements() here to declare subsystem dependencies
     m_subsystem = subsystem;
     m_frontSpeed = frontSpeed;
     m_backSpeed = backSpeed;
     addRequirements(subsystem);
-
   }
 
+  /**
+   * Gets speeds from NetworkTables
+   * 
+   * @param subsystem
+   */
   public SetShooterCommand(ShooterSubsystem subsystem) {
     m_subsystem = subsystem;
     m_frontSpeed = null;
@@ -43,6 +53,13 @@ public class SetShooterCommand extends Command {
     addRequirements(subsystem);
   }
 
+  /**
+   * Uses the magic for shooter speed *
+   * 
+   * @param subsystem
+   * @param poseEstimator
+   * @param triangle
+   */
   public SetShooterCommand(ShooterSubsystem subsystem, PoseEstimatorSubsystem poseEstimator,
       TriangleInterpolator triangle) {
     this(subsystem);
@@ -56,38 +73,32 @@ public class SetShooterCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    boolean usingNetworkTables = true;
     double frontOutput = 0;
     double backOutput = 0;
     Pose2d currentPose = m_poseEstimator == null
         ? null
-        : m_poseEstimator.getPose();
-    if (currentPose == null) {
-      frontOutput = m_frontSpeed == null
-          ? shooterTable.getEntry("frontMotor Setpoint").getDouble(ShooterConstants.shooterSpeedFront)
-          : m_frontSpeed;
-      backOutput = m_backSpeed == null
-          ? shooterTable.getEntry("backMotor Setpoint").getDouble(ShooterConstants.shooterSpeedBack)
-          : m_backSpeed;
-    } else {
-      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-        currentPose = GeometryUtil.flipFieldPose(currentPose);
-      }
+        : m_poseEstimator.getAlliancePose(); // TODO: take a look at this
+    if (currentPose != null) {
       Optional<double[]> triangleData = m_magicTriangles.getTriangulatedOutput(currentPose);
       if (triangleData.isPresent()) {
+        usingNetworkTables = false;
         // System.out.println("Recived Data");
         frontOutput = triangleData.get()[0];
         backOutput = triangleData.get()[1];
-      }
-      else{
+      } 
+    } else {
+      if (m_frontSpeed != null && m_backSpeed != null) {
+        usingNetworkTables = false;
+        frontOutput = m_frontSpeed;
+        backOutput = m_backSpeed;
+      } 
+    }
+    if (usingNetworkTables) {
         frontOutput = shooterTable.getEntry("frontMotor Setpoint").getDouble(ShooterConstants.shooterSpeedFront);
         backOutput = shooterTable.getEntry("backMotor Setpoint").getDouble(ShooterConstants.shooterSpeedBack);
       }
-    }
-    if (frontOutput == 0 && backOutput == 0) {
-      m_subsystem.stopShooter();
-    } else {
-      m_subsystem.setShooter(frontOutput, backOutput);
-    }
+    m_subsystem.setShooter(frontOutput, backOutput);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -104,18 +115,12 @@ public class SetShooterCommand extends Command {
         // System.out.println("Recived Data");
         frontOutput = triangleData.get()[0];
         backOutput = triangleData.get()[1];
-      }
-      else{
+      } else {
         frontOutput = shooterTable.getEntry("frontMotor Setpoint").getDouble(ShooterConstants.shooterSpeedFront);
         backOutput = shooterTable.getEntry("backMotor Setpoint").getDouble(ShooterConstants.shooterSpeedBack);
       }
-      if (frontOutput == 0 && backOutput == 0) {
-      m_subsystem.stopShooter();
-      } 
-      else {
       m_subsystem.setShooter(frontOutput, backOutput);
-      }
-    }    
+    }
   }
 
   // Called once the command ends or is interrupted.
