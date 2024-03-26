@@ -224,6 +224,7 @@ public class RobotContainer {
       m_opJoystick.povUp().onTrue(new SetShooterCommand(m_shooterSubsystem));
     }
     if (SubsystemConstants.useShooter && SubsystemConstants.usePivot) {
+      m_opJoystick.povDown().onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(m_pivotSubsystem.getNetworkTestValue())));
       new Trigger(() -> {
         return m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
       })

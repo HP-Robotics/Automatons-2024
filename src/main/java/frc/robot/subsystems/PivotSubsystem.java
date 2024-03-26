@@ -4,8 +4,12 @@ import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TorqueCurrentConfigs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -55,6 +59,7 @@ public class PivotSubsystem extends SubsystemBase {
     pivotTable.putValue("kI", NetworkTableValue.makeDouble(PivotConstants.kI));
     pivotTable.putValue("kD", NetworkTableValue.makeDouble(PivotConstants.kD));
     pivotTable.putValue("kG", NetworkTableValue.makeDouble(PivotConstants.kG));
+    pivotTable.putValue("Pivot Test Set Point", NetworkTableValue.makeDouble(PivotConstants.encoderAt90));
 
     motorConfigs.kP = pivotTable.getEntry("kP").getDouble(PivotConstants.kP); // we won't send to falcon
     motorConfigs.kI = pivotTable.getEntry("kI").getDouble(PivotConstants.kI);
@@ -82,58 +87,52 @@ public class PivotSubsystem extends SubsystemBase {
 
     pivotTable.putValue("Absolute Encoder Position",
         NetworkTableValue.makeDouble(m_absEncoder.getAbsolutePosition()));
-    double grav = -m_armGraivty.calculate(encoderToRadians(m_pivotController.getSetpoint()), 0);
+    double grav = -m_armGraivty.calculate(encoderToRadians(m_absEncoder.getAbsolutePosition()), 0);
     if (m_absEncoder.getAbsolutePosition() != 0 && m_absEncoder.getAbsolutePosition() != 1) {
       double filtered_Encoder = m_filter.calculate(m_absEncoder.getAbsolutePosition());
       double output = m_pivotController.calculate(filtered_Encoder);
       output = output + grav;
       if (m_usePID) {
-        if (m_pivotController.atSetpoint()) {
-          m_motorR.setControl(new DutyCycleOut(output));
-        } else {
-          m_motorR.setControl(new DutyCycleOut(output));
+          m_motorR.setControl(new VoltageOut(output));
+        m_absoluteBroken = false;
+        pivotTable.putValue("Grav Propotion", NetworkTableValue.makeDouble(grav));
+        pivotTable.putValue("Commanded Output", NetworkTableValue.makeDouble(output));
+        pivotTable.putValue("Filtered Input", NetworkTableValue.makeDouble(filtered_Encoder));
+
+      } else {
+        if (!m_absoluteBroken) {
+          // m_motorR.setControl(new DutyCycleOut(grav));
+          m_absoluteBroken = true;
         }
       }
-      m_absoluteBroken = false;
-      // pivotTable.putValue("Grav Propotion", NetworkTableValue.makeDouble(grav));
-      // pivotTable.putValue("Commanded Output",
-      // NetworkTableValue.makeDouble(output));
-      // pivotTable.putValue("Filtered Input",
-      // NetworkTableValue.makeDouble(filtered_Encoder));
+      // pivotTable.putValue("Pivot
+      // Power",NetworkTableValue.makeDouble(m_motorR.getDutyCycle().getValueAsDouble()));
+      // pivotTable.putValue("Pivot
+      // Position",NetworkTableValue.makeDouble(m_motorR.getPosition().getValueAsDouble()));
+      pivotTable.putValue("P Proportion",
+          NetworkTableValue.makeDouble(m_pivotController.getPositionError() *
+              m_pivotController.getP()));
+      pivotTable.putValue("D Proportion",
+          NetworkTableValue.makeDouble(m_pivotController.getVelocityError() *
+              m_pivotController.getD()));
+      pivotTable.putValue("Pivot Setpoint", NetworkTableValue.makeDouble(m_pivotController.getSetpoint()));
+      pivotTable.putValue("Pivot Error", NetworkTableValue.makeDouble(m_pivotController.getPositionError()));
+      pivotTable.putValue("Pivot Angle",
+          NetworkTableValue.makeDouble(Math.toDegrees(encoderToRadians(m_absEncoder.getAbsolutePosition()))));
+      pivotTable.putValue("Pivot Right Current",NetworkTableValue.makeDouble(m_motorR.getStatorCurrent().getValueAsDouble()));
 
-    } else {
-      if (!m_absoluteBroken) {
-        // m_motorR.setControl(new DutyCycleOut(grav));
-        m_absoluteBroken = true;
+      if (m_pivotController.getP() != pivotTable.getEntry("kP").getDouble(m_pivotController.getP())) {
+        m_pivotController.setP(pivotTable.getEntry("kP").getDouble(m_pivotController.getP()));
       }
-    }
-    // pivotTable.putValue("Pivot
-    // Power",NetworkTableValue.makeDouble(m_motorR.getDutyCycle().getValueAsDouble()));
-    // pivotTable.putValue("Pivot
-    // Position",NetworkTableValue.makeDouble(m_motorR.getPosition().getValueAsDouble()));
-    // pivotTable.putValue("P Proportion",
-    // NetworkTableValue.makeDouble(m_pivotController.getPositionError() *
-    // m_pivotController.getP()));
-    // pivotTable.putValue("D Proportion",
-    // NetworkTableValue.makeDouble(m_pivotController.getVelocityError() *
-    // m_pivotController.getD()));
-    pivotTable.putValue("Pivot Setpoint", NetworkTableValue.makeDouble(m_pivotController.getSetpoint()));
-    // pivotTable.putValue("Pivot
-    // Error",NetworkTableValue.makeDouble(m_pivotController.getPositionError()));
-    // pivotTable.putValue("Pivot
-    // Angle",NetworkTableValue.makeDouble(Math.toDegrees(encoderToRadians(m_absEncoder.getAbsolutePosition()))));
-
-    if (m_pivotController.getP() != pivotTable.getEntry("kP").getDouble(m_pivotController.getP())) {
-      m_pivotController.setP(pivotTable.getEntry("kP").getDouble(m_pivotController.getP()));
-    }
-    if (m_pivotController.getI() != pivotTable.getEntry("kI").getDouble(m_pivotController.getI())) {
-      m_pivotController.setI(pivotTable.getEntry("kI").getDouble(m_pivotController.getI()));
-    }
-    if (m_pivotController.getD() != pivotTable.getEntry("kD").getDouble(m_pivotController.getD())) {
-      m_pivotController.setD(pivotTable.getEntry("kD").getDouble(m_pivotController.getD()));
-    }
-    if (m_armGraivty.kg != pivotTable.getEntry("kG").getDouble(m_armGraivty.kg)) {
-      m_armGraivty = new ArmFeedforward(0, pivotTable.getEntry("kG").getDouble(m_pivotController.getD()), 0);
+      if (m_pivotController.getI() != pivotTable.getEntry("kI").getDouble(m_pivotController.getI())) {
+        m_pivotController.setI(pivotTable.getEntry("kI").getDouble(m_pivotController.getI()));
+      }
+      if (m_pivotController.getD() != pivotTable.getEntry("kD").getDouble(m_pivotController.getD())) {
+        m_pivotController.setD(pivotTable.getEntry("kD").getDouble(m_pivotController.getD()));
+      }
+      if (m_armGraivty.kg != pivotTable.getEntry("kG").getDouble(m_armGraivty.kg)) {
+        m_armGraivty = new ArmFeedforward(0, pivotTable.getEntry("kG").getDouble(m_pivotController.getD()), 0);
+      }
     }
   }
 
@@ -147,10 +146,11 @@ public class PivotSubsystem extends SubsystemBase {
       setPosition(m_absEncoder.getAbsolutePosition());// TODO constrain setpoint to within limit switches
     }
   }
-  
+
   public void clearPIDError() {
     m_pivotController.reset();
   }
+
   public boolean getUsePID() {
     return m_usePID;
   }
@@ -169,10 +169,10 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public void setPosition(double position) { // TODO remove bad inputs
-    if(position < PivotConstants.minimumPosition) {
+    if (position < PivotConstants.minimumPosition) {
       position = PivotConstants.minimumPosition;
     }
-    if(position > PivotConstants.maximumPosition) {
+    if (position > PivotConstants.maximumPosition) {
       position = PivotConstants.maximumPosition;
     }
     m_pivotController.setSetpoint(position); // TODO constrain setpoint to within limit switches--make setpoint safe
@@ -183,5 +183,9 @@ public class PivotSubsystem extends SubsystemBase {
 
   public boolean atPosition() {
     return m_pivotController.atSetpoint();
+  }
+
+  public double getNetworkTestValue() {
+    return pivotTable.getEntry("Pivot Test Set Point").getDouble(PivotConstants.encoderAt90);
   }
 }

@@ -11,6 +11,7 @@ import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -68,6 +69,12 @@ public class SetShooterCommand extends Command {
       rightOutput = m_rightSpeed == null
           ? shooterTable.getEntry("rightMotor Setpoint").getDouble(ShooterConstants.shooterSpeedRight)
           : m_rightSpeed;
+        if(m_leftSpeed != null) {
+          shooterTable.putValue("leftMotor Setpoint", NetworkTableValue.makeDouble(m_leftSpeed));
+        }
+        if(m_rightSpeed != null) {
+          shooterTable.putValue("rightMotor Setpoint", NetworkTableValue.makeDouble(m_rightSpeed));
+        }
     } else {
       if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
         currentPose = GeometryUtil.flipFieldPose(currentPose);
