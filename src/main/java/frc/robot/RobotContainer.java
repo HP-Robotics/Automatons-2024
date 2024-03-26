@@ -307,10 +307,7 @@ public class RobotContainer {
 
     if (SubsystemConstants.useShooter && SubsystemConstants.usePivot && SubsystemConstants.useDrive && m_poseEstimatorSubsystem.getPose() != null) {
       m_opJoystick.button(7).onTrue(new InstantCommand(() -> {
-        Pose2d robotPose = m_poseEstimatorSubsystem.getPose();
-        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-          robotPose = GeometryUtil.flipFieldPose(robotPose);
-        } //TODO: Make this a Pose estimator function?
+        Pose2d robotPose = m_poseEstimatorSubsystem.getAlliancePose();
         DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);", 
           robotPose.getX(),
           robotPose.getY(),
@@ -525,12 +522,9 @@ public class RobotContainer {
       return Optional.of(new Rotation2d(Math
           .toRadians(-angle.get())).plus(m_driveSubsystem.getPose().getRotation()));
     } else if (AutoConstants.pathplannerOveridePointToSpeaker) {
-      Pose2d currentPose = m_poseEstimatorSubsystem.getPose();
+      Pose2d currentPose = m_poseEstimatorSubsystem.getAlliancePose();
       if (currentPose == null) {
         return Optional.empty();
-      }
-      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-        currentPose = GeometryUtil.flipFieldPose(currentPose);
       }
       Optional<double[]> triangleData = m_triangleInterpolator.getTriangulatedOutput(currentPose);
       Rotation2d heading;

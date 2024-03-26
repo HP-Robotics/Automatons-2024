@@ -97,11 +97,8 @@ public class SetShooterCommand extends Command {
     double backOutput = 0;
     Pose2d currentPose = m_poseEstimator == null
         ? null
-        : m_poseEstimator.getPose();
+        : m_poseEstimator.getAlliancePose(); // TODO: look at this
     if (currentPose != null) {
-      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-        currentPose = GeometryUtil.flipFieldPose(currentPose);
-      }
       Optional<double[]> triangleData = m_magicTriangles.getTriangulatedOutput(currentPose);
       if (triangleData.isPresent()) {
         // System.out.println("Recived Data");

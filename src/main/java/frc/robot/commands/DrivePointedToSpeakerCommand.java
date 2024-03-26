@@ -74,7 +74,8 @@ public class DrivePointedToSpeakerCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Pose2d currentPose = m_poseEstimatorSubsystem.getPose();
+    double rumble = 0;
+    Pose2d currentPose = m_poseEstimatorSubsystem.getAlliancePose();
     if (/*m_limelightSubsystem.m_aprilTagSeen &&*/ currentPose != null) { // TODO: Make this less of a mess
       if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
         currentPose = GeometryUtil.flipFieldPose(currentPose);
