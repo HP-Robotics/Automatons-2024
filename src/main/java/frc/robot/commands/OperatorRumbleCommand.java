@@ -37,7 +37,7 @@ public class OperatorRumbleCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_pivot.atPosition() && m_drive.pointedTowardsAngle() && m_limelight.m_sawAprilTag && m_shooter.atSpeed()) {
+    if (m_pivot.atPosition() && m_drive.pointedTowardsAngle() && m_shooter.atSpeed()) {
       m_joystick.getHID().setRumble(RumbleType.kBothRumble, 0.5);
     }
     else {
