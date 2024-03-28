@@ -88,7 +88,7 @@ public class PivotSubsystem extends SubsystemBase {
     pivotTable.putValue("Absolute Encoder Position",
         NetworkTableValue.makeDouble(m_absEncoder.getAbsolutePosition()));
     double grav = -m_armGraivty.calculate(encoderToRadians(m_absEncoder.getAbsolutePosition()), 0);
-    if (m_absEncoder.getAbsolutePosition() != 0 && m_absEncoder.getAbsolutePosition() != 1) {
+    if (Math.abs(m_absEncoder.getAbsolutePosition()) > 0.001 && m_absEncoder.getAbsolutePosition() != 1) {
       double filtered_Encoder = m_filter.calculate(m_absEncoder.getAbsolutePosition());
       double output = m_pivotController.calculate(filtered_Encoder);
       output = output + grav;

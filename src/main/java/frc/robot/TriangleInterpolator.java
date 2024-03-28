@@ -17,6 +17,10 @@ import org.poly2tri.triangulation.sets.PointSet;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DataLogManager;
+import frc.robot.Constants.LimelightConstants;
+import frc.robot.Constants.ShooterConstants;
+
 import java.awt.Color;
 
 public class TriangleInterpolator {
@@ -159,7 +163,20 @@ public class TriangleInterpolator {
   }
 
   public static void addv2Magic(TriangleInterpolator m_triangleInterpolator) {
-    
+    for(double angle =-80; angle < 81; angle += 10) {
+      m_triangleInterpolator.addCalibratedPoint(5 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(), 
+        5 * Math.sin(Math.toRadians(angle))+ LimelightConstants.aprilTagList[7].getY(), 
+        80, 60, 0.348, Math.toRadians(angle));
+      DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);", 
+          5 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          5 * Math.sin(Math.toRadians(angle))+ LimelightConstants.aprilTagList[7].getY(), 
+          80.0,
+          60.0,
+          0.348,
+          Math.toRadians(angle)
+        ));
+    }
+    m_triangleInterpolator.addCalibratedPoint(2.75, 2.48, 50.0, 50.0, 0.3606, -0.8191);
   }
 
   public static void addDuluthMagic(TriangleInterpolator m_triangleInterpolator) {
