@@ -33,6 +33,18 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
 public final class Constants {
 
+  public static class SubsystemConstants {
+    public static final boolean useDrive = true;
+    public static final boolean useIntake = true;
+    public static final boolean useShooter = true;
+    public static final boolean useDataManager = true;
+    public static final boolean useLimelight = true;
+    public static final boolean usePivot = true;
+    public static final boolean useClimber = true;
+    public static final boolean useTrigger = true;
+    public static final boolean useSnuffilator = true;
+  }
+
   public static class ControllerConstants {
     public static final boolean useXbox = true;
 
@@ -68,18 +80,6 @@ public final class Constants {
         // return 0;
       }
     }
-  }
-
-  public static class SubsystemConstants {
-    public static final boolean useDrive = true;
-    public static final boolean useIntake = true;
-    public static final boolean useShooter = true;
-    public static final boolean useDataManager = true;
-    public static final boolean useLimelight = true;
-    public static final boolean usePivot = true;
-    public static final boolean useClimber = false;
-    public static final boolean useTrigger = true;
-    public static final boolean useSnuffilator = true;
   }
 
   public static class DriveConstants {
@@ -224,12 +224,14 @@ public final class Constants {
     public static final double shooterSpeedRight = 50; // 50
     public static final double shooterSpeedAmp = 12.5; // 15
 
-    public static final double shooterMotorskP = 0.4;
-    public static final double shooterMotorskI = 0.01;
-    public static final double shooterMotorskD = 0;
-    public static final double shooterMotorskV = 0.12;
+    public static final double shooterMotorskP = 9;
+    public static final double shooterMotorskI = 4; 
+    public static final double shooterMotorskD = 0.0;
+    public static final double shooterMotorskV = 0.08;
+    public static final double shooterMotorsKS = 6;
 
-    public static final double errorThreshold = 1.0;
+
+    public static final double errorThreshold = 2.0;
 
     public static final double currentLimit = 25.0;
     public static final double currentThreshold = 25.0;
@@ -264,10 +266,10 @@ public final class Constants {
   }
 
   public static class PivotConstants {
-    public static final double kP = 3;// 2
-    public static final double kI = 0.001;
-    public static final double kD = 0.08;
-    public static final double kG = -0.02;// 0.02
+    public static final double kP = 40;
+    public static final double kI = 5;
+    public static final double kD = 2;
+    public static final double kG = -0.27;
     public static final boolean startWithPID = true;
     
     public static final double[] magicConstants = { 0.0, -0.0219711, 0.437724 }; 

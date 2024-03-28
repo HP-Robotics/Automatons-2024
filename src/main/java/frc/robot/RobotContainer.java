@@ -115,9 +115,9 @@ public class RobotContainer {
     double startTime = Timer.getFPGATimestamp();
     m_triangleInterpolator.makeTriangles();
     double triangleTime = Timer.getFPGATimestamp();
-    // m_magicInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png", 500,
+    // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png", 500,
     // 500, 0, 8.27, 8.27, 0, 0, 40, 60);
-    // m_magicInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png", 500,
+    // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png", 500,
     // 500, 0, 8.27, 8.27, 0, 1, 40, 60);
     // m_triangleInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 100, 100,
     // 0, 8.27, 8.27, 0, 2, 0.3, 0.5);
@@ -224,6 +224,7 @@ public class RobotContainer {
       m_opJoystick.povUp().onTrue(new SetShooterCommand(m_shooterSubsystem));
     }
     if (SubsystemConstants.useShooter && SubsystemConstants.usePivot) {
+      m_opJoystick.povDown().onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(m_pivotSubsystem.getNetworkTestValue())));
       new Trigger(() -> {
         return m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
       })
@@ -258,7 +259,7 @@ public class RobotContainer {
         return m_intakeSubsystem.m_beambreak.beamBroken();
       })
           .onTrue(new InstantCommand(() -> {
-            m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.2);
+            m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.4);
           }))
           .onFalse(new InstantCommand(() -> {
             m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.0);
