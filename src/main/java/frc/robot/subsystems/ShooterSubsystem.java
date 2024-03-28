@@ -25,6 +25,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   public NetworkTable shooterTable = inst.getTable("shooter-subsystem");
+  public double m_lastOutput1 = 0.0;
+  public double m_lastOutput2 = 0.0;
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
@@ -86,17 +88,24 @@ public class ShooterSubsystem extends SubsystemBase {
     m_velocity.Slot = 0;
     // m_leftMotor.setControl(new DutyCycleOut(output1));
     // m_rightMotor.setControl(new DutyCycleOut(output2));
-    if (output1 == 0) {
-      m_leftMotor.setControl(new DutyCycleOut(0));
-    } else {
-      m_leftMotor.setControl(m_velocity.withVelocity(output1));
+    if (output1 != m_lastOutput1) {
+      m_lastOutput1 = output1;
+      if (output1 == 0) {
+        m_leftMotor.setControl(new DutyCycleOut(0));
+      } else {
+        m_leftMotor.setControl(m_velocity.withVelocity(output1));
+      }
     }
-    if (output2 == 0) {
-      m_rightMotor.setControl(new DutyCycleOut(0));
-    } else {
-      m_rightMotor.setControl(m_velocity.withVelocity(output2));
-
+    if (output2 != m_lastOutput2) {
+      m_lastOutput2 = output2;
+      if (output2 == 0) {
+        m_rightMotor.setControl(new DutyCycleOut(0));
+      } else {
+        m_rightMotor.setControl(m_velocity.withVelocity(output2));
+      }
     }
+    // m_frontMotor.setControl(new DutyCycleOut(output1));
+    // m_backMotor.setControl(new DutyCycleOut(output2));
   }
 
   public boolean atSpeed() {
