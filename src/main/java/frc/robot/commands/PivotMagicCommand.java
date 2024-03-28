@@ -63,11 +63,8 @@ public class PivotMagicCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Pose2d currentPose = m_poseEstimatorSubsystem.getPose();
+    Pose2d currentPose = m_poseEstimatorSubsystem.getAlliancePose();
     if (currentPose != null) {
-      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-        currentPose = GeometryUtil.flipFieldPose(currentPose);
-      }
       // System.out.println("Getting Data");
       Optional<double[]> triangleData = m_triangleInterpolator.getTriangulatedOutput(currentPose);
       // TODO: Code for reflect if red
