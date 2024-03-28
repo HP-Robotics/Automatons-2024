@@ -233,24 +233,18 @@ public class RobotContainer {
     }
 
     if (SubsystemConstants.useClimber) {
-      m_driveJoystick.povUp().whileTrue(new StartEndCommand(
-          () -> {
-            m_climberSubsystem.climbMotorLeft.set(ClimberConstants.climbSpeed);
-            m_climberSubsystem.climbMotorRight.set(ClimberConstants.climbSpeed);
-          },
-          () -> {
-            m_climberSubsystem.climbMotorLeft.set(0);
-            m_climberSubsystem.climbMotorRight.set(0);
-          }, m_climberSubsystem));
-      m_driveJoystick.povDown().whileTrue(new StartEndCommand(
-          () -> {
-            m_climberSubsystem.climbMotorLeft.set(-ClimberConstants.climbSpeed);
-            m_climberSubsystem.climbMotorRight.set(-ClimberConstants.climbSpeed);
-          },
-          () -> {
-            m_climberSubsystem.climbMotorLeft.set(0);
-            m_climberSubsystem.climbMotorRight.set(0);
-          }, m_climberSubsystem));
+      m_driveJoystick.povUp().whileTrue(
+        new ParallelCommandGroup(
+          m_climberSubsystem.climbTo(ClimberConstants.climbSpeed),
+          new InstantCommand(() -> {m_pivotSubsystem.setPosition(PivotConstants.encoderAt90);}, m_pivotSubsystem)
+      ));
+        
+      m_driveJoystick.povDown().whileTrue(
+        new ParallelCommandGroup(
+          m_climberSubsystem.climbTo(-ClimberConstants.climbSpeed),
+          new RunCommand(() -> {m_climberSubsystem.adjustPivot(m_pivotSubsystem);}, m_pivotSubsystem)
+        ));
+      
     }
 
     if (SubsystemConstants.useIntake) {

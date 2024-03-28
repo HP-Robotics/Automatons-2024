@@ -241,6 +241,9 @@ public final class Constants {
   public static class ClimberConstants {
     public static final double climbSpeed = 1; //TODO: Decide this (in RPM, so 500?)
 
+    public static final double topPosition = 130; // TODO: Measure to find real values
+    public static final double bottomPosition = -20;
+    public static final double adjustPivotThreshold = 0; 
 
     public static final double kP = 0.0;
     public static final double kI = 0.0;
@@ -260,7 +263,6 @@ public final class Constants {
     public static final double triggerkP = 0;
     public static final double triggerkI = 0;
     public static final double triggerkD = 0;
-
   }
 
   public static class PivotConstants {
@@ -301,6 +303,8 @@ public final class Constants {
     public static final double preloadFarAwayPosition = 0.363;
     public static final double minimumPosition = 0.2;
     public static final double maximumPosition = 0.7; 
+
+    public static final double climbAdjustmentPosition = 0.36; // TODO: find real value
   }
 
   public static class IDConstants {
