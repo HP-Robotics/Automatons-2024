@@ -117,10 +117,10 @@ public final class Constants {
     public static final double turningControllerTolerance = Math.toRadians(2);
 
     // Absolute encoder values that make the wheels point forward
-    public static final double absEncoderForwardFL = 0.98;
-    public static final double absEncoderForwardFR = 0.719; //.708
-    public static final double absEncoderForwardBR = 0.74;
-    public static final double absEncoderForwardBL = 0.55;
+    public static final double absEncoderForwardFL = 0.973;
+    public static final double absEncoderForwardFR = 0.718;
+    public static final double absEncoderForwardBR = 0.746;
+    public static final double absEncoderForwardBL = 0.551;
 
     public static final HolonomicPathFollowerConfig holonomicConfig = new HolonomicPathFollowerConfig(
         new PIDConstants(5.0, 0.0, 0.0),
