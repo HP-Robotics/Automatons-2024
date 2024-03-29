@@ -51,6 +51,7 @@ public final class Constants {
     public static final int drivePointedToSpeakerButton = useXbox ? 6 : 0;
     public static final int drivePointedToNoteButton = useXbox ? 5 : 0;
     public static final int driveToNoteAxis = useXbox ? 2 : 0;
+    public static final int driveToAmpButton = 1;
 
     // TODO: Add operator joystick constants
 
@@ -177,11 +178,13 @@ public final class Constants {
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 5.0;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+    public static final double kMaxAngularSpeedRadiansPerSecond = 8.37758; // 480 degrees in radians
+    public static final double kMaxAngularAcceleration = 11.1701; // 640 degrees in radians
     public static final double kFastAutoVelocity = 4.5;
     public static final double kfastAutoAcceleration = 3.0;
     public static final double kMaxAutoVelocity = 3;
     public static final double kMaxAutoAcceleration = 3;
+    
 
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
