@@ -17,6 +17,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.DrivePointedToNoteCommand;
 import frc.robot.commands.DrivePointedToSpeakerCommand;
 import frc.robot.commands.DriveToNoteCommand;
+import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.CommandBlocks;
 import frc.robot.commands.IntakeStatesCommand;
 import frc.robot.commands.OperatorRumbleCommand;
@@ -203,6 +204,8 @@ public class RobotContainer {
       // Path"));
       // m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test
       // Path Line"));
+
+      m_driveJoystick.button(ControllerConstants.driveToAmpButton).onTrue(new DriveToPoseCommand(m_driveSubsystem, "Amp Lineup"));
     }
 
     if (SubsystemConstants.useShooter) {
