@@ -109,16 +109,16 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    TriangleInterpolator.addDuluthMagic(m_triangleInterpolator);
+    // TriangleInterpolator.addDuluthMagic(m_triangleInterpolator);
     // m_triangleInterpolator.addCalibratedPoint(2.0, 7.78, 0, 0, 0.374, 0);
     TriangleInterpolator.addv2Magic(m_triangleInterpolator);
     double startTime = Timer.getFPGATimestamp();
     m_triangleInterpolator.makeTriangles();
     double triangleTime = Timer.getFPGATimestamp();
     // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png", 500,
-    // 500, 0, 8.27, 8.27, 0, 0, 40, 60);
+    // 500, 0, 8.27, 8.27, 0, 0, 0, 80);
     // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png", 500,
-    // 500, 0, 8.27, 8.27, 0, 1, 40, 60);
+    // 500, 0, 8.27, 8.27, 0, 1, 0, 80);
     // m_triangleInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 100, 100,
     // 0, 8.27, 8.27, 0, 2, 0.3, 0.5);
     // m_triangleInterpolator.draw("/home/lvuser/headingTestImage.png", 500, 500, 0,
@@ -224,13 +224,15 @@ public class RobotContainer {
       m_opJoystick.povUp().onTrue(new SetShooterCommand(m_shooterSubsystem));
     }
     if (SubsystemConstants.useShooter && SubsystemConstants.usePivot) {
-      m_opJoystick.povDown().onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(m_pivotSubsystem.getNetworkTestValue())));
+      m_opJoystick.povDown().onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(m_pivotSubsystem.getNetworkTestValue())))
+      .whileTrue(new OperatorRumbleCommand(m_pivotSubsystem, m_driveSubsystem, m_limelightSubsystem, m_shooterSubsystem, m_opJoystick));
       new Trigger(() -> {
         return m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
       })
           .onTrue(new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp,
               ShooterConstants.shooterSpeedAmp))
           .onFalse(new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator));
+      
     }
 
     if (SubsystemConstants.useClimber) {
