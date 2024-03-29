@@ -222,7 +222,7 @@ public final class Constants {
 
     public static final double shooterSpeedLeft = 50; // 50
     public static final double shooterSpeedRight = 50; // 50
-    public static final double shooterSpeedAmp = 12.5; // 15
+    public static final double shooterSpeedAmp = 18; // 12.5
 
     public static final double shooterMotorskP = 9;
     public static final double shooterMotorskI = 4; 
