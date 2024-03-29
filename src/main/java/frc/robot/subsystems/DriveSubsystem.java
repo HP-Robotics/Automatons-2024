@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -207,7 +208,7 @@ public class DriveSubsystem extends SubsystemBase {
     double rot = rotationController.calculate(m_poseEstimator.getPose().getRotation().getRadians(),
         noteAngle.getRadians());
     drive(
-        speed * DriveConstants.kMaxSpeed,
+        speed * DriveConstants.kMaxSpeed * Math.max(1 - Math.abs(rot), 0),
         0, // speed * -1 * DriveConstants.kMaxSpeed,
         rot * DriveConstants.kMaxAngularSpeed,
         false);

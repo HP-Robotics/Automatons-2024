@@ -111,9 +111,9 @@ public final class Constants {
     public static final double turningkI = 1;
     public static final double turningkD = 0.008;
 
-    public static final double turningControllerkP = 1;
-    public static final double turningControllerkI = 0.0;
-    public static final double turningControllerkD = 0.0;
+    public static final double turningControllerkP = 1.8;
+    public static final double turningControllerkI = 0.1;
+    public static final double turningControllerkD = 0.15;
     public static final double turningControllerTolerance = Math.toRadians(2);
 
     // Absolute encoder values that make the wheels point forward
@@ -138,7 +138,7 @@ public final class Constants {
     public static final double currentThreshold = 40.0;
     public static final double currentTimeThreshold = 0.04;
 
-    public static final double driveToNoteSpeed = 0.5;
+    public static final double driveToNoteSpeed = 1;
   }
 
   public static final class LimelightConstants {
