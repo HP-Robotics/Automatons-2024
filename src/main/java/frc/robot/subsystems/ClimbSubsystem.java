@@ -34,6 +34,8 @@ public class ClimbSubsystem extends SubsystemBase {
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable climberTable = inst.getTable("climber-table"); // TODO: Make these names consistant (I like table)
   public boolean climbing = true;
+private double m_leftOffset;
+private double m_rightOffset;
 
   /** Creates a new ClimbSubsystem. */
   public ClimbSubsystem() {
@@ -84,11 +86,16 @@ public class ClimbSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    climberTable.putValue("Climber Left Motor Encoder",
+    climberTable.putValue("Climber Left Motor Raw Encoder",
         NetworkTableValue.makeDouble(climbMotorLeft.getEncoder().getPosition()));
-    climberTable.putValue("Climber Right Motor Encoder",
+    climberTable.putValue("Climber Right Motor Raw Encoder",
         NetworkTableValue.makeDouble(climbMotorRight.getEncoder().getPosition()));
-
+    climberTable.putValue("Climber Left Motor Encoder",
+        NetworkTableValue.makeDouble(getPosition(climbMotorLeft)));
+    climberTable.putValue("Climber Right Motor Encoder",
+        NetworkTableValue.makeDouble(getPosition(climbMotorRight)));
+    climberTable.putValue("Left at Bottom",NetworkTableValue.makeBoolean(atBottom(climbMotorLeft)));
+    climberTable.putValue("Right at Bottom",NetworkTableValue.makeBoolean(atBottom(climbMotorRight)));
   }
 
   // public void climbTo(double output) {
@@ -96,14 +103,14 @@ public class ClimbSubsystem extends SubsystemBase {
   // }
 
   public boolean atBottom(CANSparkMax motor) {
-    if (climbing) {
+    //if (climbing) {
       if (motor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed()) {
         return true;
       } else {
         return false;
       }
-    }
-    return false;
+//}
+    //return false;
 
     // if ((m_encoder.getVelocity() < Math.abs(0.1)) || (m_encoder.getVelocity() <
     // 0)) {
@@ -138,7 +145,7 @@ public class ClimbSubsystem extends SubsystemBase {
   }
 
   public Command calibrate() {
-    return climbTo(ClimberConstants.climbSpeed).until(() -> {
+    return climbTo(-ClimberConstants.calibrateSpeed).until(() -> {
       return atBottom(climbMotorLeft) && atBottom(climbMotorRight);
     }).andThen(new InstantCommand(() -> {
       resetCalibrationLeft();
@@ -154,23 +161,44 @@ public class ClimbSubsystem extends SubsystemBase {
 
   public void resetCalibrationLeft() {
     if (atBottom(climbMotorLeft)) {
-      climbMotorLeft.getEncoder().setPosition(ClimberConstants.bottomPosition);
+      System.out.println("at bottom");
+      m_leftOffset = ClimberConstants.bottomPosition-climbMotorLeft.getEncoder().getPosition();
+      climbMotorLeft.setSoftLimit(SoftLimitDirection.kForward, (float)(ClimberConstants.topPosition-m_leftOffset));
+      climbMotorLeft.setSoftLimit(SoftLimitDirection.kReverse, (float)(ClimberConstants.bottomPosition-m_leftOffset));
+
+      //climbMotorLeft.getEncoder().setPosition(ClimberConstants.bottomPosition);
+      
     }
   }
 
   public void resetCalibrationRight() {
     if (atBottom(climbMotorRight)) {
-      climbMotorRight.getEncoder().setPosition(ClimberConstants.bottomPosition);
+      System.out.println("at bottom");
+      m_rightOffset = ClimberConstants.bottomPosition-climbMotorRight.getEncoder().getPosition();
+      climbMotorRight.setSoftLimit(SoftLimitDirection.kForward, (float)(ClimberConstants.topPosition-m_rightOffset));
+      climbMotorRight.setSoftLimit(SoftLimitDirection.kReverse, (float)(ClimberConstants.bottomPosition-m_rightOffset));
+      //climbMotorRight.getEncoder().setPosition(ClimberConstants.bottomPosition);
+      
     }
   }
 
   public void adjustPivot(PivotSubsystem m_pivotSubsystem) {
-    if (climbMotorLeft.getEncoder().getPosition() <= ClimberConstants.adjustPivotThreshold 
-    || climbMotorRight.getEncoder().getPosition() <= ClimberConstants.adjustPivotThreshold) {
-      double pivotAngle = ((climbMotorLeft.getEncoder().getPosition())*(PivotConstants.encoderAt90-PivotConstants.climbAdjustmentPosition))
-      /(ClimberConstants.adjustPivotThreshold-ClimberConstants.bottomPosition);
+    if (getPosition(climbMotorLeft) <= ClimberConstants.adjustPivotThreshold 
+    || getPosition(climbMotorRight) <= ClimberConstants.adjustPivotThreshold) {
+      double pivotAngle = ((getPosition(climbMotorLeft)-ClimberConstants.bottomPosition)*(PivotConstants.encoderAt90-PivotConstants.climbAdjustmentPosition))
+      /(ClimberConstants.adjustPivotThreshold-ClimberConstants.bottomPosition)+PivotConstants.climbAdjustmentPosition;
       m_pivotSubsystem.setPosition(pivotAngle);
     }
+  }
+
+  public double getPosition(CANSparkMax motor) {
+    if (motor == climbMotorLeft) {
+      return motor.getEncoder().getPosition() + m_leftOffset;
+    }
+    if (motor == climbMotorRight) {
+      return motor.getEncoder().getPosition() + m_rightOffset;
+    }
+    return 0;
   }
 }
 

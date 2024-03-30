@@ -248,6 +248,7 @@ public class RobotContainer {
           new RunCommand(() -> {m_climberSubsystem.adjustPivot(m_pivotSubsystem);}, m_pivotSubsystem)
         ));
       
+      m_driveJoystick.button(3).whileTrue(m_climberSubsystem.calibrate());
     }
 
     if (SubsystemConstants.useIntake) {
