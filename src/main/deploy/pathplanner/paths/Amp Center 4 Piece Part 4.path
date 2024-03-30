@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.107109781915527,
-        "y": 6.971077125052112
+        "x": 3.458152051777812,
+        "y": 6.703117346414724
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.107109781915527,
-        "y": 6.971077125052112
+        "x": 4.458152051777812,
+        "y": 6.703117346414724
       },
       "isLocked": false,
       "linkedName": "AC Shoot"
     },
     {
       "anchor": {
-        "x": 8.016762826874823,
-        "y": 5.80110613902938
+        "x": 8.047268389509721,
+        "y": 5.844567286643453
       },
       "prevControl": {
-        "x": 7.016762826874823,
-        "y": 5.80110613902938
+        "x": 6.991565670059407,
+        "y": 6.2604427024010265
       },
       "nextControl": null,
       "isLocked": true,
@@ -39,7 +39,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.65,
       "command": {
         "type": "parallel",
         "data": {
@@ -63,7 +63,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -15.406956936757656,
     "rotateFast": false
   },
   "reversed": false,

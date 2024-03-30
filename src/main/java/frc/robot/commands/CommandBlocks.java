@@ -43,6 +43,27 @@ public class CommandBlocks {
     m_triangleInterpolator = triangleInterpolator;
   }
 
+  public Command fireGamePieceCommand() {
+    if (m_intakeSubsystem == null || m_triggerSubsystem == null || m_shooterSubsystem == null
+        || m_pivotSubsystem == null) {
+      return new WaitCommand(0);
+    }
+    return new ParallelCommandGroup(
+        new InstantCommand(() -> new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator).schedule()), 
+        new InstantCommand(() -> new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator, m_poseEstimator).schedule()))
+        .andThen(
+            new ParallelDeadlineGroup(
+                new WaitCommand(1).until(() -> {
+                  /* System.out.println("wait for shooter"); */return m_shooterSubsystem.atSpeed()
+                      && m_pivotSubsystem.atPosition() && m_triggerSubsystem.m_isLoaded;
+                }).andThen(fireButtonHold().until(() -> {
+                  /* System.out.println("waiting for fire"); */return !m_triggerSubsystem.m_isLoaded;
+                })),
+                intakeButtonHold()
+            // new InstantCommand(() -> {System.out.println("firing game piece");})
+            ));
+  }
+
   public Command fireGamePieceCommand(double pivotAngle) {
     if (m_intakeSubsystem == null || m_triggerSubsystem == null || m_shooterSubsystem == null
         || m_pivotSubsystem == null) {
@@ -63,7 +84,6 @@ public class CommandBlocks {
             // new InstantCommand(() -> {System.out.println("firing game piece");})
             ));
   }
-
   public Command intakeButtonHold() {
     if (m_intakeSubsystem == null || m_triggerSubsystem == null) {
       return new WaitCommand(0);
@@ -135,5 +155,12 @@ public class CommandBlocks {
 
   public Command followPathWithPresetShot(String pathName, boolean useLimelight) {
     return followPathWithPresetShot(pathName, useLimelight, false);
+  }
+
+  public Command instantSetPivot(double pivotAngle) {
+    if (m_pivotSubsystem == null) {
+      return null;
+    } 
+    return new InstantCommand(() -> m_pivotSubsystem.setPosition(pivotAngle));
   }
 }

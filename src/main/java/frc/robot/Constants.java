@@ -138,7 +138,7 @@ public final class Constants {
     public static final double currentThreshold = 40.0;
     public static final double currentTimeThreshold = 0.04;
 
-    public static final double driveToNoteSpeed = 1;
+    public static final double driveToNoteSpeed = 0.5;
   }
 
   public static final class LimelightConstants {
