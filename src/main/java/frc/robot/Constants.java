@@ -92,7 +92,7 @@ public final class Constants {
     public static final double kEncoderResolution = 1.0;
 
     public static final double driveGearRatio = 6.75;
-    public static final double turningGearRatio = 540/35;
+    public static final double turningGearRatio = 540.0/35.0;
 
     public static final Translation2d kFrontLeftLocation = new Translation2d(0.308 - 0.038, 0.308);
     public static final Translation2d kFrontRightLocation = new Translation2d(0.308 - 0.038, -0.308);
