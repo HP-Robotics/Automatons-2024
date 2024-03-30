@@ -14,6 +14,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BeamBreak;
 import frc.robot.Constants.IDConstants;
@@ -75,6 +76,7 @@ public class TriggerSubsystem extends SubsystemBase {
   public void setTrigger(double output) {
     m_velocity.Slot = 0;
       m_triggerMotor.setControl(new DutyCycleOut(output));
+    DataLogManager.log("set trigger: " + output);
   }
 
   public void stopTrigger() {
@@ -84,12 +86,14 @@ public class TriggerSubsystem extends SubsystemBase {
   public void intakeButtonPressed() {
     if (!m_isFiring && !m_isYucking && !m_isLoaded) {
       m_isIntaking = true;
+      DataLogManager.log("pressed intake button");
     }
   }
 
   public void intakeButtonReleased() {
     if (m_isIntaking) {
       m_isIntaking = false;
+      DataLogManager.log("released intake button");
     }
   }
 
@@ -106,11 +110,13 @@ public class TriggerSubsystem extends SubsystemBase {
   public void fireButtonPressed() {
     if (!m_isYucking) {
       m_isFiring = true;
+      DataLogManager.log("pressed fire button");
     }
   }
 
   public void fireButtonReleased() {
     m_isFiring = false;
+    DataLogManager.log("released fire button");
   }
 
 }
