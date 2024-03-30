@@ -84,6 +84,7 @@ public class DriveToPoseCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     m_pathPlannerCommand.end(interrupted);
+    m_driveSubsystem.drive(0, 0, 0, false);
   }
 
   // Returns true when the command should end.

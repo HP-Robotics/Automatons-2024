@@ -205,7 +205,7 @@ public class RobotContainer {
       // m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test
       // Path Line"));
 
-      m_driveJoystick.button(ControllerConstants.driveToAmpButton).onTrue(new DriveToPoseCommand(m_driveSubsystem, "Amp Lineup"));
+      m_driveJoystick.button(ControllerConstants.driveToAmpButton).whileTrue(new DriveToPoseCommand(m_driveSubsystem, "Amp Lineup"));
     }
 
     if (SubsystemConstants.useShooter) {
