@@ -33,6 +33,18 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
 public final class Constants {
 
+  public static class SubsystemConstants {
+    public static final boolean useDrive = true;
+    public static final boolean useIntake = true;
+    public static final boolean useShooter = true;
+    public static final boolean useDataManager = true;
+    public static final boolean useLimelight = true;
+    public static final boolean usePivot = true;
+    public static final boolean useClimber = true;
+    public static final boolean useTrigger = true;
+    public static final boolean useSnuffilator = true;
+  }
+
   public static class ControllerConstants {
     public static final boolean useXbox = true;
 
@@ -71,18 +83,6 @@ public final class Constants {
     }
   }
 
-  public static class SubsystemConstants {
-    public static final boolean useDrive = true;
-    public static final boolean useIntake = true;
-    public static final boolean useShooter = true;
-    public static final boolean useDataManager = true;
-    public static final boolean useLimelight = true;
-    public static final boolean usePivot = true;
-    public static final boolean useClimber = true;
-    public static final boolean useTrigger = true;
-    public static final boolean useSnuffilator = true;
-  }
-
   public static class DriveConstants {
     public static final double kMaxSpeed = 4.4; // meters per second 
     public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second //auto is 540
@@ -112,16 +112,16 @@ public final class Constants {
     public static final double turningkI = 1;
     public static final double turningkD = 0.008;
 
-    public static final double turningControllerkP = 1;
-    public static final double turningControllerkI = 0.0;
-    public static final double turningControllerkD = 0.0;
+    public static final double turningControllerkP = 1.8;
+    public static final double turningControllerkI = 0.1;
+    public static final double turningControllerkD = 0.15;
     public static final double turningControllerTolerance = Math.toRadians(2);
 
     // Absolute encoder values that make the wheels point forward
-    public static final double absEncoderForwardFL = 0.98;
-    public static final double absEncoderForwardFR = 0.719; //.708
-    public static final double absEncoderForwardBR = 0.74;
-    public static final double absEncoderForwardBL = 0.55;
+    public static final double absEncoderForwardFL = 0.973;
+    public static final double absEncoderForwardFR = 0.718;
+    public static final double absEncoderForwardBR = 0.746;
+    public static final double absEncoderForwardBL = 0.551;
 
     public static final HolonomicPathFollowerConfig holonomicConfig = new HolonomicPathFollowerConfig(
         new PIDConstants(5.0, 0.0, 0.0),
@@ -139,7 +139,7 @@ public final class Constants {
     public static final double currentThreshold = 40.0;
     public static final double currentTimeThreshold = 0.04;
 
-    public static final double driveToNoteSpeed = 0.5;
+    public static final double driveToNoteSpeed = 1;
   }
 
   public static final class LimelightConstants {
@@ -225,14 +225,16 @@ public final class Constants {
 
     public static final double shooterSpeedLeft = 50; // 50
     public static final double shooterSpeedRight = 50; // 50
-    public static final double shooterSpeedAmp = 12.5; // 15
+    public static final double shooterSpeedAmp = 18; // 12.5
 
-    public static final double shooterMotorskP = 0.4;
-    public static final double shooterMotorskI = 0.01;
-    public static final double shooterMotorskD = 0;
-    public static final double shooterMotorskV = 0.12;
+    public static final double shooterMotorskP = 9;
+    public static final double shooterMotorskI = 4; 
+    public static final double shooterMotorskD = 0.0;
+    public static final double shooterMotorskV = 0.08;
+    public static final double shooterMotorsKS = 6;
 
-    public static final double errorThreshold = 1.0;
+
+    public static final double errorThreshold = 2.0;
 
     public static final double currentLimit = 25.0;
     public static final double currentThreshold = 25.0;
@@ -270,10 +272,10 @@ public final class Constants {
   }
 
   public static class PivotConstants {
-    public static final double kP = 3;// 2
-    public static final double kI = 0.001;
-    public static final double kD = 0.08;
-    public static final double kG = -0.02;// 0.02
+    public static final double kP = 40;
+    public static final double kI = 5;
+    public static final double kD = 2;
+    public static final double kG = -0.27;
     public static final boolean startWithPID = true;
     
     public static final double[] magicConstants = { 0.0, -0.0219711, 0.437724 }; 

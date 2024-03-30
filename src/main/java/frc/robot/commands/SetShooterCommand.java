@@ -11,6 +11,7 @@ import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,16 +27,26 @@ public class SetShooterCommand extends Command {
   private TriangleInterpolator m_magicTriangles = null;
   private PoseEstimatorSubsystem m_poseEstimator = null;
 
-  /** Creates a new ShooterCommand. */
+  /**
+   * Creates a new ShooterCommand with left and right speeds. *
+   * 
+   * @param subsystem
+   * @param leftSpeed
+   * @param rightSpeed
+   */
   public SetShooterCommand(ShooterSubsystem subsystem, Double leftSpeed, Double rightSpeed) {
     // Use addRequirements() here to declare subsystem dependencies
     m_subsystem = subsystem;
     m_leftSpeed = leftSpeed;
     m_rightSpeed = rightSpeed;
     addRequirements(subsystem);
-
   }
 
+  /**
+   * Gets speeds from NetworkTables
+   * 
+   * @param subsystem
+   */
   public SetShooterCommand(ShooterSubsystem subsystem) {
     m_subsystem = subsystem;
     m_leftSpeed = null;
@@ -43,6 +54,13 @@ public class SetShooterCommand extends Command {
     addRequirements(subsystem);
   }
 
+  /**
+   * Uses the magic for shooter speed *
+   * 
+   * @param subsystem
+   * @param poseEstimator
+   * @param triangle
+   */
   public SetShooterCommand(ShooterSubsystem subsystem, PoseEstimatorSubsystem poseEstimator,
       TriangleInterpolator triangle) {
     this(subsystem);
@@ -56,39 +74,30 @@ public class SetShooterCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    boolean usingNetworkTables = true;
     double leftOutput = 0;
     double rightOutput = 0;
     Pose2d currentPose = m_poseEstimator == null
         ? null
-        : m_poseEstimator.getPose();
-    if (currentPose == null) {
-      leftOutput = m_leftSpeed == null
-          ? shooterTable.getEntry("leftMotor Setpoint").getDouble(ShooterConstants.shooterSpeedLeft)
-          : m_leftSpeed;
-      rightOutput = m_rightSpeed == null
-          ? shooterTable.getEntry("rightMotor Setpoint").getDouble(ShooterConstants.shooterSpeedRight)
-          : m_rightSpeed;
-    } else {
-      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-        currentPose = GeometryUtil.flipFieldPose(currentPose);
-      }
+        : m_poseEstimator.getAlliancePose(); // TODO: take a look at this
+    if (currentPose != null) {
       Optional<double[]> triangleData = m_magicTriangles.getTriangulatedOutput(currentPose);
       if (triangleData.isPresent()) {
+        usingNetworkTables = false;
         // System.out.println("Recived Data");
         leftOutput = triangleData.get()[0];
         rightOutput = triangleData.get()[1];
       }
-      else{
-        leftOutput = shooterTable.getEntry("leftMotor Setpoint").getDouble(ShooterConstants.shooterSpeedLeft);
-        rightOutput = shooterTable.getEntry("rightMotor Setpoint").getDouble(ShooterConstants.shooterSpeedRight);
-      }
+    } else if (m_leftSpeed != null && m_rightSpeed != null) {
+      usingNetworkTables = false;
+      leftOutput = m_leftSpeed;
+      rightOutput = m_rightSpeed;
     }
-    if (leftOutput == 0 && rightOutput == 0) {
-      m_subsystem.stopShooter();
+    if (usingNetworkTables) {
+      leftOutput = shooterTable.getEntry("leftMotor Setpoint").getDouble(ShooterConstants.shooterSpeedLeft);
+      rightOutput = shooterTable.getEntry("rightMotor Setpoint").getDouble(ShooterConstants.shooterSpeedRight);
     }
-    else{
-      m_subsystem.setShooter(leftOutput, rightOutput);
-    }
+    m_subsystem.setShooter(leftOutput, rightOutput);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -98,28 +107,19 @@ public class SetShooterCommand extends Command {
     double rightOutput = 0;
     Pose2d currentPose = m_poseEstimator == null
         ? null
-        : m_poseEstimator.getPose();
+        : m_poseEstimator.getAlliancePose(); // TODO: look at this
     if (currentPose != null) {
-      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-        currentPose = GeometryUtil.flipFieldPose(currentPose);
-      }
       Optional<double[]> triangleData = m_magicTriangles.getTriangulatedOutput(currentPose);
       if (triangleData.isPresent()) {
         // System.out.println("Recived Data");
         leftOutput = triangleData.get()[0];
         rightOutput = triangleData.get()[1];
-      }
-      else{
+      } else {
         leftOutput = shooterTable.getEntry("leftMotor Setpoint").getDouble(ShooterConstants.shooterSpeedLeft);
         rightOutput = shooterTable.getEntry("rightMotor Setpoint").getDouble(ShooterConstants.shooterSpeedRight);
       }
-      if (leftOutput == 0 && rightOutput == 0) {
-      m_subsystem.stopShooter();
-      } 
-      else {
       m_subsystem.setShooter(leftOutput, rightOutput);
-      }
-    }    
+    }
   }
 
   // Called once the command ends or is interrupted.

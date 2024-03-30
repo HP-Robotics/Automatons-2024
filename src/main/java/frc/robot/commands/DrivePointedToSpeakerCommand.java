@@ -6,8 +6,6 @@ package frc.robot.commands;
 
 import java.util.Optional;
 
-import javax.swing.text.html.Option;
-
 import com.pathplanner.lib.util.GeometryUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,8 +15,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import frc.robot.TriangleInterpolator;
 import frc.robot.Constants.LimelightConstants;
+import frc.robot.TriangleInterpolator;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
@@ -74,43 +72,33 @@ public class DrivePointedToSpeakerCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Pose2d currentPose = m_poseEstimatorSubsystem.getPose();
+    double rumble = 0;
+    Pose2d currentPose = m_poseEstimatorSubsystem.getAlliancePose();
     if (/*m_limelightSubsystem.m_aprilTagSeen &&*/ currentPose != null) { // TODO: Make this less of a mess
-      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-        currentPose = GeometryUtil.flipFieldPose(currentPose);
-      }
       Optional<double[]> triangleData = m_triangleInterpolator.getTriangulatedOutput(currentPose);
 
-      if (triangleData.isPresent()) {
-        Rotation2d heading = new Rotation2d(triangleData.get()[3]);
+      Rotation2d heading = new Rotation2d(Math
+                  .toRadians(m_limelightSubsystem.getAngleTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag))
+                  + Math.PI);
+      if (triangleData.isPresent()) { // If we have magic data
+        rumble = 0.4;
+        heading = new Rotation2d(triangleData.get()[3]);
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
           heading = GeometryUtil.flipFieldRotation(heading);
         }
+      } 
         if (m_joystick.isPresent()) {
           m_drivesubsystem.drivePointedTowardsAngle(m_joystick.get(), heading);
-          m_joystick.get().getHID().setRumble(RumbleType.kBothRumble, 0.2);
         } else {
-          m_drivesubsystem.driveToNote(0, heading);
-        }
-      } else {
-        if (m_joystick.isPresent()) {
-          m_drivesubsystem.drivePointedTowardsAngle(m_joystick.get(),
-              new Rotation2d(Math
-                  .toRadians(m_limelightSubsystem.getAngleTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag))
-                  + Math.PI));
-          m_joystick.get().getHID().setRumble(RumbleType.kBothRumble, 0);    
-        } else {
-          m_drivesubsystem.driveToNote(0, 
-              new Rotation2d(Math
-              .toRadians(m_limelightSubsystem.getAngleTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag))
-              + Math.PI));
-        }
+          m_drivesubsystem.driveForwardWithAngle(0, heading);
       }
     } else {
       if (m_joystick.isPresent()) {
         m_drivesubsystem.driveWithJoystick(m_joystick.get());
-        m_joystick.get().getHID().setRumble(RumbleType.kBothRumble, 0);
       }
+    }
+    if (m_joystick.isPresent()) {
+    m_joystick.get().getHID().setRumble(RumbleType.kBothRumble, rumble); 
     }
   }
 
@@ -125,6 +113,9 @@ public class DrivePointedToSpeakerCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (m_joystick.isEmpty() && m_drivesubsystem.pointedTowardsAngle()) {
+      return true;
+    }
     return false;
   }
 }

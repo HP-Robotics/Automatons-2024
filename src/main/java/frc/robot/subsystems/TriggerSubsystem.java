@@ -25,7 +25,6 @@ public class TriggerSubsystem extends SubsystemBase {
   private final VelocityVoltage m_velocity = new VelocityVoltage(0);
   public BeamBreak m_beamBreak;
   public int beambreakCount = 0; // TODO remove for shooter v2?
-  public double m_lastOutput = 0.0;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable triggerTable = inst.getTable("trigger-subsystem");
@@ -75,10 +74,7 @@ public class TriggerSubsystem extends SubsystemBase {
 
   public void setTrigger(double output) {
     m_velocity.Slot = 0;
-    if (output != m_lastOutput) {
       m_triggerMotor.setControl(new DutyCycleOut(output));
-    }
-    m_lastOutput = output;
   }
 
   public void stopTrigger() {

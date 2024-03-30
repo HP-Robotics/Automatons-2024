@@ -71,8 +71,8 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   public Optional<Double> getNoteTX() {
-    double noteTV = m_gamePieceTable.getEntry("tv").getValue().getDouble(); // TODO: Is this safe to call if we don't have a limelight?
-    double noteTX = m_gamePieceTable.getEntry("tx").getValue().getDouble();
+    double noteTV = m_gamePieceTable.getEntry("tv").getDouble(0.0);
+    double noteTX = m_gamePieceTable.getEntry("tx").getDouble(0.0);
 
     if (noteTV == 1) {
       limelightMagicTable.putValue("noteTX", NetworkTableValue.makeDouble(noteTX));
@@ -107,6 +107,12 @@ public class LimelightSubsystem extends SubsystemBase {
         m_robotPose = new Pose2d(tx, ty, new Rotation2d(Math.toRadians(rz)));
         m_visionPose2d = m_robotPose;
         if (m_poseEstimator != null && 0 <= m_targetAprilTagID && m_targetAprilTagID <= 16) {
+          limelightMagicTable.putValue(
+          "distanceToSpeaker",
+          NetworkTableValue.makeDouble(getDistanceTo(m_robotPose, LimelightConstants.aprilTagList[m_targetAprilTagID])));
+      limelightMagicTable.putValue(
+          "angleToSpeaker",
+          NetworkTableValue.makeDouble(getAngleTo(m_robotPose, LimelightConstants.aprilTagList[m_targetAprilTagID])));
           if (botpose[0] != 0 || botpose[1] != 0 || botpose[5] != 0) {
             publisher.set(m_robotPose);
             limelightMagicTable.putValue("poseEstimator Timestamp", NetworkTableValue.makeDouble(timeStamp));
@@ -117,12 +123,7 @@ public class LimelightSubsystem extends SubsystemBase {
           }
         }
       }
-      limelightMagicTable.putValue(
-          "distanceToSpeaker",
-          NetworkTableValue.makeDouble(getDistanceTo(m_robotPose, LimelightConstants.aprilTagList[7])));
-      limelightMagicTable.putValue(
-          "angleToSpeaker",
-          NetworkTableValue.makeDouble(getAngleTo(m_robotPose, LimelightConstants.aprilTagList[7])));
+      
 
       if (!m_aprilTagSeen) {
         m_aprilTagSeen = true;

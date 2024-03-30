@@ -45,8 +45,9 @@ public class TriggerStatesCommand extends Command {
     }
     if (m_subsystem.m_isYucking) {
       m_subsystem.setTrigger(TriggerConstants.yuckSpeed);
-    } else if (m_subsystem.m_isFiring && m_subsystem.beambreakCount > 2) {
+    } else if (m_subsystem.m_isFiring /* && m_subsystem.beambreakCount > 2*/) {
       m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed));
+      System.out.println("Trigger Fire");
     } else if (m_subsystem.m_isLoaded) {
       m_subsystem.beambreakCount += 1;
       m_subsystem.m_triggerMotor.setControl(new NeutralOut());

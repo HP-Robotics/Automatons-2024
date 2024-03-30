@@ -110,16 +110,16 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    TriangleInterpolator.addDuluthMagic(m_triangleInterpolator);
+    // TriangleInterpolator.addDuluthMagic(m_triangleInterpolator);
     // m_triangleInterpolator.addCalibratedPoint(2.0, 7.78, 0, 0, 0.374, 0);
     TriangleInterpolator.addv2Magic(m_triangleInterpolator);
     double startTime = Timer.getFPGATimestamp();
     m_triangleInterpolator.makeTriangles();
     double triangleTime = Timer.getFPGATimestamp();
-    // m_magicInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png", 500,
-    // 500, 0, 8.27, 8.27, 0, 0, 40, 60);
-    // m_magicInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png", 500,
-    // 500, 0, 8.27, 8.27, 0, 1, 40, 60);
+    // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png", 500,
+    // 500, 0, 8.27, 8.27, 0, 0, 0, 80);
+    // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png", 500,
+    // 500, 0, 8.27, 8.27, 0, 1, 0, 80);
     // m_triangleInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 100, 100,
     // 0, 8.27, 8.27, 0, 2, 0.3, 0.5);
     // m_triangleInterpolator.draw("/home/lvuser/headingTestImage.png", 500, 500, 0,
@@ -137,7 +137,7 @@ public class RobotContainer {
     }
 
     m_compoundCommands = new CommandBlocks(m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
-        m_pivotSubsystem, m_snuffilatorSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
+        m_pivotSubsystem, m_snuffilatorSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
 
     if (SubsystemConstants.useDrive) {
       m_driveSubsystem.setDefaultCommand(
@@ -227,12 +227,15 @@ public class RobotContainer {
       m_opJoystick.povUp().onTrue(new SetShooterCommand(m_shooterSubsystem));
     }
     if (SubsystemConstants.useShooter && SubsystemConstants.usePivot) {
+      m_opJoystick.povDown().onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(m_pivotSubsystem.getNetworkTestValue())))
+      .whileTrue(new OperatorRumbleCommand(m_pivotSubsystem, m_driveSubsystem, m_limelightSubsystem, m_shooterSubsystem, m_opJoystick));
       new Trigger(() -> {
         return m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
       })
           .onTrue(new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp,
               ShooterConstants.shooterSpeedAmp))
           .onFalse(new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator));
+      
     }
 
     if (SubsystemConstants.useClimber) {
@@ -256,7 +259,7 @@ public class RobotContainer {
         return m_intakeSubsystem.m_beambreak.beamBroken();
       })
           .onTrue(new InstantCommand(() -> {
-            m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.2);
+            m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.4);
           }))
           .onFalse(new InstantCommand(() -> {
             m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.0);
@@ -308,10 +311,7 @@ public class RobotContainer {
         if( m_poseEstimatorSubsystem.getPose() == null) {
           return;
         }
-        Pose2d robotPose = m_poseEstimatorSubsystem.getPose();
-        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-          robotPose = GeometryUtil.flipFieldPose(robotPose);
-        } //TODO: Make this a Pose estimator function?
+        Pose2d robotPose = m_poseEstimatorSubsystem.getAlliancePose();
         DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);", 
           robotPose.getX(),
           robotPose.getY(),
@@ -526,12 +526,9 @@ public class RobotContainer {
       return Optional.of(new Rotation2d(Math
           .toRadians(-angle.get())).plus(m_driveSubsystem.getPose().getRotation()));
     } else if (AutoConstants.pathplannerOveridePointToSpeaker) {
-      Pose2d currentPose = m_poseEstimatorSubsystem.getPose();
+      Pose2d currentPose = m_poseEstimatorSubsystem.getAlliancePose();
       if (currentPose == null) {
         return Optional.empty();
-      }
-      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
-        currentPose = GeometryUtil.flipFieldPose(currentPose);
       }
       Optional<double[]> triangleData = m_triangleInterpolator.getTriangulatedOutput(currentPose);
       Rotation2d heading;

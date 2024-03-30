@@ -67,7 +67,7 @@ public class DriveToNoteCommand extends Command {
       m_noteHeading = new Rotation2d(Math.toRadians(-angle.get())).plus(m_driveSubsystem.getPose().getRotation());
     }
     if (m_seenNote == true) {
-      m_driveSubsystem.driveToNote(m_speed.getAsDouble(), m_noteHeading);
+      m_driveSubsystem.driveForwardWithAngle(m_speed.getAsDouble(), m_noteHeading);
     } else if (m_joystick.isPresent()) {
       m_driveSubsystem.driveWithJoystick(m_joystick.get());
     }

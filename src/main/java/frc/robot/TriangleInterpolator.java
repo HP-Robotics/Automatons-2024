@@ -17,6 +17,10 @@ import org.poly2tri.triangulation.sets.PointSet;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DataLogManager;
+import frc.robot.Constants.LimelightConstants;
+import frc.robot.Constants.ShooterConstants;
+
 import java.awt.Color;
 
 public class TriangleInterpolator {
@@ -135,6 +139,13 @@ public class TriangleInterpolator {
     }
   }
 
+  /**
+   * 
+   * @param robotPose
+   * @return Optional double array where 0th element is left shooter speed, 1st is
+   *         right shooter speed, 2nd is pivot angle, 3rd is heading
+   * 
+   */
   public Optional<double[]> getTriangulatedOutput(Pose2d robotPose) {
     List<DelaunayTriangle> triangles = m_pointSet.getTriangles();
     for (DelaunayTriangle triangle : triangles) {
@@ -159,7 +170,90 @@ public class TriangleInterpolator {
   }
 
   public static void addv2Magic(TriangleInterpolator m_triangleInterpolator) {
-    
+    for (double angle = -30; angle < 31; angle += 10) {
+      m_triangleInterpolator.addCalibratedPoint(
+          1.48 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          1.48 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          40, 30, 0.425, Math.toRadians(angle));
+      DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
+          1.48 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          1.48 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          40.0,
+          30.0,
+          0.425,
+          Math.toRadians(angle)));
+    }
+    for (double angle = -50; angle < 51; angle += 10) {
+      m_triangleInterpolator.addCalibratedPoint(
+          2.46 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          2.46 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          44, 33, 0.395, Math.toRadians(angle));
+      DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
+          2.46 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          2.46 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          44.0,
+          33.0,
+          0.395,
+          Math.toRadians(angle)));
+      m_triangleInterpolator.addCalibratedPoint(
+          3.43 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          3.43 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          60, 45, 0.374, Math.toRadians(angle));
+      DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
+          3.43 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          3.43 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          60.0,
+          45.0,
+          0.374,
+          Math.toRadians(angle)));
+      m_triangleInterpolator.addCalibratedPoint(
+          4.37 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          4.37 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          80, 60, 0.3585, Math.toRadians(angle));
+      DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
+          4.37 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          4.37 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          80.0,
+          60.0,
+          0.3585,
+          Math.toRadians(angle)));
+      m_triangleInterpolator.addCalibratedPoint(
+          5 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          5 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          80, 60, 0.349, Math.toRadians(angle));
+      DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
+          5 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          5 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          80.0,
+          60.0,
+          0.349,
+          Math.toRadians(angle)));
+    }
+
+    // m_triangleInterpolator.addCalibratedPoint(2.75, 2.48, 50.0, 50.0, 0.3606,
+    // -0.8191);
+    m_triangleInterpolator.addCalibratedPoint(1.35, 4.52, 40.0, 30.0, 0.4163, -0.7601);
+    m_triangleInterpolator.addCalibratedPoint(1.26, 3.36, 44.0, 33.0, 0.3936, -1.1441);
+    m_triangleInterpolator.addCalibratedPoint(1.75, 2.51, 60.0, 45.0, 0.3726, -1.0717);
+    m_triangleInterpolator.addCalibratedPoint(2.24, 1.64, 80.0, 60.0, 0.3560, -1.0940);
+    Pose2d tempPose = reflectAcrossSpeaker(new Pose2d(1.35, 4.52, new Rotation2d(-0.7601)));
+    m_triangleInterpolator.addCalibratedPoint(tempPose.getX(), tempPose.getY(), 40.0, 30.0, 0.4163,
+        tempPose.getRotation().getRadians());
+    tempPose = reflectAcrossSpeaker(new Pose2d(1.26, 3.36, new Rotation2d(-1.1441)));
+    m_triangleInterpolator.addCalibratedPoint(tempPose.getX(), tempPose.getY(), 44.0, 33.0, 0.3936,
+        tempPose.getRotation().getRadians());
+    tempPose = reflectAcrossSpeaker(new Pose2d(1.75, 2.51, new Rotation2d(-1.0717)));
+    m_triangleInterpolator.addCalibratedPoint(tempPose.getX(), tempPose.getY(), 60.0, 45.0, 0.3726,
+        tempPose.getRotation().getRadians());
+    tempPose = reflectAcrossSpeaker(new Pose2d(2.24, 1.64, new Rotation2d(-1.0940)));
+    m_triangleInterpolator.addCalibratedPoint(tempPose.getX(), tempPose.getY(), 80.0, 60.0, 0.3560,
+        tempPose.getRotation().getRadians());
+  }
+
+  public static Pose2d reflectAcrossSpeaker(Pose2d pose) {
+    return new Pose2d(pose.getX(),
+        2 * LimelightConstants.aprilTagList[7].getY() - pose.getY(),
+        new Rotation2d(Math.abs(pose.getRotation().getRadians())));
   }
 
   public static void addDuluthMagic(TriangleInterpolator m_triangleInterpolator) {
