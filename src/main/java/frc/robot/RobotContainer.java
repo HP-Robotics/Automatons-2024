@@ -17,6 +17,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.DrivePointedToNoteCommand;
 import frc.robot.commands.DrivePointedToSpeakerCommand;
 import frc.robot.commands.DriveToNoteCommand;
+import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.CommandBlocks;
 import frc.robot.commands.IntakeStatesCommand;
 import frc.robot.commands.OperatorRumbleCommand;
@@ -203,6 +204,8 @@ public class RobotContainer {
       // Path"));
       // m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test
       // Path Line"));
+
+      m_driveJoystick.button(ControllerConstants.driveToAmpButton).whileTrue(new DriveToPoseCommand(m_driveSubsystem, "Amp Lineup"));
     }
 
     if (SubsystemConstants.useShooter) {
@@ -236,24 +239,19 @@ public class RobotContainer {
     }
 
     if (SubsystemConstants.useClimber) {
-      m_driveJoystick.povUp().whileTrue(new StartEndCommand(
-          () -> {
-            m_climberSubsystem.climbMotorLeft.set(ClimberConstants.climbSpeed);
-            m_climberSubsystem.climbMotorRight.set(ClimberConstants.climbSpeed);
-          },
-          () -> {
-            m_climberSubsystem.climbMotorLeft.set(0);
-            m_climberSubsystem.climbMotorRight.set(0);
-          }, m_climberSubsystem));
-      m_driveJoystick.povDown().whileTrue(new StartEndCommand(
-          () -> {
-            m_climberSubsystem.climbMotorLeft.set(-ClimberConstants.climbSpeed);
-            m_climberSubsystem.climbMotorRight.set(-ClimberConstants.climbSpeed);
-          },
-          () -> {
-            m_climberSubsystem.climbMotorLeft.set(0);
-            m_climberSubsystem.climbMotorRight.set(0);
-          }, m_climberSubsystem));
+      m_driveJoystick.povUp().whileTrue(
+        new ParallelCommandGroup(
+          m_climberSubsystem.climbTo(ClimberConstants.climbSpeed),
+          new InstantCommand(() -> {m_pivotSubsystem.setPosition(PivotConstants.encoderAt90);}, m_pivotSubsystem)
+      ));
+        
+      m_driveJoystick.povDown().whileTrue(
+        new ParallelCommandGroup(
+          m_climberSubsystem.climbTo(-ClimberConstants.climbSpeed),
+          new RunCommand(() -> {m_climberSubsystem.adjustPivot(m_pivotSubsystem);}, m_pivotSubsystem)
+        ));
+      
+      m_driveJoystick.button(3).whileTrue(m_climberSubsystem.calibrate());
     }
 
     if (SubsystemConstants.useIntake) {
