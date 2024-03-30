@@ -228,6 +228,17 @@ public class TriangleInterpolator {
           60.0,
           0.349,
           Math.toRadians(angle)));
+      m_triangleInterpolator.addCalibratedPoint(
+          2.97 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          2.97 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          53.3, 40, 0.3795, Math.toRadians(angle));
+      DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
+          2.97 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          2.97 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          53.3,
+          40.0,
+          0.3795,
+          Math.toRadians(angle)));
     }
 
     // m_triangleInterpolator.addCalibratedPoint(2.75, 2.48, 50.0, 50.0, 0.3606,
