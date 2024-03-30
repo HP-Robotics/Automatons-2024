@@ -170,7 +170,7 @@ public class TriangleInterpolator {
   }
 
   public static void addv2Magic(TriangleInterpolator m_triangleInterpolator) {
-    for (double angle = -30; angle < 31; angle += 10) {
+    for (double angle = -90; angle < 91; angle += 10) {
       m_triangleInterpolator.addCalibratedPoint(
           1.48 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
           1.48 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),

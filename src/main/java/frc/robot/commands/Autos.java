@@ -235,7 +235,7 @@ public final class Autos {
         new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 5 Piece Part 4"),
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
-        }).withTimeout(1.5),
+        }).withTimeout(0.75),
         new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 5 Piece Part 5"),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
         commandBlocks.fireGamePieceCommand());
