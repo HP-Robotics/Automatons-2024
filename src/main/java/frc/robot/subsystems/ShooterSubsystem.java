@@ -95,8 +95,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setShooter(double output1, double output2) {
     m_velocity.Slot = 0;
-    // m_leftMotor.setControl(new DutyCycleOut(output1));
-    // m_rightMotor.setControl(new DutyCycleOut(output2));
     if (output1 != m_lastOutput1) {
       m_lastOutput1 = output1;
       if (output1 == 0) {
@@ -113,8 +111,6 @@ public class ShooterSubsystem extends SubsystemBase {
         m_rightMotor.setControl(m_velocity.withVelocity(output2));
       }
     }
-    // m_frontMotor.setControl(new DutyCycleOut(output1));
-    // m_backMotor.setControl(new DutyCycleOut(output2));
   }
 
   public boolean atSpeed() {
@@ -129,5 +125,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void stopShooter() {
     m_leftMotor.setControl(new DutyCycleOut(0));
     m_rightMotor.setControl(new DutyCycleOut(0));
+    m_lastOutput1 = 0;
+    m_lastOutput2 = 0;
   }
 }

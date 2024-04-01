@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7224667370911348,
+        "x": 0.72,
         "y": 6.71
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7224667370911364,
-        "y": 6.71
+        "x": 1.1704294548550895,
+        "y": 6.961690896555974
       },
       "isLocked": false,
       "linkedName": "Amp Side Start"
@@ -20,18 +20,23 @@
         "y": 6.98
       },
       "prevControl": {
-        "x": 1.62,
-        "y": 6.98
+        "x": 2.214845352767623,
+        "y": 7.028786107669473
       },
       "nextControl": null,
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "AC 1A"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.6,
       "rotationDegrees": 0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.1,
+      "rotationDegrees": 56.549242389760856,
       "rotateFast": false
     }
   ],
@@ -69,7 +74,7 @@
   "reversed": false,
   "folder": "Amp Center 4 Piece",
   "previewStartingState": {
-    "rotation": 59.81732363331607,
+    "rotation": 58.84672202788177,
     "velocity": 0
   },
   "useDefaultConstraints": true

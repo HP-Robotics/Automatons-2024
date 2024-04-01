@@ -48,14 +48,17 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     }
   }
 
-  public void updateVision(Pose2d vPose, double vTime, double distance) {
+  public void updateVision(Pose2d vPose, double vTime, double distance, double skew) {
     if (poseEstimator != null) {
+      System.out.println(skew);
+      if (/*skew < PoseEstimatorConstants.maxAcceptableSkew &&*/ distance < PoseEstimatorConstants.maxAcceptableDistance) {
       poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(
           PoseEstimatorConstants.visionXStandardDev * distance,
           PoseEstimatorConstants.visionYStandardDev * distance,
           PoseEstimatorConstants.visionHeadingStandardDev * distance));
       poseEstimator.addVisionMeasurement(vPose, vTime);
-      // System.out.println(vTime);
+      // System.out.println(vTime);      
+    }
     }
   }
 

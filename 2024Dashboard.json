@@ -133,48 +133,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "10,0": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "3-Axis Accelerometer",
-              "_title": "3-Axis Accelerometer",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Accelerometer/Range": "k16G",
-              "Visuals/Show value": true,
-              "Visuals/Precision": 2,
-              "Visuals/Show tick marks": false
-            }
-          },
-          "11,4": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_title": "Text View",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "5,0": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "ComboBox Chooser",
-              "_source0": "network_table:///SmartDashboard/Auto Chooser",
-              "_title": "/SmartDashboard/Auto Chooser",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "5,5": {
+          "3,5": {
             "size": [
               4,
               1
@@ -187,7 +146,7 @@
               "_showGlyph": false
             }
           },
-          "6,2": {
+          "7,3": {
             "size": [
               5,
               3
@@ -200,7 +159,8 @@
               "_showGlyph": false,
               "Game/Game": "k2024Crescendo",
               "Visuals/Robot Icon Size": 50.0,
-              "Visuals/Show Outside Circles": false
+              "Visuals/Show Outside Circles": false,
+              "Colors/Auto Path": "#FFFFFFFF"
             }
           },
           "1,0": {
@@ -222,6 +182,27 @@
               "fps": -1,
               "imageWidth": 0,
               "imageHeight": 0
+            }
+          },
+          "6,0": {
+            "size": [
+              4,
+              3
+            ],
+            "content": {
+              "_type": "Camera Stream",
+              "_source0": "camera_server://limelight-bite",
+              "_title": "limelight-bite",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": -1.0,
+              "fps": -1,
+              "imageWidth": -1,
+              "imageHeight": -1
             }
           }
         }
@@ -332,6 +313,19 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "5,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///limelight-subsystem/noteTX",
+              "_title": "/noteTX",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -436,19 +430,6 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "10,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///shooter-subsystem/frontMotor Setpoint",
-              "_title": "/frontMotor Setpoint",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
           "11,0": {
             "size": [
               1,
@@ -514,32 +495,6 @@
               "_showGlyph": false
             }
           },
-          "5,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///shooter-subsystem/frontMotor Velocity",
-              "_title": "/frontMotor Velocity",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "6,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///shooter-subsystem/backMotor Velocity",
-              "_title": "/backMotor Velocity",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
           "2,2": {
             "size": [
               2,
@@ -555,33 +510,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "6,2": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///shooter-subsystem/leftMotor Setpoint",
-              "_title": "/leftMotor Setpoint",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "6,3": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///shooter-subsystem/rightMotor Setpoint",
-              "_title": "/rightMotor Setpoint",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "8,1": {
+          "7,1": {
             "size": [
               2,
               1
@@ -603,6 +532,45 @@
               "_type": "Text View",
               "_source0": "network_table:///shooter-subsystem/rightMotor Velocity",
               "_title": "/rightMotor Velocity",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///shooter-subsystem/leftMotor Setpoint",
+              "_title": "shooter-subsystem/leftMotor Setpoint",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///shooter-subsystem/rightMotor Setpoint",
+              "_title": "shooter-subsystem/rightMotor Setpoint",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///shooter-subsystem/rightOutput",
+              "_title": "/rightOutput",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -1074,6 +1042,19 @@
               "_showGlyph": false
             }
           },
+          "9,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///pivot-table/Pivot Right Current",
+              "_title": "/Pivot Right Current",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
           "5,1": {
             "size": [
               2,
@@ -1082,7 +1063,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///pivot-table/Pivot Test Set Point",
-              "_title": "/Pivot Test Set Point",
+              "_title": "pivot-table/Pivot Test Set Point",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -1216,6 +1197,62 @@
               "_title": "climber-table/Climber Right Motor Encoder",
               "_glyph": 148,
               "_showGlyph": false
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///climber-table/Climber Left Motor Raw Encoder",
+              "_title": "/Climber Left Motor Raw Encoder",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///climber-table/Climber Right Motor Raw Encoder",
+              "_title": "/Climber Right Motor Raw Encoder",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///climber-table/Left at Bottom",
+              "_title": "/Left at Bottom",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///climber-table/Right at Bottom",
+              "_title": "/Right at Bottom",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           }
         }
@@ -1595,6 +1632,19 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///drive-train/Rotation Filtered Target Angle",
+              "_title": "/Rotation Filtered Target Angle",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -1627,9 +1677,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -7.199999809265137,
-    "y": -7.199999809265137,
-    "width": 1550.4000244140625,
-    "height": 830.4000244140625
+    "x": 0.800000011920929,
+    "y": 0.800000011920929,
+    "width": 1534.4000244140625,
+    "height": 814.4000244140625
   }
 }
