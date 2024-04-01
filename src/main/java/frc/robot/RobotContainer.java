@@ -379,13 +379,7 @@ public class RobotContainer {
   }
 
   public void configureAutoSelector() {
-    m_chooseAutos.addOption("Center Down", "CenterDown");
-    m_chooseAutos.addOption("Four Piece", "FourPiece");
     m_chooseAutos.addOption("Grand Theft Auto", "GrandTheftAuto");
-    m_chooseAutos.addOption("Basic Amp", "BasicAmp");
-    m_chooseAutos.addOption("Intermediate Amp", "IntermediateAmp");
-    m_chooseAutos.addOption("Four Piece Center", "FourPieceCenter");
-    m_chooseAutos.addOption("Three Piece Center", "ThreePieceCenter");
     m_chooseAutos.addOption("Test Path 5", "TestPath5");
     m_chooseAutos.addOption("Shoot Preload Far Away", "ShootPreloadFarAway");
     m_chooseAutos.addOption("Only Shoot", "OnlyShoot");
@@ -401,26 +395,8 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    if (m_chooseAutos.getSelected() == "CenterDown") {
-      return Autos.CenterDown(m_compoundCommands, m_driveSubsystem, m_shooterSubsystem);
-    }
-    if (m_chooseAutos.getSelected() == "FourPiece") {
-      return Autos.FourPiece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
-          m_triggerSubsystem,
-          m_pivotSubsystem);
-    }
-    if (m_chooseAutos.getSelected() == "FourPieceCenter") {
-      return Autos.FourPieceCenter(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
-          m_triggerSubsystem, m_pivotSubsystem);
-    }
     if (m_chooseAutos.getSelected() == "GrandTheftAuto") {
       return Autos.GrandTheftAuto(m_driveSubsystem);
-    }
-    if (m_chooseAutos.getSelected() == "BasicAmp") {
-      return Autos.BasicAmp(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem);
-    }
-    if (m_chooseAutos.getSelected() == "IntermediateAmp") {
-      return Autos.IntermediateAmp(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem);
     }
     if (m_chooseAutos.getSelected() == "TestPath5") {
       return Autos.FiveMeterTest(m_driveSubsystem);
@@ -456,26 +432,8 @@ public class RobotContainer {
   public void drawSelectedAuto(String selection) {
     m_autoPath = new ArrayList<>();
     String autoFile = "";
-    if (selection == "FourPieceCenter") {
-      autoFile = "4 Piece Center";
-    }
-    if (selection == "ThreePieceCenter") {
-      autoFile = "3 Piece Center";
-    }
-    if (selection == "FourPiece") {
-      autoFile = "4 Piece Auto";
-    }
-    if (selection == "BasicAmp") {
-      autoFile = "Basic Amp";
-    }
-    if (selection == "CenterDown") {
-      autoFile = "Center Down";
-    }
     if (selection == "GrandTheftAuto") {
       autoFile = "Grand Theft Auto";
-    }
-    if (selection == "IntermediateAmp") {
-      autoFile = "Intermediate Amp";
     }
     if (selection == "ShootPreloadFarAway") {
       autoFile = "Shoot Preload Far Away";
