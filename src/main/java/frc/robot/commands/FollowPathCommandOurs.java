@@ -16,6 +16,8 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -86,22 +88,20 @@ public class FollowPathCommandOurs extends Command {
   public void initialize() {
     Optional<Alliance> ally = DriverStation.getAlliance();
     if (m_resetPosition) {
-      if (ally.isPresent()) {
-        if (ally.get() == Alliance.Red) {
-          // TODO: only reset odometry once
-          m_driveSubsystem.resetPoseEstimator(GeometryUtil.flipFieldPose(m_path.getPreviewStartingHolonomicPose()));
-          // Pose2d startPose =
-          // GeometryUtil.flipFieldPose(m_path.getPreviewStartingHolonomicPose());
-          // Double[] startPoseArray =
-          // {startPose.getX(),startPose.getY(),startPose.getRotation().getRadians()};
-          // m_driveSubsystem.driveTrainTable.putValue("Start
-          // Pose",NetworkTableValue.makeDoubleArray(startPoseArray));
-        } else {
-          m_driveSubsystem.resetPoseEstimator(m_path.getPreviewStartingHolonomicPose());
-        }
-      } else {
-        m_driveSubsystem.resetPoseEstimator(m_path.getPreviewStartingHolonomicPose());
+      Pose2d startPose = m_path.getPreviewStartingHolonomicPose();
+      double startRotationDegrees = startPose.getRotation().getDegrees();
+      if (ally.isPresent() && ally.get() == Alliance.Red) {
+        // TODO: only reset odometry once
+        startPose = GeometryUtil.flipFieldPose(startPose);
+        startRotationDegrees -= 180;
+        // Double[] startPoseArray =
+        // {startPose.getX(),startPose.getY(),startPose.getRotation().getRadians()};
+        // m_driveSubsystem.driveTrainTable.putValue("Start
+        // Pose",NetworkTableValue.makeDoubleArray(startPoseArray));
       }
+      startRotationDegrees = MathUtil.inputModulus(startRotationDegrees, -180, 180);
+      m_driveSubsystem.resetYaw(startRotationDegrees);
+      m_driveSubsystem.resetPoseEstimator(startPose);
     }
     m_pathPlannerCommand.initialize();
   }

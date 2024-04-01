@@ -289,8 +289,12 @@ public class DriveSubsystem extends SubsystemBase {
   /**
    * Resets robot's conception of field orientation
    */
-  public void resetYaw() {
-    m_pGyro.setYaw(0);// TODO how do we want this to interact with pose estimator?
+  public void resetYaw(double angle) {
+    m_pGyro.setYaw(angle);// TODO how do we want this to interact with pose estimator?
     // add offset (and a wraparound to avoid the offset breaking things)
+  }
+
+  public void resetYaw() {
+    resetYaw(0);
   }
 }
