@@ -1,0 +1,76 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.727843583953202,
+        "y": 4.40494076237559
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.587197071830041,
+        "y": 2.350525042930428
+      },
+      "isLocked": false,
+      "linkedName": "Source Side Start"
+    },
+    {
+      "anchor": {
+        "x": 8.026512585096112,
+        "y": 2.3399419720486945
+      },
+      "prevControl": {
+        "x": 3.8381720068283434,
+        "y": 0.07016492665464083
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "SC C4"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8,
+      "rotationDegrees": 13.781490778727543,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.9,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "cancelIfNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 480.0,
+    "maxAngularAcceleration": 640.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 16.313310372485653,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Source Center 3 Piece",
+  "previewStartingState": {
+    "rotation": -60.09327061606361,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

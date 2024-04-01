@@ -1,0 +1,86 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.8006421808568094,
+        "y": 2.7104327842859965
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.9200310879254237,
+        "y": 3.262669089440744
+      },
+      "isLocked": false,
+      "linkedName": "SC Shoot"
+    },
+    {
+      "anchor": {
+        "x": 5.2999413121377135,
+        "y": 3.870765120447915
+      },
+      "prevControl": {
+        "x": 4.116307247842955,
+        "y": 3.0027668066356927
+      },
+      "nextControl": {
+        "x": 6.177002895325086,
+        "y": 4.513943614782409
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.909515486489407,
+        "y": 4.1046482092964185
+      },
+      "prevControl": {
+        "x": 6.705017578922471,
+        "y": 4.198201444836233
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "SC C3"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.65,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "cancelIfNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 480.0,
+    "maxAngularAcceleration": 640.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 2.432926690894146e-10,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Source Center 3 Piece",
+  "previewStartingState": {
+    "rotation": -51.26341110094608,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

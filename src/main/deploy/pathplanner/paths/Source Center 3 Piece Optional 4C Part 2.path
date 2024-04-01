@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.026512585096112,
+        "y": 2.3399419720486945
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.732625026503613,
+        "y": 0.6080960310068779
+      },
+      "isLocked": false,
+      "linkedName": "SC C4"
+    },
+    {
+      "anchor": {
+        "x": 2.8006421808568094,
+        "y": 2.7104327842859965
+      },
+      "prevControl": {
+        "x": 3.3470175202458665,
+        "y": 2.315442579603108
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "SC Shoot"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.45,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "pointAtSpeaker"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 480.0,
+    "maxAngularAcceleration": 640.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -41.06472153297858,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Source Center 3 Piece",
+  "previewStartingState": {
+    "rotation": 22.94656306098137,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
