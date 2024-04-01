@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.SubsystemConstants;
 
 /**
@@ -122,6 +123,9 @@ public class Robot extends TimedRobot {
     }
     if (SubsystemConstants.useDrive) {
       m_robotContainer.resetDriveOffsets();
+    }
+    if (SubsystemConstants.useClimber) {
+      m_robotContainer.m_climberSubsystem.calibrate().withTimeout(ClimberConstants.calibrationTime).schedule();
     }
   }
 
