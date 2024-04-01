@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.xml.crypto.Data;
-
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -40,7 +38,6 @@ import com.pathplanner.lib.util.GeometryUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -63,9 +60,6 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -86,8 +80,10 @@ public class RobotContainer {
   public List<Pose2d> m_autoPath = new ArrayList<>();
 
   // The robot's subsystems and commands are defined here...
-  final PoseEstimatorSubsystem m_poseEstimatorSubsystem = new PoseEstimatorSubsystem(); //TODO add optional initializatoin
-  final DriveSubsystem m_driveSubsystem = SubsystemConstants.useDrive ? new DriveSubsystem(m_poseEstimatorSubsystem) : null; 
+  final PoseEstimatorSubsystem m_poseEstimatorSubsystem = new PoseEstimatorSubsystem(); // TODO add optional
+                                                                                        // initializatoin
+  final DriveSubsystem m_driveSubsystem = SubsystemConstants.useDrive ? new DriveSubsystem(m_poseEstimatorSubsystem)
+      : null;
   private final LimelightSubsystem m_limelightSubsystem = SubsystemConstants.useLimelight
       ? new LimelightSubsystem(m_poseEstimatorSubsystem)
       : null;
@@ -117,9 +113,11 @@ public class RobotContainer {
     double startTime = Timer.getFPGATimestamp();
     m_triangleInterpolator.makeTriangles();
     double triangleTime = Timer.getFPGATimestamp();
-    // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png", 500,
+    // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png",
+    // 500,
     // 500, 0, 8.27, 8.27, 0, 0, 0, 80);
-    // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png", 500,
+    // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png",
+    // 500,
     // 500, 0, 8.27, 8.27, 0, 1, 0, 80);
     // m_triangleInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 100, 100,
     // 0, 8.27, 8.27, 0, 2, 0.3, 0.5);
@@ -138,7 +136,8 @@ public class RobotContainer {
     }
 
     m_compoundCommands = new CommandBlocks(m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
-        m_pivotSubsystem, m_snuffilatorSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
+        m_pivotSubsystem, m_snuffilatorSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem,
+        m_triangleInterpolator);
 
     if (SubsystemConstants.useDrive) {
       m_driveSubsystem.setDefaultCommand(
@@ -206,7 +205,8 @@ public class RobotContainer {
       // m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test
       // Path Line"));
 
-      m_driveJoystick.button(ControllerConstants.driveToAmpButton).whileTrue(new DriveToPoseCommand(m_driveSubsystem, "Amp Lineup"));
+      m_driveJoystick.button(ControllerConstants.driveToAmpButton)
+          .whileTrue(new DriveToPoseCommand(m_driveSubsystem, "Amp Lineup"));
     }
 
     if (SubsystemConstants.useShooter) {
@@ -228,30 +228,34 @@ public class RobotContainer {
       m_opJoystick.povUp().onTrue(new SetShooterCommand(m_shooterSubsystem));
     }
     if (SubsystemConstants.useShooter && SubsystemConstants.usePivot) {
-      m_opJoystick.povDown().onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(m_pivotSubsystem.getNetworkTestValue())))
-      .whileTrue(new OperatorRumbleCommand(m_pivotSubsystem, m_driveSubsystem, m_limelightSubsystem, m_shooterSubsystem, m_opJoystick));
+      m_opJoystick.povDown()
+          .onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(m_pivotSubsystem.getNetworkTestValue())))
+          .whileTrue(new OperatorRumbleCommand(m_pivotSubsystem, m_driveSubsystem, m_limelightSubsystem,
+              m_shooterSubsystem, m_opJoystick));
       new Trigger(() -> {
         return m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
       })
           .onTrue(new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp,
               ShooterConstants.shooterSpeedAmp))
           .onFalse(new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator));
-      
+
     }
 
     if (SubsystemConstants.useClimber) {
       m_driveJoystick.povUp().whileTrue(
-        new ParallelCommandGroup(
-          m_climberSubsystem.climbTo(ClimberConstants.climbSpeed),
-          new InstantCommand(() -> {m_pivotSubsystem.setPosition(PivotConstants.encoderAt90);}, m_pivotSubsystem)
-      ));
-        
+          new ParallelCommandGroup(
+              m_climberSubsystem.climbTo(ClimberConstants.climbSpeed),
+              new InstantCommand(() -> {
+                m_pivotSubsystem.setPosition(PivotConstants.encoderAt90);
+              }, m_pivotSubsystem)));
+
       m_driveJoystick.povDown().whileTrue(
-        new ParallelCommandGroup(
-          m_climberSubsystem.climbTo(-ClimberConstants.climbSpeed),
-          new RunCommand(() -> {m_climberSubsystem.adjustPivot(m_pivotSubsystem);}, m_pivotSubsystem)
-        ));
-      
+          new ParallelCommandGroup(
+              m_climberSubsystem.climbTo(-ClimberConstants.climbSpeed),
+              new RunCommand(() -> {
+                m_climberSubsystem.adjustPivot(m_pivotSubsystem);
+              }, m_pivotSubsystem)));
+
       m_driveJoystick.button(3).whileTrue(m_climberSubsystem.calibrate());
     }
 
@@ -296,7 +300,9 @@ public class RobotContainer {
                                                                                 // statement
           .whileTrue(
               new DriveToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_intakeSubsystem, m_triggerSubsystem,
-                  m_driveJoystick, () -> {return m_driveJoystick.getRawAxis(2);}));
+                  m_driveJoystick, () -> {
+                    return m_driveJoystick.getRawAxis(2);
+                  }));
     }
 
     if (SubsystemConstants.useSnuffilator) {
@@ -309,18 +315,19 @@ public class RobotContainer {
 
     if (SubsystemConstants.useShooter && SubsystemConstants.usePivot && SubsystemConstants.useDrive) {
       m_opJoystick.button(7).onTrue(new InstantCommand(() -> {
-        if( m_poseEstimatorSubsystem.getPose() == null) {
+        if (m_poseEstimatorSubsystem.getPose() == null) {
           return;
         }
         Pose2d robotPose = m_poseEstimatorSubsystem.getAlliancePose();
-        DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);", 
-          robotPose.getX(),
-          robotPose.getY(),
-          m_shooterSubsystem.shooterTable.getEntry("leftMotor Setpoint").getDouble(ShooterConstants.shooterSpeedLeft),
-          m_shooterSubsystem.shooterTable.getEntry("rightMotor Setpoint").getDouble(ShooterConstants.shooterSpeedRight),
-          m_pivotSubsystem.getCurrentPosition(),
-          robotPose.getRotation().getRadians()
-        ));
+        DataLogManager.log(String.format(
+            "m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
+            robotPose.getX(),
+            robotPose.getY(),
+            m_shooterSubsystem.shooterTable.getEntry("leftMotor Setpoint").getDouble(ShooterConstants.shooterSpeedLeft),
+            m_shooterSubsystem.shooterTable.getEntry("rightMotor Setpoint")
+                .getDouble(ShooterConstants.shooterSpeedRight),
+            m_pivotSubsystem.getCurrentPosition(),
+            robotPose.getRotation().getRadians()));
       }));
     }
   }
@@ -382,13 +389,7 @@ public class RobotContainer {
   }
 
   public void configureAutoSelector() {
-    m_chooseAutos.addOption("Center Down", "CenterDown");
-    m_chooseAutos.addOption("Four Piece", "FourPiece");
     m_chooseAutos.addOption("Grand Theft Auto", "GrandTheftAuto");
-    m_chooseAutos.addOption("Basic Amp", "BasicAmp");
-    m_chooseAutos.addOption("Intermediate Amp", "IntermediateAmp");
-    m_chooseAutos.addOption("Four Piece Center", "FourPieceCenter");
-    m_chooseAutos.addOption("Three Piece Center", "ThreePieceCenter");
     m_chooseAutos.addOption("Test Path 5", "TestPath5");
     m_chooseAutos.addOption("Shoot Preload Far Away", "ShootPreloadFarAway");
     m_chooseAutos.addOption("Only Shoot", "OnlyShoot");
@@ -404,26 +405,8 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    if (m_chooseAutos.getSelected() == "CenterDown") {
-      return Autos.CenterDown(m_compoundCommands, m_driveSubsystem, m_shooterSubsystem);
-    }
-    if (m_chooseAutos.getSelected() == "FourPiece") {
-      return Autos.FourPiece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
-          m_triggerSubsystem,
-          m_pivotSubsystem);
-    }
-    if (m_chooseAutos.getSelected() == "FourPieceCenter") {
-      return Autos.FourPieceCenter(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
-          m_triggerSubsystem, m_pivotSubsystem);
-    }
     if (m_chooseAutos.getSelected() == "GrandTheftAuto") {
       return Autos.GrandTheftAuto(m_driveSubsystem);
-    }
-    if (m_chooseAutos.getSelected() == "BasicAmp") {
-      return Autos.BasicAmp(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem);
-    }
-    if (m_chooseAutos.getSelected() == "IntermediateAmp") {
-      return Autos.IntermediateAmp(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem);
     }
     if (m_chooseAutos.getSelected() == "TestPath5") {
       return Autos.FiveMeterTest(m_driveSubsystem);
@@ -441,13 +424,16 @@ public class RobotContainer {
           m_limelightSubsystem, m_triggerSubsystem);
     }
     if (m_chooseAutos.getSelected() == "AmpCenter4Piece") {
-      return Autos.AmpCenter4Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
+      return Autos.AmpCenter4Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
+          m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
     }
     if (m_chooseAutos.getSelected() == "MidAlliance4Piece") {
-      return Autos.MiddleAllianceFourPiece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
+      return Autos.MiddleAllianceFourPiece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
+          m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
     }
     if (m_chooseAutos.getSelected() == "SourceCenter3Piece") {
-      return Autos.SourceCenter3Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
+      return Autos.SourceCenter3Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
+          m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
     }
     if (m_chooseAutos.getSelected() == "DoNothing") {
       return Autos.DoNothing();
@@ -459,26 +445,8 @@ public class RobotContainer {
   public void drawSelectedAuto(String selection) {
     m_autoPath = new ArrayList<>();
     String autoFile = "";
-    if (selection == "FourPieceCenter") {
-      autoFile = "4 Piece Center";
-    }
-    if (selection == "ThreePieceCenter") {
-      autoFile = "3 Piece Center";
-    }
-    if (selection == "FourPiece") {
-      autoFile = "4 Piece Auto";
-    }
-    if (selection == "BasicAmp") {
-      autoFile = "Basic Amp";
-    }
-    if (selection == "CenterDown") {
-      autoFile = "Center Down";
-    }
     if (selection == "GrandTheftAuto") {
       autoFile = "Grand Theft Auto";
-    }
-    if (selection == "IntermediateAmp") {
-      autoFile = "Intermediate Amp";
     }
     if (selection == "ShootPreloadFarAway") {
       autoFile = "Shoot Preload Far Away";

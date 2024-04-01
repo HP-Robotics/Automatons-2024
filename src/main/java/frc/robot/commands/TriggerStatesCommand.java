@@ -8,7 +8,6 @@ import com.ctre.phoenix6.controls.NeutralOut;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.TriggerSubsystem;
@@ -49,7 +48,7 @@ public class TriggerStatesCommand extends Command {
     }
     if (m_subsystem.m_isYucking) {
       m_subsystem.setTrigger(TriggerConstants.yuckSpeed);
-    } else if (m_subsystem.m_isFiring /* && m_subsystem.beambreakCount > 2*/) {
+    } else if (m_subsystem.m_isFiring /* && m_subsystem.beambreakCount > 2 */) {
       m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed));
       DataLogManager.log("20ms firing");
     } else if (m_subsystem.m_isLoaded) {
@@ -57,7 +56,13 @@ public class TriggerStatesCommand extends Command {
       m_subsystem.m_triggerMotor.setControl(new NeutralOut());
       DataLogManager.log("20ms loaded");
     } else if (m_subsystem.m_isIntaking) {
-      m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed));//divide this by two if triger toasters 
+      m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed));// divide
+                                                                                                                 // this
+                                                                                                                 // by
+                                                                                                                 // two
+                                                                                                                 // if
+                                                                                                                 // triger
+                                                                                                                 // toasters
       DataLogManager.log("20ms intaking");
     } else {
       m_subsystem.m_triggerMotor.setControl(new NeutralOut());

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7275269251393202,
-        "y": 6.665668032190766
+        "x": 7.909515486489407,
+        "y": 4.1046482092964185
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.244264110632693,
-        "y": 6.470672867853643
+        "x": 6.312332872612079,
+        "y": -0.2924649694187741
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SC C3"
     },
     {
       "anchor": {
-        "x": 2.65,
-        "y": 6.83
+        "x": 2.8006421808568094,
+        "y": 2.7104327842859965
       },
       "prevControl": {
-        "x": 2.2461571714117308,
-        "y": 6.186515957687496
+        "x": 3.9803629250915074,
+        "y": 2.232694631658019
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Grab piece 1A"
+      "linkedName": "SC Shoot"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.75,
+      "waypointRelativePos": 0.55,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "startIntaking"
+                "name": "pointAtSpeaker"
               }
             }
           ]
@@ -50,21 +50,21 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 480.0,
+    "maxAngularAcceleration": 640.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 41.82,
+    "rotation": -50.19442890815739,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Four Piece",
+  "folder": "Source Center 3 Piece",
   "previewStartingState": {
-    "rotation": 58.39,
+    "rotation": 0.0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

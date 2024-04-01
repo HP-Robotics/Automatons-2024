@@ -3,37 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3601616480916998,
-        "y": 5.4935044960977635
+        "x": 0.727843583953202,
+        "y": 4.40494076237559
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.590034026914901,
-        "y": 5.498749447949347
+        "x": 0.587197071830041,
+        "y": 2.350525042930428
       },
       "isLocked": false,
-      "linkedName": "Start Center"
+      "linkedName": "Source Side Start"
     },
     {
       "anchor": {
-        "x": 2.75,
-        "y": 5.55
+        "x": 8.026512585096112,
+        "y": 2.3399419720486945
       },
       "prevControl": {
-        "x": 2.471078613636399,
-        "y": 5.5420985442956505
+        "x": 3.8381720068283434,
+        "y": 0.07016492665464083
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Grab piece 2A"
+      "linkedName": "SC C4"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8,
+      "rotationDegrees": 13.781490778727543,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.65,
+      "waypointRelativePos": 0.9,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +47,7 @@
             {
               "type": "named",
               "data": {
-                "name": "startIntaking"
+                "name": "cancelIfNote"
               }
             }
           ]
@@ -51,20 +57,20 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 480.0,
+    "maxAngularAcceleration": 640.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 16.313310372485653,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "3 Piece Center",
+  "folder": "Source Center 3 Piece",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -60.09327061606361,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

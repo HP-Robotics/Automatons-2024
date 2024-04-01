@@ -44,7 +44,8 @@ public class DriveToNoteCommand extends Command {
   }
 
   public DriveToNoteCommand(DriveSubsystem driveSubsystem, LimelightSubsystem limelightSubsystem,
-      IntakeSubsystem intakeSubsystem, TriggerSubsystem triggerSubsystem, CommandJoystick joystick, DoubleSupplier speed) {
+      IntakeSubsystem intakeSubsystem, TriggerSubsystem triggerSubsystem, CommandJoystick joystick,
+      DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this(driveSubsystem, limelightSubsystem, intakeSubsystem, triggerSubsystem, speed);
     m_joystick = Optional.of(joystick);

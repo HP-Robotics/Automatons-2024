@@ -4,16 +4,11 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.TriangleInterpolator;
-import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.subsystems.DriveSubsystem;
@@ -30,57 +25,6 @@ public final class Autos {
   // return Commands.sequence(subsystem.exampleMethodCommand(), new
   // ExampleCommand(subsystem));
   // }
-
-  public static Command FourPiece(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
-      ShooterSubsystem shooterSubsystem,
-      TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem) {
-    if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive || !SubsystemConstants.useShooter) {
-      return null;
-    }
-    return new SequentialCommandGroup(
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
-        new FollowPathCommandOurs(drive, "4 Piece part 1", true),
-        commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position),
-        new FollowPathCommandOurs(drive, "4 Piece part 2"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.note2Position),
-        new FollowPathCommandOurs(drive, "4 Piece Part 3"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.note1_3Position));
-  }
-
-  public static Command FourPieceCenter(CommandBlocks commandBlocks, DriveSubsystem drive,
-      IntakeSubsystem intakeSubsystem, ShooterSubsystem shooterSubsystem,
-      TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem) {
-    if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive || !SubsystemConstants.useShooter) {
-      return null;
-    }
-    return new SequentialCommandGroup(
-        new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.subwooferPosition)),
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
-        new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.noteA1Position)),
-        new FollowPathCommandOurs(drive, "4 Piece Center Part 1", true),
-        commandBlocks.fireGamePieceCommand(PivotConstants.noteA1Position),
-        new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.note2Position)),
-        new FollowPathCommandOurs(drive, "4 Piece Center Part 2"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.note2Position),
-        new InstantCommand(() -> pivotSubsystem.setPosition(PivotConstants.noteA3Position)),
-        new FollowPathCommandOurs(drive, "4 Piece Center Part 3"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.noteA3Position),
-        new InstantCommand(shooterSubsystem::stopShooter));
-  }
-
-  public static Command CenterDown(CommandBlocks commandBlocks, DriveSubsystem drive,
-      ShooterSubsystem shooterSubsystem) {
-    if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive || !SubsystemConstants.useShooter) {
-      return null;
-    }
-    return new SequentialCommandGroup(
-        new FollowPathCommandOurs(drive, "Center Down Part 1", true),
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
-        new FollowPathCommandOurs(drive, "Center Down Part 2"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
-        new FollowPathCommandOurs(drive, "Center Down Part 3"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition));
-  }
 
   public static Command ShootPreloadFarAway(CommandBlocks commandBlocks, DriveSubsystem drive,
       ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, PivotSubsystem pivotSubsystem) {
@@ -105,52 +49,12 @@ public final class Autos {
         commandBlocks.fireGamePieceCommand(PivotConstants.preloadFarAwayPosition));
   }
 
-  public static Command BasicAmp(CommandBlocks commandBlocks, DriveSubsystem drive, IntakeSubsystem intakeSubsystem,
-      ShooterSubsystem shooterSubsystem) {
-    if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter) {
-      return null;
-    }
-    return new SequentialCommandGroup(
-        new FollowPathCommandOurs(drive, "Basic Amp Part 1", true),
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
-        new FollowPathCommandOurs(drive, "Basic Amp Part 2"),
-        commandBlocks.startIntaking());
-  }
-
   public static Command GrandTheftAuto(DriveSubsystem drive) {
     if (!SubsystemConstants.useDrive) {
       return null;
     }
     return new SequentialCommandGroup(
         new FollowPathCommandOurs(drive, "Grand Theft Auto Part 1", true));
-  }
-
-  public static Command IntermediateAmp(CommandBlocks commandBlocks, DriveSubsystem drive,
-      IntakeSubsystem intakeSubsystem, ShooterSubsystem shooterSubsystem) {
-    if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive || !SubsystemConstants.useShooter) {
-      return null;
-    }
-    return new SequentialCommandGroup(
-        new FollowPathCommandOurs(drive, "Intermediate Amp Part 1", true),
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
-        new FollowPathCommandOurs(drive, "Intermediate Amp Part 2"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
-        new FollowPathCommandOurs(drive, "Intermediate Amp Part 3"),
-        commandBlocks.startIntaking());
-  }
-
-  public static Command ThreePieceCenter(CommandBlocks commandBlocks, DriveSubsystem drive,
-      IntakeSubsystem intakeSubsystem, ShooterSubsystem shooterSubsystem,
-      TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem) {
-    if (!SubsystemConstants.useIntake || !SubsystemConstants.useDrive || !SubsystemConstants.useShooter) {
-      return null;
-    }
-    return new SequentialCommandGroup(
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
-        new FollowPathCommandOurs(drive, "3 Piece Center Part 1", true),
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition),
-        new FollowPathCommandOurs(drive, "3 Piece Center Part 2"),
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition));
   }
 
   public static Command FiveMeterTest(DriveSubsystem drive) {

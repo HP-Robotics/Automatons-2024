@@ -3,59 +3,53 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.861859906055994,
-        "y": 7.6128945420284
+        "x": 2.8006421808568094,
+        "y": 2.7104327842859965
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.762309798123869,
-        "y": 7.68305946868304
+        "x": 3.9200310879254237,
+        "y": 3.262669089440744
       },
       "isLocked": false,
-      "linkedName": "Amp"
+      "linkedName": "SC Shoot"
     },
     {
       "anchor": {
-        "x": 4.036972632349822,
-        "y": 7.6128945420284
+        "x": 5.2999413121377135,
+        "y": 3.870765120447915
       },
       "prevControl": {
-        "x": 3.248405310728492,
-        "y": 7.636790521471471
+        "x": 4.116307247842955,
+        "y": 3.0027668066356927
       },
       "nextControl": {
-        "x": 4.8087868255508575,
-        "y": 7.58950623314352
+        "x": 6.177002895325086,
+        "y": 4.513943614782409
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.779102053930601,
-        "y": 7.437482225391801
+        "x": 7.909515486489407,
+        "y": 4.1046482092964185
       },
       "prevControl": {
-        "x": 7.065758632941766,
-        "y": 7.226987445427882
+        "x": 6.705017578922471,
+        "y": 4.198201444836233
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SC C3"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": -90.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 1.85,
+      "waypointRelativePos": 1.65,
       "command": {
         "type": "parallel",
         "data": {
@@ -63,7 +57,7 @@
             {
               "type": "named",
               "data": {
-                "name": "IntakeCommand"
+                "name": "cancelIfNote"
               }
             }
           ]
@@ -73,20 +67,20 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 480.0,
+    "maxAngularAcceleration": 640.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 2.432926690894146e-10,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Intermediate Amp",
+  "folder": "Source Center 3 Piece",
   "previewStartingState": {
-    "rotation": -90.0,
+    "rotation": -51.26341110094608,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

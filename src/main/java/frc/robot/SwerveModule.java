@@ -13,7 +13,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
-import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -25,7 +24,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.SubsystemConstants;
 
 public class SwerveModule {
 
@@ -55,7 +53,7 @@ public class SwerveModule {
       int turningMotorChannel, int absEncoder, double absEncoderForward, String name) {
     m_driveMotor = new TalonFX(driveMotorChannel, "CANivore");
     var slot0Configs = new Slot0Configs();
-    var rampConfigs = new ClosedLoopRampsConfigs().withTorqueClosedLoopRampPeriod(DriveConstants.rampTimeTo300s);
+    new ClosedLoopRampsConfigs().withTorqueClosedLoopRampPeriod(DriveConstants.rampTimeTo300s);
     var currentConfigs = new TorqueCurrentConfigs().withPeakForwardTorqueCurrent(DriveConstants.currentMax)
         .withPeakReverseTorqueCurrent(DriveConstants.currentMin);
 
@@ -155,7 +153,7 @@ public class SwerveModule {
   }
 
   public double getModifiedAbsolute() {
-    double absValue = m_absEncoder.getAbsolutePosition()-m_absEncoderForward;
+    double absValue = m_absEncoder.getAbsolutePosition() - m_absEncoderForward;
     return absValue * 2 * Math.PI;
   }
 
@@ -168,11 +166,13 @@ public class SwerveModule {
   }
 
   public SwerveModulePosition getPosition() {
-    // driveTrainTable.putValue(m_name + "currentAngle", NetworkTableValue.makeDouble(ticksToRadians(motorValueToTicks(m_turningMotor.getRotorPosition().getValue()))));
-    // driveTrainTable.putValue(m_name + "testAngle", NetworkTableValue.makeDouble(getModifiedAbsolute()));
-    if(m_absEncoder.getAbsolutePosition() != 0){
+    // driveTrainTable.putValue(m_name + "currentAngle",
+    // NetworkTableValue.makeDouble(ticksToRadians(motorValueToTicks(m_turningMotor.getRotorPosition().getValue()))));
+    // driveTrainTable.putValue(m_name + "testAngle",
+    // NetworkTableValue.makeDouble(getModifiedAbsolute()));
+    if (m_absEncoder.getAbsolutePosition() != 0) {
       return new SwerveModulePosition(
-        ticksToMeters(m_driveMotor.getRotorPosition().getValue()),new Rotation2d(getModifiedAbsolute()));
+          ticksToMeters(m_driveMotor.getRotorPosition().getValue()), new Rotation2d(getModifiedAbsolute()));
     }
     return new SwerveModulePosition(
         ticksToMeters(m_driveMotor.getRotorPosition().getValue()),
@@ -196,29 +196,33 @@ public class SwerveModule {
   }
 
   public void updateShuffleboard() {
-    // driveTrainTable.putValue(m_name + " Drive Power", NetworkTableValue.makeDouble(drivePower()));
-    // driveTrainTable.putValue(m_name + " Drive Velocity", NetworkTableValue.makeDouble(driveSpeed()));
-    // driveTrainTable.putValue(m_name + " Turn Power", NetworkTableValue.makeDouble(turnPower()));
-    // driveTrainTable.putValue(m_name + " Turn Angle", NetworkTableValue.makeDouble(getEncoderAngle()));
+    // driveTrainTable.putValue(m_name + " Drive Power",
+    // NetworkTableValue.makeDouble(drivePower()));
+    // driveTrainTable.putValue(m_name + " Drive Velocity",
+    // NetworkTableValue.makeDouble(driveSpeed()));
+    // driveTrainTable.putValue(m_name + " Turn Power",
+    // NetworkTableValue.makeDouble(turnPower()));
+    // driveTrainTable.putValue(m_name + " Turn Angle",
+    // NetworkTableValue.makeDouble(getEncoderAngle()));
     driveTrainTable.putValue(m_name + " Abs Encoder", NetworkTableValue.makeDouble(m_absEncoder.getAbsolutePosition()));
     // driveTrainTable.putValue(m_name + " Turning kD Proportion",
-    //     NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopDerivativeOutput().getValue()));
+    // NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopDerivativeOutput().getValue()));
     // driveTrainTable.putValue(m_name + " Turning kP Proportion",
-    //     NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopProportionalOutput().getValue()));
+    // NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopProportionalOutput().getValue()));
     // driveTrainTable.putValue(m_name + " Turning kI Proportion",
-    //     NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopIntegratedOutput().getValue()));
+    // NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopIntegratedOutput().getValue()));
     // driveTrainTable.putValue(m_name + " Turning kF Proportion",
-    //     NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopFeedForward().getValue()));
+    // NetworkTableValue.makeDouble(m_turningMotor.getClosedLoopFeedForward().getValue()));
 
     // driveTrainTable.putValue(m_name + " Driving kD Proportion",
-    //     NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopDerivativeOutput().getValue()));
+    // NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopDerivativeOutput().getValue()));
     // driveTrainTable.putValue(m_name + " Driving Error",
-    //     NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopError().getValue()));
+    // NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopError().getValue()));
     // driveTrainTable.putValue(m_name + " Driving kP Proportion",
-    //     NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopProportionalOutput().getValue()));
+    // NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopProportionalOutput().getValue()));
     // driveTrainTable.putValue(m_name + " Driving kI Proportion",
-    //     NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopIntegratedOutput().getValue()));
+    // NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopIntegratedOutput().getValue()));
     // driveTrainTable.putValue(m_name + " Driving kF Proportion",
-    //     NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopFeedForward().getValue()));
+    // NetworkTableValue.makeDouble(m_driveMotor.getClosedLoopFeedForward().getValue()));
   }
 }

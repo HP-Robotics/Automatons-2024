@@ -6,11 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.SubsystemConstants;
 
 /**
@@ -43,13 +41,18 @@ public class Robot extends TimedRobot {
       m_robotContainer.fastBeamBreakCheckIntake();
       m_robotContainer.fastBeamBreakCheckTrigger();
     }, 0.001);
-    
+
     if (SubsystemConstants.useDrive) {
       m_robotContainer.resetDriveOffsets();
       addPeriodic(() -> {
         m_robotContainer.m_driveSubsystem.updateOdometry();
       }, 0.01);
-      m_robotContainer.m_driveSubsystem.initializePoseEstimator(new Pose2d(0, 0, new Rotation2d(0))); //TODO when and where to initialize Pose Estimator(and reset odometrey)
+      m_robotContainer.m_driveSubsystem.initializePoseEstimator(new Pose2d(0, 0, new Rotation2d(0))); // TODO when and
+                                                                                                      // where to
+                                                                                                      // initialize Pose
+                                                                                                      // Estimator(and
+                                                                                                      // reset
+                                                                                                      // odometrey)
     }
   }
 
@@ -90,7 +93,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    if(SubsystemConstants.usePivot) {
+    if (SubsystemConstants.usePivot) {
       m_robotContainer.m_pivotSubsystem.clearPIDError();
     }
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();

@@ -6,9 +6,6 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
-
-import java.util.function.DoubleToIntFunction;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
@@ -86,7 +83,6 @@ public class LimelightSubsystem extends SubsystemBase {
   public void periodic() {
     // read values periodically
     double[] botpose = null;
-    double Stamp = 0;
     double latency = 0;
     double timeStamp = 0;
     m_sawAprilTag = m_limelight_twoplus.getEntry("tv").getDouble(0) == 1.0;
@@ -108,17 +104,21 @@ public class LimelightSubsystem extends SubsystemBase {
         m_visionPose2d = m_robotPose;
         if (m_poseEstimator != null && 0 <= m_targetAprilTagID && m_targetAprilTagID <= 16) {
           limelightMagicTable.putValue(
-          "distanceToSpeaker",
-          NetworkTableValue.makeDouble(getDistanceTo(m_robotPose, LimelightConstants.aprilTagList[m_targetAprilTagID])));
-      limelightMagicTable.putValue(
-          "angleToSpeaker",
-          NetworkTableValue.makeDouble(getAngleTo(m_robotPose, LimelightConstants.aprilTagList[m_targetAprilTagID])));
+              "distanceToSpeaker",
+              NetworkTableValue
+                  .makeDouble(getDistanceTo(m_robotPose, LimelightConstants.aprilTagList[m_targetAprilTagID])));
+          limelightMagicTable.putValue(
+              "angleToSpeaker",
+              NetworkTableValue
+                  .makeDouble(getAngleTo(m_robotPose, LimelightConstants.aprilTagList[m_targetAprilTagID])));
           if (botpose[0] != 0 || botpose[1] != 0 || botpose[5] != 0) {
             publisher.set(m_robotPose);
             limelightMagicTable.putValue("poseEstimator Timestamp", NetworkTableValue.makeDouble(timeStamp));
             limelightMagicTable.putValue("current Timestamp", NetworkTableValue.makeDouble(Timer.getFPGATimestamp()));
             double skew = LimelightConstants.aprilTagList[m_targetAprilTagID].getRotation()
-            .minus(Rotation2d.fromDegrees(getAngleTo(m_robotPose, LimelightConstants.aprilTagList[m_targetAprilTagID]))).getRadians();
+                .minus(Rotation2d
+                    .fromDegrees(getAngleTo(m_robotPose, LimelightConstants.aprilTagList[m_targetAprilTagID])))
+                .getRadians();
             skew = Math.abs(skew);
             m_poseEstimator.updateVision(m_robotPose, timeStamp,
                 getDistanceTo(m_robotPose, LimelightConstants.aprilTagList[m_targetAprilTagID]), skew);
@@ -126,11 +126,10 @@ public class LimelightSubsystem extends SubsystemBase {
           }
         }
       }
-      
 
       if (!m_aprilTagSeen) {
         m_aprilTagSeen = true;
-        //TODO: maybe run poseEstimatorSubsystem's resetPosition
+        // TODO: maybe run poseEstimatorSubsystem's resetPosition
       }
 
       // double noteTV = m_gamePieceTable.getEntry("tv").getValue().getDouble();

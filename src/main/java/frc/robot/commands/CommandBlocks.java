@@ -49,8 +49,11 @@ public class CommandBlocks {
       return new WaitCommand(0);
     }
     return new ParallelCommandGroup(
-        new InstantCommand(() -> new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator).schedule()), 
-        new InstantCommand(() -> new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator, m_poseEstimator).schedule()))
+        new InstantCommand(
+            () -> new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator).schedule()),
+        new InstantCommand(
+            () -> new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator, m_poseEstimator)
+                .schedule()))
         .andThen(
             new ParallelDeadlineGroup(
                 new WaitCommand(1).until(() -> {
@@ -70,7 +73,8 @@ public class CommandBlocks {
       return new WaitCommand(0);
     }
     return new ParallelCommandGroup(
-        new InstantCommand(() -> new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator).schedule()), 
+        new InstantCommand(
+            () -> new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator).schedule()),
         new InstantCommand(() -> m_pivotSubsystem.setPosition(pivotAngle)))
         .andThen(
             new ParallelDeadlineGroup(
@@ -84,6 +88,7 @@ public class CommandBlocks {
             // new InstantCommand(() -> {System.out.println("firing game piece");})
             ));
   }
+
   public Command intakeButtonHold() {
     if (m_intakeSubsystem == null || m_triggerSubsystem == null) {
       return new WaitCommand(0);
@@ -160,7 +165,7 @@ public class CommandBlocks {
   public Command instantSetPivot(double pivotAngle) {
     if (m_pivotSubsystem == null) {
       return null;
-    } 
+    }
     return new InstantCommand(() -> m_pivotSubsystem.setPosition(pivotAngle));
   }
 }

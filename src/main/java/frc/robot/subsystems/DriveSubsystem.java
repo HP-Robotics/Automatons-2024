@@ -16,7 +16,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTable;
@@ -59,9 +58,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final Pigeon2 m_pGyro = new Pigeon2(IDConstants.PigeonID, "CANivore");
 
-  private StatusSignal m_pGyroPitch = m_pGyro.getPitch();
-  private StatusSignal m_pGyroYaw = m_pGyro.getYaw();
-  private StatusSignal m_pGyroRoll = m_pGyro.getRoll();
+  private StatusSignal<Double> m_pGyroPitch = m_pGyro.getPitch();
+  private StatusSignal<Double> m_pGyroYaw = m_pGyro.getYaw();
+  private StatusSignal<Double> m_pGyroRoll = m_pGyro.getRoll();
 
   PIDController rotationController;
   PoseEstimatorSubsystem m_poseEstimator;
@@ -74,7 +73,6 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem(PoseEstimatorSubsystem poseEstimator) {
     m_poseEstimator = poseEstimator;
     m_pGyro.setYaw(0);
-    var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
 
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
       m_currentPose.setRobotPose(pose);
@@ -112,7 +110,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if(getPose() != null){
+    if (getPose() != null) {
       m_field.setRobotPose(getPose());
     }
     driveTrainTable.putValue("Robot x", NetworkTableValue.makeDouble(m_poseEstimator.getPose().getX()));
@@ -269,9 +267,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_backLeft.resetOffset();
   }
 
-
-  public void resetPoseEstimator(Pose2d pose){
-    if (pose == null){
+  public void resetPoseEstimator(Pose2d pose) {
+    if (pose == null) {
       return;
     }
     var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
@@ -283,8 +280,9 @@ public class DriveSubsystem extends SubsystemBase {
             m_backRight.getPosition(),
             m_backLeft.getPosition()
         },
-        pose); 
-    // setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds()));
+        pose);
+    // setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new
+    // ChassisSpeeds()));
 
   }
 
@@ -292,7 +290,7 @@ public class DriveSubsystem extends SubsystemBase {
    * Resets robot's conception of field orientation
    */
   public void resetYaw() {
-    m_pGyro.setYaw(0);//TODO how do we want this to interact with pose estimator?
-    //add offset (and a wraparound to avoid the offset breaking things)
+    m_pGyro.setYaw(0);// TODO how do we want this to interact with pose estimator?
+    // add offset (and a wraparound to avoid the offset breaking things)
   }
 }
