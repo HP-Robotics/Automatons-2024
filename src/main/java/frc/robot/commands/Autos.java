@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -100,14 +101,14 @@ public final class Autos {
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(2),
-        new FollowPathCommandOurs(drive, "Amp Center 4 Piece Part 3"),
+        commandBlocks.followPathWithPresetShot("Amp Center 4 Piece Part 3", false),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
         new FollowPathCommandOurs(drive, limelightSubsystem, "Amp Center 4 Piece Part 4"),
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(2),
-        new FollowPathCommandOurs(drive, "Amp Center 4 Piece Part 5"),
+        commandBlocks.followPathWithPresetShot("Amp Center 4 Piece Part 5", false),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
         commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
         new WaitCommand(1));
@@ -145,7 +146,7 @@ public final class Autos {
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(1.5),
-        new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 5 Piece Part 5"),
+        commandBlocks.followPathWithPresetShot("Middle Alliance 5 Piece Part 5", false),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
         commandBlocks.fireGamePieceCommand(PivotConstants.podiumPosition));
   }
@@ -178,14 +179,14 @@ public final class Autos {
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(1.5),
-        new FollowPathCommandOurs(drive, limelightSubsystem, "Source Center 3 Piece Part 2"),
+        commandBlocks.followPathWithPresetShot("Source Center 3 Piece Part 2", false),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
         commandBlocks.fireGamePieceCommand(PivotConstants.podiumPosition).withTimeout(1.5),
         new FollowPathCommandOurs(drive, limelightSubsystem, "Source Center 3 Piece Part 3"),
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(1.5),
-        new FollowPathCommandOurs(drive, limelightSubsystem, "Source Center 3 Piece Part 4"),
+        commandBlocks.followPathWithPresetShot("Source Center 3 Piece Part 3", false),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
         commandBlocks.fireGamePieceCommand(PivotConstants.podiumPosition).withTimeout(1.5));
   }
