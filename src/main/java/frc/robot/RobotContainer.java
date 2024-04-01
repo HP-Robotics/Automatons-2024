@@ -435,9 +435,6 @@ public class RobotContainer {
     if (selection == "GrandTheftAuto") {
       autoFile = "Grand Theft Auto";
     }
-    if (selection == "ShootPreloadFarAway") {
-      autoFile = "Shoot Preload Far Away";
-    }
     if (selection == "AmpCenter4Piece") {
       autoFile = "Amp Center 4 Piece";
     }

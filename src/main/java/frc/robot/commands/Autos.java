@@ -51,7 +51,7 @@ public final class Autos {
      * if we ever see that error return. -- Mentor Jeremy White
      */
     return new SequentialCommandGroup(
-        new FollowPathCommandOurs(drive, "Center Down Part 1", true),
+        new FollowPathCommandOurs(drive, "Shoot Preload Far Away", true),
         commandBlocks.fireGamePieceCommand(PivotConstants.preloadFarAwayPosition));
   }
 
