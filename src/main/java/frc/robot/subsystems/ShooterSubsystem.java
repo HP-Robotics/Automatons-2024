@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -34,8 +33,9 @@ public class ShooterSubsystem extends SubsystemBase {
     m_leftMotor = new TalonFX(IDConstants.leftMotorID, "CANivore");
     m_rightMotor = new TalonFX(IDConstants.rightMotorID, "CANivore");
     TalonFXConfiguration config = new TalonFXConfiguration();
-    // var rampConfigs = new ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(ShooterConstants.rampTimeTo300s);
-    var torqueCurrentConfigs = new TorqueCurrentConfigs(); 
+    // var rampConfigs = new
+    // ClosedLoopRampsConfigs().withVoltageClosedLoopRampPeriod(ShooterConstants.rampTimeTo300s);
+    var torqueCurrentConfigs = new TorqueCurrentConfigs();
     var currentConfigs = new CurrentLimitsConfigs()
         .withSupplyCurrentLimit(ShooterConstants.currentLimit)
         .withSupplyCurrentLimitEnable(true)
@@ -81,7 +81,8 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTable.putValue("leftMotor Velocity", NetworkTableValue.makeDouble(m_leftMotor.getVelocity().getValue()));
     shooterTable.putValue("rightMotor Velocity", NetworkTableValue.makeDouble(m_rightMotor.getVelocity().getValue()));
     shooterTable.putValue("Shooter At Speed", NetworkTableValue.makeBoolean(this.atSpeed()));
-    shooterTable.putValue("rightOutput", NetworkTableValue.makeDouble(m_rightMotor.getTorqueCurrent().getValueAsDouble()));
+    shooterTable.putValue("rightOutput",
+        NetworkTableValue.makeDouble(m_rightMotor.getTorqueCurrent().getValueAsDouble()));
 
     // Slot0Configs slot0Configs = new Slot0Configs();
     // slot0Configs.kV = ShooterConstants.shooterMotorskV;

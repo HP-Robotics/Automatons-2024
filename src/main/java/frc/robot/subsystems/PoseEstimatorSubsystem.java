@@ -51,18 +51,18 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   public void updateVision(Pose2d vPose, double vTime, double distance, double skew) {
     if (poseEstimator != null) {
       System.out.println(skew);
-      if (/*skew < PoseEstimatorConstants.maxAcceptableSkew &&*/ distance < PoseEstimatorConstants.maxAcceptableDistance) {
-      poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(
-          PoseEstimatorConstants.visionXStandardDev * distance,
-          PoseEstimatorConstants.visionYStandardDev * distance,
-          PoseEstimatorConstants.visionHeadingStandardDev * distance));
-      poseEstimator.addVisionMeasurement(vPose, vTime);
-      // System.out.println(vTime);      
-    }
+      if (/* skew < PoseEstimatorConstants.maxAcceptableSkew && */ distance < PoseEstimatorConstants.maxAcceptableDistance) {
+        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(
+            PoseEstimatorConstants.visionXStandardDev * distance,
+            PoseEstimatorConstants.visionYStandardDev * distance,
+            PoseEstimatorConstants.visionHeadingStandardDev * distance));
+        poseEstimator.addVisionMeasurement(vPose, vTime);
+        // System.out.println(vTime);
+      }
     }
   }
 
-  public void resetPosition(Rotation2d angle, SwerveModulePosition[] positions, Pose2d pose){
+  public void resetPosition(Rotation2d angle, SwerveModulePosition[] positions, Pose2d pose) {
     if (poseEstimator != null) {
       poseEstimator.resetPosition(angle, positions, pose);
     }
@@ -78,9 +78,10 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
   public Pose2d getAlliancePose() {
     Pose2d currentPose = getPose();
-    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red && currentPose != null) {
+    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
+        && currentPose != null) {
       currentPose = GeometryUtil.flipFieldPose(currentPose);
-      }
+    }
     return currentPose;
   }
 

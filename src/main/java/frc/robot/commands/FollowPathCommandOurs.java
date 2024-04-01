@@ -16,11 +16,8 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class FollowPathCommandOurs extends Command {
@@ -47,7 +44,8 @@ public class FollowPathCommandOurs extends Command {
     this(driveSubsystem, pathName, false);
   }
 
-  public FollowPathCommandOurs(DriveSubsystem driveSubsystem, LimelightSubsystem limelightSubsystem, String pathName, Boolean resetPosition) {
+  public FollowPathCommandOurs(DriveSubsystem driveSubsystem, LimelightSubsystem limelightSubsystem, String pathName,
+      Boolean resetPosition) {
     this(driveSubsystem, pathName, resetPosition);
     m_limelightSubsystem = Optional.of(limelightSubsystem);
   }
@@ -87,14 +85,17 @@ public class FollowPathCommandOurs extends Command {
   @Override
   public void initialize() {
     Optional<Alliance> ally = DriverStation.getAlliance();
-    if(m_resetPosition){
+    if (m_resetPosition) {
       if (ally.isPresent()) {
         if (ally.get() == Alliance.Red) {
           // TODO: only reset odometry once
           m_driveSubsystem.resetPoseEstimator(GeometryUtil.flipFieldPose(m_path.getPreviewStartingHolonomicPose()));
-          // Pose2d startPose = GeometryUtil.flipFieldPose(m_path.getPreviewStartingHolonomicPose());
-          // Double[] startPoseArray = {startPose.getX(),startPose.getY(),startPose.getRotation().getRadians()};
-          // m_driveSubsystem.driveTrainTable.putValue("Start Pose",NetworkTableValue.makeDoubleArray(startPoseArray));
+          // Pose2d startPose =
+          // GeometryUtil.flipFieldPose(m_path.getPreviewStartingHolonomicPose());
+          // Double[] startPoseArray =
+          // {startPose.getX(),startPose.getY(),startPose.getRotation().getRadians()};
+          // m_driveSubsystem.driveTrainTable.putValue("Start
+          // Pose",NetworkTableValue.makeDoubleArray(startPoseArray));
         } else {
           m_driveSubsystem.resetPoseEstimator(m_path.getPreviewStartingHolonomicPose());
         }
@@ -102,7 +103,7 @@ public class FollowPathCommandOurs extends Command {
         m_driveSubsystem.resetPoseEstimator(m_path.getPreviewStartingHolonomicPose());
       }
     }
-      m_pathPlannerCommand.initialize();
+    m_pathPlannerCommand.initialize();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

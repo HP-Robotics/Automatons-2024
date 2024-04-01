@@ -8,16 +8,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkMaxLimitSwitch.Type;
-
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
-import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -34,8 +30,8 @@ public class ClimbSubsystem extends SubsystemBase {
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable climberTable = inst.getTable("climber-table"); // TODO: Make these names consistant (I like table)
   public boolean climbing = true;
-private double m_leftOffset;
-private double m_rightOffset;
+  private double m_leftOffset;
+  private double m_rightOffset;
 
   /** Creates a new ClimbSubsystem. */
   public ClimbSubsystem() {
@@ -57,10 +53,10 @@ private double m_rightOffset;
 
     // climbMotorRight.follow(climbMotorLeft,true);
     climbMotorRight.setInverted(true);
-    climbMotorLeft.setSoftLimit(SoftLimitDirection.kForward, (float)ClimberConstants.topPosition);
-    climbMotorLeft.setSoftLimit(SoftLimitDirection.kReverse, (float)ClimberConstants.bottomPosition);
-    climbMotorRight.setSoftLimit(SoftLimitDirection.kForward, (float)ClimberConstants.topPosition);
-    climbMotorRight.setSoftLimit(SoftLimitDirection.kReverse, (float)ClimberConstants.bottomPosition);
+    climbMotorLeft.setSoftLimit(SoftLimitDirection.kForward, (float) ClimberConstants.topPosition);
+    climbMotorLeft.setSoftLimit(SoftLimitDirection.kReverse, (float) ClimberConstants.bottomPosition);
+    climbMotorRight.setSoftLimit(SoftLimitDirection.kForward, (float) ClimberConstants.topPosition);
+    climbMotorRight.setSoftLimit(SoftLimitDirection.kReverse, (float) ClimberConstants.bottomPosition);
 
     climbMotorRight.enableSoftLimit(SoftLimitDirection.kForward, true);
     climbMotorLeft.enableSoftLimit(SoftLimitDirection.kForward, true);
@@ -94,8 +90,8 @@ private double m_rightOffset;
         NetworkTableValue.makeDouble(getPosition(climbMotorLeft)));
     climberTable.putValue("Climber Right Motor Encoder",
         NetworkTableValue.makeDouble(getPosition(climbMotorRight)));
-    climberTable.putValue("Left at Bottom",NetworkTableValue.makeBoolean(atBottom(climbMotorLeft)));
-    climberTable.putValue("Right at Bottom",NetworkTableValue.makeBoolean(atBottom(climbMotorRight)));
+    climberTable.putValue("Left at Bottom", NetworkTableValue.makeBoolean(atBottom(climbMotorLeft)));
+    climberTable.putValue("Right at Bottom", NetworkTableValue.makeBoolean(atBottom(climbMotorRight)));
   }
 
   // public void climbTo(double output) {
@@ -103,14 +99,14 @@ private double m_rightOffset;
   // }
 
   public boolean atBottom(CANSparkMax motor) {
-    //if (climbing) {
-      if (motor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed()) {
-        return true;
-      } else {
-        return false;
-      }
-//}
-    //return false;
+    // if (climbing) {
+    if (motor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed()) {
+      return true;
+    } else {
+      return false;
+    }
+    // }
+    // return false;
 
     // if ((m_encoder.getVelocity() < Math.abs(0.1)) || (m_encoder.getVelocity() <
     // 0)) {
@@ -162,31 +158,35 @@ private double m_rightOffset;
   public void resetCalibrationLeft() {
     if (atBottom(climbMotorLeft)) {
       System.out.println("at bottom");
-      m_leftOffset = ClimberConstants.bottomPosition-climbMotorLeft.getEncoder().getPosition();
-      climbMotorLeft.setSoftLimit(SoftLimitDirection.kForward, (float)(ClimberConstants.topPosition-m_leftOffset));
-      climbMotorLeft.setSoftLimit(SoftLimitDirection.kReverse, (float)(ClimberConstants.bottomPosition-m_leftOffset));
+      m_leftOffset = ClimberConstants.bottomPosition - climbMotorLeft.getEncoder().getPosition();
+      climbMotorLeft.setSoftLimit(SoftLimitDirection.kForward, (float) (ClimberConstants.topPosition - m_leftOffset));
+      climbMotorLeft.setSoftLimit(SoftLimitDirection.kReverse,
+          (float) (ClimberConstants.bottomPosition - m_leftOffset));
 
-      //climbMotorLeft.getEncoder().setPosition(ClimberConstants.bottomPosition);
-      
+      // climbMotorLeft.getEncoder().setPosition(ClimberConstants.bottomPosition);
+
     }
   }
 
   public void resetCalibrationRight() {
     if (atBottom(climbMotorRight)) {
       System.out.println("at bottom");
-      m_rightOffset = ClimberConstants.bottomPosition-climbMotorRight.getEncoder().getPosition();
-      climbMotorRight.setSoftLimit(SoftLimitDirection.kForward, (float)(ClimberConstants.topPosition-m_rightOffset));
-      climbMotorRight.setSoftLimit(SoftLimitDirection.kReverse, (float)(ClimberConstants.bottomPosition-m_rightOffset));
-      //climbMotorRight.getEncoder().setPosition(ClimberConstants.bottomPosition);
-      
+      m_rightOffset = ClimberConstants.bottomPosition - climbMotorRight.getEncoder().getPosition();
+      climbMotorRight.setSoftLimit(SoftLimitDirection.kForward, (float) (ClimberConstants.topPosition - m_rightOffset));
+      climbMotorRight.setSoftLimit(SoftLimitDirection.kReverse,
+          (float) (ClimberConstants.bottomPosition - m_rightOffset));
+      // climbMotorRight.getEncoder().setPosition(ClimberConstants.bottomPosition);
+
     }
   }
 
   public void adjustPivot(PivotSubsystem m_pivotSubsystem) {
-    if (getPosition(climbMotorLeft) <= ClimberConstants.adjustPivotThreshold 
-    || getPosition(climbMotorRight) <= ClimberConstants.adjustPivotThreshold) {
-      double pivotAngle = ((getPosition(climbMotorLeft)-ClimberConstants.bottomPosition)*(PivotConstants.encoderAt90-PivotConstants.climbAdjustmentPosition))
-      /(ClimberConstants.adjustPivotThreshold-ClimberConstants.bottomPosition)+PivotConstants.climbAdjustmentPosition;
+    if (getPosition(climbMotorLeft) <= ClimberConstants.adjustPivotThreshold
+        || getPosition(climbMotorRight) <= ClimberConstants.adjustPivotThreshold) {
+      double pivotAngle = ((getPosition(climbMotorLeft) - ClimberConstants.bottomPosition)
+          * (PivotConstants.encoderAt90 - PivotConstants.climbAdjustmentPosition))
+          / (ClimberConstants.adjustPivotThreshold - ClimberConstants.bottomPosition)
+          + PivotConstants.climbAdjustmentPosition;
       m_pivotSubsystem.setPosition(pivotAngle);
     }
   }

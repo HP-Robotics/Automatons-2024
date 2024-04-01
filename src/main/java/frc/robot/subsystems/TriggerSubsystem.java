@@ -75,7 +75,7 @@ public class TriggerSubsystem extends SubsystemBase {
 
   public void setTrigger(double output) {
     m_velocity.Slot = 0;
-      m_triggerMotor.setControl(new DutyCycleOut(output));
+    m_triggerMotor.setControl(new DutyCycleOut(output));
     DataLogManager.log("set trigger: " + output);
   }
 

@@ -28,8 +28,6 @@ public class DrivePointedToSpeakerCommand extends Command {
   private final TriangleInterpolator m_triangleInterpolator;
   private Optional<CommandJoystick> m_joystick;
   private Pose2d m_targetAprilTag;
-  private Rotation2d m_offset;
-  private boolean m_aprilTagSeen = false;
 
   /** Creates a new IntakeCommand. */
   public DrivePointedToSpeakerCommand(DriveSubsystem drivesubsystem, LimelightSubsystem limelightsubsystem,
@@ -50,7 +48,7 @@ public class DrivePointedToSpeakerCommand extends Command {
   public DrivePointedToSpeakerCommand(DriveSubsystem drivesubsystem, LimelightSubsystem limelightsubsystem,
       PoseEstimatorSubsystem poseestimatorsubsystem, TriangleInterpolator magicTriangles) {
     // Use addRequirements() here to declare subsystem dependencies.
-    
+
     this(drivesubsystem, limelightsubsystem, poseestimatorsubsystem, null, magicTriangles);
     addRequirements(drivesubsystem);
   }
@@ -74,23 +72,23 @@ public class DrivePointedToSpeakerCommand extends Command {
   public void execute() {
     double rumble = 0;
     Pose2d currentPose = m_poseEstimatorSubsystem.getAlliancePose();
-    if (/*m_limelightSubsystem.m_aprilTagSeen &&*/ currentPose != null) { // TODO: Make this less of a mess
+    if (/* m_limelightSubsystem.m_aprilTagSeen && */ currentPose != null) { // TODO: Make this less of a mess
       Optional<double[]> triangleData = m_triangleInterpolator.getTriangulatedOutput(currentPose);
 
       Rotation2d heading = new Rotation2d(Math
-                  .toRadians(m_limelightSubsystem.getAngleTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag))
-                  + Math.PI);
+          .toRadians(m_limelightSubsystem.getAngleTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag))
+          + Math.PI);
       if (triangleData.isPresent()) { // If we have magic data
         rumble = 0.4;
         heading = new Rotation2d(triangleData.get()[3]);
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
           heading = GeometryUtil.flipFieldRotation(heading);
         }
-      } 
-        if (m_joystick.isPresent()) {
-          m_drivesubsystem.drivePointedTowardsAngle(m_joystick.get(), heading);
-        } else {
-          m_drivesubsystem.driveForwardWithAngle(0, heading);
+      }
+      if (m_joystick.isPresent()) {
+        m_drivesubsystem.drivePointedTowardsAngle(m_joystick.get(), heading);
+      } else {
+        m_drivesubsystem.driveForwardWithAngle(0, heading);
       }
     } else {
       if (m_joystick.isPresent()) {
@@ -98,7 +96,7 @@ public class DrivePointedToSpeakerCommand extends Command {
       }
     }
     if (m_joystick.isPresent()) {
-    m_joystick.get().getHID().setRumble(RumbleType.kBothRumble, rumble); 
+      m_joystick.get().getHID().setRumble(RumbleType.kBothRumble, rumble);
     }
   }
 

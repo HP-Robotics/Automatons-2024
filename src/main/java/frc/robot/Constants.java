@@ -84,7 +84,7 @@ public final class Constants {
   }
 
   public static class DriveConstants {
-    public static final double kMaxSpeed = 4.4; // meters per second 
+    public static final double kMaxSpeed = 4.4; // meters per second
     public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second //auto is 540
     public static final double kSlowSpeed = 2.0;
     public static final double kSlowAngularspeed = Math.PI / 2; // 1/4 rotation per second
@@ -93,7 +93,7 @@ public final class Constants {
     public static final double kEncoderResolution = 1.0;
 
     public static final double driveGearRatio = 6.75;
-    public static final double turningGearRatio = 540.0/35.0;
+    public static final double turningGearRatio = 540.0 / 35.0;
 
     public static final Translation2d kFrontLeftLocation = new Translation2d(0.308 - 0.038, 0.308);
     public static final Translation2d kFrontRightLocation = new Translation2d(0.308 - 0.038, -0.308);
@@ -145,23 +145,23 @@ public final class Constants {
   public static final class LimelightConstants {
     public static final double inToM = 0.0254;
     public static final Pose2d aprilTagList[] = { // 0 is empty, april tag number is that number in list
-      new Pose2d(),
-      new Pose2d(593.68 * inToM, 9.68 * inToM, new Rotation2d(Math.PI * 2/3)),    // 1
-      new Pose2d(637.21 * inToM, 34.79 * inToM, new Rotation2d(Math.PI * 2/3)),   // 2
-      new Pose2d(652.73 * inToM, 196.17 * inToM, new Rotation2d(Math.PI)),        // 3
-      new Pose2d(652.73 * inToM, 218.42 * inToM, new Rotation2d(Math.PI)),        // 4
-      new Pose2d(578.77 * inToM, 323.00 * inToM, new Rotation2d(Math.PI * 3/2)),  // 5
-      new Pose2d(72.5 * inToM, 323.00 * inToM, new Rotation2d(Math.PI * 3/2)),    // 6
-      new Pose2d(-1.5 * inToM, 218.42 * inToM, new Rotation2d(0)),          // 7
-      new Pose2d(-1.5 * inToM, 196.17 * inToM, new Rotation2d(0)),          // 8
-      new Pose2d(14.02 * inToM, 34.79 * inToM, new Rotation2d(Math.PI/3)),        // 9
-      new Pose2d(57.54 * inToM, 9.68 * inToM, new Rotation2d(Math.PI/3)),         // 10
-      new Pose2d(468.69 * inToM, 146.19 * inToM, new Rotation2d(Math.PI * 5/3)),  // 11
-      new Pose2d(468.69 * inToM, 177.10 * inToM, new Rotation2d(Math.PI/3)),      // 12
-      new Pose2d(441.74 * inToM, 161.62 * inToM, new Rotation2d(Math.PI)),        // 13
-      new Pose2d(209.48 * inToM, 161.62 * inToM, new Rotation2d(0)),        // 14
-      new Pose2d(182.73* inToM, 177.10 * inToM, new Rotation2d(Math.PI * 2/3)),   // 15
-      new Pose2d(182.73 * inToM, 146.19 * inToM, new Rotation2d(Math.PI * 4/3))   // 16
+        new Pose2d(),
+        new Pose2d(593.68 * inToM, 9.68 * inToM, new Rotation2d(Math.PI * 2 / 3)), // 1
+        new Pose2d(637.21 * inToM, 34.79 * inToM, new Rotation2d(Math.PI * 2 / 3)), // 2
+        new Pose2d(652.73 * inToM, 196.17 * inToM, new Rotation2d(Math.PI)), // 3
+        new Pose2d(652.73 * inToM, 218.42 * inToM, new Rotation2d(Math.PI)), // 4
+        new Pose2d(578.77 * inToM, 323.00 * inToM, new Rotation2d(Math.PI * 3 / 2)), // 5
+        new Pose2d(72.5 * inToM, 323.00 * inToM, new Rotation2d(Math.PI * 3 / 2)), // 6
+        new Pose2d(-1.5 * inToM, 218.42 * inToM, new Rotation2d(0)), // 7
+        new Pose2d(-1.5 * inToM, 196.17 * inToM, new Rotation2d(0)), // 8
+        new Pose2d(14.02 * inToM, 34.79 * inToM, new Rotation2d(Math.PI / 3)), // 9
+        new Pose2d(57.54 * inToM, 9.68 * inToM, new Rotation2d(Math.PI / 3)), // 10
+        new Pose2d(468.69 * inToM, 146.19 * inToM, new Rotation2d(Math.PI * 5 / 3)), // 11
+        new Pose2d(468.69 * inToM, 177.10 * inToM, new Rotation2d(Math.PI / 3)), // 12
+        new Pose2d(441.74 * inToM, 161.62 * inToM, new Rotation2d(Math.PI)), // 13
+        new Pose2d(209.48 * inToM, 161.62 * inToM, new Rotation2d(0)), // 14
+        new Pose2d(182.73 * inToM, 177.10 * inToM, new Rotation2d(Math.PI * 2 / 3)), // 15
+        new Pose2d(182.73 * inToM, 146.19 * inToM, new Rotation2d(Math.PI * 4 / 3)) // 16
     };
 
     public static double allowableNoteAngleError = 2.5;
@@ -169,12 +169,12 @@ public final class Constants {
   }
 
   public static final class PoseEstimatorConstants {
-    public static final Matrix<N3,N1> statesStandardDev = VecBuilder.fill(0.001,0.001,0.005);
+    public static final Matrix<N3, N1> statesStandardDev = VecBuilder.fill(0.001, 0.001, 0.005);
     public static final double visionXStandardDev = 0.01;
     public static final double visionYStandardDev = 0.01;
     public static final double visionHeadingStandardDev = 0.05;
 
-    public static final double maxAcceptableSkew = Math.PI/4.0;
+    public static final double maxAcceptableSkew = Math.PI / 4.0;
     public static final double maxAcceptableDistance = 5.0;
   }
 
@@ -187,7 +187,6 @@ public final class Constants {
     public static final double kfastAutoAcceleration = 3.0;
     public static final double kMaxAutoVelocity = 3;
     public static final double kMaxAutoAcceleration = 3;
-    
 
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
@@ -202,7 +201,7 @@ public final class Constants {
     public static final double additionalIntakeTime = 0.5;
     public static final double additionalShootTime = 0.3;
 
-    public static boolean pathplannerOveridePointToSpeaker = false; 
+    public static boolean pathplannerOveridePointToSpeaker = false;
 
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
@@ -231,11 +230,10 @@ public final class Constants {
     public static final double shooterSpeedAmp = 18; // 12.5
 
     public static final double shooterMotorskP = 9;
-    public static final double shooterMotorskI = 4; 
+    public static final double shooterMotorskI = 4;
     public static final double shooterMotorskD = 0.0;
     public static final double shooterMotorskV = 0.08;
     public static final double shooterMotorsKS = 6;
-
 
     public static final double errorThreshold = 2.0;
 
@@ -247,12 +245,12 @@ public final class Constants {
   }
 
   public static class ClimberConstants {
-    public static final double climbSpeed = 1.0; //TODO: Decide this (in RPM, so 500?)
+    public static final double climbSpeed = 1.0; // TODO: Decide this (in RPM, so 500?)
     public static final double calibrateSpeed = 0.1;
 
     public static final double topPosition = 110; // TODO: Measure to find real values
     public static final double bottomPosition = -20;
-    public static final double adjustPivotThreshold = 0; 
+    public static final double adjustPivotThreshold = 0;
 
     public static final double kP = 0.0;
     public static final double kI = 0.0;
@@ -280,9 +278,9 @@ public final class Constants {
     public static final double kD = 2;
     public static final double kG = -0.27;
     public static final boolean startWithPID = true;
-    
-    public static final double[] magicConstants = { 0.0, -0.0219711, 0.437724 }; 
-    
+
+    public static final double[] magicConstants = { 0.0, -0.0219711, 0.437724 };
+
     // new line: { 0.0, -0.0245526, 0.461092 };
     // new quadratic: { 0.0025323, -0.0378195, 0.476864 };
     // old line: { 0.0, -0.0219711, 0.437724 };
@@ -311,7 +309,7 @@ public final class Constants {
     public static final double noteA3Position = 0.3772;
     public static final double preloadFarAwayPosition = 0.363;
     public static final double minimumPosition = 0.2;
-    public static final double maximumPosition = 0.7; 
+    public static final double maximumPosition = 0.7;
 
     public static final double climbAdjustmentPosition = 0.4; // TODO: find real value
   }
@@ -342,10 +340,10 @@ public final class Constants {
     public static final int rightPivotID = 40;
     public static final int leftPivotID = 41;
 
-    //Climber is 50s
+    // Climber is 50s
     public static final int climbMotorRightID = 50;
     public static final int climbMotorLeftID = 51;
-    
+
     public static final int PigeonID = 57;
 
     // Snuffilator is 60s

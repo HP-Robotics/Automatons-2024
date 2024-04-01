@@ -37,7 +37,7 @@ public class PresetShotForPathCommand extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    PathPoint endPoint = m_path.getPoint(m_path.numPoints()-1);
+    PathPoint endPoint = m_path.getPoint(m_path.numPoints() - 1);
     Pose2d pose = new Pose2d(endPoint.position, new Rotation2d());
 
     Optional<double[]> shotValues = m_triangleInterpolator.getTriangulatedOutput(pose);

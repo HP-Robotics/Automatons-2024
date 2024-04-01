@@ -17,10 +17,11 @@ public class OperatorRumbleCommand extends Command {
   DriveSubsystem m_drive;
   LimelightSubsystem m_limelight;
   ShooterSubsystem m_shooter;
-  CommandJoystick m_joystick; 
+  CommandJoystick m_joystick;
 
   /** Creates a new ShooterCommand. */
-  public OperatorRumbleCommand(PivotSubsystem pivot, DriveSubsystem drive, LimelightSubsystem limelight, ShooterSubsystem shooter, CommandJoystick joystick) {
+  public OperatorRumbleCommand(PivotSubsystem pivot, DriveSubsystem drive, LimelightSubsystem limelight,
+      ShooterSubsystem shooter, CommandJoystick joystick) {
     // Use addRequirements() here to declare subsystem dependencies
     m_pivot = pivot;
     m_drive = drive;
@@ -39,8 +40,7 @@ public class OperatorRumbleCommand extends Command {
   public void execute() {
     if (m_pivot.atPosition() && m_drive.pointedTowardsAngle() && m_shooter.atSpeed()) {
       m_joystick.getHID().setRumble(RumbleType.kBothRumble, 0.5);
-    }
-    else {
+    } else {
       m_joystick.getHID().setRumble(RumbleType.kBothRumble, 0);
     }
   }
