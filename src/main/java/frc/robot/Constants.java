@@ -63,6 +63,7 @@ public final class Constants {
     public static final int drivePointedToSpeakerButton = useXbox ? 6 : 0;
     public static final int drivePointedToNoteButton = useXbox ? 5 : 0;
     public static final int driveToNoteAxis = useXbox ? 2 : 0;
+    public static final int driveToAmpButton = 1;
 
     // TODO: Add operator joystick constants
 
@@ -92,7 +93,7 @@ public final class Constants {
     public static final double kEncoderResolution = 1.0;
 
     public static final double driveGearRatio = 6.75;
-    public static final double turningGearRatio = 540/35;
+    public static final double turningGearRatio = 540.0/35.0;
 
     public static final Translation2d kFrontLeftLocation = new Translation2d(0.308 - 0.038, 0.308);
     public static final Translation2d kFrontRightLocation = new Translation2d(0.308 - 0.038, -0.308);
@@ -111,16 +112,16 @@ public final class Constants {
     public static final double turningkI = 1;
     public static final double turningkD = 0.008;
 
-    public static final double turningControllerkP = 1;
-    public static final double turningControllerkI = 0.0;
-    public static final double turningControllerkD = 0.0;
+    public static final double turningControllerkP = 1.8;
+    public static final double turningControllerkI = 0.1;
+    public static final double turningControllerkD = 0.15;
     public static final double turningControllerTolerance = Math.toRadians(2);
 
     // Absolute encoder values that make the wheels point forward
-    public static final double absEncoderForwardFL = 0.98;
-    public static final double absEncoderForwardFR = 0.719; //.708
-    public static final double absEncoderForwardBR = 0.74;
-    public static final double absEncoderForwardBL = 0.55;
+    public static final double absEncoderForwardFL = 0.973;
+    public static final double absEncoderForwardFR = 0.718;
+    public static final double absEncoderForwardBR = 0.746;
+    public static final double absEncoderForwardBL = 0.551;
 
     public static final HolonomicPathFollowerConfig holonomicConfig = new HolonomicPathFollowerConfig(
         new PIDConstants(5.0, 0.0, 0.0),
@@ -172,16 +173,21 @@ public final class Constants {
     public static final double visionXStandardDev = 0.01;
     public static final double visionYStandardDev = 0.01;
     public static final double visionHeadingStandardDev = 0.05;
+
+    public static final double maxAcceptableSkew = Math.PI/4.0;
+    public static final double maxAcceptableDistance = 5.0;
   }
 
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 5.0;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+    public static final double kMaxAngularSpeedRadiansPerSecond = 8.37758; // 480 degrees in radians
+    public static final double kMaxAngularAcceleration = 11.1701; // 640 degrees in radians
     public static final double kFastAutoVelocity = 4.5;
     public static final double kfastAutoAcceleration = 3.0;
     public static final double kMaxAutoVelocity = 3;
     public static final double kMaxAutoAcceleration = 3;
+    
 
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
@@ -222,7 +228,7 @@ public final class Constants {
 
     public static final double shooterSpeedLeft = 50; // 50
     public static final double shooterSpeedRight = 50; // 50
-    public static final double shooterSpeedAmp = 12.5; // 15
+    public static final double shooterSpeedAmp = 18; // 12.5
 
     public static final double shooterMotorskP = 9;
     public static final double shooterMotorskI = 4; 
@@ -241,8 +247,12 @@ public final class Constants {
   }
 
   public static class ClimberConstants {
-    public static final double climbSpeed = 1; //TODO: Decide this (in RPM, so 500?)
+    public static final double climbSpeed = 1.0; //TODO: Decide this (in RPM, so 500?)
+    public static final double calibrateSpeed = 0.1;
 
+    public static final double topPosition = 110; // TODO: Measure to find real values
+    public static final double bottomPosition = -20;
+    public static final double adjustPivotThreshold = 0; 
 
     public static final double kP = 0.0;
     public static final double kI = 0.0;
@@ -262,7 +272,6 @@ public final class Constants {
     public static final double triggerkP = 0;
     public static final double triggerkI = 0;
     public static final double triggerkD = 0;
-
   }
 
   public static class PivotConstants {
@@ -303,6 +312,8 @@ public final class Constants {
     public static final double preloadFarAwayPosition = 0.363;
     public static final double minimumPosition = 0.2;
     public static final double maximumPosition = 0.7; 
+
+    public static final double climbAdjustmentPosition = 0.4; // TODO: find real value
   }
 
   public static class IDConstants {

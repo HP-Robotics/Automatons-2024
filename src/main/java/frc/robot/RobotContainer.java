@@ -17,6 +17,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.DrivePointedToNoteCommand;
 import frc.robot.commands.DrivePointedToSpeakerCommand;
 import frc.robot.commands.DriveToNoteCommand;
+import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.CommandBlocks;
 import frc.robot.commands.IntakeStatesCommand;
 import frc.robot.commands.OperatorRumbleCommand;
@@ -39,6 +40,7 @@ import com.pathplanner.lib.util.GeometryUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -109,16 +111,16 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    TriangleInterpolator.addDuluthMagic(m_triangleInterpolator);
+    // TriangleInterpolator.addDuluthMagic(m_triangleInterpolator);
     // m_triangleInterpolator.addCalibratedPoint(2.0, 7.78, 0, 0, 0.374, 0);
     TriangleInterpolator.addv2Magic(m_triangleInterpolator);
     double startTime = Timer.getFPGATimestamp();
     m_triangleInterpolator.makeTriangles();
     double triangleTime = Timer.getFPGATimestamp();
     // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png", 500,
-    // 500, 0, 8.27, 8.27, 0, 0, 40, 60);
+    // 500, 0, 8.27, 8.27, 0, 0, 0, 80);
     // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png", 500,
-    // 500, 0, 8.27, 8.27, 0, 1, 40, 60);
+    // 500, 0, 8.27, 8.27, 0, 1, 0, 80);
     // m_triangleInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 100, 100,
     // 0, 8.27, 8.27, 0, 2, 0.3, 0.5);
     // m_triangleInterpolator.draw("/home/lvuser/headingTestImage.png", 500, 500, 0,
@@ -203,6 +205,8 @@ public class RobotContainer {
       // Path"));
       // m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test
       // Path Line"));
+
+      m_driveJoystick.button(ControllerConstants.driveToAmpButton).whileTrue(new DriveToPoseCommand(m_driveSubsystem, "Amp Lineup"));
     }
 
     if (SubsystemConstants.useShooter) {
@@ -224,34 +228,31 @@ public class RobotContainer {
       m_opJoystick.povUp().onTrue(new SetShooterCommand(m_shooterSubsystem));
     }
     if (SubsystemConstants.useShooter && SubsystemConstants.usePivot) {
-      m_opJoystick.povDown().onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(m_pivotSubsystem.getNetworkTestValue())));
+      m_opJoystick.povDown().onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(m_pivotSubsystem.getNetworkTestValue())))
+      .whileTrue(new OperatorRumbleCommand(m_pivotSubsystem, m_driveSubsystem, m_limelightSubsystem, m_shooterSubsystem, m_opJoystick));
       new Trigger(() -> {
         return m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
       })
           .onTrue(new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp,
               ShooterConstants.shooterSpeedAmp))
           .onFalse(new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator));
+      
     }
 
     if (SubsystemConstants.useClimber) {
-      m_driveJoystick.povUp().whileTrue(new StartEndCommand(
-          () -> {
-            m_climberSubsystem.climbMotorLeft.set(ClimberConstants.climbSpeed);
-            m_climberSubsystem.climbMotorRight.set(ClimberConstants.climbSpeed);
-          },
-          () -> {
-            m_climberSubsystem.climbMotorLeft.set(0);
-            m_climberSubsystem.climbMotorRight.set(0);
-          }, m_climberSubsystem));
-      m_driveJoystick.povDown().whileTrue(new StartEndCommand(
-          () -> {
-            m_climberSubsystem.climbMotorLeft.set(-ClimberConstants.climbSpeed);
-            m_climberSubsystem.climbMotorRight.set(-ClimberConstants.climbSpeed);
-          },
-          () -> {
-            m_climberSubsystem.climbMotorLeft.set(0);
-            m_climberSubsystem.climbMotorRight.set(0);
-          }, m_climberSubsystem));
+      m_driveJoystick.povUp().whileTrue(
+        new ParallelCommandGroup(
+          m_climberSubsystem.climbTo(ClimberConstants.climbSpeed),
+          new InstantCommand(() -> {m_pivotSubsystem.setPosition(PivotConstants.encoderAt90);}, m_pivotSubsystem)
+      ));
+        
+      m_driveJoystick.povDown().whileTrue(
+        new ParallelCommandGroup(
+          m_climberSubsystem.climbTo(-ClimberConstants.climbSpeed),
+          new RunCommand(() -> {m_climberSubsystem.adjustPivot(m_pivotSubsystem);}, m_pivotSubsystem)
+        ));
+      
+      m_driveJoystick.button(3).whileTrue(m_climberSubsystem.calibrate());
     }
 
     if (SubsystemConstants.useIntake) {
@@ -355,6 +356,7 @@ public class RobotContainer {
     if (!m_triggerSubsystem.m_beamBreak.beamBroken()) {
       return;
     }
+    DataLogManager.log("1ms loop beam break");
     m_triggerSubsystem.m_isLoaded = true;
     m_triggerSubsystem.beambreakCount = 0;
     if (m_triggerSubsystem.m_isYucking || m_triggerSubsystem.m_isFiring) {
@@ -363,6 +365,7 @@ public class RobotContainer {
     // NeutralOut neutral = new NeutralOut();
     // neutral.UpdateFreqHz = 1000;
     m_triggerSubsystem.m_triggerMotor.setControl(new NeutralOut());
+    DataLogManager.log("1ms loop stopped motor");
     // System.out.println("quick stop");
   }
 

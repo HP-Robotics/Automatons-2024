@@ -117,8 +117,11 @@ public class LimelightSubsystem extends SubsystemBase {
             publisher.set(m_robotPose);
             limelightMagicTable.putValue("poseEstimator Timestamp", NetworkTableValue.makeDouble(timeStamp));
             limelightMagicTable.putValue("current Timestamp", NetworkTableValue.makeDouble(Timer.getFPGATimestamp()));
+            double skew = LimelightConstants.aprilTagList[m_targetAprilTagID].getRotation()
+            .minus(Rotation2d.fromDegrees(getAngleTo(m_robotPose, LimelightConstants.aprilTagList[m_targetAprilTagID]))).getRadians();
+            skew = Math.abs(skew);
             m_poseEstimator.updateVision(m_robotPose, timeStamp,
-                getDistanceTo(m_robotPose, LimelightConstants.aprilTagList[m_targetAprilTagID]));
+                getDistanceTo(m_robotPose, LimelightConstants.aprilTagList[m_targetAprilTagID]), skew);
             // System.out.println("saw apriltag: " + timeStamp + " latency: " + latency);
           }
         }
