@@ -260,6 +260,8 @@ public final class Constants {
 
     public static final double kMinOutput = 0.0;
     public static final double kMaxOutput = 0.0;
+
+    public static final double calibrationTime = 1.0;
   }
 
   public static class TriggerConstants {
