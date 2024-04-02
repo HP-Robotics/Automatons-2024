@@ -42,23 +42,24 @@ public class IntakeStatesCommand extends Command {
     }
     if (m_subsystem.m_isYucking) {
       m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed),
-          IntakeConstants.vanguardSpeed);
+          IntakeConstants.vanguardSpeedSide, IntakeConstants.vanguardSpeedFront);
     } else if (m_subsystem.m_isFiring) {
-      m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed), 0);
+      m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed), 0, 0);
     } else if (m_subsystem.m_isLoaded) {
-      m_subsystem.runIntake(0, 0);
+      m_subsystem.runIntake(0, 0, 0);
     } else if (m_subsystem.m_isIntaking) {
       m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed),
-          IntakeConstants.vanguardSpeed);
+          IntakeConstants.vanguardSpeedSide, IntakeConstants.vanguardSpeedFront);
+          
     } else {
-      m_subsystem.runIntake(0, 0);
+      m_subsystem.runIntake(0, 0, 0);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.runIntake(0.0, 0.0); // Turn intake off;
+    m_subsystem.runIntake(0.0, 0.0, 0.0); // Turn intake off;
   }
 
   // Returns true when the command should end.

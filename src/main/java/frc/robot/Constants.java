@@ -212,7 +212,8 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final double intakeSpeed = -0.45;
-    public static final double vanguardSpeed = -0.25;
+    public static final double vanguardSpeedSide = -0.25;
+    public static final double vanguardSpeedFront = -0.25; 
   }
 
   public static class SnuffilatorConstants {
@@ -330,8 +331,8 @@ public final class Constants {
 
     // Intake is 10s
     public static final int intakeMotorID = 10;
-    public static final int vanguardLeftID = 11;
-    public static final int vanguardRightID = 12;
+    public static final int vanguardSideID = 11;
+    public static final int vanguardFrontID = 12;
 
     // Shooter is 30s
     public static final int leftMotorID = 30;

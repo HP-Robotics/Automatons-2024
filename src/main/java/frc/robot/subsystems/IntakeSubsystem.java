@@ -21,8 +21,8 @@ import frc.robot.Constants.PortConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
   public TalonFX m_motor = new TalonFX(IDConstants.intakeMotorID, "CANivore");
-  CANSparkMax m_vanguardLeft = new CANSparkMax(IDConstants.vanguardLeftID, CANSparkLowLevel.MotorType.kBrushless);
-  CANSparkMax m_vanguardRight = new CANSparkMax(IDConstants.vanguardRightID, CANSparkLowLevel.MotorType.kBrushless);
+  CANSparkMax m_vanguardSide = new CANSparkMax(IDConstants.vanguardSideID, CANSparkLowLevel.MotorType.kBrushless);
+  CANSparkMax m_vanguardFront = new CANSparkMax(IDConstants.vanguardFrontID, CANSparkLowLevel.MotorType.kBrushless);
 
   public BeamBreak m_beambreak;
   public boolean m_isIntaking = false; // intake button is pressed
@@ -44,11 +44,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     m_beambreak = new BeamBreak(PortConstants.IntakeBeamBreak);
 
-    m_vanguardLeft.restoreFactoryDefaults();
-    m_vanguardRight.restoreFactoryDefaults();
-    m_vanguardLeft.setSmartCurrentLimit(10);
-    m_vanguardRight.setSmartCurrentLimit(10);
-    m_vanguardRight.follow(m_vanguardLeft, true);
+    m_vanguardSide.restoreFactoryDefaults();
+    m_vanguardFront.restoreFactoryDefaults();
+    m_vanguardSide.setSmartCurrentLimit(10);
+    m_vanguardFront.setSmartCurrentLimit(10);
   }
 
   @Override
@@ -61,14 +60,15 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeTable.putValue("Intake BeamBreak", NetworkTableValue.makeBoolean(m_isLoaded));
   }
 
-  public void runIntake(double output, double vanguardOutput) {
+  public void runIntake(double output, double vanguardOutputSide, double vangaurdOutputFront) {
     if (output != m_lastOutput) {
       if (output == 0) {
         m_motor.setControl(new NeutralOut());
       } else {
         m_motor.setControl(new DutyCycleOut(output));
       }
-      m_vanguardLeft.set(vanguardOutput);
+      m_vanguardSide.set(vanguardOutputSide);
+      m_vanguardFront.set(vangaurdOutputFront);
     }
     m_lastOutput = output;
   };
@@ -105,8 +105,9 @@ public class IntakeSubsystem extends SubsystemBase {
     m_isFiring = false;
   }
 
-  public void runOnlyVanguard(double output) {
-    m_vanguardLeft.set(output);
+  public void runOnlyVanguard(double vangaurdOutputFront, double vanguardOutputSide) {
+    m_vanguardSide.set(vanguardOutputSide);
+    m_vanguardFront.set(vangaurdOutputFront);
 
   }
 }
