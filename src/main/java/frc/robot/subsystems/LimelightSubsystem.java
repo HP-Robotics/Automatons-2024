@@ -117,7 +117,7 @@ public class LimelightSubsystem extends SubsystemBase {
             limelightMagicTable.putValue("current Timestamp", NetworkTableValue.makeDouble(Timer.getFPGATimestamp()));
             double skew = LimelightConstants.aprilTagList[m_targetAprilTagID].getRotation()
                 .minus(Rotation2d
-                    .fromDegrees(getAngleTo(m_robotPose, LimelightConstants.aprilTagList[m_targetAprilTagID])))
+                    .fromDegrees(getAngleTo(m_robotPose, LimelightConstants.aprilTagList[m_targetAprilTagID])-180))
                 .getRadians();
             skew = Math.abs(skew);
             m_poseEstimator.updateVision(m_robotPose, timeStamp,
