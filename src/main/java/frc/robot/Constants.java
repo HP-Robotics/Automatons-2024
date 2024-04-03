@@ -276,10 +276,10 @@ public final class Constants {
   }
 
   public static class PivotConstants {
-    public static final double kP = 40;
+    public static final double kP = 39;
     public static final double kI = 5;
     public static final double kD = 2;
-    public static final double kG = -0.27;
+    public static final double kG = -0.33;
     public static final boolean startWithPID = true;
 
     public static final double[] magicConstants = { 0.0, -0.0219711, 0.437724 };

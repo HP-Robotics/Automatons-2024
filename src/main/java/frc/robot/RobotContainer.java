@@ -363,7 +363,7 @@ public class RobotContainer {
     if (!m_triggerSubsystem.m_beamBreak.beamBroken()) {
       return;
     }
-    DataLogManager.log("1ms loop beam break");
+    // DataLogManager.log("1ms loop beam break");
     m_triggerSubsystem.m_isLoaded = true;
     m_triggerSubsystem.beambreakCount = 0;
     if (m_triggerSubsystem.m_isYucking || m_triggerSubsystem.m_isFiring) {
@@ -372,7 +372,7 @@ public class RobotContainer {
     // NeutralOut neutral = new NeutralOut();
     // neutral.UpdateFreqHz = 1000;
     m_triggerSubsystem.m_triggerMotor.setControl(new NeutralOut());
-    DataLogManager.log("1ms loop stopped motor");
+    // DataLogManager.log("1ms loop stopped motor");
     // System.out.println("quick stop");
   }
 

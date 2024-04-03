@@ -56,13 +56,7 @@ public class TriggerStatesCommand extends Command {
       m_subsystem.m_triggerMotor.setControl(new NeutralOut());
       DataLogManager.log("20ms loaded");
     } else if (m_subsystem.m_isIntaking) {
-      m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed));// divide
-                                                                                                                 // this
-                                                                                                                 // by
-                                                                                                                 // two
-                                                                                                                 // if
-                                                                                                                 // triger
-                                                                                                                 // toasters
+      m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed/2.0));
       DataLogManager.log("20ms intaking");
     } else {
       m_subsystem.m_triggerMotor.setControl(new NeutralOut());
