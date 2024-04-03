@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.77400395256631,
-        "y": 5.537862667174266
+        "x": 3.731462847541081,
+        "y": 4.992673062269202
       },
       "prevControl": {
-        "x": 3.9608634086626853,
-        "y": 5.5086133925236975
+        "x": 4.918322303637453,
+        "y": 4.963423787618634
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MA 2A"
+      "linkedName": "MA 5P End"
     }
   ],
   "rotationTargets": [],
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.6173803680570805,
+    "rotation": -7.4314079711724865,
     "rotateFast": false
   },
   "reversed": false,

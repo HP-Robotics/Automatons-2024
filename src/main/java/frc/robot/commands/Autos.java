@@ -45,7 +45,7 @@ public final class Autos {
      * if we ever see that error return. -- Mentor Jeremy White
      */
     return new SequentialCommandGroup(
-        new FollowPathCommandOurs(drive, "Center Down Part 1", true),
+        new FollowPathCommandOurs(drive, "Shoot Preload Far Away", true),
         commandBlocks.fireGamePieceCommand(PivotConstants.preloadFarAwayPosition));
   }
 
@@ -95,14 +95,14 @@ public final class Autos {
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(2),
-        new FollowPathCommandOurs(drive, "Amp Center 4 Piece Part 3"),
+        commandBlocks.followPathWithPresetShot("Amp Center 4 Piece Part 3", false),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
         commandBlocks.fireGamePieceCommand().withTimeout(1.5),
         new FollowPathCommandOurs(drive, limelightSubsystem, "Amp Center 4 Piece Part 4"),
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(2),
-        new FollowPathCommandOurs(drive, "Amp Center 4 Piece Part 5"),
+        commandBlocks.followPathWithPresetShot("Amp Center 4 Piece Part 5", false),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
         commandBlocks.fireGamePieceCommand().withTimeout(1.5),
         new WaitCommand(1));
@@ -117,7 +117,8 @@ public final class Autos {
       return null;
     }
     return new SequentialCommandGroup(
-        commandBlocks.fireGamePieceCommand().withTimeout(1.5),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
+        // commandBlocks.followPathWithPresetShot("Middle Alliance 4 Piece Part 1", true, true),
         new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 4 Piece Part 1", true),
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
@@ -140,7 +141,7 @@ public final class Autos {
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(0.75),
-        new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 5 Piece Part 5"),
+        commandBlocks.followPathWithPresetShot("Middle Alliance 5 Piece Part 5", false),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
         commandBlocks.fireGamePieceCommand());
   }
@@ -174,14 +175,14 @@ public final class Autos {
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(1.5),
-        new FollowPathCommandOurs(drive, limelightSubsystem, "Source Center 3 Piece Part 2"),
+        commandBlocks.followPathWithPresetShot("Source Center 3 Piece Part 2", false),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
         commandBlocks.fireGamePieceCommand().withTimeout(1.5),
         new FollowPathCommandOurs(drive, limelightSubsystem, "Source Center 3 Piece Part 3"),
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(1.5),
-        new FollowPathCommandOurs(drive, limelightSubsystem, "Source Center 3 Piece Part 4"),
+        commandBlocks.followPathWithPresetShot("Source Center 3 Piece Part 3", false),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
         commandBlocks.fireGamePieceCommand().withTimeout(1.5));
   }
