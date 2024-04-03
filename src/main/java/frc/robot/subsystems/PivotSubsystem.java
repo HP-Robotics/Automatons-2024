@@ -95,8 +95,8 @@ public class PivotSubsystem extends SubsystemBase {
         // pivotTable.putValue("Grav Propotion", NetworkTableValue.makeDouble(grav));
         // pivotTable.putValue("Commanded Output",
         // NetworkTableValue.makeDouble(output));
-        // pivotTable.putValue("Filtered Input",
-        // NetworkTableValue.makeDouble(filtered_Encoder));
+        pivotTable.putValue("Filtered Input",
+        NetworkTableValue.makeDouble(filtered_Encoder));
 
       } else {
         if (!m_absoluteBroken) {
@@ -114,10 +114,10 @@ public class PivotSubsystem extends SubsystemBase {
       // pivotTable.putValue("D Proportion",
       // NetworkTableValue.makeDouble(m_pivotController.getVelocityError() *
       // m_pivotController.getD()));
-      // pivotTable.putValue("Pivot Setpoint",
-      // NetworkTableValue.makeDouble(m_pivotController.getSetpoint()));
-      // pivotTable.putValue("Pivot Error",
-      // NetworkTableValue.makeDouble(m_pivotController.getPositionError()));
+      pivotTable.putValue("Pivot Setpoint",
+      NetworkTableValue.makeDouble(m_pivotController.getSetpoint()));
+      pivotTable.putValue("Pivot Error",
+      NetworkTableValue.makeDouble(m_pivotController.getPositionError()));
       // pivotTable.putValue("Pivot Angle",
       // NetworkTableValue.makeDouble(Math.toDegrees(encoderToRadians(m_absEncoder.getAbsolutePosition()))));
       // pivotTable.putValue("Pivot Right
