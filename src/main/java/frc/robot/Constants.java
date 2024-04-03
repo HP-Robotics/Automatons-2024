@@ -212,7 +212,7 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final double intakeSpeed = -0.45;
-    public static final double vanguardSpeedSide = 0.25;
+    public static final double vanguardSpeedSide = 0.5;
     public static final double vanguardSpeedFront = 0.25; 
   }
 
@@ -226,6 +226,7 @@ public final class Constants {
 
   public static class ShooterConstants {
 
+    //Long distance unaimed shot is 60 60 speeds, 0.38 pivot
     public static final double shooterSpeedLeft = 50; // 50
     public static final double shooterSpeedRight = 50; // 50
     public static final double shooterSpeedAmp = 18; // 12.5
