@@ -31,7 +31,7 @@ public class PresetShotForPathCommand extends InstantCommand {
     m_shooterSubsystem = shooterSubsystem;
     m_path = PathPlannerPath.fromPathFile(pathName);
 
-    addRequirements(pivotSubsystem, shooterSubsystem);
+    //addRequirements(pivotSubsystem, shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
