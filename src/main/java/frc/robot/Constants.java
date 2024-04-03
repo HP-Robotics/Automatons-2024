@@ -212,8 +212,8 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final double intakeSpeed = -0.45;
-    public static final double vanguardSpeedSide = -0.25;
-    public static final double vanguardSpeedFront = -0.25; 
+    public static final double vanguardSpeedSide = 0.25;
+    public static final double vanguardSpeedFront = 0.25; 
   }
 
   public static class SnuffilatorConstants {
