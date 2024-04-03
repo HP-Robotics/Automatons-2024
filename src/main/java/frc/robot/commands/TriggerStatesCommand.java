@@ -54,7 +54,7 @@ public class TriggerStatesCommand extends Command {
     } else if (m_subsystem.m_isLoaded) {
       m_subsystem.beambreakCount += 1;
       m_subsystem.m_triggerMotor.setControl(new NeutralOut());
-      DataLogManager.log("20ms loaded");
+      // DataLogManager.log("20ms loaded");
     } else if (m_subsystem.m_isIntaking) {
       m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed/2.0));
       DataLogManager.log("20ms intaking");
