@@ -100,7 +100,7 @@ public class FollowPathCommandOurs extends Command {
         // Pose",NetworkTableValue.makeDoubleArray(startPoseArray));
       }
       startRotationDegrees = MathUtil.inputModulus(startRotationDegrees, -180, 180);
-      m_driveSubsystem.resetYaw(startRotationDegrees);
+      // m_driveSubsystem.resetYaw(startRotationDegrees);
       m_driveSubsystem.resetPoseEstimator(startPose);
     }
     m_pathPlannerCommand.initialize();
