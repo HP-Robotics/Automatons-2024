@@ -48,12 +48,7 @@ public class Robot extends TimedRobot {
       addPeriodic(() -> {
         m_robotContainer.m_driveSubsystem.updateOdometry();
       }, 0.01);
-      m_robotContainer.m_driveSubsystem.initializePoseEstimator(new Pose2d(0, 0, new Rotation2d(0))); // TODO when and
-                                                                                                      // where to
-                                                                                                      // initialize Pose
-                                                                                                      // Estimator(and
-                                                                                                      // reset
-                                                                                                      // odometrey)
+      m_robotContainer.m_driveSubsystem.initializePoseEstimator(new Pose2d(0, 0, new Rotation2d(0)));
     }
   }
 
