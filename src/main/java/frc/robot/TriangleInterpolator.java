@@ -100,7 +100,7 @@ public class TriangleInterpolator {
 
   public void draw(String fileName, int width, int height, double minX, double maxX, double maxY, double minY,
       int dataIndex, double dataMin, double dataMax) {
-    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     double currentX = minX;
     double currentY = minY;
     // System.out.println((maxY-minY)/(double)height);
@@ -120,8 +120,8 @@ public class TriangleInterpolator {
           if (color < 0) {
             color = 0;
           }
+          image.setRGB(i, j, new Color(color, color, color).getRGB());
         }
-        image.setRGB(i, j, new Color(color, color, color).getRGB());
         currentY += (maxY - minY) / (double) height;
       }
       currentX += (maxX - minX) / (double) width;

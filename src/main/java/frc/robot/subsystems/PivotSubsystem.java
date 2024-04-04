@@ -84,6 +84,8 @@ public class PivotSubsystem extends SubsystemBase {
 
     pivotTable.putValue("Absolute Encoder Position",
         NetworkTableValue.makeDouble(m_absEncoder.getAbsolutePosition()));
+    pivotTable.putValue("is Pivot abs Working", NetworkTableValue.makeBoolean(m_absEncoder.getAbsolutePosition() != 0));  
+
     double grav = -m_armGraivty.calculate(encoderToRadians(m_absEncoder.getAbsolutePosition()), 0);
     if (Math.abs(m_absEncoder.getAbsolutePosition()) > 0.15 && m_absEncoder.getAbsolutePosition() != 1) {
       double filtered_Encoder = m_filter.calculate(m_absEncoder.getAbsolutePosition());
