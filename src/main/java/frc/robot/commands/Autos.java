@@ -46,7 +46,7 @@ public final class Autos {
      */
     return new SequentialCommandGroup(
         new FollowPathCommandOurs(drive, "Center Down Part 1", true),
-        commandBlocks.fireGamePieceCommand(PivotConstants.preloadFarAwayPosition));
+        commandBlocks.fireGamePieceCommand(PivotConstants.preloadFarAwayPosition, ShooterConstants.preloadSpeedLeft, ShooterConstants.preloadSpeedRight));
   }
 
   public static Command GrandTheftAuto(DriveSubsystem drive) {
@@ -71,7 +71,7 @@ public final class Autos {
     if (!SubsystemConstants.useIntake || !SubsystemConstants.useShooter) {
       return new WaitCommand(0);
     }
-    return commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition);
+    return commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition, ShooterConstants.preloadSpeedLeft, ShooterConstants.preloadSpeedRight);
   }
 
   public static Command AmpCenter4Piece(CommandBlocks commandBlocks, DriveSubsystem drive,
@@ -83,7 +83,7 @@ public final class Autos {
       return null;
     }
     return new SequentialCommandGroup(
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition, ShooterConstants.preloadSpeedLeft, ShooterConstants.preloadSpeedRight).withTimeout(1.5),
         commandBlocks.instantSetPivot(PivotConstants.podiumPosition),
         new FollowPathCommandOurs(drive, limelightSubsystem, "Amp Center 4 Piece Part 1", true),
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
@@ -117,7 +117,7 @@ public final class Autos {
       return null;
     }
     return new SequentialCommandGroup(
-        commandBlocks.fireGamePieceCommand().withTimeout(1.5),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition, ShooterConstants.preloadSpeedLeft, ShooterConstants.preloadSpeedRight).withTimeout(1.5),
         new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 4 Piece Part 1", true),
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
@@ -168,7 +168,7 @@ public final class Autos {
       return null;
     }
     return new SequentialCommandGroup(
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition, ShooterConstants.preloadSpeedLeft, ShooterConstants.preloadSpeedRight).withTimeout(1.5),
         commandBlocks.instantSetPivot(PivotConstants.podiumPosition),
         new FollowPathCommandOurs(drive, limelightSubsystem, "Source Center 3 Piece Part 1", true),
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {

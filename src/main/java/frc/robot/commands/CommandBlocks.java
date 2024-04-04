@@ -67,14 +67,14 @@ public class CommandBlocks {
             ));
   }
 
-  public Command fireGamePieceCommand(double pivotAngle) {
+  public Command fireGamePieceCommand(double pivotAngle, double leftSpeed, double rightSpeed) {
     if (m_intakeSubsystem == null || m_triggerSubsystem == null || m_shooterSubsystem == null
         || m_pivotSubsystem == null) {
       return new WaitCommand(0);
     }
     return new ParallelCommandGroup(
         new InstantCommand(
-            () -> new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator).schedule()),
+            () -> m_shooterSubsystem.setShooter(leftSpeed, rightSpeed)),
         new InstantCommand(() -> m_pivotSubsystem.setPosition(pivotAngle)))
         .andThen(
             new ParallelDeadlineGroup(
