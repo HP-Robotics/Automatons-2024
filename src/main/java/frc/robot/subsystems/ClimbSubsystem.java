@@ -14,8 +14,10 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
+import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
@@ -140,19 +142,38 @@ public class ClimbSubsystem extends SubsystemBase {
         });
   }
 
+  public Command climbTo(CANSparkMax motor, double climbSpeed) {
+    return new StartEndCommand(
+        () -> {
+          climbing = true;
+          motor.set(climbSpeed);
+        },
+        () -> {
+          motor.set(0);
+          climbing = false;
+        });
+  }
+
   public Command calibrate() {
-    return climbTo(-ClimberConstants.calibrateSpeed).until(() -> {
-      return atBottom(climbMotorLeft) && atBottom(climbMotorRight);
-    }).andThen(new InstantCommand(() -> {
-      resetCalibrationLeft();
-      resetCalibrationRight();
+    return new ParallelCommandGroup(
+        climbTo(climbMotorLeft, -ClimberConstants.calibrateSpeed).until(() -> {
+          return atBottom(climbMotorLeft);
+        }).andThen(new InstantCommand(() -> {
+          resetCalibrationLeft();
 
-      climbMotorRight.enableSoftLimit(SoftLimitDirection.kReverse, true);
-      climbMotorLeft.enableSoftLimit(SoftLimitDirection.kReverse, true);
+          climbMotorLeft.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
-      climbMotorLeft.burnFlash();
-      climbMotorRight.burnFlash();
-    }));
+          climbMotorLeft.burnFlash();
+        })),
+        climbTo(climbMotorRight, -ClimberConstants.calibrateSpeed).until(() -> {
+          return atBottom(climbMotorRight);
+        }).andThen(new InstantCommand(() -> {
+          resetCalibrationRight();
+
+          climbMotorRight.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
+          climbMotorRight.burnFlash();
+        })));
   }
 
   public void resetCalibrationLeft() {

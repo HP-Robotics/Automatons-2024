@@ -248,9 +248,9 @@ public final class Constants {
 
   public static class ClimberConstants {
     public static final double climbSpeed = 1.0; // TODO: Decide this (in RPM, so 500?)
-    public static final double calibrateSpeed = 0.1;
+    public static final double calibrateSpeed = 0.5;
 
-    public static final double topPosition = 110; // TODO: Measure to find real values
+    public static final double topPosition = 115; // TODO: Measure to find real values
     public static final double bottomPosition = -20;
     public static final double adjustPivotThreshold = 0;
 
@@ -263,7 +263,7 @@ public final class Constants {
     public static final double kMinOutput = 0.0;
     public static final double kMaxOutput = 0.0;
 
-    public static final double calibrationTime = 1.0;
+    public static final double calibrationTime = 1.3;
   }
 
   public static class TriggerConstants {

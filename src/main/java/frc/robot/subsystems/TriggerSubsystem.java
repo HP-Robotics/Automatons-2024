@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -34,6 +35,7 @@ public class TriggerSubsystem extends SubsystemBase {
   public boolean m_isFiring = false; // fire button is pressed
   public boolean m_isYucking = false; // yuck button is pressed
   public boolean m_isLoaded = false; // trigger beambreak sees note & intakeOn
+  private double m_lastOutput = 0.0;
 
   /** Creates a new ShooterSubsystem. */
   public TriggerSubsystem() {
@@ -74,13 +76,16 @@ public class TriggerSubsystem extends SubsystemBase {
   }
 
   public void setTrigger(double output) {
-    m_velocity.Slot = 0;
-    m_triggerMotor.setControl(new DutyCycleOut(output));
-    DataLogManager.log("set trigger: " + output);
-  }
-
-  public void stopTrigger() {
-    m_triggerMotor.setControl(new DutyCycleOut(0));
+    if (output != m_lastOutput) {
+      m_lastOutput = output;
+      if (output != 0) {
+        m_velocity.Slot = 0;
+        m_triggerMotor.setControl(new DutyCycleOut(output));
+      } else {
+        m_triggerMotor.setControl(new NeutralOut());
+      }
+      DataLogManager.log("set trigger: " + output);
+    }
   }
 
   public void intakeButtonPressed() {

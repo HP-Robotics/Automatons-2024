@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     // addPeriodic(()->{}, 0.001);
     addPeriodic(() -> {
-      m_robotContainer.fastBeamBreakCheckIntake();
+      // m_robotContainer.fastBeamBreakCheckIntake(); //TODO: maybe not needed
       m_robotContainer.fastBeamBreakCheckTrigger();
     }, 0.001);
 

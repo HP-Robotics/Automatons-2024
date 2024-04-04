@@ -371,7 +371,7 @@ public class RobotContainer {
     }
     // NeutralOut neutral = new NeutralOut();
     // neutral.UpdateFreqHz = 1000;
-    m_triggerSubsystem.m_triggerMotor.setControl(new NeutralOut());
+    m_triggerSubsystem.setTrigger(0);
     // DataLogManager.log("1ms loop stopped motor");
     // System.out.println("quick stop");
   }

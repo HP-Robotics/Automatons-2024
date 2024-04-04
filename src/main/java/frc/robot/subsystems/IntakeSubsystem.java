@@ -71,7 +71,7 @@ public class IntakeSubsystem extends SubsystemBase {
       } else {
         m_motor.setControl(new DutyCycleOut(output));
       }
-      m_vanguardSide.set(vanguardOutputSide);
+      // m_vanguardSide.set(vanguardOutputSide);
       m_vanguardFront.set(vangaurdOutputFront);
     }
     m_lastOutput = output;
@@ -110,7 +110,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void runOnlyVanguard(double vangaurdOutputFront, double vanguardOutputSide) {
-    m_vanguardSide.set(vanguardOutputSide);
+    // m_vanguardSide.set(vanguardOutputSide);
     m_vanguardFront.set(vangaurdOutputFront);
 
   }
