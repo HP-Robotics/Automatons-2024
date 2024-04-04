@@ -227,6 +227,8 @@ public final class Constants {
   public static class ShooterConstants {
 
     //Long distance unaimed shot is 60 60 speeds, 0.38 pivot
+    public static final double preloadSpeedLeft = 40;
+    public static final double preloadSpeedRight = 30;
     public static final double shooterSpeedLeft = 50; // 50
     public static final double shooterSpeedRight = 50; // 50
     public static final double shooterSpeedAmp = 18; // 12.5
@@ -304,7 +306,7 @@ public final class Constants {
 
     public static final double rampTimeTo300s = 10;
 
-    public static final double subwooferPosition = degreesToEncoder(58.3); // 0.43
+    public static final double subwooferPosition = 0.425;
     public static final double ampPosition = degreesToEncoder(119.5 + 3); // 0.6
     public static final double podiumPosition = degreesToEncoder(42.12 - 3); // 0.385
     public static final double note2Position = degreesToEncoder(45.72 - 3.25); // 0.395

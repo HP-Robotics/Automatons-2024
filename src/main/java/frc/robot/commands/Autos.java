@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.TriangleInterpolator;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PivotConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -46,7 +47,7 @@ public final class Autos {
      */
     return new SequentialCommandGroup(
         new FollowPathCommandOurs(drive, "Shoot Preload Far Away", true),
-        commandBlocks.fireGamePieceCommand(PivotConstants.preloadFarAwayPosition));
+        commandBlocks.fireGamePieceCommand(PivotConstants.preloadFarAwayPosition, ShooterConstants.preloadSpeedLeft, ShooterConstants.preloadSpeedRight));
   }
 
   public static Command GrandTheftAuto(DriveSubsystem drive) {
@@ -71,7 +72,7 @@ public final class Autos {
     if (!SubsystemConstants.useIntake || !SubsystemConstants.useShooter) {
       return new WaitCommand(0);
     }
-    return commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition);
+    return commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition, ShooterConstants.preloadSpeedLeft, ShooterConstants.preloadSpeedRight);
   }
 
   public static Command AmpCenter4Piece(CommandBlocks commandBlocks, DriveSubsystem drive,
@@ -83,7 +84,7 @@ public final class Autos {
       return null;
     }
     return new SequentialCommandGroup(
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition, ShooterConstants.preloadSpeedLeft, ShooterConstants.preloadSpeedRight).withTimeout(1.5),
         commandBlocks.instantSetPivot(PivotConstants.podiumPosition),
         new FollowPathCommandOurs(drive, limelightSubsystem, "Amp Center 4 Piece Part 1", true),
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
@@ -117,7 +118,7 @@ public final class Autos {
       return null;
     }
     return new SequentialCommandGroup(
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition, ShooterConstants.preloadSpeedLeft, ShooterConstants.preloadSpeedRight).withTimeout(1.5),
         // commandBlocks.followPathWithPresetShot("Middle Alliance 4 Piece Part 1", true, true),
         new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 4 Piece Part 1", true),
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
@@ -169,7 +170,7 @@ public final class Autos {
       return null;
     }
     return new SequentialCommandGroup(
-        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition).withTimeout(1.5),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition, ShooterConstants.preloadSpeedLeft, ShooterConstants.preloadSpeedRight).withTimeout(1.5),
         commandBlocks.instantSetPivot(PivotConstants.podiumPosition),
         new FollowPathCommandOurs(drive, limelightSubsystem, "Source Center 3 Piece Part 1", true),
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
