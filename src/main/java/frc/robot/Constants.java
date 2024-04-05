@@ -40,7 +40,7 @@ public final class Constants {
     public static final boolean useDataManager = true;
     public static final boolean useLimelight = true;
     public static final boolean usePivot = true;
-    public static final boolean useClimber = false;
+    public static final boolean useClimber = true;
     public static final boolean useTrigger = true;
     public static final boolean useSnuffilator = true;
   }
@@ -113,7 +113,7 @@ public final class Constants {
     public static final double turningkD = 0.008;
 
     public static final double turningControllerkP = 1.8;
-    public static final double turningControllerkI = 0.1;
+    public static final double turningControllerkI = 0.3;
     public static final double turningControllerkD = 0.15;
     public static final double turningControllerTolerance = Math.toRadians(2);
     public static final double turningControllerIZone = 0.15;
@@ -252,7 +252,7 @@ public final class Constants {
   }
 
   public static class ClimberConstants {
-    public static final double climbSpeed = 1.0; // TODO: Decide this (in RPM, so 500?)
+    public static final double climbSpeed = 0.5; // TODO: Decide this (in RPM, so 500?)
     public static final double calibrateSpeed = 0.5;
 
     public static final double topPosition = 115; // TODO: Measure to find real values

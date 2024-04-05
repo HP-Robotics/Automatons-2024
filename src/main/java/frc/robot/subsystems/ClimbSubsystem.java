@@ -84,14 +84,14 @@ public class ClimbSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    climberTable.putValue("Climber Left Motor Raw Encoder",
-        NetworkTableValue.makeDouble(climbMotorLeft.getEncoder().getPosition()));
-    climberTable.putValue("Climber Right Motor Raw Encoder",
-        NetworkTableValue.makeDouble(climbMotorRight.getEncoder().getPosition()));
-    climberTable.putValue("Climber Left Motor Encoder",
-        NetworkTableValue.makeDouble(getPosition(climbMotorLeft)));
-    climberTable.putValue("Climber Right Motor Encoder",
-        NetworkTableValue.makeDouble(getPosition(climbMotorRight)));
+    // climberTable.putValue("Climber Left Motor Raw Encoder",
+    //     NetworkTableValue.makeDouble(climbMotorLeft.getEncoder().getPosition()));
+    // climberTable.putValue("Climber Right Motor Raw Encoder",
+    //     NetworkTableValue.makeDouble(climbMotorRight.getEncoder().getPosition()));
+    // climberTable.putValue("Climber Left Motor Encoder",
+    //     NetworkTableValue.makeDouble(getPosition(climbMotorLeft)));
+    // climberTable.putValue("Climber Right Motor Encoder",
+    //     NetworkTableValue.makeDouble(getPosition(climbMotorRight)));
     climberTable.putValue("Left at Bottom", NetworkTableValue.makeBoolean(atBottom(climbMotorLeft)));
     climberTable.putValue("Right at Bottom", NetworkTableValue.makeBoolean(atBottom(climbMotorRight)));
   }

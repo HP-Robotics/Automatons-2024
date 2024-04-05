@@ -224,6 +224,8 @@ public class RobotContainer {
               () -> {
                 return m_pivotSubsystem != null && m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
               }));
+      m_opJoystick.button(1).onTrue(new SetShooterCommand(m_shooterSubsystem, ShooterConstants.preloadSpeedLeft, ShooterConstants.preloadSpeedRight));
+      m_opJoystick.button(1).onFalse(new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator));
       if (SubsystemConstants.useTrigger) {
         m_opJoystick.button(3).whileTrue(m_compoundCommands.fireButtonHold());
         m_opJoystick.button(3).onTrue(new InstantCommand(() -> {
