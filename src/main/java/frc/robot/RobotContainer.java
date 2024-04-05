@@ -396,6 +396,7 @@ public class RobotContainer {
     m_chooseAutos.addOption("Note Cancel Test", "NoteCancelTest");
     m_chooseAutos.addOption("Amp Center 4 Piece", "AmpCenter4Piece");
     m_chooseAutos.addOption("Middle Alliance 4 Piece", "MidAlliance4Piece");
+    m_chooseAutos.addOption("Middle Alliance 4 Piece Skip 1A", "MidAlliance4PieceSkip1A");
     m_chooseAutos.addOption("Source Center 3 Piece", "SourceCenter3Piece");
     m_chooseAutos.setDefaultOption("Do Nothing", "DoNothing");
     m_chooseAutos.onChange(this::drawSelectedAuto);
@@ -431,6 +432,11 @@ public class RobotContainer {
       return Autos.MiddleAllianceFourPiece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
           m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
     }
+    if (m_chooseAutos.getSelected() == "MidAlliance4PieceSkip1A") {
+      return Autos.MiddleAllianceFourPieceSkip1A(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem,
+          m_shooterSubsystem, m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem,
+          m_triangleInterpolator);
+    }
     if (m_chooseAutos.getSelected() == "SourceCenter3Piece") {
       return Autos.SourceCenter3Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
           m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
@@ -456,6 +462,9 @@ public class RobotContainer {
     }
     if (selection == "MidAlliance4Piece") {
       autoFile = "Middle Alliance 4 Piece";
+    }
+    if (selection == "MidAlliance4PieceSkip1A") {
+      autoFile = "Middle Alliance 4 Piece Skip 1A";
     }
     if (selection == "SourceCenter3Piece") {
       autoFile = "Source Center 3 Piece";
