@@ -55,9 +55,9 @@ public class ClimbSubsystem extends SubsystemBase {
 
     // climbMotorRight.follow(climbMotorLeft,true);
     climbMotorRight.setInverted(true);
-    climbMotorLeft.setSoftLimit(SoftLimitDirection.kForward, (float) ClimberConstants.topPosition);
+    climbMotorLeft.setSoftLimit(SoftLimitDirection.kForward, (float) ClimberConstants.topPosition+5);
     climbMotorLeft.setSoftLimit(SoftLimitDirection.kReverse, (float) ClimberConstants.bottomPosition);
-    climbMotorRight.setSoftLimit(SoftLimitDirection.kForward, (float) ClimberConstants.topPosition);
+    climbMotorRight.setSoftLimit(SoftLimitDirection.kForward, (float) ClimberConstants.topPosition-3);
     climbMotorRight.setSoftLimit(SoftLimitDirection.kReverse, (float) ClimberConstants.bottomPosition);
 
     climbMotorRight.enableSoftLimit(SoftLimitDirection.kForward, true);
