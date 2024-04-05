@@ -106,6 +106,9 @@ public class DrivePointedToSpeakerCommand extends Command {
     if (m_joystick.isPresent()) {
       m_joystick.get().getHID().setRumble(RumbleType.kBothRumble, 0);
     }
+    else{
+      m_drivesubsystem.drive(0, 0, 0, true);
+    }
   }
 
   // Returns true when the command should end.

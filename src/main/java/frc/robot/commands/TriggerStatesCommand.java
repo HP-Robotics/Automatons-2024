@@ -39,33 +39,27 @@ public class TriggerStatesCommand extends Command {
   public void execute() {
     if (m_subsystem.m_isLoaded && !m_beamBreak.beamBroken()) {
       m_subsystem.m_isLoaded = false;
-      DataLogManager.log("20ms loop lost beam break");
+      //DataLogManager.log("20ms loop lost beam break");
     }
     if (!m_subsystem.m_isLoaded && m_beamBreak.beamBroken()) {
       m_subsystem.beambreakCount = 0;
       m_subsystem.m_isLoaded = true;
-      DataLogManager.log("20ms loop beam break");
+      //DataLogManager.log("20ms loop beam break");
     }
     if (m_subsystem.m_isYucking) {
       m_subsystem.setTrigger(TriggerConstants.yuckSpeed);
     } else if (m_subsystem.m_isFiring /* && m_subsystem.beambreakCount > 2 */) {
-      m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed));
-      DataLogManager.log("20ms firing");
+      m_subsystem.setTrigger(TriggerConstants.triggerSpeed);
+     // DataLogManager.log("20ms firing");
     } else if (m_subsystem.m_isLoaded) {
       m_subsystem.beambreakCount += 1;
-      m_subsystem.m_triggerMotor.setControl(new NeutralOut());
-      DataLogManager.log("20ms loaded");
+      m_subsystem.setTrigger(0);
+      // DataLogManager.log("20ms loaded");
     } else if (m_subsystem.m_isIntaking) {
-      m_subsystem.setTrigger(triggerTable.getEntry("Trigger Setpoint").getDouble(TriggerConstants.triggerSpeed));// divide
-                                                                                                                 // this
-                                                                                                                 // by
-                                                                                                                 // two
-                                                                                                                 // if
-                                                                                                                 // triger
-                                                                                                                 // toasters
-      DataLogManager.log("20ms intaking");
+      m_subsystem.setTrigger(TriggerConstants.triggerSpeed/2.0);
+      //DataLogManager.log("20ms intaking");
     } else {
-      m_subsystem.m_triggerMotor.setControl(new NeutralOut());
+      m_subsystem.setTrigger(0);
     }
   }
 

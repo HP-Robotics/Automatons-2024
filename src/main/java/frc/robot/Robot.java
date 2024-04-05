@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     // addPeriodic(()->{}, 0.001);
     addPeriodic(() -> {
-      m_robotContainer.fastBeamBreakCheckIntake();
+      // m_robotContainer.fastBeamBreakCheckIntake(); //TODO: maybe not needed
       m_robotContainer.fastBeamBreakCheckTrigger();
     }, 0.001);
 
@@ -48,12 +48,7 @@ public class Robot extends TimedRobot {
       addPeriodic(() -> {
         m_robotContainer.m_driveSubsystem.updateOdometry();
       }, 0.01);
-      m_robotContainer.m_driveSubsystem.initializePoseEstimator(new Pose2d(0, 0, new Rotation2d(0))); // TODO when and
-                                                                                                      // where to
-                                                                                                      // initialize Pose
-                                                                                                      // Estimator(and
-                                                                                                      // reset
-                                                                                                      // odometrey)
+      m_robotContainer.m_driveSubsystem.initializePoseEstimator(new Pose2d(0, 0, new Rotation2d(0)));
     }
   }
 

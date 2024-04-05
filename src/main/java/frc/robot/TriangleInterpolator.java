@@ -100,7 +100,7 @@ public class TriangleInterpolator {
 
   public void draw(String fileName, int width, int height, double minX, double maxX, double maxY, double minY,
       int dataIndex, double dataMin, double dataMax) {
-    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     double currentX = minX;
     double currentY = minY;
     // System.out.println((maxY-minY)/(double)height);
@@ -120,8 +120,8 @@ public class TriangleInterpolator {
           if (color < 0) {
             color = 0;
           }
+          image.setRGB(i, j, new Color(color, color, color).getRGB());
         }
-        image.setRGB(i, j, new Color(color, color, color).getRGB());
         currentY += (maxY - minY) / (double) height;
       }
       currentX += (maxX - minX) / (double) width;
@@ -194,48 +194,59 @@ public class TriangleInterpolator {
           0.395,
           Math.toRadians(angle)));
       m_triangleInterpolator.addCalibratedPoint(
-          3.43 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          3.43 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          60, 45, 0.374, Math.toRadians(angle));
+          3.55 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          3.55 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          63.0, 46.5, 0.364, Math.toRadians(angle));
       DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
-          3.43 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          3.43 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          60.0,
-          45.0,
-          0.374,
+          3.55 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          3.55 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          63.0,
+          46.5,
+          0.364,
           Math.toRadians(angle)));
       m_triangleInterpolator.addCalibratedPoint(
-          4.37 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          4.37 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          80, 60, 0.3585, Math.toRadians(angle));
+          3.98 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          3.98 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          72.0, 54.0, 0.355, Math.toRadians(angle));
       DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
-          4.37 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          4.37 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          3.98 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          3.98 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          72.0,
+          54.0,
+          0.345,
+          Math.toRadians(angle)));
+      m_triangleInterpolator.addCalibratedPoint(
+          4.64 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          4.64 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          80, 60, 0.345, Math.toRadians(angle));
+      DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
+          4.64 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          4.64 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
           80.0,
           60.0,
-          0.3585,
+          0.345,
           Math.toRadians(angle)));
       m_triangleInterpolator.addCalibratedPoint(
-          5 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          5 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          80, 60, 0.349, Math.toRadians(angle));
+          5.03 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          5.03 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          80, 60, 0.341, Math.toRadians(angle));
       DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
-          5 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          5 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          5.03 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          5.03 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
           80.0,
           60.0,
-          0.349,
+          0.341,
           Math.toRadians(angle)));
       m_triangleInterpolator.addCalibratedPoint(
-          2.97 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          2.97 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          53.3, 40, 0.3795, Math.toRadians(angle));
+          3.03 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          3.03 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          55.3, 41, 0.375, Math.toRadians(angle));
       DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
-          2.97 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          2.97 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          53.3,
-          40.0,
-          0.3795,
+          3.03 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
+          3.03 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
+          55.3,
+          41.0,
+          0.375,
           Math.toRadians(angle)));
     }
 

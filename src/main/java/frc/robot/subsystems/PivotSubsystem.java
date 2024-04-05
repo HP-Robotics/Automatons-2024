@@ -67,7 +67,7 @@ public class PivotSubsystem extends SubsystemBase {
     m_absEncoder = new DutyCycleEncoder(PortConstants.pivotAbsEncoderID);
     m_pivotController = new PIDController(motorConfigs.kP, motorConfigs.kI, motorConfigs.kD);
     setPosition(0.4);
-    m_pivotController.setTolerance(0.015);
+    m_pivotController.setTolerance(0.005);
     m_pivotController.setIZone(0.014);
 
     m_motorR.getConfigurator().apply(rampConfigs);
@@ -84,8 +84,10 @@ public class PivotSubsystem extends SubsystemBase {
 
     pivotTable.putValue("Absolute Encoder Position",
         NetworkTableValue.makeDouble(m_absEncoder.getAbsolutePosition()));
+    pivotTable.putValue("is Pivot abs Working", NetworkTableValue.makeBoolean(m_absEncoder.getAbsolutePosition() != 0));  
+
     double grav = -m_armGraivty.calculate(encoderToRadians(m_absEncoder.getAbsolutePosition()), 0);
-    if (Math.abs(m_absEncoder.getAbsolutePosition()) > 0.001 && m_absEncoder.getAbsolutePosition() != 1) {
+    if (Math.abs(m_absEncoder.getAbsolutePosition()) > 0.15 && m_absEncoder.getAbsolutePosition() != 1) {
       double filtered_Encoder = m_filter.calculate(m_absEncoder.getAbsolutePosition());
       double output = m_pivotController.calculate(filtered_Encoder);
       output = output + grav;
@@ -95,8 +97,8 @@ public class PivotSubsystem extends SubsystemBase {
         // pivotTable.putValue("Grav Propotion", NetworkTableValue.makeDouble(grav));
         // pivotTable.putValue("Commanded Output",
         // NetworkTableValue.makeDouble(output));
-        // pivotTable.putValue("Filtered Input",
-        // NetworkTableValue.makeDouble(filtered_Encoder));
+        pivotTable.putValue("Filtered Input",
+        NetworkTableValue.makeDouble(filtered_Encoder));
 
       } else {
         if (!m_absoluteBroken) {
@@ -114,10 +116,10 @@ public class PivotSubsystem extends SubsystemBase {
       // pivotTable.putValue("D Proportion",
       // NetworkTableValue.makeDouble(m_pivotController.getVelocityError() *
       // m_pivotController.getD()));
-      // pivotTable.putValue("Pivot Setpoint",
-      // NetworkTableValue.makeDouble(m_pivotController.getSetpoint()));
-      // pivotTable.putValue("Pivot Error",
-      // NetworkTableValue.makeDouble(m_pivotController.getPositionError()));
+      pivotTable.putValue("Pivot Setpoint",
+      NetworkTableValue.makeDouble(m_pivotController.getSetpoint()));
+      pivotTable.putValue("Pivot Error",
+      NetworkTableValue.makeDouble(m_pivotController.getPositionError()));
       // pivotTable.putValue("Pivot Angle",
       // NetworkTableValue.makeDouble(Math.toDegrees(encoderToRadians(m_absEncoder.getAbsolutePosition()))));
       // pivotTable.putValue("Pivot Right

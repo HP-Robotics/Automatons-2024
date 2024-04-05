@@ -86,6 +86,7 @@ public class DriveSubsystem extends SubsystemBase {
         DriveConstants.turningControllerkD);
     rotationController.enableContinuousInput(-Math.PI, Math.PI);
     rotationController.setTolerance(DriveConstants.turningControllerTolerance);
+    rotationController.setIZone(DriveConstants.turningControllerIZone);
 
     drivePublisher = poseEstimatorTable.getStructTopic("Drive Pose", Pose2d.struct).publish();
 
@@ -117,6 +118,12 @@ public class DriveSubsystem extends SubsystemBase {
     driveTrainTable.putValue("Robot y", NetworkTableValue.makeDouble(m_poseEstimator.getPose().getY()));
     driveTrainTable.putValue("Robot theta",
         NetworkTableValue.makeDouble(m_poseEstimator.getPose().getRotation().getDegrees()));
+    driveTrainTable.putValue("is Drive Abs Working", NetworkTableValue.makeBoolean(
+      m_backLeft.m_absEncoder.getAbsolutePosition() != 0 &&
+      m_backRight.m_absEncoder.getAbsolutePosition() != 0 &&
+      m_frontLeft.m_absEncoder.getAbsolutePosition() != 0 &&
+      m_frontRight.m_absEncoder.getAbsolutePosition() != 0
+    ));
     // TODO investigate why this takes so long
     m_frontLeft.updateShuffleboard();
     m_frontRight.updateShuffleboard();

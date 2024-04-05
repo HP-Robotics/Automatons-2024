@@ -67,14 +67,14 @@ public class CommandBlocks {
             ));
   }
 
-  public Command fireGamePieceCommand(double pivotAngle) {
+  public Command fireGamePieceCommand(double pivotAngle, double leftSpeed, double rightSpeed) {
     if (m_intakeSubsystem == null || m_triggerSubsystem == null || m_shooterSubsystem == null
         || m_pivotSubsystem == null) {
       return new WaitCommand(0);
     }
     return new ParallelCommandGroup(
         new InstantCommand(
-            () -> new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator).schedule()),
+            () -> m_shooterSubsystem.setShooter(leftSpeed, rightSpeed)),
         new InstantCommand(() -> m_pivotSubsystem.setPosition(pivotAngle)))
         .andThen(
             new ParallelDeadlineGroup(
@@ -147,12 +147,18 @@ public class CommandBlocks {
   }
 
   public Command followPathWithPresetShot(String pathName, boolean useLimelight, boolean resetPosition) {
-    if (useLimelight) {
+    if (m_driveSubsystem == null || m_triangleInterpolator == null || m_shooterSubsystem == null
+        || m_pivotSubsystem == null) {
       return new ParallelCommandGroup(
+      new WaitCommand(0)
+      );
+    }
+    if (useLimelight) {
+      return new ParallelDeadlineGroup(
           new FollowPathCommandOurs(m_driveSubsystem, m_limelightSubsystem, pathName, resetPosition),
           new PresetShotForPathCommand(m_pivotSubsystem, m_shooterSubsystem, m_triangleInterpolator, pathName));
     } else {
-      return new ParallelCommandGroup(
+      return new ParallelDeadlineGroup(
           new FollowPathCommandOurs(m_driveSubsystem, pathName, resetPosition),
           new PresetShotForPathCommand(m_pivotSubsystem, m_shooterSubsystem, m_triangleInterpolator, pathName));
     }

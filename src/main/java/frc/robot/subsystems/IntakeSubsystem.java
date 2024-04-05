@@ -46,9 +46,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     m_vanguardSide.restoreFactoryDefaults();
     m_vanguardFront.restoreFactoryDefaults();
-    m_vanguardSide.setSmartCurrentLimit(30);
+    m_vanguardSide.setSmartCurrentLimit(IntakeConstants.vanguardCurrentLimitSide);
     m_vanguardSide.setInverted(true);
-    m_vanguardFront.setSmartCurrentLimit(10);
+    m_vanguardFront.setSmartCurrentLimit(IntakeConstants.vanguardCurrentLimitFront);
 
     m_vanguardSide.burnFlash();
     m_vanguardFront.burnFlash();
@@ -71,7 +71,7 @@ public class IntakeSubsystem extends SubsystemBase {
       } else {
         m_motor.setControl(new DutyCycleOut(output));
       }
-      m_vanguardSide.set(vanguardOutputSide);
+      // m_vanguardSide.set(vanguardOutputSide);
       m_vanguardFront.set(vangaurdOutputFront);
     }
     m_lastOutput = output;
@@ -110,7 +110,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void runOnlyVanguard(double vangaurdOutputFront, double vanguardOutputSide) {
-    m_vanguardSide.set(vanguardOutputSide);
+    // m_vanguardSide.set(vanguardOutputSide);
     m_vanguardFront.set(vangaurdOutputFront);
 
   }

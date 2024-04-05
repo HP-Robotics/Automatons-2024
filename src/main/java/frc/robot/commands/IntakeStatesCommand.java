@@ -41,14 +41,14 @@ public class IntakeStatesCommand extends Command {
       m_subsystem.m_isLoaded = true;
     }
     if (m_subsystem.m_isYucking) {
-      m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed),
+      m_subsystem.runIntake(IntakeConstants.intakeSpeed,
           IntakeConstants.vanguardSpeedSide, IntakeConstants.vanguardSpeedFront);
     } else if (m_subsystem.m_isFiring) {
-      m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed), 0, 0);
+      m_subsystem.runIntake(IntakeConstants.intakeSpeed, 0, 0);
     } else if (m_subsystem.m_isLoaded) {
       m_subsystem.runIntake(0, 0, 0);
     } else if (m_subsystem.m_isIntaking) {
-      m_subsystem.runIntake(intakeTable.getEntry("Intake Setpoint").getDouble(IntakeConstants.intakeSpeed),
+      m_subsystem.runIntake(IntakeConstants.intakeSpeed,
           IntakeConstants.vanguardSpeedSide, IntakeConstants.vanguardSpeedFront);
           
     } else {

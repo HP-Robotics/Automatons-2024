@@ -85,7 +85,7 @@ public final class Constants {
 
   public static class DriveConstants {
     public static final double kMaxSpeed = 4.4; // meters per second
-    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second //auto is 540
+    public static final double kMaxAngularSpeed = Math.PI * 1.3; // 1/2 rotation per second //auto is 540
     public static final double kSlowSpeed = 2.0;
     public static final double kSlowAngularspeed = Math.PI / 2; // 1/4 rotation per second
 
@@ -113,9 +113,10 @@ public final class Constants {
     public static final double turningkD = 0.008;
 
     public static final double turningControllerkP = 1.8;
-    public static final double turningControllerkI = 0.1;
+    public static final double turningControllerkI = 0.3;
     public static final double turningControllerkD = 0.15;
     public static final double turningControllerTolerance = Math.toRadians(2);
+    public static final double turningControllerIZone = 0.15;
 
     // Absolute encoder values that make the wheels point forward
     public static final double absEncoderForwardFL = 0.973;
@@ -212,8 +213,10 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final double intakeSpeed = -0.45;
-    public static final double vanguardSpeedSide = 0.25;
-    public static final double vanguardSpeedFront = 0.25; 
+    public static final double vanguardSpeedSide = 0.5;
+    public static final double vanguardSpeedFront = 0.5; 
+    public static final int vanguardCurrentLimitFront = 30;
+    public static final int vanguardCurrentLimitSide = 30;
   }
 
   public static class SnuffilatorConstants {
@@ -226,9 +229,12 @@ public final class Constants {
 
   public static class ShooterConstants {
 
+    //Long distance unaimed shot is 60 60 speeds, 0.38 pivot
+    public static final double preloadSpeedLeft = 40;
+    public static final double preloadSpeedRight = 30;
     public static final double shooterSpeedLeft = 50; // 50
     public static final double shooterSpeedRight = 50; // 50
-    public static final double shooterSpeedAmp = 18; // 12.5
+    public static final double shooterSpeedAmp = 12.5; // 12.5
 
     public static final double shooterMotorskP = 9;
     public static final double shooterMotorskI = 4;
@@ -246,10 +252,10 @@ public final class Constants {
   }
 
   public static class ClimberConstants {
-    public static final double climbSpeed = 1.0; // TODO: Decide this (in RPM, so 500?)
-    public static final double calibrateSpeed = 0.1;
+    public static final double climbSpeed = 0.5; // TODO: Decide this (in RPM, so 500?)
+    public static final double calibrateSpeed = 0.5;
 
-    public static final double topPosition = 110; // TODO: Measure to find real values
+    public static final double topPosition = 115; // TODO: Measure to find real values
     public static final double bottomPosition = -20;
     public static final double adjustPivotThreshold = 0;
 
@@ -262,7 +268,7 @@ public final class Constants {
     public static final double kMinOutput = 0.0;
     public static final double kMaxOutput = 0.0;
 
-    public static final double calibrationTime = 1.0;
+    public static final double calibrationTime = 1.3;
   }
 
   public static class TriggerConstants {
@@ -276,11 +282,12 @@ public final class Constants {
   }
 
   public static class PivotConstants {
-    public static final double kP = 40;
+    public static final double kP = 39;
     public static final double kI = 5;
     public static final double kD = 2;
-    public static final double kG = -0.27;
+    public static final double kG = -0.33;
     public static final boolean startWithPID = true;
+    public static final double toleratedPivotAngle = 0.005;
 
     public static final double[] magicConstants = { 0.0, -0.0219711, 0.437724 };
 
@@ -303,7 +310,7 @@ public final class Constants {
 
     public static final double rampTimeTo300s = 10;
 
-    public static final double subwooferPosition = degreesToEncoder(58.3); // 0.43
+    public static final double subwooferPosition = 0.425;
     public static final double ampPosition = degreesToEncoder(119.5 + 3); // 0.6
     public static final double podiumPosition = degreesToEncoder(42.12 - 3); // 0.385
     public static final double note2Position = degreesToEncoder(45.72 - 3.25); // 0.395
