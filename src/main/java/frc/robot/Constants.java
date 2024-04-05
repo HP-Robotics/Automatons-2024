@@ -40,7 +40,7 @@ public final class Constants {
     public static final boolean useDataManager = true;
     public static final boolean useLimelight = true;
     public static final boolean usePivot = true;
-    public static final boolean useClimber = true;
+    public static final boolean useClimber = false;
     public static final boolean useTrigger = true;
     public static final boolean useSnuffilator = true;
   }
@@ -85,7 +85,7 @@ public final class Constants {
 
   public static class DriveConstants {
     public static final double kMaxSpeed = 4.4; // meters per second
-    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second //auto is 540
+    public static final double kMaxAngularSpeed = Math.PI * 1.3; // 1/2 rotation per second //auto is 540
     public static final double kSlowSpeed = 2.0;
     public static final double kSlowAngularspeed = Math.PI / 2; // 1/4 rotation per second
 
@@ -213,7 +213,9 @@ public final class Constants {
   public static class IntakeConstants {
     public static final double intakeSpeed = -0.45;
     public static final double vanguardSpeedSide = 0.5;
-    public static final double vanguardSpeedFront = 0.25; 
+    public static final double vanguardSpeedFront = 0.5; 
+    public static final int vanguardCurrentLimitFront = 30;
+    public static final int vanguardCurrentLimitSide = 30;
   }
 
   public static class SnuffilatorConstants {
@@ -231,7 +233,7 @@ public final class Constants {
     public static final double preloadSpeedRight = 30;
     public static final double shooterSpeedLeft = 50; // 50
     public static final double shooterSpeedRight = 50; // 50
-    public static final double shooterSpeedAmp = 18; // 12.5
+    public static final double shooterSpeedAmp = 12.5; // 12.5
 
     public static final double shooterMotorskP = 9;
     public static final double shooterMotorskI = 4;
@@ -284,6 +286,7 @@ public final class Constants {
     public static final double kD = 2;
     public static final double kG = -0.33;
     public static final boolean startWithPID = true;
+    public static final double toleratedPivotAngle = 0.005;
 
     public static final double[] magicConstants = { 0.0, -0.0219711, 0.437724 };
 

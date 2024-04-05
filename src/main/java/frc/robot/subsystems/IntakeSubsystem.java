@@ -46,9 +46,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     m_vanguardSide.restoreFactoryDefaults();
     m_vanguardFront.restoreFactoryDefaults();
-    m_vanguardSide.setSmartCurrentLimit(30);
+    m_vanguardSide.setSmartCurrentLimit(IntakeConstants.vanguardCurrentLimitSide);
     m_vanguardSide.setInverted(true);
-    m_vanguardFront.setSmartCurrentLimit(10);
+    m_vanguardFront.setSmartCurrentLimit(IntakeConstants.vanguardCurrentLimitFront);
 
     m_vanguardSide.burnFlash();
     m_vanguardFront.burnFlash();
