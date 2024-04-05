@@ -156,7 +156,7 @@ public final class Autos {
       return null;
     }
     return new SequentialCommandGroup(
-        commandBlocks.fireGamePieceCommand().withTimeout(1.5),
+        commandBlocks.fireGamePieceCommand(PivotConstants.subwooferPosition, ShooterConstants.preloadSpeedLeft, ShooterConstants.preloadSpeedRight).withTimeout(1.5),
         new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 4 Piece Part 1", true),
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
