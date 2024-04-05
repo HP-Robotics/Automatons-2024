@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.ShooterConstants;
@@ -60,6 +61,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -159,6 +161,10 @@ public class RobotContainer {
           ? new Trigger(m_driveJoystick.axisGreaterThan(3, 0.1))
           : new Trigger(m_driveJoystick.button(ControllerConstants.intakeButton));
       intakeTrigger.whileTrue(m_compoundCommands.intakeButtonHold());
+      m_opJoystick.button(7).whileTrue(
+        new StartEndCommand(() -> m_intakeSubsystem.runIntake(-IntakeConstants.intakeSpeed, 0.0, 0.0), 
+        ()-> m_intakeSubsystem.runIntake(0 ,0 ,0),m_intakeSubsystem))
+      .whileTrue(new StartEndCommand(() -> m_triggerSubsystem.intakeButtonPressed(),() -> m_triggerSubsystem.intakeButtonReleased()));
     }
     configureAutoSelector();
     configureNamedCommands();
@@ -238,6 +244,10 @@ public class RobotContainer {
           .onTrue(new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp,
               ShooterConstants.shooterSpeedAmp))
           .onFalse(new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator));
+          m_opJoystick.button(5).whileTrue(new ParallelCommandGroup(
+            new SetShooterCommand(m_shooterSubsystem, 45.0, 45.0),
+            new InstantCommand(() -> m_pivotSubsystem.setPosition(0.38))
+          ));
 
     }
 
