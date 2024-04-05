@@ -40,7 +40,7 @@ public final class Constants {
     public static final boolean useDataManager = true;
     public static final boolean useLimelight = true;
     public static final boolean usePivot = true;
-    public static final boolean useClimber = true;
+    public static final boolean useClimber = false;
     public static final boolean useTrigger = true;
     public static final boolean useSnuffilator = true;
   }
@@ -120,7 +120,7 @@ public final class Constants {
 
     // Absolute encoder values that make the wheels point forward
     public static final double absEncoderForwardFL = 0.973;
-    public static final double absEncoderForwardFR = 0.718;
+    public static final double absEncoderForwardFR = 0.612;
     public static final double absEncoderForwardBR = 0.746;
     public static final double absEncoderForwardBL = 0.551;
 
@@ -252,10 +252,10 @@ public final class Constants {
   }
 
   public static class ClimberConstants {
-    public static final double climbSpeed = 0.5; // TODO: Decide this (in RPM, so 500?)
+    public static final double climbSpeed = 0.65; // TODO: Decide this (in RPM, so 500?)
     public static final double calibrateSpeed = 0.5;
 
-    public static final double topPosition = 115; // TODO: Measure to find real values
+    public static final double topPosition = 120; // TODO: Measure to find real values
     public static final double bottomPosition = -20;
     public static final double adjustPivotThreshold = 0;
 
