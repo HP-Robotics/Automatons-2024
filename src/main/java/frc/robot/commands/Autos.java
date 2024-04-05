@@ -183,7 +183,7 @@ public final class Autos {
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(1.5),
-        commandBlocks.followPathWithPresetShot("Source Center 3 Piece Part 3", false),
+        commandBlocks.followPathWithPresetShot("Source Center 3 Piece Part 4", false),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles).withTimeout(1),
         commandBlocks.fireGamePieceCommand().withTimeout(1.5));
   }
