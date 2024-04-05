@@ -49,3 +49,5 @@ public class PresetShotForPathCommand extends InstantCommand {
     m_pivotSubsystem.setPosition(shotValues.get()[2]);
   }
 }
+
+//TODO make sure command ends
