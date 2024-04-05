@@ -67,7 +67,7 @@ public class PivotSubsystem extends SubsystemBase {
     m_absEncoder = new DutyCycleEncoder(PortConstants.pivotAbsEncoderID);
     m_pivotController = new PIDController(motorConfigs.kP, motorConfigs.kI, motorConfigs.kD);
     setPosition(0.4);
-    m_pivotController.setTolerance(0.015);
+    m_pivotController.setTolerance(0.005);
     m_pivotController.setIZone(0.014);
 
     m_motorR.getConfigurator().apply(rampConfigs);
