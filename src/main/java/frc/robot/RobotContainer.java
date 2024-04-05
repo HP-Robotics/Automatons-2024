@@ -214,7 +214,7 @@ public class RobotContainer {
       m_driveJoystick.button(ControllerConstants.driveToAmpButton)
         .whileTrue(new RunCommand(() -> {
           double angle = (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) ?
-          90.0: -90.0;
+          -90.0: 90.0;
           m_driveSubsystem.drivePointedTowardsAngle(m_driveJoystick, Rotation2d.fromDegrees(angle));
         }, m_driveSubsystem));
           // .whileTrue(new DriveToPoseCommand(m_driveSubsystem, "Amp Lineup"));
