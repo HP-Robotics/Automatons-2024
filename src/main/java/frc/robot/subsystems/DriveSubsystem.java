@@ -86,6 +86,7 @@ public class DriveSubsystem extends SubsystemBase {
         DriveConstants.turningControllerkD);
     rotationController.enableContinuousInput(-Math.PI, Math.PI);
     rotationController.setTolerance(DriveConstants.turningControllerTolerance);
+    rotationController.setIZone(DriveConstants.turningControllerIZone);
 
     drivePublisher = poseEstimatorTable.getStructTopic("Drive Pose", Pose2d.struct).publish();
 
