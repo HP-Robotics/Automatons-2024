@@ -146,7 +146,7 @@ public class CommandBlocks {
     }
   }
 
-  public ParallelCommandGroup followPathWithPresetShot(String pathName, boolean useLimelight, boolean resetPosition) {
+  public Command followPathWithPresetShot(String pathName, boolean useLimelight, boolean resetPosition) {
     if (m_driveSubsystem == null || m_triangleInterpolator == null || m_shooterSubsystem == null
         || m_pivotSubsystem == null) {
       return new ParallelCommandGroup(
@@ -154,17 +154,17 @@ public class CommandBlocks {
       );
     }
     if (useLimelight) {
-      return new ParallelCommandGroup(
+      return new ParallelDeadlineGroup(
           new FollowPathCommandOurs(m_driveSubsystem, m_limelightSubsystem, pathName, resetPosition),
           new PresetShotForPathCommand(m_pivotSubsystem, m_shooterSubsystem, m_triangleInterpolator, pathName));
     } else {
-      return new ParallelCommandGroup(
+      return new ParallelDeadlineGroup(
           new FollowPathCommandOurs(m_driveSubsystem, pathName, resetPosition),
           new PresetShotForPathCommand(m_pivotSubsystem, m_shooterSubsystem, m_triangleInterpolator, pathName));
     }
   }
 
-  public ParallelCommandGroup followPathWithPresetShot(String pathName, boolean useLimelight) {
+  public Command followPathWithPresetShot(String pathName, boolean useLimelight) {
     return followPathWithPresetShot(pathName, useLimelight, false);
   }
 
