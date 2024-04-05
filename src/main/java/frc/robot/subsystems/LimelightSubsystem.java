@@ -102,7 +102,7 @@ public class LimelightSubsystem extends SubsystemBase {
         timeStamp -= latency / 1000;
         m_robotPose = new Pose2d(tx, ty, new Rotation2d(Math.toRadians(rz)));
         m_visionPose2d = m_robotPose;
-        if (m_poseEstimator != null && 0 <= m_targetAprilTagID && m_targetAprilTagID <= 16) {
+        if (m_poseEstimator != null && 0 <= m_targetAprilTagID && m_targetAprilTagID <= 16 && m_targetAprilTagID !=8 && m_targetAprilTagID !=3) {
           limelightMagicTable.putValue(
               "distanceToSpeaker",
               NetworkTableValue
