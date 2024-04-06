@@ -115,15 +115,15 @@ public class RobotContainer {
     double startTime = Timer.getFPGATimestamp();
     m_triangleInterpolator.makeTriangles();
     double triangleTime = Timer.getFPGATimestamp();
-    // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png",
-    // 500,
-    // 500, 0, 8.27, 8.27, 0, 0, 0, 80);
-    // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png",
-    // 500,
-    // 500, 0, 8.27, 8.27, 0, 1, 0, 80);
-    // m_triangleInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 100, 100,
+    // m_triangleInterpolator.draw("C:\\Users\\Scottie\\Desktop\\Automatons-Code\\AdvantageLogs\\shooterSpeedLeftTestImage.png",
+    // 1000,
+    // 1000, 0, 8.27, 8.27, 0, 0, 0, 80);
+    // m_triangleInterpolator.draw("C:\\Users\\Scottie\\Desktop\\Automatons-Code\\AdvantageLogs\\shooterSpeedRightTestImage.png",
+    // 1000,
+    // 1000, 0, 8.27, 8.27, 0, 1, 0, 80);
+    // m_triangleInterpolator.draw("C:\\Users\\Scottie\\Desktop\\Automatons-Code\\AdvantageLogs\\pivotAngleTestImage.png", 1000, 1000,
     // 0, 8.27, 8.27, 0, 2, 0.3, 0.5);
-    // m_triangleInterpolator.draw("/home/lvuser/headingTestImage.png", 500, 500, 0,
+    // m_triangleInterpolator.draw("C:\\Users\\Scottie\\Desktop\\Automatons-Code\\AdvantageLogs\\headingTestImage.png", 1000, 1000, 0,
     // 8.27, 8.27, 0, 3, (-Math.PI)/2, (Math.PI)/2);
     double TenKTesTime = Timer.getFPGATimestamp();
     System.out.println(triangleTime - startTime);

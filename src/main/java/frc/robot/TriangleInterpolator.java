@@ -168,88 +168,91 @@ public class TriangleInterpolator {
   }
 
   public static void addv2Magic(TriangleInterpolator m_triangleInterpolator) {
-    for (double angle = -90; angle < 91; angle += 10) {
-      m_triangleInterpolator.addCalibratedPoint(
-          1.48 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          1.48 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          40, 30, 0.425, Math.toRadians(angle));
-      DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
-          1.48 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          1.48 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          40.0,
-          30.0,
-          0.425,
-          Math.toRadians(angle)));
-    }
-    for (double angle = -50; angle < 51; angle += 10) {
-      m_triangleInterpolator.addCalibratedPoint(
-          2.46 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          2.46 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          44, 33, 0.395, Math.toRadians(angle));
-      DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
-          2.46 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          2.46 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          44.0,
-          33.0,
-          0.395,
-          Math.toRadians(angle)));
-      m_triangleInterpolator.addCalibratedPoint(
-          3.55 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          3.55 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          63.0, 46.5, 0.364, Math.toRadians(angle));
-      DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
-          3.55 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          3.55 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          63.0,
-          46.5,
-          0.364,
-          Math.toRadians(angle)));
-      m_triangleInterpolator.addCalibratedPoint(
-          3.98 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          3.98 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          72.0, 54.0, 0.355, Math.toRadians(angle));
-      DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
-          3.98 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          3.98 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          72.0,
-          54.0,
-          0.345,
-          Math.toRadians(angle)));
-      m_triangleInterpolator.addCalibratedPoint(
-          4.64 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          4.64 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          80, 60, 0.345, Math.toRadians(angle));
-      DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
-          4.64 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          4.64 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          80.0,
-          60.0,
-          0.345,
-          Math.toRadians(angle)));
-      m_triangleInterpolator.addCalibratedPoint(
-          5.03 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          5.03 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          80, 60, 0.341, Math.toRadians(angle));
-      DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
-          5.03 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          5.03 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          80.0,
-          60.0,
-          0.341,
-          Math.toRadians(angle)));
-      m_triangleInterpolator.addCalibratedPoint(
-          3.03 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          3.03 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          55.3, 41, 0.375, Math.toRadians(angle));
-      DataLogManager.log(String.format("m_triangleInterpolator.addCalibratedPoint(%.2f, %.2f, %.1f, %.1f, %.4f, %.4f);",
-          3.03 * Math.cos(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getX(),
-          3.03 * Math.sin(Math.toRadians(angle)) + LimelightConstants.aprilTagList[7].getY(),
-          55.3,
-          41.0,
-          0.375,
-          Math.toRadians(angle)));
-    }
-
+    m_triangleInterpolator.addCalibratedPoint(-0.04, 4.07, 40.0, 30.0, 0.4250, -1.5708);
+m_triangleInterpolator.addCalibratedPoint(0.22, 4.09, 40.0, 30.0, 0.4250, -1.3963);
+m_triangleInterpolator.addCalibratedPoint(0.47, 4.16, 40.0, 30.0, 0.4250, -1.2217);
+m_triangleInterpolator.addCalibratedPoint(0.70, 4.27, 40.0, 30.0, 0.4250, -1.0472);
+m_triangleInterpolator.addCalibratedPoint(0.91, 4.41, 40.0, 30.0, 0.4250, -0.8727);
+m_triangleInterpolator.addCalibratedPoint(1.10, 4.60, 40.0, 30.0, 0.4250, -0.6981);
+m_triangleInterpolator.addCalibratedPoint(1.24, 4.81, 40.0, 30.0, 0.4250, -0.5236);
+m_triangleInterpolator.addCalibratedPoint(1.35, 5.04, 40.0, 30.0, 0.4250, -0.3491);
+m_triangleInterpolator.addCalibratedPoint(1.42, 5.29, 40.0, 30.0, 0.4250, -0.1745);
+m_triangleInterpolator.addCalibratedPoint(1.44, 5.55, 40.0, 30.0, 0.4250, 0.0000);
+m_triangleInterpolator.addCalibratedPoint(1.42, 5.80, 40.0, 30.0, 0.4250, 0.1745);
+m_triangleInterpolator.addCalibratedPoint(1.35, 6.05, 40.0, 30.0, 0.4250, 0.3491);
+m_triangleInterpolator.addCalibratedPoint(1.24, 6.29, 40.0, 30.0, 0.4250, 0.5236);
+m_triangleInterpolator.addCalibratedPoint(1.10, 6.50, 40.0, 30.0, 0.4250, 0.6981);
+m_triangleInterpolator.addCalibratedPoint(0.91, 6.68, 40.0, 30.0, 0.4250, 0.8727);
+m_triangleInterpolator.addCalibratedPoint(0.70, 6.83, 40.0, 30.0, 0.4250, 1.0472);
+m_triangleInterpolator.addCalibratedPoint(0.47, 6.94, 40.0, 30.0, 0.4250, 1.2217);
+m_triangleInterpolator.addCalibratedPoint(0.22, 7.01, 40.0, 30.0, 0.4250, 1.3963);
+m_triangleInterpolator.addCalibratedPoint(-0.04, 7.03, 40.0, 30.0, 0.4250, 1.5708);
+m_triangleInterpolator.addCalibratedPoint(1.54, 3.66, 44.0, 33.0, 0.3950, -0.8727);
+m_triangleInterpolator.addCalibratedPoint(2.24, 2.83, 63.0, 46.5, 0.3640, -0.8727);
+m_triangleInterpolator.addCalibratedPoint(2.52, 2.50, 72.0, 54.0, 0.3550, -0.8727);
+m_triangleInterpolator.addCalibratedPoint(2.94, 1.99, 80.0, 60.0, 0.3450, -0.8727);
+m_triangleInterpolator.addCalibratedPoint(3.20, 1.69, 80.0, 60.0, 0.3410, -0.8727);
+m_triangleInterpolator.addCalibratedPoint(1.91, 3.23, 55.3, 41.0, 0.3750, -0.8727);
+m_triangleInterpolator.addCalibratedPoint(1.85, 3.97, 44.0, 33.0, 0.3950, -0.6981);
+m_triangleInterpolator.addCalibratedPoint(2.68, 3.27, 63.0, 46.5, 0.3640, -0.6981);
+m_triangleInterpolator.addCalibratedPoint(3.01, 2.99, 72.0, 54.0, 0.3550, -0.6981);
+m_triangleInterpolator.addCalibratedPoint(3.52, 2.57, 80.0, 60.0, 0.3450, -0.6981);
+m_triangleInterpolator.addCalibratedPoint(3.82, 2.31, 80.0, 60.0, 0.3410, -0.6981);
+m_triangleInterpolator.addCalibratedPoint(2.28, 3.60, 55.3, 41.0, 0.3750, -0.6981);
+m_triangleInterpolator.addCalibratedPoint(2.09, 4.32, 44.0, 33.0, 0.3950, -0.5236);
+m_triangleInterpolator.addCalibratedPoint(3.04, 3.77, 63.0, 46.5, 0.3640, -0.5236);
+m_triangleInterpolator.addCalibratedPoint(3.41, 3.56, 72.0, 54.0, 0.3550, -0.5236);
+m_triangleInterpolator.addCalibratedPoint(3.98, 3.23, 80.0, 60.0, 0.3450, -0.5236);
+m_triangleInterpolator.addCalibratedPoint(4.32, 3.03, 80.0, 60.0, 0.3410, -0.5236);
+m_triangleInterpolator.addCalibratedPoint(2.59, 4.03, 55.3, 41.0, 0.3750, -0.5236);
+m_triangleInterpolator.addCalibratedPoint(2.27, 4.71, 44.0, 33.0, 0.3950, -0.3491);
+m_triangleInterpolator.addCalibratedPoint(3.30, 4.33, 63.0, 46.5, 0.3640, -0.3491);
+m_triangleInterpolator.addCalibratedPoint(3.70, 4.19, 72.0, 54.0, 0.3550, -0.3491);
+m_triangleInterpolator.addCalibratedPoint(4.32, 3.96, 80.0, 60.0, 0.3450, -0.3491);
+m_triangleInterpolator.addCalibratedPoint(4.69, 3.83, 80.0, 60.0, 0.3410, -0.3491);
+m_triangleInterpolator.addCalibratedPoint(2.81, 4.51, 55.3, 41.0, 0.3750, -0.3491);
+m_triangleInterpolator.addCalibratedPoint(2.38, 5.12, 44.0, 33.0, 0.3950, -0.1745);
+m_triangleInterpolator.addCalibratedPoint(3.46, 4.93, 63.0, 46.5, 0.3640, -0.1745);
+m_triangleInterpolator.addCalibratedPoint(3.88, 4.86, 72.0, 54.0, 0.3550, -0.1745);
+m_triangleInterpolator.addCalibratedPoint(4.53, 4.74, 80.0, 60.0, 0.3450, -0.1745);
+m_triangleInterpolator.addCalibratedPoint(4.92, 4.67, 80.0, 60.0, 0.3410, -0.1745);
+m_triangleInterpolator.addCalibratedPoint(2.95, 5.02, 55.3, 41.0, 0.3750, -0.1745);
+m_triangleInterpolator.addCalibratedPoint(2.42, 5.55, 44.0, 33.0, 0.3950, 0.0000);
+m_triangleInterpolator.addCalibratedPoint(3.51, 5.55, 63.0, 46.5, 0.3640, 0.0000);
+m_triangleInterpolator.addCalibratedPoint(3.94, 5.55, 72.0, 54.0, 0.3550, 0.0000);
+m_triangleInterpolator.addCalibratedPoint(4.60, 5.55, 80.0, 60.0, 0.3450, 0.0000);
+m_triangleInterpolator.addCalibratedPoint(4.99, 5.55, 80.0, 60.0, 0.3410, 0.0000);
+m_triangleInterpolator.addCalibratedPoint(2.99, 5.55, 55.3, 41.0, 0.3750, 0.0000);
+m_triangleInterpolator.addCalibratedPoint(2.38, 5.98, 44.0, 33.0, 0.3950, 0.1745);
+m_triangleInterpolator.addCalibratedPoint(3.46, 6.16, 63.0, 46.5, 0.3640, 0.1745);
+m_triangleInterpolator.addCalibratedPoint(3.88, 6.24, 72.0, 54.0, 0.3550, 0.1745);
+m_triangleInterpolator.addCalibratedPoint(4.53, 6.35, 80.0, 60.0, 0.3450, 0.1745);
+m_triangleInterpolator.addCalibratedPoint(4.92, 6.42, 80.0, 60.0, 0.3410, 0.1745);
+m_triangleInterpolator.addCalibratedPoint(2.95, 6.07, 55.3, 41.0, 0.3750, 0.1745);
+m_triangleInterpolator.addCalibratedPoint(2.27, 6.39, 44.0, 33.0, 0.3950, 0.3491);
+m_triangleInterpolator.addCalibratedPoint(3.30, 6.76, 63.0, 46.5, 0.3640, 0.3791);
+m_triangleInterpolator.addCalibratedPoint(3.70, 6.91, 72.0, 54.0, 0.3550, 0.3491);
+m_triangleInterpolator.addCalibratedPoint(4.32, 7.13, 80.0, 60.0, 0.3450, 0.3491);
+m_triangleInterpolator.addCalibratedPoint(4.69, 7.27, 80.0, 60.0, 0.3410, 0.3491);
+m_triangleInterpolator.addCalibratedPoint(2.81, 6.58, 55.3, 41.0, 0.3750, 0.3491);
+m_triangleInterpolator.addCalibratedPoint(2.09, 6.78, 44.0, 33.0, 0.3950, 0.5236);
+m_triangleInterpolator.addCalibratedPoint(3.04, 7.32, 63.0, 46.5, 0.3640, 0.5336);
+m_triangleInterpolator.addCalibratedPoint(3.41, 7.54, 72.0, 54.0, 0.3550, 0.5236);
+m_triangleInterpolator.addCalibratedPoint(3.98, 7.87, 80.0, 60.0, 0.3450, 0.5236);
+m_triangleInterpolator.addCalibratedPoint(4.32, 8.06, 80.0, 60.0, 0.3410, 0.5236);
+m_triangleInterpolator.addCalibratedPoint(2.59, 7.06, 55.3, 41.0, 0.3750, 0.5236);
+m_triangleInterpolator.addCalibratedPoint(1.85, 7.13, 44.0, 33.0, 0.3950, 0.6981);
+m_triangleInterpolator.addCalibratedPoint(2.68, 7.83, 63.0, 46.5, 0.3640, 0.6981);
+m_triangleInterpolator.addCalibratedPoint(3.01, 8.11, 72.0, 54.0, 0.3550, 0.6981);
+m_triangleInterpolator.addCalibratedPoint(3.52, 8.53, 80.0, 60.0, 0.3450, 0.6981);
+m_triangleInterpolator.addCalibratedPoint(3.82, 8.78, 80.0, 60.0, 0.3410, 0.6981);
+m_triangleInterpolator.addCalibratedPoint(2.28, 7.50, 55.3, 41.0, 0.3750, 0.6981);
+m_triangleInterpolator.addCalibratedPoint(1.54, 7.43, 44.0, 33.0, 0.3950, 0.8727);
+m_triangleInterpolator.addCalibratedPoint(2.24, 8.27, 63.0, 46.5, 0.3640, 0.8727);
+m_triangleInterpolator.addCalibratedPoint(2.52, 8.60, 72.0, 54.0, 0.3550, 0.8727);
+m_triangleInterpolator.addCalibratedPoint(2.94, 9.10, 80.0, 60.0, 0.3450, 0.8727);
+m_triangleInterpolator.addCalibratedPoint(3.20, 9.40, 80.0, 60.0, 0.3410, 0.8727);
+m_triangleInterpolator.addCalibratedPoint(1.91, 7.87, 55.3, 41.0, 0.3750, 0.8727);
     // m_triangleInterpolator.addCalibratedPoint(2.75, 2.48, 50.0, 50.0, 0.3606,
     // -0.8191);
     m_triangleInterpolator.addCalibratedPoint(1.35, 4.52, 40.0, 30.0, 0.4163, -0.7601);
