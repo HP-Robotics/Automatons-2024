@@ -193,7 +193,7 @@ public class ClimbSubsystem extends SubsystemBase {
     if (atBottom(climbMotorRight)) {
       System.out.println("at bottom");
       m_rightOffset = ClimberConstants.bottomPosition - climbMotorRight.getEncoder().getPosition();
-      climbMotorRight.setSoftLimit(SoftLimitDirection.kForward, (float) (ClimberConstants.topPosition - m_rightOffset-10));
+      climbMotorRight.setSoftLimit(SoftLimitDirection.kForward, (float) (ClimberConstants.topPosition - m_rightOffset));
       climbMotorRight.setSoftLimit(SoftLimitDirection.kReverse,
           (float) (ClimberConstants.bottomPosition - m_rightOffset));
       // climbMotorRight.getEncoder().setPosition(ClimberConstants.bottomPosition);
