@@ -100,7 +100,7 @@ public class TriangleInterpolator {
 
   public void draw(String fileName, int width, int height, double minX, double maxX, double maxY, double minY,
       int dataIndex, double dataMin, double dataMax) {
-    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     double currentX = minX;
     double currentY = minY;
     // System.out.println((maxY-minY)/(double)height);
@@ -272,6 +272,21 @@ m_triangleInterpolator.addCalibratedPoint(1.91, 7.87, 55.3, 41.0, 0.3750, 0.8727
     m_triangleInterpolator.addCalibratedPoint(tempPose.getX(), tempPose.getY(), 80.0, 60.0, 0.3560,
         tempPose.getRotation().getRadians());
   }
+  public static void addFeederMagic(TriangleInterpolator m_triangleInterpolator) {
+    m_triangleInterpolator.addCalibratedPoint(16.54-6.62, 0.30, 72.0, 48.0, 0.3902, -Math.PI-(-2.5456));
+    m_triangleInterpolator.addCalibratedPoint(16.54-7.54, 0.30, 69.0, 46.0, 0.3893, -Math.PI-(-2.4540));
+    m_triangleInterpolator.addCalibratedPoint(16.54-8.94, 0.30, 63.0, 42.0, 0.3952, -Math.PI-(-2.3679));
+    m_triangleInterpolator.addCalibratedPoint(16.54-10.17, 0.26, 61.5, 41.0, 0.4052,-Math.PI-( -2.2385));
+    m_triangleInterpolator.addCalibratedPoint(16.54-6.75, 2.03, 69.0, 46.0, 0.3912, -Math.PI-(-2.6028)); 
+    m_triangleInterpolator.addCalibratedPoint(16.54-7.46, 3.14, 60.0, 40.0, 0.4016, -Math.PI-(-2.6246));
+    m_triangleInterpolator.addCalibratedPoint(16.54-8.88, 3.44, 54.5, 37.0, 0.4037, -Math.PI-(-2.5910));
+    m_triangleInterpolator.addCalibratedPoint(16.54-10.54, 3.71, 54.5, 37.0, 0.4235,-Math.PI-( -2.4971));
+    m_triangleInterpolator.addCalibratedPoint(16.54-10.66, 2.14, 63.0, 42.0, 0.4317,-Math.PI-( -2.3330));
+    m_triangleInterpolator.addCalibratedPoint(16.54-9.69, 1.88, 60.0, 40.0, 0.4099, -Math.PI-(-2.3735));
+    m_triangleInterpolator.addCalibratedPoint(16.54-8.51, 2.02, 63.0, 42.0, 0.4098, -Math.PI-(-2.4483));
+    m_triangleInterpolator.addCalibratedPoint(16.54-7.00, 3.50, 64.5, 43.0, 0.4014, -Math.PI-(-2.6425));
+  }
+
 
   public static Pose2d reflectAcrossSpeaker(Pose2d pose) {
     return new Pose2d(pose.getX(),

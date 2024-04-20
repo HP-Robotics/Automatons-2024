@@ -64,6 +64,7 @@ public final class Constants {
     public static final int drivePointedToNoteButton = useXbox ? 5 : 0;
     public static final int driveToNoteAxis = useXbox ? 2 : 0;
     public static final int driveToAmpButton = 1;
+    public static final int pointToCornerButton = 2;
 
     // TODO: Add operator joystick constants
 
@@ -167,6 +168,8 @@ public final class Constants {
 
     public static double allowableNoteAngleError = 2.5;
     public static double allowableSpeakerDistanceError = 2.5; // Make these good
+
+    public static Pose2d feedPosition = new Pose2d(0, 323.00 * inToM, new Rotation2d(0));
   }
 
   public static final class PoseEstimatorConstants {
