@@ -37,6 +37,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.GeometryUtil;
 
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -301,7 +302,7 @@ public class RobotContainer {
     if (SubsystemConstants.useIntake) {
       new Trigger(() -> {
         return m_intakeSubsystem.m_beambreak.beamBroken();
-      })
+      }).debounce(0.06, DebounceType.kRising)
           .onTrue(new InstantCommand(() -> {
             m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.4);
           }))
