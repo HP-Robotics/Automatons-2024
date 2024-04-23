@@ -55,9 +55,9 @@ public class ClimbSubsystem extends SubsystemBase {
 
     // climbMotorRight.follow(climbMotorLeft,true);
     climbMotorRight.setInverted(true);
-    climbMotorLeft.setSoftLimit(SoftLimitDirection.kForward, (float) ClimberConstants.topPosition+5);
+    climbMotorLeft.setSoftLimit(SoftLimitDirection.kForward, (float) ClimberConstants.topPosition); //to change, go to the reset calibrations
     climbMotorLeft.setSoftLimit(SoftLimitDirection.kReverse, (float) ClimberConstants.bottomPosition);
-    climbMotorRight.setSoftLimit(SoftLimitDirection.kForward, (float) ClimberConstants.topPosition-3);
+    climbMotorRight.setSoftLimit(SoftLimitDirection.kForward, (float) ClimberConstants.topPosition);
     climbMotorRight.setSoftLimit(SoftLimitDirection.kReverse, (float) ClimberConstants.bottomPosition);
 
     climbMotorRight.enableSoftLimit(SoftLimitDirection.kForward, true);
@@ -88,10 +88,10 @@ public class ClimbSubsystem extends SubsystemBase {
     //     NetworkTableValue.makeDouble(climbMotorLeft.getEncoder().getPosition()));
     // climberTable.putValue("Climber Right Motor Raw Encoder",
     //     NetworkTableValue.makeDouble(climbMotorRight.getEncoder().getPosition()));
-    // climberTable.putValue("Climber Left Motor Encoder",
-    //     NetworkTableValue.makeDouble(getPosition(climbMotorLeft)));
-    // climberTable.putValue("Climber Right Motor Encoder",
-    //     NetworkTableValue.makeDouble(getPosition(climbMotorRight)));
+    climberTable.putValue("Climber Left Motor Encoder",
+        NetworkTableValue.makeDouble(getPosition(climbMotorLeft)));
+    climberTable.putValue("Climber Right Motor Encoder",
+        NetworkTableValue.makeDouble(getPosition(climbMotorRight)));
     climberTable.putValue("Left at Bottom", NetworkTableValue.makeBoolean(atBottom(climbMotorLeft)));
     climberTable.putValue("Right at Bottom", NetworkTableValue.makeBoolean(atBottom(climbMotorRight)));
   }

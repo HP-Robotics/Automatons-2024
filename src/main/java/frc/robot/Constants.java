@@ -40,7 +40,7 @@ public final class Constants {
     public static final boolean useDataManager = true;
     public static final boolean useLimelight = true;
     public static final boolean usePivot = true;
-    public static final boolean useClimber = false;
+    public static final boolean useClimber = true;
     public static final boolean useTrigger = true;
     public static final boolean useSnuffilator = true;
   }
@@ -64,6 +64,7 @@ public final class Constants {
     public static final int drivePointedToNoteButton = useXbox ? 5 : 0;
     public static final int driveToNoteAxis = useXbox ? 2 : 0;
     public static final int driveToAmpButton = 1;
+    public static final int pointToCornerButton = 2;
 
     // TODO: Add operator joystick constants
 
@@ -167,6 +168,8 @@ public final class Constants {
 
     public static double allowableNoteAngleError = 2.5;
     public static double allowableSpeakerDistanceError = 2.5; // Make these good
+
+    public static Pose2d feedPosition = new Pose2d(0, 323.00 * inToM, new Rotation2d(0));
   }
 
   public static final class PoseEstimatorConstants {
@@ -282,10 +285,10 @@ public final class Constants {
   }
 
   public static class PivotConstants {
-    public static final double kP = 39;
-    public static final double kI = 5;
-    public static final double kD = 2;
-    public static final double kG = -0.33;
+    public static final double kP = 39; // 39
+    public static final double kI = 5; // 5
+    public static final double kD = 2; // 2
+    public static final double kG = -0.33; // -0.33
     public static final boolean startWithPID = true;
     public static final double toleratedPivotAngle = 0.005;
 
@@ -310,7 +313,7 @@ public final class Constants {
 
     public static final double rampTimeTo300s = 10;
 
-    public static final double subwooferPosition = 0.425;
+    public static final double subwooferPosition = 0.431;
     public static final double ampPosition = degreesToEncoder(119.5 + 3); // 0.6
     public static final double podiumPosition = degreesToEncoder(42.12 - 3); // 0.385
     public static final double note2Position = degreesToEncoder(45.72 - 3.25); // 0.395

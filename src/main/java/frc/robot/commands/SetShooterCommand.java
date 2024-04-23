@@ -20,6 +20,7 @@ public class SetShooterCommand extends Command {
   private final Double m_leftSpeed;
   private final Double m_rightSpeed;
   private TriangleInterpolator m_magicTriangles = null;
+  private TriangleInterpolator m_feederInterpolator = null;
   private PoseEstimatorSubsystem m_poseEstimator = null;
 
   /**
@@ -57,10 +58,11 @@ public class SetShooterCommand extends Command {
    * @param triangle
    */
   public SetShooterCommand(ShooterSubsystem subsystem, PoseEstimatorSubsystem poseEstimator,
-      TriangleInterpolator triangle) {
+      TriangleInterpolator triangle, TriangleInterpolator feederInterpolator) {
     this(subsystem);
     m_poseEstimator = poseEstimator;
     m_magicTriangles = triangle;
+    m_feederInterpolator = feederInterpolator;
   }
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -76,12 +78,16 @@ public class SetShooterCommand extends Command {
         ? null
         : m_poseEstimator.getAlliancePose(); // TODO: take a look at this
     if (currentPose != null) {
-      Optional<double[]> triangleData = m_magicTriangles.getTriangulatedOutput(currentPose);
-      if (triangleData.isPresent()) {
+      Optional<double[]> interpolatorData = m_magicTriangles.getTriangulatedOutput(currentPose);
+      if (interpolatorData.isEmpty()) {
+        interpolatorData = m_feederInterpolator.getTriangulatedOutput(currentPose);
+      }
+
+      if (interpolatorData.isPresent()) {
         usingNetworkTables = false;
         // System.out.println("Recived Data");
-        leftOutput = triangleData.get()[0];
-        rightOutput = triangleData.get()[1];
+        leftOutput = interpolatorData.get()[0];
+        rightOutput = interpolatorData.get()[1];
       }
     } else if (m_leftSpeed != null && m_rightSpeed != null) {
       usingNetworkTables = false;
@@ -104,11 +110,15 @@ public class SetShooterCommand extends Command {
         ? null
         : m_poseEstimator.getAlliancePose(); // TODO: look at this
     if (currentPose != null) {
-      Optional<double[]> triangleData = m_magicTriangles.getTriangulatedOutput(currentPose);
-      if (triangleData.isPresent()) {
+      Optional<double[]> interpolatorData = m_magicTriangles.getTriangulatedOutput(currentPose);
+      if (interpolatorData.isEmpty()) {
+        interpolatorData = m_feederInterpolator.getTriangulatedOutput(currentPose);
+      }
+      
+      if (interpolatorData.isPresent()) {
         // System.out.println("Recived Data");
-        leftOutput = triangleData.get()[0];
-        rightOutput = triangleData.get()[1];
+        leftOutput = interpolatorData.get()[0];
+        rightOutput = interpolatorData.get()[1];
       } else {
         leftOutput = shooterTable.getEntry("leftMotor Setpoint").getDouble(ShooterConstants.shooterSpeedLeft);
         rightOutput = shooterTable.getEntry("rightMotor Setpoint").getDouble(ShooterConstants.shooterSpeedRight);
