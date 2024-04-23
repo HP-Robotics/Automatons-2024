@@ -40,7 +40,7 @@ public final class Constants {
     public static final boolean useDataManager = true;
     public static final boolean useLimelight = true;
     public static final boolean usePivot = true;
-    public static final boolean useClimber = true;
+    public static final boolean useClimber = false;
     public static final boolean useTrigger = true;
     public static final boolean useSnuffilator = true;
   }

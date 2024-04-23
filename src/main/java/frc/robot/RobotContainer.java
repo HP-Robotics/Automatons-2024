@@ -104,6 +104,7 @@ public class RobotContainer {
   private final PowerDistribution pdh = new PowerDistribution();
 
   private final SendableChooser<String> m_chooseAutos = new SendableChooser<>();
+  public Command m_autonomousCommand = null;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -438,9 +439,10 @@ public class RobotContainer {
     m_chooseAutos.addOption("Source Center 3 Piece", "SourceCenter3Piece");
     m_chooseAutos.setDefaultOption("Do Nothing", "DoNothing");
     m_chooseAutos.onChange(this::drawSelectedAuto);
+    
 
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
-
+    m_autonomousCommand = getAutonomousCommand();
   }
 
   public Command getAutonomousCommand() {
@@ -463,20 +465,20 @@ public class RobotContainer {
           m_limelightSubsystem, m_triggerSubsystem);
     }
     if (m_chooseAutos.getSelected() == "AmpCenter4Piece") {
-      return Autos.AmpCenter4Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
+      return Autos.AmpCenter4Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_pivotSubsystem,
           m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator, m_feederInterpolator);
     }
     if (m_chooseAutos.getSelected() == "MidAlliance4Piece") {
-      return Autos.MiddleAllianceFourPiece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
+      return Autos.MiddleAllianceFourPiece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_pivotSubsystem,
           m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator, m_feederInterpolator);
     }
     if (m_chooseAutos.getSelected() == "MidAlliance4PieceSkip1A") {
       return Autos.MiddleAllianceFourPieceSkip1A(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem,
-          m_shooterSubsystem, m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem,
+          m_shooterSubsystem, m_pivotSubsystem, m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem,
           m_triangleInterpolator, m_feederInterpolator);
     }
     if (m_chooseAutos.getSelected() == "SourceCenter3Piece") {
-      return Autos.SourceCenter3Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
+      return Autos.SourceCenter3Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_pivotSubsystem,
           m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator, m_feederInterpolator);
     }
     if (m_chooseAutos.getSelected() == "DoNothing") {
@@ -487,6 +489,7 @@ public class RobotContainer {
   }
 
   public void drawSelectedAuto(String selection) {
+    m_autonomousCommand = getAutonomousCommand();
     m_autoPath = new ArrayList<>();
     String autoFile = "";
     if (selection == "GrandTheftAuto") {
