@@ -42,10 +42,10 @@ public class LimelightSubsystem extends SubsystemBase {
 
   public LimelightSubsystem(PoseEstimatorSubsystem PoseEstimatorSubsystem) {
     m_limelight_twoplus = NetworkTableInstance.getDefault().getTable("limelight-fight");
-    botpose_blue = m_limelight_twoplus.getEntry("botpose_wpiblue"); // TODO: Look into Megatag
+    botpose_blue = m_limelight_twoplus.getEntry("botpose_orb_wpiblue"); // TODO: Look into Megatag
     m_poseEstimator = PoseEstimatorSubsystem;
     publisher = poseEstimatorTable.getStructTopic("AprilTagPose", Pose2d.struct).publish();
-    limeSub = m_limelight_twoplus.getDoubleArrayTopic("botpose_wpiblue").subscribe(defaultValues);
+    limeSub = m_limelight_twoplus.getDoubleArrayTopic("botpose_orb_wpiblue").subscribe(defaultValues);
 
     m_gamePieceTable = NetworkTableInstance.getDefault().getTable("limelight-bite");
     m_aprilTagSeen = false;
@@ -82,10 +82,19 @@ public class LimelightSubsystem extends SubsystemBase {
   // This method will be called once per scheduler run
   public void periodic() {
     // read values periodically
+    double[] entries = new double[6];
+        entries[0] = m_poseEstimator.getPose().getRotation().getDegrees();
+        entries[1] = 0;
+        entries[2] = 0;
+        entries[3] = 0;
+        entries[4] = 0;
+        entries[5] = 0;
+    m_limelight_twoplus.getEntry("robot_orientation_set").setDoubleArray(entries);
     double[] botpose = null;
     double latency = 0;
     double timeStamp = 0;
-    m_sawAprilTag = m_limelight_twoplus.getEntry("tv").getDouble(0) == 1.0;
+    double[] botposeEmpty = {0, 0, 0, 0, 0, 0, 0, 0};
+    m_sawAprilTag = m_limelight_twoplus.getEntry("botpose_orb_wpiblue").getDoubleArray(botposeEmpty)[7] != 0;
     limelightMagicTable.putValue("Saw April Tag", NetworkTableValue.makeBoolean(m_sawAprilTag));
     if (m_sawAprilTag) {
       m_targetAprilTagID = (int) m_limelight_twoplus.getEntry("tid").getInteger(0);
@@ -131,7 +140,6 @@ public class LimelightSubsystem extends SubsystemBase {
         m_aprilTagSeen = true;
         // TODO: maybe run poseEstimatorSubsystem's resetPosition
       }
-
       // double noteTV = m_gamePieceTable.getEntry("tv").getValue().getDouble();
       // double noteTX = m_gamePieceTable.getEntry("tx").getValue().getDouble();
       // double noteTY = m_gamePieceTable.getEntry("ty").getValue().getDouble();
