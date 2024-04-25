@@ -97,7 +97,7 @@ public class RobotContainer {
   final PivotSubsystem m_pivotSubsystem = SubsystemConstants.usePivot ? new PivotSubsystem() : null;
   public final ClimbSubsystem m_climberSubsystem = SubsystemConstants.useClimber ? new ClimbSubsystem() : null;
   private final TriggerSubsystem m_triggerSubsystem = SubsystemConstants.useShooter ? new TriggerSubsystem() : null;
-  private final SnuffilatorSubsystem m_snuffilatorSubsystem = SubsystemConstants.useSnuffilator
+  public final SnuffilatorSubsystem m_snuffilatorSubsystem = SubsystemConstants.useSnuffilator
       ? new SnuffilatorSubsystem()
       : null;
   private final TriangleInterpolator m_triangleInterpolator = new TriangleInterpolator(4);
@@ -302,7 +302,7 @@ public class RobotContainer {
     if (SubsystemConstants.useIntake) {
       new Trigger(() -> {
         return m_intakeSubsystem.m_beambreak.beamBroken();
-      }).debounce(0.06, DebounceType.kRising)
+      }).debounce(0.08, DebounceType.kRising)
           .onTrue(new InstantCommand(() -> {
             m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.4);
           }))

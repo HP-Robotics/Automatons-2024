@@ -11,7 +11,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.SnuffilatorConstants;
+
 import frc.robot.Constants.SubsystemConstants;
 
 /**
@@ -122,6 +125,12 @@ public class Robot extends TimedRobot {
     }
     if (SubsystemConstants.useClimber) {
        m_robotContainer.m_climberSubsystem.calibrate().withTimeout(ClimberConstants.calibrationTime).schedule();
+    }
+    if (SubsystemConstants.useSnuffilator) {
+      new StartEndCommand(
+        () -> m_robotContainer.m_snuffilatorSubsystem.move(-SnuffilatorConstants.snuffilatorInSpeed),
+        () -> m_robotContainer.m_snuffilatorSubsystem.move(0)
+      ).withTimeout(0.5);
     }
   }
 
