@@ -93,7 +93,7 @@ public class FollowPathCommandOurs extends Command {
       if (ally.isPresent() && ally.get() == Alliance.Red) {
         // TODO: only reset odometry once
         startPose = GeometryUtil.flipFieldPose(startPose);
-        startRotationDegrees -= 180;
+        startRotationDegrees *= -1;
         // Double[] startPoseArray =
         // {startPose.getX(),startPose.getY(),startPose.getRotation().getRadians()};
         // m_driveSubsystem.driveTrainTable.putValue("Start
@@ -102,7 +102,7 @@ public class FollowPathCommandOurs extends Command {
     
       startRotationDegrees = MathUtil.inputModulus(startRotationDegrees, -180, 180);
       // System.out.println(startRotationDegrees);
-      // m_driveSubsystem.resetYaw(startRotationDegrees);
+      m_driveSubsystem.resetYaw(startRotationDegrees);
       m_driveSubsystem.resetPoseEstimator(startPose);
     }
     m_pathPlannerCommand.initialize();
