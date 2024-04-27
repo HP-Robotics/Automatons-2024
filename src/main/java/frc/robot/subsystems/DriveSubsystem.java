@@ -69,6 +69,7 @@ public class DriveSubsystem extends SubsystemBase {
   public NetworkTable driveTrainTable = inst.getTable("drive-train");
   NetworkTable poseEstimatorTable = inst.getTable("pose-estimator-table");
   StructPublisher<Pose2d> drivePublisher;
+  private double m_gyroOffset;
 
   public DriveSubsystem(PoseEstimatorSubsystem poseEstimator) {
     m_poseEstimator = poseEstimator;
@@ -97,7 +98,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void updateOdometry() {
-    var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
+    var pigeonYaw = new Rotation2d(Math.toRadians(getYaw()));
     // Update the odometry in the periodic block
     if (m_poseEstimator != null) {
       m_poseEstimator.updatePoseEstimator(pigeonYaw, new SwerveModulePosition[] {
@@ -147,7 +148,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
+    var pigeonYaw = new Rotation2d(Math.toRadians(getYaw()));
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
@@ -258,7 +259,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void initializePoseEstimator(Pose2d pose) {
     if (m_poseEstimator != null) {
       m_poseEstimator.createPoseEstimator(DriveConstants.kDriveKinematics,
-          new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue())), new SwerveModulePosition[] {
+          new Rotation2d(Math.toRadians(getYaw())), new SwerveModulePosition[] {
               m_frontLeft.getPosition(),
               m_frontRight.getPosition(),
               m_backRight.getPosition(),
@@ -278,7 +279,7 @@ public class DriveSubsystem extends SubsystemBase {
     if (pose == null) {
       return;
     }
-    var pigeonYaw = new Rotation2d(Math.toRadians(m_pGyro.getYaw().getValue()));
+    var pigeonYaw = new Rotation2d(Math.toRadians(getYaw()));
     m_poseEstimator.resetPosition(
         pigeonYaw,
         new SwerveModulePosition[] {
@@ -297,10 +298,14 @@ public class DriveSubsystem extends SubsystemBase {
    * Resets robot's conception of field orientation
    */
   public void resetYaw(double angle) {
-    m_pGyro.setYaw(angle);// TODO how do we want this to interact with pose estimator?
+    m_gyroOffset = m_pGyro.getYaw().getValue() - angle;
+    //m_pGyro.setYaw(angle);// TODO how do we want this to interact with pose estimator?
     // add offset (and a wraparound to avoid the offset breaking things)
   }
 
+  public double getYaw() {
+    return MathUtil.inputModulus(m_pGyro.getYaw().getValue() - m_gyroOffset, -180.0, 180.0);
+  }
   public void resetYaw() {
     resetYaw(0);
   }
