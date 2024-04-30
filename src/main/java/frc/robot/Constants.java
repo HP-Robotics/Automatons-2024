@@ -55,8 +55,10 @@ public final class Constants {
 
     public static final double driveJoystickExponent = useXbox ? 2 : 2;
 
+    public static final int resetHeadingButton = useXbox ? 8 : 0;
     public static final int resetYawButton = useXbox ? 7 : 11;
     public static final int fieldRelativeButton = useXbox ? 8 : 8;
+    public static final int robotRelativeButton = useXbox ? 2 : 8;
     public static final int yuckButton = useXbox ? 4 : 2;
     public static final int climberButton = useXbox ? 10 : 10;
     public static final int intakeButton = useXbox ? 0 : 1;

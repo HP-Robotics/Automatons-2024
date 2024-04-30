@@ -216,14 +216,32 @@ public class RobotContainer {
 
     if (SubsystemConstants.useDrive) {
       m_driveJoystick.button(ControllerConstants.resetYawButton)
-          .whileTrue(new InstantCommand(m_driveSubsystem::resetYaw));
-      Trigger fieldRelativeTrigger = ControllerConstants.useXbox
-          ? new Trigger(m_driveJoystick.axisGreaterThan(2, 0.1))
-          : new Trigger(m_driveJoystick.button(ControllerConstants.fieldRelativeButton));
+          .whileTrue(new InstantCommand(() -> {
+            Rotation2d heading = m_poseEstimatorSubsystem.getPose().getRotation();
+            m_driveSubsystem.resetYaw();
+            m_driveSubsystem.resetPoseEstimatorHeading(heading);
+          }));
+      m_driveJoystick.button(ControllerConstants.resetHeadingButton)
+          .whileTrue(new InstantCommand(() -> {
+            m_driveSubsystem.resetYaw();
+            double angle = (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) ?
+          Math.PI: 0;
+            m_driveSubsystem.resetPoseEstimatorHeading(new Rotation2d(angle));
+          }));
+      // Trigger fieldRelativeTrigger = ControllerConstants.useXbox
+      //     ? new Trigger(m_driveJoystick.axisGreaterThan(2, 0.1))
+      //     : new Trigger(m_driveJoystick.button(ControllerConstants.fieldRelativeButton));
       // m_driveJoystick.button(7).whileTrue(new FollowPathCommand(m_robotDrive, "Test
       // Path"));
       // m_driveJoystick.button(8).whileTrue(new FollowPathCommand(m_robotDrive, "Test
       // Path Line"));
+
+      m_driveJoystick.button(ControllerConstants.robotRelativeButton)
+          .toggleOnTrue(new InstantCommand(m_driveSubsystem::toggleFieldRelative));
+
+      // m_driveJoystick.button(ControllerConstants.robotRelativeButton)
+      //     .onTrue(new InstantCommand(() -> m_driveSubsystem.setFieldRelative(false)))
+      //     .onFalse(new InstantCommand(() -> m_driveSubsystem.setFieldRelative(true)));
 
       m_driveJoystick.button(ControllerConstants.driveToAmpButton)
         .whileTrue(new RunCommand(() -> {
@@ -234,11 +252,11 @@ public class RobotContainer {
           // .whileTrue(new DriveToPoseCommand(m_driveSubsystem, "Amp Lineup"));
     }
 
-    m_driveJoystick.button(ControllerConstants.pointToCornerButton)
-      .whileTrue(new RunCommand(()  -> {
-          double angle = (m_limelightSubsystem.getAngleTo(m_poseEstimatorSubsystem.getPose(), LimelightConstants.feedPosition)-180);
-          m_driveSubsystem.drivePointedTowardsAngle(m_driveJoystick, Rotation2d.fromDegrees(angle));
-        }, m_driveSubsystem));
+    // m_driveJoystick.button(ControllerConstants.pointToCornerButton)
+    //   .whileTrue(new RunCommand(()  -> {
+    //       double angle = (m_limelightSubsystem.getAngleTo(m_poseEstimatorSubsystem.getPose(), LimelightConstants.feedPosition)-180);
+    //       m_driveSubsystem.drivePointedTowardsAngle(m_driveJoystick, Rotation2d.fromDegrees(angle));
+    //     }, m_driveSubsystem));
 
 
     if (SubsystemConstants.useShooter) {

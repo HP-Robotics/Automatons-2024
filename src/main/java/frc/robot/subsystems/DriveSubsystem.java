@@ -195,7 +195,7 @@ public class DriveSubsystem extends SubsystemBase {
                 ControllerConstants.driveJoystickDeadband), 2)
             * -1 * DriveConstants.kMaxSpeed,
         rot * 1 * DriveConstants.kMaxAngularSpeed,
-        true);
+        m_fieldRelative);
 
     driveTrainTable.putValue("Rotation Current Angle",
         NetworkTableValue.makeDouble(m_poseEstimator.getPose().getRotation().getDegrees()));
@@ -256,6 +256,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_fieldRelative = isTrue;
   }
 
+  public void toggleFieldRelative() {
+    m_fieldRelative = !m_fieldRelative;
+  }
+
   public void initializePoseEstimator(Pose2d pose) {
     if (m_poseEstimator != null) {
       m_poseEstimator.createPoseEstimator(DriveConstants.kDriveKinematics,
@@ -292,6 +296,23 @@ public class DriveSubsystem extends SubsystemBase {
     // setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new
     // ChassisSpeeds()));
 
+  }
+
+  public void resetPoseEstimatorHeading(Rotation2d angle) {
+    if (angle == null) {
+      return;
+    }
+    Pose2d pose = new Pose2d(m_poseEstimator.getPose().getTranslation(), angle);
+    var pigeonYaw = new Rotation2d(Math.toRadians(getYaw()));
+    m_poseEstimator.resetPosition(
+        pigeonYaw,
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_backRight.getPosition(),
+            m_backLeft.getPosition()
+        },
+        pose);
   }
 
   /**
