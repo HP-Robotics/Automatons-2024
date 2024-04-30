@@ -40,7 +40,7 @@ public final class Constants {
     public static final boolean useDataManager = true;
     public static final boolean useLimelight = true;
     public static final boolean usePivot = true;
-    public static final boolean useClimber = false;
+    public static final boolean useClimber = true;
     public static final boolean useTrigger = true;
     public static final boolean useSnuffilator = true;
   }
@@ -258,9 +258,10 @@ public final class Constants {
     public static final double climbSpeed = 0.65; // TODO: Decide this (in RPM, so 500?)
     public static final double calibrateSpeed = 0.5;
 
-    public static final double topPosition = 120; // TODO: Measure to find real values
+    public static final double topLeftPosition = 100; // TODO: Measure to find real values
+    public static final double topRightPosition = 100;
     public static final double bottomPosition = -20;
-    public static final double adjustPivotThreshold = 0;
+    public static final double adjustPivotThreshold = -5;
 
     public static final double kP = 0.0;
     public static final double kI = 0.0;

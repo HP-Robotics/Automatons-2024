@@ -11,6 +11,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.SnuffilatorConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -287,7 +288,10 @@ public class RobotContainer {
               m_climberSubsystem.climbTo(ClimberConstants.climbSpeed),
               new InstantCommand(() -> {
                 m_pivotSubsystem.setPosition(PivotConstants.encoderAt90);
-              }, m_pivotSubsystem)));
+              },  
+              m_pivotSubsystem),
+              new InstantCommand(() -> {m_snuffilatorSubsystem.move(SnuffilatorConstants.snuffilatorOutSpeed);})
+              ));
 
       m_driveJoystick.povDown().whileTrue(
           new ParallelCommandGroup(
