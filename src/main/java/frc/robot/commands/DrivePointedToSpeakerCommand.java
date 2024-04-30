@@ -26,13 +26,14 @@ public class DrivePointedToSpeakerCommand extends Command {
   private final LimelightSubsystem m_limelightSubsystem;
   private final PoseEstimatorSubsystem m_poseEstimatorSubsystem;
   private final TriangleInterpolator m_triangleInterpolator;
+  private final TriangleInterpolator m_feederInterpolator;
   private Optional<CommandJoystick> m_joystick;
   private Pose2d m_targetAprilTag;
 
   /** Creates a new IntakeCommand. */
   public DrivePointedToSpeakerCommand(DriveSubsystem drivesubsystem, LimelightSubsystem limelightsubsystem,
       PoseEstimatorSubsystem poseestimatorsubsystem,
-      CommandJoystick joystick, TriangleInterpolator magicTriangles) {
+      CommandJoystick joystick, TriangleInterpolator magicTriangles, TriangleInterpolator feederInterpolator) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivesubsystem = drivesubsystem;
     m_limelightSubsystem = limelightsubsystem;
@@ -42,14 +43,15 @@ public class DrivePointedToSpeakerCommand extends Command {
       m_joystick = Optional.of(joystick);
     }
     m_triangleInterpolator = magicTriangles;
+    m_feederInterpolator = feederInterpolator;
     addRequirements(drivesubsystem);
   }
 
   public DrivePointedToSpeakerCommand(DriveSubsystem drivesubsystem, LimelightSubsystem limelightsubsystem,
-      PoseEstimatorSubsystem poseestimatorsubsystem, TriangleInterpolator magicTriangles) {
+      PoseEstimatorSubsystem poseestimatorsubsystem, TriangleInterpolator magicTriangles, TriangleInterpolator feederInterpolator) {
     // Use addRequirements() here to declare subsystem dependencies.
 
-    this(drivesubsystem, limelightsubsystem, poseestimatorsubsystem, null, magicTriangles);
+    this(drivesubsystem, limelightsubsystem, poseestimatorsubsystem, null, magicTriangles, feederInterpolator);
     addRequirements(drivesubsystem);
   }
 
@@ -71,16 +73,20 @@ public class DrivePointedToSpeakerCommand extends Command {
   @Override
   public void execute() {
     double rumble = 0;
+    Pose2d target = m_targetAprilTag;
     Pose2d currentPose = m_poseEstimatorSubsystem.getAlliancePose();
     if (/* m_limelightSubsystem.m_aprilTagSeen && */ currentPose != null) { // TODO: Make this less of a mess
-      Optional<double[]> triangleData = m_triangleInterpolator.getTriangulatedOutput(currentPose);
+      Optional<double[]> interpolatorData = m_triangleInterpolator.getTriangulatedOutput(currentPose);
+      if (interpolatorData.isEmpty()) {
+        interpolatorData = m_feederInterpolator.getTriangulatedOutput(currentPose);
+      }
 
       Rotation2d heading = new Rotation2d(Math
-          .toRadians(m_limelightSubsystem.getAngleTo(m_poseEstimatorSubsystem.getPose(), m_targetAprilTag))
+          .toRadians(m_limelightSubsystem.getAngleTo(m_poseEstimatorSubsystem.getPose(), target))
           + Math.PI);
-      if (triangleData.isPresent()) { // If we have magic data
+      if (interpolatorData.isPresent()) { // If we have magic data
         rumble = 0.4;
-        heading = new Rotation2d(triangleData.get()[3]);
+        heading = new Rotation2d(interpolatorData.get()[3]);
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
           heading = GeometryUtil.flipFieldRotation(heading);
         }

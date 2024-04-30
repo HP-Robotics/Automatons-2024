@@ -25,17 +25,19 @@ public class PivotMagicCommand extends Command {
   private final PoseEstimatorSubsystem m_poseEstimatorSubsystem;
   private Pose2d m_targetAprilTag;
   private TriangleInterpolator m_triangleInterpolator;
+  private TriangleInterpolator m_feederInterpolator;
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable pivotTable = inst.getTable("pivot-table");
 
   /** Creates a new pivotMagicCommand. */
   public PivotMagicCommand(PivotSubsystem subsystem, LimelightSubsystem limelightSubsystem,
-      TriangleInterpolator magicTriangles, PoseEstimatorSubsystem poseEstimatorSubsystem) {
+      TriangleInterpolator magicTriangles, TriangleInterpolator feederInterpolator, PoseEstimatorSubsystem poseEstimatorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
     m_limelightSubsystem = limelightSubsystem;
     m_triangleInterpolator = magicTriangles;
+    m_feederInterpolator = feederInterpolator;
     m_poseEstimatorSubsystem = poseEstimatorSubsystem;
 
     addRequirements(subsystem);
@@ -62,11 +64,14 @@ public class PivotMagicCommand extends Command {
     Pose2d currentPose = m_poseEstimatorSubsystem.getAlliancePose();
     if (currentPose != null) {
       // System.out.println("Getting Data");
-      Optional<double[]> triangleData = m_triangleInterpolator.getTriangulatedOutput(currentPose);
-      // TODO: Code for reflect if red
-      if (triangleData.isPresent()) {
+      Optional<double[]> interpolatorData = m_triangleInterpolator.getTriangulatedOutput(currentPose);
+      if (interpolatorData.isEmpty()) {
+        interpolatorData = m_feederInterpolator.getTriangulatedOutput(currentPose);
+      }
+
+      if (interpolatorData.isPresent()) {
         // System.out.println("Recived Data");
-        m_subsystem.setPosition(triangleData.get()[2]);
+        m_subsystem.setPosition(interpolatorData.get()[2]);
       }
       // m_subsystem.setPosition(m_subsystem.getMagicAngle(
       // m_limelightSubsystem.getDistanceTo(m_limelightSubsystem.m_visionPose2d,

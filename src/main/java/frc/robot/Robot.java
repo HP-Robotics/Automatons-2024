@@ -4,12 +4,17 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.commands.PathfindingCommand;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.SnuffilatorConstants;
+
 import frc.robot.Constants.SubsystemConstants;
 
 /**
@@ -22,7 +27,6 @@ import frc.robot.Constants.SubsystemConstants;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
 
@@ -92,13 +96,13 @@ public class Robot extends TimedRobot {
     if (SubsystemConstants.usePivot) {
       m_robotContainer.m_pivotSubsystem.clearPIDError();
     }
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
     if (SubsystemConstants.useDrive) {
       m_robotContainer.resetDriveOffsets();
     }
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+    if (m_robotContainer.m_autonomousCommand != null) {
+      m_robotContainer.m_autonomousCommand.schedule();
     }
   }
 
@@ -113,14 +117,20 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    if (m_robotContainer.m_autonomousCommand != null) {
+      m_robotContainer.m_autonomousCommand.cancel();
     }
     if (SubsystemConstants.useDrive) {
       m_robotContainer.resetDriveOffsets();
     }
     if (SubsystemConstants.useClimber) {
        m_robotContainer.m_climberSubsystem.calibrate().withTimeout(ClimberConstants.calibrationTime).schedule();
+    }
+    if (SubsystemConstants.useSnuffilator) {
+      new StartEndCommand(
+        () -> m_robotContainer.m_snuffilatorSubsystem.move(-SnuffilatorConstants.snuffilatorInSpeed),
+        () -> m_robotContainer.m_snuffilatorSubsystem.move(0)
+      ).withTimeout(0.5);
     }
   }
 

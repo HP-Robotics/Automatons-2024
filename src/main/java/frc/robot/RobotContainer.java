@@ -11,6 +11,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.SnuffilatorConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -37,6 +38,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.GeometryUtil;
 
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -96,13 +98,15 @@ public class RobotContainer {
   final PivotSubsystem m_pivotSubsystem = SubsystemConstants.usePivot ? new PivotSubsystem() : null;
   public final ClimbSubsystem m_climberSubsystem = SubsystemConstants.useClimber ? new ClimbSubsystem() : null;
   private final TriggerSubsystem m_triggerSubsystem = SubsystemConstants.useShooter ? new TriggerSubsystem() : null;
-  private final SnuffilatorSubsystem m_snuffilatorSubsystem = SubsystemConstants.useSnuffilator
+  public final SnuffilatorSubsystem m_snuffilatorSubsystem = SubsystemConstants.useSnuffilator
       ? new SnuffilatorSubsystem()
       : null;
   private final TriangleInterpolator m_triangleInterpolator = new TriangleInterpolator(4);
+  private final TriangleInterpolator m_feederInterpolator = new TriangleInterpolator(4);
   private final PowerDistribution pdh = new PowerDistribution();
 
   private final SendableChooser<String> m_chooseAutos = new SendableChooser<>();
+  public Command m_autonomousCommand = null;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -112,19 +116,32 @@ public class RobotContainer {
     // TriangleInterpolator.addDuluthMagic(m_triangleInterpolator);
     // m_triangleInterpolator.addCalibratedPoint(2.0, 7.78, 0, 0, 0.374, 0);
     TriangleInterpolator.addv2Magic(m_triangleInterpolator);
+    TriangleInterpolator.addFeederMagic(m_feederInterpolator);
     double startTime = Timer.getFPGATimestamp();
     m_triangleInterpolator.makeTriangles();
+    m_feederInterpolator.makeTriangles();
     double triangleTime = Timer.getFPGATimestamp();
-    // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedLeftTestImage.png",
-    // 500,
-    // 500, 0, 8.27, 8.27, 0, 0, 0, 80);
-    // m_triangleInterpolator.draw("/home/lvuser/shooterSpeedRightTestImage.png",
-    // 500,
-    // 500, 0, 8.27, 8.27, 0, 1, 0, 80);
-    // m_triangleInterpolator.draw("/home/lvuser/pivotAngleTestImage.png", 100, 100,
+    // m_triangleInterpolator.draw("C:\\Users\\Scottie\\Desktop\\Automatons-Code\\AdvantageLogs\\shooterSpeedLeftTestImage.png",
+    // 1000,
+    // 1000, 0, 8.27, 8.27, 0, 0, 0, 80);
+    // m_triangleInterpolator.draw("C:\\Users\\Scottie\\Desktop\\Automatons-Code\\AdvantageLogs\\shooterSpeedRightTestImage.png",
+    // 1000,
+    // 1000, 0, 8.27, 8.27, 0, 1, 0, 80);
+    // m_triangleInterpolator.draw("C:\\Users\\Scottie\\Desktop\\Automatons-Code\\AdvantageLogs\\pivotAngleTestImage.png", 1000, 1000,
     // 0, 8.27, 8.27, 0, 2, 0.3, 0.5);
-    // m_triangleInterpolator.draw("/home/lvuser/headingTestImage.png", 500, 500, 0,
+    // m_triangleInterpolator.draw("C:\\Users\\Scottie\\Desktop\\Automatons-Code\\AdvantageLogs\\headingTestImage.png", 1000, 1000, 0,
     // 8.27, 8.27, 0, 3, (-Math.PI)/2, (Math.PI)/2);
+    
+    // m_feederInterpolator.draw("C:\\Users\\Scottie\\Automatons-Code\\Logs\\shooterSpeedLeftFeederImage.png",
+    // 2000,
+    // 1000, 0, 16.54, 8.27, 0, 0, 0, 80);
+    // m_feederInterpolator.draw("C:\\Users\\Scottie\\Automatons-Code\\Logs\\shooterSpeedRightFeederImage.png",
+    // 2000,
+    // 1000, 0, 16.54, 8.27, 0, 1, 0, 80);
+    // m_feederInterpolator.draw("C:\\Users\\Scottie\\Automatons-Code\\Logs\\pivotAngleFeederImage.png", 2000, 1000,
+    // 0, 16.54, 8.27, 0, 2, 0.3, 0.5);
+    // m_feederInterpolator.draw("C:\\Users\\Scottie\\Automatons-Code\\Logs\\headingFeederImage.png", 2000, 1000, 0,
+    // 16.54, 8.27, 0, 3, (-Math.PI)/2, (Math.PI)/2);
     double TenKTesTime = Timer.getFPGATimestamp();
     System.out.println(triangleTime - startTime);
     System.out.println(TenKTesTime - triangleTime);
@@ -139,7 +156,7 @@ public class RobotContainer {
 
     m_compoundCommands = new CommandBlocks(m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_triggerSubsystem,
         m_pivotSubsystem, m_snuffilatorSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem,
-        m_triangleInterpolator);
+        m_triangleInterpolator, m_feederInterpolator);
 
     if (SubsystemConstants.useDrive) {
       m_driveSubsystem.setDefaultCommand(
@@ -189,11 +206,11 @@ public class RobotContainer {
       m_driveSubsystem.m_pathplannerUsingNoteVision = false;
     }));
     NamedCommands.registerCommand("magicPivot", new PivotMagicCommand(
-        m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator, m_poseEstimatorSubsystem));
+        m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator, m_feederInterpolator, m_poseEstimatorSubsystem));
 
     if (SubsystemConstants.useShooter) {
       NamedCommands.registerCommand("runShooter",
-          new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator));
+          new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator, m_feederInterpolator));
       NamedCommands.registerCommand("stopShooter", new SetShooterCommand(m_shooterSubsystem, 0.0, 0.0));
     }
   }
@@ -220,17 +237,24 @@ public class RobotContainer {
           // .whileTrue(new DriveToPoseCommand(m_driveSubsystem, "Amp Lineup"));
     }
 
+    m_driveJoystick.button(ControllerConstants.pointToCornerButton)
+      .whileTrue(new RunCommand(()  -> {
+          double angle = (m_limelightSubsystem.getAngleTo(m_poseEstimatorSubsystem.getPose(), LimelightConstants.feedPosition)-180);
+          m_driveSubsystem.drivePointedTowardsAngle(m_driveJoystick, Rotation2d.fromDegrees(angle));
+        }, m_driveSubsystem));
+
+
     if (SubsystemConstants.useShooter) {
       m_opJoystick.axisGreaterThan(3, 0.1).onTrue(
           new ConditionalCommand(
               new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp,
                   ShooterConstants.shooterSpeedAmp),
-              new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator),
+              new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator, m_feederInterpolator),
               () -> {
                 return m_pivotSubsystem != null && m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition;
               }));
       m_opJoystick.button(1).onTrue(new SetShooterCommand(m_shooterSubsystem, ShooterConstants.preloadSpeedLeft, ShooterConstants.preloadSpeedRight));
-      m_opJoystick.button(1).onFalse(new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator));
+      m_opJoystick.button(1).onFalse(new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator, m_feederInterpolator));
       if (SubsystemConstants.useTrigger) {
         m_opJoystick.button(3).whileTrue(m_compoundCommands.fireButtonHold());
         m_opJoystick.button(3).onTrue(new InstantCommand(() -> {
@@ -250,7 +274,7 @@ public class RobotContainer {
       })
           .onTrue(new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp,
               ShooterConstants.shooterSpeedAmp))
-          .onFalse(new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator));
+          .onFalse(new SetShooterCommand(m_shooterSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator, m_feederInterpolator));
           m_opJoystick.button(5).whileTrue(new ParallelCommandGroup(
             new SetShooterCommand(m_shooterSubsystem, 45.0, 45.0),
             new InstantCommand(() -> m_pivotSubsystem.setPosition(0.38))
@@ -264,7 +288,10 @@ public class RobotContainer {
               m_climberSubsystem.climbTo(ClimberConstants.climbSpeed),
               new InstantCommand(() -> {
                 m_pivotSubsystem.setPosition(PivotConstants.encoderAt90);
-              }, m_pivotSubsystem)));
+              },  
+              m_pivotSubsystem),
+              new InstantCommand(() -> {m_snuffilatorSubsystem.move(SnuffilatorConstants.snuffilatorOutSpeed);})
+              ));
 
       m_driveJoystick.povDown().whileTrue(
           new ParallelCommandGroup(
@@ -279,7 +306,7 @@ public class RobotContainer {
     if (SubsystemConstants.useIntake) {
       new Trigger(() -> {
         return m_intakeSubsystem.m_beambreak.beamBroken();
-      })
+      }).debounce(0.08, DebounceType.kRising)
           .onTrue(new InstantCommand(() -> {
             m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.4);
           }))
@@ -304,11 +331,11 @@ public class RobotContainer {
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
       m_driveJoystick.button(ControllerConstants.drivePointedToSpeakerButton)
           .whileTrue(new DrivePointedToSpeakerCommand(m_driveSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem,
-              m_driveJoystick, m_triangleInterpolator)); // TODO use pose estimator constant
+              m_driveJoystick, m_triangleInterpolator, m_feederInterpolator)); // TODO use pose estimator constant
       m_driveJoystick.button(ControllerConstants.drivePointedToNoteButton)
           .whileTrue(new DrivePointedToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_driveJoystick));
       m_opJoystick.axisGreaterThan(2, 0.1)
-          .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator,
+          .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator, m_feederInterpolator,
               m_poseEstimatorSubsystem))
           .whileTrue(
               new OperatorRumbleCommand(m_pivotSubsystem, m_driveSubsystem, m_limelightSubsystem, m_shooterSubsystem,
@@ -417,9 +444,10 @@ public class RobotContainer {
     m_chooseAutos.addOption("Source Center 3 Piece", "SourceCenter3Piece");
     m_chooseAutos.setDefaultOption("Do Nothing", "DoNothing");
     m_chooseAutos.onChange(this::drawSelectedAuto);
+    
 
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
-
+    m_autonomousCommand = getAutonomousCommand();
   }
 
   public Command getAutonomousCommand() {
@@ -442,21 +470,21 @@ public class RobotContainer {
           m_limelightSubsystem, m_triggerSubsystem);
     }
     if (m_chooseAutos.getSelected() == "AmpCenter4Piece") {
-      return Autos.AmpCenter4Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
-          m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
+      return Autos.AmpCenter4Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_pivotSubsystem,
+          m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator, m_feederInterpolator);
     }
     if (m_chooseAutos.getSelected() == "MidAlliance4Piece") {
-      return Autos.MiddleAllianceFourPiece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
-          m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
+      return Autos.MiddleAllianceFourPiece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_pivotSubsystem,
+          m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator, m_feederInterpolator);
     }
     if (m_chooseAutos.getSelected() == "MidAlliance4PieceSkip1A") {
       return Autos.MiddleAllianceFourPieceSkip1A(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem,
-          m_shooterSubsystem, m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem,
-          m_triangleInterpolator);
+          m_shooterSubsystem, m_pivotSubsystem, m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem,
+          m_triangleInterpolator, m_feederInterpolator);
     }
     if (m_chooseAutos.getSelected() == "SourceCenter3Piece") {
-      return Autos.SourceCenter3Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
-          m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator);
+      return Autos.SourceCenter3Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_pivotSubsystem,
+          m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator, m_feederInterpolator);
     }
     if (m_chooseAutos.getSelected() == "DoNothing") {
       return Autos.DoNothing();
@@ -466,6 +494,7 @@ public class RobotContainer {
   }
 
   public void drawSelectedAuto(String selection) {
+    m_autonomousCommand = getAutonomousCommand();
     m_autoPath = new ArrayList<>();
     String autoFile = "";
     if (selection == "GrandTheftAuto") {
@@ -524,10 +553,13 @@ public class RobotContainer {
       if (currentPose == null) {
         return Optional.empty();
       }
-      Optional<double[]> triangleData = m_triangleInterpolator.getTriangulatedOutput(currentPose);
+      Optional<double[]> interpolatorData = m_triangleInterpolator.getTriangulatedOutput(currentPose);
+      if (interpolatorData.isEmpty()) {
+        interpolatorData = m_feederInterpolator.getTriangulatedOutput(currentPose);
+      }
       Rotation2d heading;
-      if (triangleData.isPresent()) {
-        heading = new Rotation2d(triangleData.get()[3]);
+      if (interpolatorData.isPresent()) {
+        heading = new Rotation2d(interpolatorData.get()[3]);
       } else {
         heading = new Rotation2d(Math
             .toRadians(m_limelightSubsystem.getAngleTo(currentPose, LimelightConstants.aprilTagList[7]))

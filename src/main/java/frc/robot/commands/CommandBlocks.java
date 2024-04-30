@@ -26,12 +26,13 @@ public class CommandBlocks {
   SnuffilatorSubsystem m_snuffilatorSubsystem;
   LimelightSubsystem m_limelightSubsystem;
   PoseEstimatorSubsystem m_poseEstimator;
-  TriangleInterpolator m_triangleInterpolator;
+  TriangleInterpolator m_triangleInterpolator; 
+  TriangleInterpolator m_feederInterpolator;
 
   public CommandBlocks(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem,
       ShooterSubsystem shooterSubsystem, TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem,
       SnuffilatorSubsystem snuffilatorSubsystem, LimelightSubsystem limelightSubsystem,
-      PoseEstimatorSubsystem poseEstimator, TriangleInterpolator triangleInterpolator) {
+      PoseEstimatorSubsystem poseEstimator, TriangleInterpolator triangleInterpolator, TriangleInterpolator feederInterpolator) {
     m_driveSubsystem = driveSubsystem;
     m_intakeSubsystem = intakeSubsystem;
     m_shooterSubsystem = shooterSubsystem;
@@ -41,6 +42,7 @@ public class CommandBlocks {
     m_limelightSubsystem = limelightSubsystem;
     m_poseEstimator = poseEstimator;
     m_triangleInterpolator = triangleInterpolator;
+    m_feederInterpolator = feederInterpolator;
   }
 
   public Command fireGamePieceCommand() {
@@ -50,9 +52,9 @@ public class CommandBlocks {
     }
     return new ParallelCommandGroup(
         new InstantCommand(
-            () -> new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator).schedule()),
+            () -> new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator, m_feederInterpolator).schedule()),
         new InstantCommand(
-            () -> new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator, m_poseEstimator)
+            () -> new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator, m_feederInterpolator, m_poseEstimator)
                 .schedule()))
         .andThen(
             new ParallelDeadlineGroup(
