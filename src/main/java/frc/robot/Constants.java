@@ -180,7 +180,7 @@ public final class Constants {
     public static final double visionYStandardDev = 0.01;
     public static final double visionHeadingStandardDev = 0.05;
 
-    public static final double maxAcceptableSkew = Math.PI / 4.0;
+    public static final double maxAcceptableSkew = Math.PI / 3;
     public static final double maxAcceptableDistance = 5.0;
   }
 
