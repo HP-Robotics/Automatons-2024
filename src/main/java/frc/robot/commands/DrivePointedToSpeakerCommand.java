@@ -48,7 +48,8 @@ public class DrivePointedToSpeakerCommand extends Command {
   }
 
   public DrivePointedToSpeakerCommand(DriveSubsystem drivesubsystem, LimelightSubsystem limelightsubsystem,
-      PoseEstimatorSubsystem poseestimatorsubsystem, TriangleInterpolator magicTriangles, TriangleInterpolator feederInterpolator) {
+      PoseEstimatorSubsystem poseestimatorsubsystem, TriangleInterpolator magicTriangles,
+      TriangleInterpolator feederInterpolator) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     this(drivesubsystem, limelightsubsystem, poseestimatorsubsystem, null, magicTriangles, feederInterpolator);
@@ -75,15 +76,25 @@ public class DrivePointedToSpeakerCommand extends Command {
     double rumble = 0;
     Pose2d target = m_targetAprilTag;
     Pose2d currentPose = m_poseEstimatorSubsystem.getAlliancePose();
+    Rotation2d heading;
     if (/* m_limelightSubsystem.m_aprilTagSeen && */ currentPose != null) { // TODO: Make this less of a mess
       Optional<double[]> interpolatorData = m_triangleInterpolator.getTriangulatedOutput(currentPose);
       if (interpolatorData.isEmpty()) {
         interpolatorData = m_feederInterpolator.getTriangulatedOutput(currentPose);
       }
-
-      Rotation2d heading = new Rotation2d(Math
-          .toRadians(m_limelightSubsystem.getAngleTo(m_poseEstimatorSubsystem.getPose(), target))
-          + Math.PI);
+      if (currentPose.getX() < 8.27) {
+        heading = new Rotation2d(Math
+            .toRadians(m_limelightSubsystem.getAngleTo(m_poseEstimatorSubsystem.getPose(), target))
+            + Math.PI);
+      } else {
+        Pose2d targetPose = LimelightConstants.feedPosition;
+        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+          targetPose = GeometryUtil.flipFieldPose(targetPose);
+        }
+          heading = new Rotation2d(Math
+              .toRadians(m_limelightSubsystem.getAngleTo(m_poseEstimatorSubsystem.getPose(), targetPose))
+              + Math.PI);
+        }
       if (interpolatorData.isPresent()) { // If we have magic data
         rumble = 0.4;
         heading = new Rotation2d(interpolatorData.get()[3]);
@@ -111,8 +122,7 @@ public class DrivePointedToSpeakerCommand extends Command {
   public void end(boolean interrupted) {
     if (m_joystick.isPresent()) {
       m_joystick.get().getHID().setRumble(RumbleType.kBothRumble, 0);
-    }
-    else{
+    } else {
       m_drivesubsystem.drive(0, 0, 0, true);
     }
   }
