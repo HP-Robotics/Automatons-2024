@@ -221,7 +221,7 @@ public final class Constants {
     public static final double vanguardSpeedSide = 0.5;
     public static final double vanguardSpeedFront = 0.5; 
     public static final int vanguardCurrentLimitFront = 30;
-    public static final int vanguardCurrentLimitSide = 30;
+    public static final int vanguardCurrentLimitSide = 45;
   }
 
   public static class SnuffilatorConstants {
@@ -239,7 +239,7 @@ public final class Constants {
     public static final double preloadSpeedRight = 30;
     public static final double shooterSpeedLeft = 50; // 50
     public static final double shooterSpeedRight = 50; // 50
-    public static final double shooterSpeedAmp = 12.5; // 12.5
+    public static final double shooterSpeedAmp = 13; // 12.5
 
     public static final double shooterMotorskP = 9;
     public static final double shooterMotorskI = 4;
@@ -260,9 +260,10 @@ public final class Constants {
     public static final double climbSpeed = 0.65; // TODO: Decide this (in RPM, so 500?)
     public static final double calibrateSpeed = 0.5;
 
-    public static final double topPosition = 120; // TODO: Measure to find real values
+    public static final double topLeftPosition = 100; // TODO: Measure to find real values
+    public static final double topRightPosition = 100;
     public static final double bottomPosition = -20;
-    public static final double adjustPivotThreshold = 0;
+    public static final double adjustPivotThreshold = -5;
 
     public static final double kP = 0.0;
     public static final double kI = 0.0;
@@ -315,8 +316,8 @@ public final class Constants {
 
     public static final double rampTimeTo300s = 10;
 
+    public static final double ampPosition = degreesToEncoder(119.5 + 3 + 1); // 0.6 // +1
     public static final double subwooferPosition = 0.431;
-    public static final double ampPosition = degreesToEncoder(119.5 + 3); // 0.6
     public static final double podiumPosition = degreesToEncoder(42.12 - 3); // 0.385
     public static final double note2Position = degreesToEncoder(45.72 - 3.25); // 0.395
     public static final double note1_3Position = degreesToEncoder(42.12); // 0.385

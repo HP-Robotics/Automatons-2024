@@ -11,6 +11,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.SnuffilatorConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -37,6 +38,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.GeometryUtil;
 
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -96,7 +98,7 @@ public class RobotContainer {
   final PivotSubsystem m_pivotSubsystem = SubsystemConstants.usePivot ? new PivotSubsystem() : null;
   public final ClimbSubsystem m_climberSubsystem = SubsystemConstants.useClimber ? new ClimbSubsystem() : null;
   private final TriggerSubsystem m_triggerSubsystem = SubsystemConstants.useShooter ? new TriggerSubsystem() : null;
-  private final SnuffilatorSubsystem m_snuffilatorSubsystem = SubsystemConstants.useSnuffilator
+  public final SnuffilatorSubsystem m_snuffilatorSubsystem = SubsystemConstants.useSnuffilator
       ? new SnuffilatorSubsystem()
       : null;
   private final TriangleInterpolator m_triangleInterpolator = new TriangleInterpolator(4);
@@ -104,6 +106,7 @@ public class RobotContainer {
   private final PowerDistribution pdh = new PowerDistribution();
 
   private final SendableChooser<String> m_chooseAutos = new SendableChooser<>();
+  public Command m_autonomousCommand = null;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -303,7 +306,10 @@ public class RobotContainer {
               m_climberSubsystem.climbTo(ClimberConstants.climbSpeed),
               new InstantCommand(() -> {
                 m_pivotSubsystem.setPosition(PivotConstants.encoderAt90);
-              }, m_pivotSubsystem)));
+              },  
+              m_pivotSubsystem),
+              new InstantCommand(() -> {m_snuffilatorSubsystem.move(SnuffilatorConstants.snuffilatorOutSpeed);})
+              ));
 
       m_driveJoystick.povDown().whileTrue(
           new ParallelCommandGroup(
@@ -318,7 +324,7 @@ public class RobotContainer {
     if (SubsystemConstants.useIntake) {
       new Trigger(() -> {
         return m_intakeSubsystem.m_beambreak.beamBroken();
-      })
+      }).debounce(0.08, DebounceType.kRising)
           .onTrue(new InstantCommand(() -> {
             m_driveJoystick.getHID().setRumble(RumbleType.kBothRumble, 0.4);
           }))
@@ -456,9 +462,10 @@ public class RobotContainer {
     m_chooseAutos.addOption("Source Center 3 Piece", "SourceCenter3Piece");
     m_chooseAutos.setDefaultOption("Do Nothing", "DoNothing");
     m_chooseAutos.onChange(this::drawSelectedAuto);
+    
 
     SmartDashboard.putData("Auto Chooser", m_chooseAutos);
-
+    m_autonomousCommand = getAutonomousCommand();
   }
 
   public Command getAutonomousCommand() {
@@ -481,20 +488,20 @@ public class RobotContainer {
           m_limelightSubsystem, m_triggerSubsystem);
     }
     if (m_chooseAutos.getSelected() == "AmpCenter4Piece") {
-      return Autos.AmpCenter4Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
+      return Autos.AmpCenter4Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_pivotSubsystem,
           m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator, m_feederInterpolator);
     }
     if (m_chooseAutos.getSelected() == "MidAlliance4Piece") {
-      return Autos.MiddleAllianceFourPiece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
+      return Autos.MiddleAllianceFourPiece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_pivotSubsystem,
           m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator, m_feederInterpolator);
     }
     if (m_chooseAutos.getSelected() == "MidAlliance4PieceSkip1A") {
       return Autos.MiddleAllianceFourPieceSkip1A(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem,
-          m_shooterSubsystem, m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem,
+          m_shooterSubsystem, m_pivotSubsystem, m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem,
           m_triangleInterpolator, m_feederInterpolator);
     }
     if (m_chooseAutos.getSelected() == "SourceCenter3Piece") {
-      return Autos.SourceCenter3Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem,
+      return Autos.SourceCenter3Piece(m_compoundCommands, m_driveSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_pivotSubsystem,
           m_limelightSubsystem, m_triggerSubsystem, m_poseEstimatorSubsystem, m_triangleInterpolator, m_feederInterpolator);
     }
     if (m_chooseAutos.getSelected() == "DoNothing") {
@@ -505,6 +512,7 @@ public class RobotContainer {
   }
 
   public void drawSelectedAuto(String selection) {
+    m_autonomousCommand = getAutonomousCommand();
     m_autoPath = new ArrayList<>();
     String autoFile = "";
     if (selection == "GrandTheftAuto") {

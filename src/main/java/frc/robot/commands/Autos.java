@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.TriangleInterpolator;
@@ -77,7 +78,7 @@ public final class Autos {
 
   public static Command AmpCenter4Piece(CommandBlocks commandBlocks, DriveSubsystem drive,
       IntakeSubsystem intakeSubsystem,
-      ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem,
+      ShooterSubsystem shooterSubsystem, PivotSubsystem pivotSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem,
       PoseEstimatorSubsystem poseEstimatorSubsystem, TriangleInterpolator triangles, TriangleInterpolator feederInterpolator) {
     if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter
         || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
@@ -90,6 +91,7 @@ public final class Autos {
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(1),
+        new InstantCommand(() -> new PivotMagicCommand(pivotSubsystem, limelightSubsystem, triangles, triangles, poseEstimatorSubsystem).schedule()),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles, feederInterpolator).withTimeout(1),
         commandBlocks.fireGamePieceCommand().withTimeout(1.5),
         new FollowPathCommandOurs(drive, limelightSubsystem, "Amp Center 4 Piece Part 2"),
@@ -111,7 +113,7 @@ public final class Autos {
 
   public static Command MiddleAllianceFourPiece(CommandBlocks commandBlocks, DriveSubsystem drive,
       IntakeSubsystem intakeSubsystem,
-      ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem,
+      ShooterSubsystem shooterSubsystem, PivotSubsystem pivotSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem,
       PoseEstimatorSubsystem poseEstimatorSubsystem, TriangleInterpolator triangles, TriangleInterpolator feederInterpolator) {
     if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter
         || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
@@ -124,6 +126,7 @@ public final class Autos {
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(1),
+        new InstantCommand(() -> new PivotMagicCommand(pivotSubsystem, limelightSubsystem, triangles, triangles, poseEstimatorSubsystem).schedule()),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles, feederInterpolator).withTimeout(1),
         commandBlocks.fireGamePieceCommand().withTimeout(1.5), // TODO: Add magic to these
         new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 4 Piece Part 2"),
@@ -149,7 +152,7 @@ public final class Autos {
 
   public static Command MiddleAllianceFourPieceSkip1A(CommandBlocks commandBlocks, DriveSubsystem drive,
       IntakeSubsystem intakeSubsystem,
-      ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem,
+      ShooterSubsystem shooterSubsystem, PivotSubsystem pivotSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem,
       PoseEstimatorSubsystem poseEstimatorSubsystem, TriangleInterpolator triangles, TriangleInterpolator feederInterpolator) {
     if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter
         || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
@@ -161,6 +164,7 @@ public final class Autos {
         new DriveToNoteCommand(drive, limelightSubsystem, intakeSubsystem, triggerSubsystem, () -> {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(1),
+        new InstantCommand(() -> new PivotMagicCommand(pivotSubsystem, limelightSubsystem, triangles, triangles, poseEstimatorSubsystem).schedule()),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles, feederInterpolator).withTimeout(1),
         commandBlocks.fireGamePieceCommand().withTimeout(1.5), // TODO: Add magic to these
         new FollowPathCommandOurs(drive, limelightSubsystem, "Middle Alliance 4 Piece Part 2"),
@@ -194,7 +198,7 @@ public final class Autos {
 
   public static Command SourceCenter3Piece(CommandBlocks commandBlocks, DriveSubsystem drive,
       IntakeSubsystem intakeSubsystem,
-      ShooterSubsystem shooterSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem,
+      ShooterSubsystem shooterSubsystem, PivotSubsystem pivotSubsystem, LimelightSubsystem limelightSubsystem, TriggerSubsystem triggerSubsystem,
       PoseEstimatorSubsystem poseEstimatorSubsystem, TriangleInterpolator triangles, TriangleInterpolator feederInterpolator) {
     if (!SubsystemConstants.useDrive || !SubsystemConstants.useIntake || !SubsystemConstants.useShooter
         || !SubsystemConstants.useLimelight || !SubsystemConstants.useTrigger) {
@@ -208,6 +212,7 @@ public final class Autos {
           return DriveConstants.driveToNoteSpeed;
         }).withTimeout(1.5),
         commandBlocks.followPathWithPresetShot("Source Center 3 Piece Part 2", false),
+        new InstantCommand(() -> new PivotMagicCommand(pivotSubsystem, limelightSubsystem, triangles, triangles, poseEstimatorSubsystem).schedule()),
         new DrivePointedToSpeakerCommand(drive, limelightSubsystem, poseEstimatorSubsystem, triangles, feederInterpolator).withTimeout(1.5),
         commandBlocks.fireGamePieceCommand().withTimeout(1.5),
         new FollowPathCommandOurs(drive, limelightSubsystem, "Source Center 3 Piece Part 3"),
