@@ -25,6 +25,7 @@ public class DriveToNoteCommand extends Command {
   private Optional<CommandJoystick> m_joystick = Optional.empty();
   Boolean pastBeamBroken = false;
   Boolean currentbeambreak = false;
+  int m_count = 0;
   Boolean m_seenNote = false;
   Rotation2d m_noteHeading;
   DoubleSupplier m_speed;
@@ -57,6 +58,7 @@ public class DriveToNoteCommand extends Command {
     m_intakeSubsystem.intakeButtonPressed();
     m_triggerSubsystem.intakeButtonPressed();
     m_seenNote = false;
+    m_count = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -89,8 +91,13 @@ public class DriveToNoteCommand extends Command {
   @Override
   public boolean isFinished() {
     currentbeambreak = m_intakeSubsystem.m_beambreak.beamBroken();
-    if (pastBeamBroken != currentbeambreak && !pastBeamBroken) {
-      return true;
+    if (currentbeambreak) {
+      m_count++;
+      if (m_count > 2) {
+        return true;
+      }
+    } else {
+      m_count = 0;
     }
     return false;
   }
