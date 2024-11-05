@@ -176,8 +176,8 @@ public final class Constants {
 
   public static final class PoseEstimatorConstants {
     public static final Matrix<N3, N1> statesStandardDev = VecBuilder.fill(0.001, 0.001, 0.005);
-    public static final double visionXStandardDev = 0.01;
-    public static final double visionYStandardDev = 0.01;
+    public static final double visionXStandardDev = 0.005; //TODO: adjust with framerate
+    public static final double visionYStandardDev = 0.005;
     public static final double visionHeadingStandardDev = 0.05;
 
     public static final double maxAcceptableSkew = Math.PI / 3;
@@ -261,7 +261,7 @@ public final class Constants {
     public static final double calibrateSpeed = 0.5;
 
     public static final double topLeftPosition = 100; // TODO: Measure to find real values
-    public static final double topRightPosition = 100;
+    public static final double topRightPosition = 102;
     public static final double bottomPosition = -20;
     public static final double adjustPivotThreshold = -5;
 
