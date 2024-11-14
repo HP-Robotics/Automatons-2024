@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.TriangleInterpolator;
 import frc.robot.Constants.SnuffilatorConstants;
 import frc.robot.subsystems.DriveSubsystem;
@@ -26,13 +27,14 @@ public class CommandBlocks {
   SnuffilatorSubsystem m_snuffilatorSubsystem;
   LimelightSubsystem m_limelightSubsystem;
   PoseEstimatorSubsystem m_poseEstimator;
-  TriangleInterpolator m_triangleInterpolator; 
+  TriangleInterpolator m_triangleInterpolator;
   TriangleInterpolator m_feederInterpolator;
 
   public CommandBlocks(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem,
       ShooterSubsystem shooterSubsystem, TriggerSubsystem triggerSubsystem, PivotSubsystem pivotSubsystem,
       SnuffilatorSubsystem snuffilatorSubsystem, LimelightSubsystem limelightSubsystem,
-      PoseEstimatorSubsystem poseEstimator, TriangleInterpolator triangleInterpolator, TriangleInterpolator feederInterpolator) {
+      PoseEstimatorSubsystem poseEstimator, TriangleInterpolator triangleInterpolator,
+      TriangleInterpolator feederInterpolator) {
     m_driveSubsystem = driveSubsystem;
     m_intakeSubsystem = intakeSubsystem;
     m_shooterSubsystem = shooterSubsystem;
@@ -52,9 +54,11 @@ public class CommandBlocks {
     }
     return new ParallelCommandGroup(
         new InstantCommand(
-            () -> new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator, m_feederInterpolator).schedule()),
+            () -> new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator,
+                m_feederInterpolator).schedule()),
         new InstantCommand(
-            () -> new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator, m_feederInterpolator, m_poseEstimator)
+            () -> new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator,
+                m_feederInterpolator, m_poseEstimator)
                 .schedule()))
         .andThen(
             new ParallelDeadlineGroup(
@@ -67,6 +71,37 @@ public class CommandBlocks {
                 intakeButtonHold()
             // new InstantCommand(() -> {System.out.println("firing game piece");})
             ));
+  }
+
+  public Command magicFireGamePieceCommand() {
+    if (m_intakeSubsystem == null || m_triggerSubsystem == null || m_shooterSubsystem == null
+        || m_pivotSubsystem == null) {
+      return new WaitCommand(0);
+    }
+    return new ParallelCommandGroup(
+        new InstantCommand(
+            () -> new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator,
+                m_feederInterpolator).schedule()),
+        new InstantCommand(
+            () -> new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator,
+                m_feederInterpolator, m_poseEstimator)
+                .schedule()))
+        .andThen(
+            new ParallelDeadlineGroup(
+                new WaitUntilCommand(() -> {
+                    return m_shooterSubsystem.atSpeed()
+                    && m_pivotSubsystem.atPosition() 
+                    && m_triggerSubsystem.m_isLoaded
+                    && m_driveSubsystem.pointedTowardsAngle()
+                    && Math.abs(m_driveSubsystem.getCurrentspeeds().vxMetersPerSecond) < 0.01
+                    && Math.abs(m_driveSubsystem.getCurrentspeeds().vyMetersPerSecond) < 0.01;
+                }).andThen(fireButtonHold().until(() -> {
+                   return !m_triggerSubsystem.m_isLoaded;
+                })),
+                intakeButtonHold()
+            // new InstantCommand(() -> {System.out.println("firing game piece");})
+            ));
+
   }
 
   public Command fireGamePieceCommand(double pivotAngle, double leftSpeed, double rightSpeed) {
@@ -152,8 +187,7 @@ public class CommandBlocks {
     if (m_driveSubsystem == null || m_triangleInterpolator == null || m_shooterSubsystem == null
         || m_pivotSubsystem == null) {
       return new ParallelCommandGroup(
-      new WaitCommand(0)
-      );
+          new WaitCommand(0));
     }
     if (useLimelight) {
       return new ParallelDeadlineGroup(

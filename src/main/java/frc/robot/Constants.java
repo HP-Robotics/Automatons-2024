@@ -62,11 +62,12 @@ public final class Constants {
     public static final int yuckButton = useXbox ? 4 : 2;
     public static final int climberButton = useXbox ? 10 : 10;
     public static final int intakeButton = useXbox ? 0 : 1;
-    public static final int drivePointedToSpeakerButton = useXbox ? 6 : 0;
-    public static final int drivePointedToNoteButton = useXbox ? 5 : 0;
+    public static final int drivePointedToSpeakerButton = useXbox ? 0 : 0; //give value?
+    public static final int drivePointedToNoteButton = useXbox ? 0 : 0; //give value?
     public static final int driveToNoteAxis = useXbox ? 2 : 0;
-    public static final int driveToAmpButton = 1;
+    public static final int driveToAmpButton = 15; //TODO: change to button 5???
     public static final int pointToCornerButton = 2;
+    public static final int drivePointedToNoteAxis = 2;
 
     // TODO: Add operator joystick constants
 
