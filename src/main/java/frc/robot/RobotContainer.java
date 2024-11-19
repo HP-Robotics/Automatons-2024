@@ -362,7 +362,7 @@ public class RobotContainer {
           .whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.podiumPosition)));
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
-      m_opJoystick.button(1).or(m_driveJoystick.button(1))
+        (m_driveJoystick.button(1))
           .whileTrue(
             new ParallelCommandGroup(
               new DrivePointedToSpeakerCommand(m_driveSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem, m_driveJoystick, m_triangleInterpolator, m_feederInterpolator),
