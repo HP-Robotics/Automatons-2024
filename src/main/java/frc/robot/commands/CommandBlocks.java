@@ -7,7 +7,9 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants;
 import frc.robot.TriangleInterpolator;
+import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.SnuffilatorConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -78,30 +80,33 @@ public class CommandBlocks {
         || m_pivotSubsystem == null) {
       return new WaitCommand(0);
     }
-    return new ParallelCommandGroup(
-        new InstantCommand(
-            () -> new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator,
-                m_feederInterpolator).schedule()),
-        new InstantCommand(
-            () -> new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator,
-                m_feederInterpolator, m_poseEstimator)
-                .schedule()))
-        .andThen(
-            new ParallelDeadlineGroup(
-                new WaitUntilCommand(() -> {
+    if (m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition) {
+      return fireButtonHold();
+    } else {
+      return new ParallelCommandGroup(
+          new InstantCommand(
+              () -> new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator,
+                  m_feederInterpolator).schedule()),
+          new InstantCommand(
+              () -> new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator,
+                  m_feederInterpolator, m_poseEstimator)
+                  .schedule()))
+          .andThen(
+              new ParallelDeadlineGroup(
+                  new WaitUntilCommand(() -> {
                     return m_shooterSubsystem.atSpeed()
-                    && m_pivotSubsystem.atPosition() 
-                    && m_triggerSubsystem.m_isLoaded
-                    && m_driveSubsystem.pointedTowardsAngle()
-                    && Math.abs(m_driveSubsystem.getCurrentspeeds().vxMetersPerSecond) < 0.01
-                    && Math.abs(m_driveSubsystem.getCurrentspeeds().vyMetersPerSecond) < 0.01;
-                }).andThen(fireButtonHold().until(() -> {
-                   return !m_triggerSubsystem.m_isLoaded;
-                })),
-                intakeButtonHold()
-            // new InstantCommand(() -> {System.out.println("firing game piece");})
-            ));
-
+                        && m_pivotSubsystem.atPosition()
+                        && m_triggerSubsystem.m_isLoaded
+                        && m_driveSubsystem.pointedTowardsAngle()
+                        && Math.abs(m_driveSubsystem.getCurrentspeeds().vxMetersPerSecond) < 0.01
+                        && Math.abs(m_driveSubsystem.getCurrentspeeds().vyMetersPerSecond) < 0.01;
+                  }).andThen(fireButtonHold().until(() -> {
+                    return !m_triggerSubsystem.m_isLoaded;
+                  })),
+                  intakeButtonHold()
+              // new InstantCommand(() -> {System.out.println("firing game piece");})
+              ));
+    }
   }
 
   public Command fireGamePieceCommand(double pivotAngle, double leftSpeed, double rightSpeed) {

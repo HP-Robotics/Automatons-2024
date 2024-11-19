@@ -353,7 +353,7 @@ public class RobotContainer {
       m_opJoystick.povLeft().whileTrue(new PivotManualCommand(m_pivotSubsystem, -PivotConstants.manualSpeed));
       // m_opJoystick.button(7).onTrue(new
       // InstantCommand(m_pivotSubsystem::togglePID));
-      m_driveJoystick.button(5)
+      m_opJoystick.button(5)
           .onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.subwooferPosition), m_pivotSubsystem));
       m_driveJoystick.button(6).whileTrue(
           new ParallelCommandGroup(
