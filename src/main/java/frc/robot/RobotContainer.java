@@ -225,13 +225,13 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     if (SubsystemConstants.useDrive) {
+      // m_opJoystick.button(8)
+      //     .whileTrue(new InstantCommand(() -> {
+      //       Rotation2d heading = m_poseEstimatorSubsystem.getPose().getRotation();
+      //       m_driveSubsystem.resetYaw();
+      //       m_driveSubsystem.resetPoseEstimatorHeading(heading);
+      //     }));
       m_opJoystick.button(8)
-          .whileTrue(new InstantCommand(() -> {
-            Rotation2d heading = m_poseEstimatorSubsystem.getPose().getRotation();
-            m_driveSubsystem.resetYaw();
-            m_driveSubsystem.resetPoseEstimatorHeading(heading);
-          }));
-      m_driveJoystick.button(ControllerConstants.resetHeadingButton)
           .whileTrue(new InstantCommand(() -> {
             m_driveSubsystem.resetYaw();
             double angle = (DriverStation.getAlliance().isPresent()

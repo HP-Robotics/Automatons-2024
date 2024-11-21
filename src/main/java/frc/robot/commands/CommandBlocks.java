@@ -96,7 +96,8 @@ public class CommandBlocks {
                         && m_triggerSubsystem.m_isLoaded
                         && m_driveSubsystem.pointedTowardsAngle()
                         && Math.abs(m_driveSubsystem.getCurrentspeeds().vxMetersPerSecond) < 0.01
-                        && Math.abs(m_driveSubsystem.getCurrentspeeds().vyMetersPerSecond) < 0.01;
+                        && Math.abs(m_driveSubsystem.getCurrentspeeds().vyMetersPerSecond) < 0.01
+                        && Math.abs(m_driveSubsystem.getCurrentspeeds().omegaRadiansPerSecond) < 0.005;
                   }).andThen(fireButtonHold().until(() -> {
                     return !m_triggerSubsystem.m_isLoaded;
                   })),
