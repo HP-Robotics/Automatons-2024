@@ -80,9 +80,6 @@ public class CommandBlocks {
         || m_pivotSubsystem == null) {
       return new WaitCommand(0);
     }
-    if (m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition) {
-      return fireButtonHold();
-    } else {
       return new ParallelCommandGroup(
           new InstantCommand(
               () -> new SetShooterCommand(m_shooterSubsystem, m_poseEstimator, m_triangleInterpolator,
@@ -106,7 +103,7 @@ public class CommandBlocks {
                   intakeButtonHold()
               // new InstantCommand(() -> {System.out.println("firing game piece");})
               ));
-    }
+    
   }
 
   public Command fireGamePieceCommand(double pivotAngle, double leftSpeed, double rightSpeed) {

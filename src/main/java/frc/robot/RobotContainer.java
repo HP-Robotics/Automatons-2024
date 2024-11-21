@@ -365,11 +365,14 @@ public class RobotContainer {
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
       (m_driveJoystick.button(1))
           .whileTrue(
-              // new ConditionalCommand(
+              new ConditionalCommand(
+                  m_compoundCommands.fireButtonHold(),
                   new ParallelCommandGroup(
                       new DrivePointedToSpeakerCommand(m_driveSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem,
                           m_driveJoystick, m_triangleInterpolator, m_feederInterpolator),
-                      m_compoundCommands.magicFireGamePieceCommand())
+                      m_compoundCommands.magicFireGamePieceCommand()),
+                      () -> m_pivotSubsystem.m_setpoint == PivotConstants.ampPosition)
+                      
                   // new ParallelCommandGroup(
                   //   m_compoundCommands.fireButtonHold(),
                   //   new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp, ShooterConstants.shooterSpeedAmp)
