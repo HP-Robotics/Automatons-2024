@@ -354,7 +354,8 @@ public class RobotContainer {
       // m_opJoystick.button(7).onTrue(new
       // InstantCommand(m_pivotSubsystem::togglePID));
       m_opJoystick.button(5)
-          .onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.subwooferPosition), m_pivotSubsystem));
+          .onTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.subwooferPosition),
+              m_pivotSubsystem));
       m_driveJoystick.button(6).whileTrue(
           new ParallelCommandGroup(
               new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.ampPosition), m_pivotSubsystem)));
@@ -362,32 +363,49 @@ public class RobotContainer {
           .whileTrue(new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.podiumPosition)));
     }
     if (SubsystemConstants.useDrive && SubsystemConstants.useLimelight) {
-        (m_driveJoystick.button(1))
+      (m_driveJoystick.button(1))
           .whileTrue(
-            new ParallelCommandGroup(
-              new DrivePointedToSpeakerCommand(m_driveSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem, m_driveJoystick, m_triangleInterpolator, m_feederInterpolator),
-              m_compoundCommands.magicFireGamePieceCommand()
-              ));
-          // new DrivePointedToSpeakerCommand(m_driveSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem,
-          //     m_driveJoystick, m_triangleInterpolator, m_feederInterpolator)); // TODO use pose estimator constant
+              // new ConditionalCommand(
+                  new ParallelCommandGroup(
+                      new DrivePointedToSpeakerCommand(m_driveSubsystem, m_limelightSubsystem, m_poseEstimatorSubsystem,
+                          m_driveJoystick, m_triangleInterpolator, m_feederInterpolator),
+                      m_compoundCommands.magicFireGamePieceCommand())
+                  // new ParallelCommandGroup(
+                  //   m_compoundCommands.fireButtonHold(),
+                  //   new SetShooterCommand(m_shooterSubsystem, ShooterConstants.shooterSpeedAmp, ShooterConstants.shooterSpeedAmp)
+
+                  );
+                  // () -> {
+                  //   return m_pivotSubsystem.m_setpoint != PivotConstants.ampPosition;
+                  // }));
+      // new DrivePointedToSpeakerCommand(m_driveSubsystem, m_limelightSubsystem,
+      // m_poseEstimatorSubsystem,
+      // m_driveJoystick, m_triangleInterpolator, m_feederInterpolator)); // TODO use
+      // pose estimator constant
       m_driveJoystick.axisGreaterThan(ControllerConstants.drivePointedToNoteAxis, 0.1)
           .whileTrue(new DrivePointedToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_driveJoystick));
-          // intake
+      // intake
 
       // m_opJoystick.axisGreaterThan(2, 0.1)
-      //     .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem, m_triangleInterpolator,
-      //         m_feederInterpolator,
-      //         m_poseEstimatorSubsystem))
-      //     .whileTrue(
-      //         new OperatorRumbleCommand(m_pivotSubsystem, m_driveSubsystem, m_limelightSubsystem, m_shooterSubsystem,
-      //             m_opJoystick)); // TODO change with pose estimator
+      // .whileTrue(new PivotMagicCommand(m_pivotSubsystem, m_limelightSubsystem,
+      // m_triangleInterpolator,
+      // m_feederInterpolator,
+      // m_poseEstimatorSubsystem))
+      // .whileTrue(
+      // new OperatorRumbleCommand(m_pivotSubsystem, m_driveSubsystem,
+      // m_limelightSubsystem, m_shooterSubsystem,
+      // m_opJoystick)); // TODO change with pose estimator
       m_driveJoystick.axisGreaterThan(ControllerConstants.driveToNoteAxis, 0.1) // TODO change button, and put in if
                                                                                 // statement
           .whileTrue(
+            new ParallelCommandGroup(
               new DriveToNoteCommand(m_driveSubsystem, m_limelightSubsystem, m_intakeSubsystem, m_triggerSubsystem,
                   m_driveJoystick, () -> {
                     return m_driveJoystick.getRawAxis(2);
-                  }));
+                  }),
+            new InstantCommand(() -> m_pivotSubsystem.setPosition(PivotConstants.podiumPosition))
+            ));
+              
     }
 
     if (SubsystemConstants.useSnuffilator) {
