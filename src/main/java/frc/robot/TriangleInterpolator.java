@@ -29,6 +29,8 @@ public class TriangleInterpolator {
   private int m_currentIndex = 0;
   private List<TriangulationPoint> m_pointList = new ArrayList<TriangulationPoint>();
   private int m_outputSize;
+  private static DelaunayTriangle m_lastTriangle;
+  private static TriangulationPoint m_lastPoint;
 
   public TriangleInterpolator(int outputSize) {
     // addCalibratedPoint(new double[]{0, 0, 50, 50, 36, 90);
@@ -60,6 +62,8 @@ public class TriangleInterpolator {
     Polygon polygon = new Polygon(points);
     return polygon;
   }
+
+  
 
   private static double getTriangleArea(TriangulationPoint p1, TriangulationPoint p2, TriangulationPoint p3) {
     return ((p2.getX() - p1.getX()) * (p3.getY() - p1.getY()) - (p3.getX() - p1.getX()) * (p2.getY() - p1.getY())) / 2;
@@ -178,6 +182,18 @@ public class TriangleInterpolator {
       }
     }
     return Optional.empty();
+  }
+
+  public Optional<double[]> getWalkingTriangulatedOutput(Pose2d robotPose) {
+    List<DelaunayTriangle> triangles = m_pointSet.getTriangles();
+    DelaunayTriangle currentTriangle = m_lastTriangle;
+    double xyDistanceToQuery = Math.sqrt(Math.pow(m_lastPoint.getX() - robotPose.getX(), 2) + Math.pow())
+    for (DelaunayTriangle neighbor : m_lastTriangle.neighbors) {
+
+    }
+
+    double[] weights = getWeights(new Pose2d(robotPose.getX(), robotPose.getY(), new Rotation2d()), );
+
   }
 
   public static void addv2Magic(TriangleInterpolator m_triangleInterpolator) {
