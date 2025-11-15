@@ -187,12 +187,12 @@ public class TriangleInterpolator {
   public Optional<double[]> getWalkingTriangulatedOutput(Pose2d robotPose) {
     List<DelaunayTriangle> triangles = m_pointSet.getTriangles();
     DelaunayTriangle currentTriangle = m_lastTriangle;
-    double xyDistanceToQuery = Math.sqrt(Math.pow(m_lastPoint.getX() - robotPose.getX(), 2) + Math.pow())
+    double xyDistanceToQuery = Math.sqrt(Math.pow(m_lastPoint.getX() - robotPose.getX(), 2) + Math.pow(m_lastPoint.getY() - robotPose.getY(),2));
     for (DelaunayTriangle neighbor : m_lastTriangle.neighbors) {
 
     }
-
-    double[] weights = getWeights(new Pose2d(robotPose.getX(), robotPose.getY(), new Rotation2d()), );
+    return Optional.empty();
+    // double[] weights = getWeights(new Pose2d(robotPose.getX(), robotPose.getY(), new Rotation2d()), );
 
   }
 
